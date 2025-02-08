@@ -37,37 +37,13 @@
 
 <br/>
 
-## 📸 *****ScreenShot*****
-
-**온보딩**
-
-| <img width="250" src="https://github.com/user-attachments/assets/923b64cd-687b-40dd-879d-80d251c784cb"/> | <img width="250" src="https://github.com/user-attachments/assets/cead7cf0-2b25-414a-9763-1c4b1094dce9"/> | <img width="250" src="https://github.com/user-attachments/assets/800bbdf2-a1a4-4587-ae57-efd706572c20"/> |
-|:--------------------------------------------------------------------------------------------------------:|:--------------------------------------------------------------------------------------------------------:|:--------------------------------------------------------------------------------------------------------:|
-|                                                  `스플래시`                                                  |                                                  `온보딩`                                                   |                                                  `회원가입`                                                  |
-
-<br>
-
-**홈**
-
-| <img width="250" src="https://github.com/user-attachments/assets/923b64cd-687b-40dd-879d-80d251c784cb"/> |
-|:--------------------------------------------------------------------------------------------------------:|
-|                                                   `홈`                                                    |
-
-<br>
-
-**채우기**
-
-| <img width="250" src="https://github.com/user-attachments/assets/923b64cd-687b-40dd-879d-80d251c784cb"/> | <img width="250" src="https://github.com/user-attachments/assets/cead7cf0-2b25-414a-9763-1c4b1094dce9"/> | <img width="250" src="https://github.com/user-attachments/assets/cead7cf0-2b25-414a-9763-1c4b1094dce9"/> |
-|:--------------------------------------------------------------------------------------------------------:|:--------------------------------------------------------------------------------------------------------:|:--------------------------------------------------------------------------------------------------------:|
-|                                                  `채우기`                                                   |                                                `모임 모집하기`                                                 |                                                `모임 신청하기`                                                 |
-
-<br>
-
-**나의 채움**
-
-| <img width="250" src="https://github.com/user-attachments/assets/923b64cd-687b-40dd-879d-80d251c784cb"/> | <img width="250" src="https://github.com/user-attachments/assets/923b64cd-687b-40dd-879d-80d251c784cb"/> | <img width="250" src="https://github.com/user-attachments/assets/cead7cf0-2b25-414a-9763-1c4b1094dce9"/> |
-|:--------------------------------------------------------------------------------------------------------:|:--------------------------------------------------------------------------------------------------------:|:--------------------------------------------------------------------------------------------------------:|
-|                                                 `나의 채움`                                                  |                                                 `모임 상세`                                                  |                                                  `스페이스`                                                  |
+## 📸 *****구현 기능*****
+![공백  온보딩](https://github.com/user-attachments/assets/0e9bea7d-204f-438f-8a5b-4270ad6aad36)
+![공백  홈화면](https://github.com/user-attachments/assets/112a084d-7b76-404c-827b-f97ada5a2bd3)
+![공백  주요기능](https://github.com/user-attachments/assets/2bef3b87-35ed-4286-8255-d3c18bdc1632)
+![공백  채우기](https://github.com/user-attachments/assets/49942d03-82db-4d35-9519-07f12d2a9946)
+![공백  모집하기](https://github.com/user-attachments/assets/d1db3bc6-dc09-4f1f-8609-fe193ac723d4)
+![공백  채움](https://github.com/user-attachments/assets/bf266edd-9b75-4b13-bdb1-89645c9b3309)
 
 <br><br>
 
