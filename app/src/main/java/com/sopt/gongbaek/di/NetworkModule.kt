@@ -51,17 +51,15 @@ object NetworkModule {
     fun provideAuthInterceptor(
         tokenLocalDataSource: TokenLocalDataSource,
         @ApplicationContext context: Context
-    ): AuthInterceptor {
-        return AuthInterceptor(tokenLocalDataSource, context)
-    }
+    ): AuthInterceptor = AuthInterceptor(tokenLocalDataSource, context)
 
     @Provides
     @Singleton
     fun providesOkHttpClient(
         loggingInterceptor: HttpLoggingInterceptor,
         authInterceptor: AuthInterceptor
-    ): OkHttpClient =
-        OkHttpClient.Builder().apply {
+    ): OkHttpClient = OkHttpClient.Builder()
+        .apply {
             connectTimeout(10L, TimeUnit.SECONDS)
             writeTimeout(10L, TimeUnit.SECONDS)
             readTimeout(10L, TimeUnit.SECONDS)
@@ -79,13 +77,11 @@ object NetworkModule {
         converterFactory: Converter.Factory,
         okHttpClient: OkHttpClient,
         baseUrl: String
-    ): Retrofit {
-        return Retrofit.Builder()
-            .baseUrl(baseUrl)
-            .client(okHttpClient)
-            .addConverterFactory(converterFactory)
-            .build()
-    }
+    ): Retrofit = Retrofit.Builder()
+        .baseUrl(baseUrl)
+        .client(okHttpClient)
+        .addConverterFactory(converterFactory)
+        .build()
 
     @Provides
     @Singleton

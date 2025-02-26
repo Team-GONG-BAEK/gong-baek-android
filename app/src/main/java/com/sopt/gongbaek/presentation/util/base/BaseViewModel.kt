@@ -10,12 +10,11 @@ import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 
-abstract class BaseViewModel<State : UiState, Event : UiEvent, SideEffect : UiSideEffect>() :
-    ViewModel() {
+abstract class BaseViewModel<State : UiState, Event : UiEvent, SideEffect : UiSideEffect> : ViewModel() {
     private val initialState: State by lazy { createInitialState() }
     abstract fun createInitialState(): State
 
-    private val _state = MutableStateFlow(initialState)
+    private val _state: MutableStateFlow<State> = MutableStateFlow(initialState)
     val state: StateFlow<State>
         get() = _state.asStateFlow()
     val currentState: State
@@ -33,9 +32,7 @@ abstract class BaseViewModel<State : UiState, Event : UiEvent, SideEffect : UiSi
         _state.value = currentState.reduce()
     }
 
-    open fun setEvent(event: Event) {
-        dispatchEvent(event)
-    }
+    open fun setEvent(event: Event) = dispatchEvent(event)
 
     fun dispatchEvent(event: Event) = viewModelScope.launch {
         handleEvent(event)
@@ -43,7 +40,7 @@ abstract class BaseViewModel<State : UiState, Event : UiEvent, SideEffect : UiSi
 
     protected abstract suspend fun handleEvent(event: Event)
 
-    protected fun setSideEffect(sideEffect: SideEffect) {
-        viewModelScope.launch { _sideEffect.emit(sideEffect) }
+    protected fun setSideEffect(sideEffect: SideEffect) = viewModelScope.launch {
+        _sideEffect.emit(sideEffect)
     }
 }

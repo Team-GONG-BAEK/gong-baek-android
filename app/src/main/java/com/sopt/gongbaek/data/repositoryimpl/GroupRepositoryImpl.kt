@@ -57,13 +57,12 @@ class GroupRepositoryImpl @Inject constructor(
             groupDataSource.getLatestGroup(groupType = groupType).handleApiResponse().getOrThrow().map { group -> group.toDomain() }
         }
 
-    override suspend fun postGroup(groupRegisterInfo: GroupRegisterInfo): Result<GroupRegisterResponseDto> {
-        return runCatching {
+    override suspend fun postGroup(groupRegisterInfo: GroupRegisterInfo): Result<GroupRegisterResponseDto> =
+        runCatching {
             groupDataSource.postGroup(
                 groupRegisterRequestDto = groupRegisterInfo.toData()
             ).handleApiResponse().getOrThrow()
         }
-    }
 
     override suspend fun getGroupMembers(groupId: Int, groupType: String): Result<GroupMembers> =
         runCatching {
