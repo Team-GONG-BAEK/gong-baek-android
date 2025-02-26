@@ -1,9 +1,7 @@
 package com.sopt.gongbaek.di
 
-import com.sopt.gongbaek.data.local.datasource.ExampleLocalDataSource
 import com.sopt.gongbaek.data.local.datasource.LectureTimetableLocalDataSource
 import com.sopt.gongbaek.data.local.datasource.TokenLocalDataSource
-import com.sopt.gongbaek.data.local.datasourceimpl.ExampleLocalDataSourceImpl
 import com.sopt.gongbaek.data.local.datasourceimpl.LectureTimetableLocalDataSourceImpl
 import com.sopt.gongbaek.data.local.datasourceimpl.TokenLocalDataSourceImpl
 import com.sopt.gongbaek.data.remote.datasource.CommentRemoteDataSource
@@ -23,11 +21,6 @@ import javax.inject.Singleton
 @Module
 @InstallIn(SingletonComponent::class)
 abstract class DataSourceModule {
-    @Binds
-    @Singleton
-    abstract fun bindExampleLocalDataSource(
-        exampleLocalDataSourceImpl: ExampleLocalDataSourceImpl
-    ): ExampleLocalDataSource
 
     @Binds
     @Singleton
