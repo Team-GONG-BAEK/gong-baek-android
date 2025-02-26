@@ -18,6 +18,7 @@ import retrofit2.http.POST
 import retrofit2.http.Query
 
 interface GroupService {
+
     @GET("/api/v1/my/groups")
     suspend fun getMyGroups(
         @Query("category") category: String,

@@ -19,8 +19,8 @@ import javax.inject.Inject
 class GroupRegisterViewModel @Inject constructor(
     private val postGroupUseCase: PostGroupUseCase,
     private val getLectureTimetableUseCase: GetLectureTimetableUseCase
-) :
-    BaseViewModel<GroupRegisterContract.State, GroupRegisterContract.Event, GroupRegisterContract.SideEffect>() {
+) : BaseViewModel<GroupRegisterContract.State, GroupRegisterContract.Event, GroupRegisterContract.SideEffect>() {
+
     override fun createInitialState(): GroupRegisterContract.State = GroupRegisterContract.State(
         registerState = UiLoadState.Idle
     )

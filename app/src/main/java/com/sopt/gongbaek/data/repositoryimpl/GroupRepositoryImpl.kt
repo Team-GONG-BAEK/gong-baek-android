@@ -19,6 +19,7 @@ import javax.inject.Inject
 class GroupRepositoryImpl @Inject constructor(
     private val groupDataSource: GroupRemoteDataSource
 ) : GroupRepository {
+
     override suspend fun getMyGroups(category: String, status: Boolean): Result<List<GroupInfo>> =
         runCatching {
             groupDataSource.getMyGroups(category = category, status = status).handleApiResponse().getOrThrow().toDomain()

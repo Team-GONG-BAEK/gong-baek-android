@@ -11,12 +11,14 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 
 abstract class BaseViewModel<State : UiState, Event : UiEvent, SideEffect : UiSideEffect> : ViewModel() {
+
     private val initialState: State by lazy { createInitialState() }
     abstract fun createInitialState(): State
 
     private val _state: MutableStateFlow<State> = MutableStateFlow(initialState)
     val state: StateFlow<State>
         get() = _state.asStateFlow()
+
     val currentState: State
         get() = state.value
 

@@ -11,6 +11,7 @@ import retrofit2.http.POST
 import retrofit2.http.Query
 
 interface CommentService {
+
     @GET("/api/v1/comments")
     suspend fun getGroupComments(
         @Query("isPublic") isPublic: Boolean,

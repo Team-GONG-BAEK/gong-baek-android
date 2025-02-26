@@ -13,6 +13,7 @@ import javax.inject.Inject
 class CommentRepositoryImpl @Inject constructor(
     private val commentRemoteDataSource: CommentRemoteDataSource
 ) : CommentRepository {
+
     override suspend fun getGroupComments(isPublic: Boolean, groupId: Int, groupType: String): Result<GroupComments> =
         runCatching {
             commentRemoteDataSource.getGroupComments(isPublic = isPublic, groupId = groupId, groupType = groupType).handleApiResponse().getOrThrow().toDomain()
