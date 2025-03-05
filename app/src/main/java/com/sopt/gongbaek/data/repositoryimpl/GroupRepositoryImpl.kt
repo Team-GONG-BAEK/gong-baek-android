@@ -22,51 +22,72 @@ class GroupRepositoryImpl @Inject constructor(
 
     override suspend fun getMyGroups(category: String, status: Boolean): Result<List<GroupInfo>> =
         runCatching {
-            groupDataSource.getMyGroups(category = category, status = status).handleApiResponse().getOrThrow().toDomain()
+            groupDataSource.getMyGroups(category = category, status = status)
+                .handleApiResponse()
+                .getOrThrow()
+                .toDomain()
         }
 
     override suspend fun getGroupDetail(groupId: Int, groupType: String): Result<GroupInfo> =
         runCatching {
-            groupDataSource.getGroupDetail(groupId = groupId, groupType = groupType).handleApiResponse().getOrThrow().toDomain()
+            groupDataSource.getGroupDetail(groupId = groupId, groupType = groupType)
+                .handleApiResponse()
+                .getOrThrow()
+                .toDomain()
         }
 
     override suspend fun getGroupHost(groupId: Int, groupType: String): Result<GroupHost> =
         runCatching {
-            groupDataSource.getGroupHost(groupId = groupId, groupType = groupType).handleApiResponse().getOrThrow().toDomain()
+            groupDataSource.getGroupHost(groupId = groupId, groupType = groupType)
+                .handleApiResponse()
+                .getOrThrow()
+                .toDomain()
         }
 
     override suspend fun applyGroup(groupId: Int, groupType: String): Result<Unit> =
         runCatching {
-            groupDataSource.applyGroup(applyGroupRequestDto = ApplyGroupRequestDto(groupId = groupId, groupType = groupType)).handleNullableApiResponse().getOrThrow()
+            groupDataSource.applyGroup(applyGroupRequestDto = ApplyGroupRequestDto(groupId = groupId, groupType = groupType))
+                .handleNullableApiResponse()
+                .getOrThrow()
         }
 
     override suspend fun getGroups(category: String?): Result<List<GroupInfo>> {
         return runCatching {
-            groupDataSource.getGroups(
-                category = category
-            ).handleApiResponse().getOrThrow().map { group -> group.toDomain() }
+            groupDataSource.getGroups(category = category)
+                .handleApiResponse()
+                .getOrThrow()
+                .map { group -> group.toDomain() }
         }
     }
 
     override suspend fun getNearestGroup(): Result<NearestGroup> =
         runCatching {
-            groupDataSource.getNearestGroup().handleApiResponse().getOrThrow().toDomain()
+            groupDataSource.getNearestGroup()
+                .handleApiResponse()
+                .getOrThrow()
+                .toDomain()
         }
 
     override suspend fun getLatestGroup(groupType: String): Result<List<RecommendGroupInfo>> =
         runCatching {
-            groupDataSource.getLatestGroup(groupType = groupType).handleApiResponse().getOrThrow().map { group -> group.toDomain() }
+            groupDataSource.getLatestGroup(groupType = groupType)
+                .handleApiResponse()
+                .getOrThrow()
+                .map { group -> group.toDomain() }
         }
 
     override suspend fun postGroup(groupRegisterInfo: GroupRegisterInfo): Result<GroupRegisterResponseDto> =
         runCatching {
-            groupDataSource.postGroup(
-                groupRegisterRequestDto = groupRegisterInfo.toData()
-            ).handleApiResponse().getOrThrow()
+            groupDataSource.postGroup(groupRegisterRequestDto = groupRegisterInfo.toData())
+                .handleApiResponse()
+                .getOrThrow()
         }
 
     override suspend fun getGroupMembers(groupId: Int, groupType: String): Result<GroupMembers> =
         runCatching {
-            groupDataSource.getGroupMembers(groupId = groupId, groupType = groupType).handleApiResponse().getOrThrow().toDomain()
+            groupDataSource.getGroupMembers(groupId = groupId, groupType = groupType)
+                .handleApiResponse()
+                .getOrThrow()
+                .toDomain()
         }
 }

@@ -17,23 +17,32 @@ class AuthRepositoryImpl @Inject constructor(
 
     override suspend fun registerUserInfo(userInfo: UserInfo): Result<UserAuth> =
         runCatching {
-            authRemoteDatasource.registerUserInfo(
-                registerUserInfoRequestDto = userInfo.toData()
-            ).handleApiResponse().getOrThrow().toDomain()
+            authRemoteDatasource.registerUserInfo(registerUserInfoRequestDto = userInfo.toData())
+                .handleApiResponse()
+                .getOrThrow()
+                .toDomain()
         }
 
     override suspend fun validateNickname(nickname: String): Result<Unit> =
         runCatching {
-            authRemoteDatasource.validateNickname(nickname = nickname).handleNullableApiResponse().exceptionOrNull()
+            authRemoteDatasource.validateNickname(nickname = nickname)
+                .handleNullableApiResponse()
+                .exceptionOrNull()
         }
 
     override suspend fun getUserProfile(): Result<UserProfile> =
         runCatching {
-            authRemoteDatasource.getUserProfile().handleApiResponse().getOrThrow().toDomain()
+            authRemoteDatasource.getUserProfile()
+                .handleApiResponse()
+                .getOrThrow()
+                .toDomain()
         }
 
     override suspend fun getUserLectureTimeTable() =
         runCatching {
-            authRemoteDatasource.getUserLectureTimeTable().handleApiResponse().getOrThrow().toDomain()
+            authRemoteDatasource.getUserLectureTimeTable()
+                .handleApiResponse()
+                .getOrThrow()
+                .toDomain()
         }
 }

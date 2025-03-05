@@ -24,11 +24,17 @@ class CommentRepositoryImpl @Inject constructor(
                 isPublic = isPublic,
                 groupId = groupId,
                 groupType = groupType
-            ).handleApiResponse().getOrThrow().toDomain()
+            )
+                .handleApiResponse()
+                .getOrThrow()
+                .toDomain()
         }
 
     override suspend fun postComment(comment: Comment): Result<Int> =
         runCatching {
-            commentRemoteDataSource.postComment(postCommentRequestDto = comment.toData()).handleNullableApiResponse().getOrThrow()?.toDomain() ?: 0
+            commentRemoteDataSource.postComment(postCommentRequestDto = comment.toData())
+                .handleNullableApiResponse()
+                .getOrThrow()
+                ?.toDomain() ?: 0
         }
 }
