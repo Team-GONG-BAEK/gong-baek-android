@@ -13,8 +13,16 @@ class CommentRemoteDataSourceImpl @Inject constructor(
     private val commentService: CommentService
 ) : CommentRemoteDataSource {
 
-    override suspend fun getGroupComments(isPublic: Boolean, groupId: Int, groupType: String): ApiResponse<GroupCommentsResponseDto> =
-        commentService.getGroupComments(isPublic = isPublic, groupId = groupId, groupType = groupType)
+    override suspend fun getGroupComments(
+        isPublic: Boolean,
+        groupId: Int,
+        groupType: String
+    ): ApiResponse<GroupCommentsResponseDto> =
+        commentService.getGroupComments(
+            isPublic = isPublic,
+            groupId = groupId,
+            groupType = groupType
+        )
 
     override suspend fun postComment(postCommentRequestDto: PostCommentRequestDto): NullableApiResponse<PostCommentResponseDto> =
         commentService.postComment(postCommentRequestDto = postCommentRequestDto)
