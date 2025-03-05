@@ -11,5 +11,4 @@ class LectureTimetableRepositoryImpl @Inject constructor(
     override fun getTimetable(): Map<String, List<Int>> = lectureTimetableLocalDataSource.getTimetable()
 
     override fun setTimetable(lectureTimetable: Map<String, List<Int>>) = lectureTimetableLocalDataSource.setTimetable(lectureTimetable)
-
 }

@@ -39,9 +39,9 @@ class LoadGroupRoomScreenUseCase(
                     Result.failure(
                         Exception(
                             "Failed to load group detail: " +
-                                    "GroupInfo=${groupInfoResult.exceptionOrNull()?.message}, " +
-                                    "GroupMembers=${groupMembersResult.exceptionOrNull()?.message}, " +
-                                    "GroupComments=${groupCommentsResult.exceptionOrNull()?.message}"
+                                "GroupInfo=${groupInfoResult.exceptionOrNull()?.message}, " +
+                                "GroupMembers=${groupMembersResult.exceptionOrNull()?.message}, " +
+                                "GroupComments=${groupCommentsResult.exceptionOrNull()?.message}"
                         )
                     )
                 }

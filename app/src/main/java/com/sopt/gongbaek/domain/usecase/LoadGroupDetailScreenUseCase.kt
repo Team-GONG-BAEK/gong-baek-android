@@ -27,7 +27,7 @@ class LoadGroupDetailScreenUseCase(
                 val groupHostResult = groupHostDeferred.await()
                 val groupCommentsResult = groupCommentsDeferred.await()
 
-                if (groupInfoResult.isSuccess&& groupHostResult.isSuccess && groupCommentsResult.isSuccess) {
+                if (groupInfoResult.isSuccess && groupHostResult.isSuccess && groupCommentsResult.isSuccess) {
                     Result.success(
                         GroupDetail(
                             groupInfo = groupInfoResult.getOrThrow(),
@@ -39,9 +39,9 @@ class LoadGroupDetailScreenUseCase(
                     Result.failure(
                         Exception(
                             "Failed to load group detail: " +
-                                    "GroupInfo=${groupInfoResult.exceptionOrNull()?.message}, " +
-                                    "GroupHost=${groupHostResult.exceptionOrNull()?.message}, " +
-                                    "GroupComments=${groupCommentsResult.exceptionOrNull()?.message}"
+                                "GroupInfo=${groupInfoResult.exceptionOrNull()?.message}, " +
+                                "GroupHost=${groupHostResult.exceptionOrNull()?.message}, " +
+                                "GroupComments=${groupCommentsResult.exceptionOrNull()?.message}"
                         )
                     )
                 }
