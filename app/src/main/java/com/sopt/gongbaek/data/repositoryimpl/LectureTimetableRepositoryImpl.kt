@@ -7,10 +7,8 @@ import javax.inject.Inject
 class LectureTimetableRepositoryImpl @Inject constructor(
     private val lectureTimetableLocalDataSource: LectureTimetableLocalDataSource
 ) : LectureTimetableRepository {
-    override fun getTimetable(): Map<String, List<Int>> =
-        lectureTimetableLocalDataSource.getTimetable()
 
-    override fun setTimetable(lectureTimetable: Map<String, List<Int>>) {
-        lectureTimetableLocalDataSource.setTimetable(lectureTimetable)
-    }
+    override fun getTimetable(): Map<String, List<Int>> = lectureTimetableLocalDataSource.getTimetable()
+
+    override fun setTimetable(lectureTimetable: Map<String, List<Int>>) = lectureTimetableLocalDataSource.setTimetable(lectureTimetable)
 }

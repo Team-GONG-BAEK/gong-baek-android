@@ -13,13 +13,28 @@ import javax.inject.Inject
 class CommentRepositoryImpl @Inject constructor(
     private val commentRemoteDataSource: CommentRemoteDataSource
 ) : CommentRepository {
-    override suspend fun getGroupComments(isPublic: Boolean, groupId: Int, groupType: String): Result<GroupComments> =
+
+    override suspend fun getGroupComments(
+        isPublic: Boolean,
+        groupId: Int,
+        groupType: String
+    ): Result<GroupComments> =
         runCatching {
-            commentRemoteDataSource.getGroupComments(isPublic = isPublic, groupId = groupId, groupType = groupType).handleApiResponse().getOrThrow().toDomain()
+            commentRemoteDataSource.getGroupComments(
+                isPublic = isPublic,
+                groupId = groupId,
+                groupType = groupType
+            )
+                .handleApiResponse()
+                .getOrThrow()
+                .toDomain()
         }
 
     override suspend fun postComment(comment: Comment): Result<Int> =
         runCatching {
-            commentRemoteDataSource.postComment(postCommentRequestDto = comment.toData()).handleNullableApiResponse().getOrThrow()?.toDomain() ?: 0
+            commentRemoteDataSource.postComment(postCommentRequestDto = comment.toData())
+                .handleNullableApiResponse()
+                .getOrThrow()
+                ?.toDomain() ?: 0
         }
 }

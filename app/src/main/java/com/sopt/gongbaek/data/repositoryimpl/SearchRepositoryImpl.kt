@@ -14,16 +14,17 @@ class SearchRepositoryImpl @Inject constructor(
 
     override suspend fun getSearchUniversitiesResult(universityName: String): Result<Universities> =
         runCatching {
-            searchRemoteDataSource.getSearchUniversitiesResult(
-                universityName = universityName
-            ).handleApiResponse().getOrThrow().toDomain()
+            searchRemoteDataSource.getSearchUniversitiesResult(universityName = universityName)
+                .handleApiResponse()
+                .getOrThrow()
+                .toDomain()
         }
 
     override suspend fun getSearchMajorsResult(universityName: String, majorName: String): Result<Majors> =
         runCatching {
-            searchRemoteDataSource.getSearchMajorsResult(
-                universityName = universityName,
-                majorName = majorName
-            ).handleApiResponse().getOrThrow().toDomain()
+            searchRemoteDataSource.getSearchMajorsResult(universityName = universityName, majorName = majorName)
+                .handleApiResponse()
+                .getOrThrow()
+                .toDomain()
         }
 }

@@ -8,6 +8,7 @@ import javax.inject.Inject
 class TokenRepositoryImpl @Inject constructor(
     private val tokenLocalDataSource: TokenLocalDataSource
 ) : TokenRepository {
+
     override fun getAccessToken(): String = tokenLocalDataSource.accessToken
 
     override fun getRefreshToken(): String = tokenLocalDataSource.refreshToken

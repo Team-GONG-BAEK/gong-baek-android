@@ -12,8 +12,8 @@ import javax.inject.Inject
 @HiltViewModel
 class GroupListViewModel @Inject constructor(
     private val getGroupsUseCase: GetGroupsUseCase
-) :
-    BaseViewModel<GroupListContract.State, GroupListContract.Event, GroupListContract.SideEffect>() {
+) : BaseViewModel<GroupListContract.State, GroupListContract.Event, GroupListContract.SideEffect>() {
+
     override fun createInitialState(): GroupListContract.State = GroupListContract.State()
 
     override suspend fun handleEvent(event: GroupListContract.Event) {

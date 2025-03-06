@@ -17,9 +17,8 @@ object ServiceModule {
 
     @Provides
     @Singleton
-    fun provideSearchService(retrofit: Retrofit): SearchService {
-        return retrofit.create(SearchService::class.java)
-    }
+    fun provideSearchService(retrofit: Retrofit): SearchService =
+        retrofit.create(SearchService::class.java)
 
     @Provides
     @Singleton
@@ -33,7 +32,6 @@ object ServiceModule {
 
     @Provides
     @Singleton
-    fun provideAuthService(retrofit: Retrofit): AuthService {
-        return retrofit.create(AuthService::class.java)
-    }
+    fun provideAuthService(retrofit: Retrofit): AuthService =
+        retrofit.create(AuthService::class.java)
 }
