@@ -1,6 +1,5 @@
 package com.sopt.gongbaek.presentation.ui.main
 
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.asPaddingValues
@@ -39,7 +38,9 @@ fun MainNavHost(
     val authViewModel: AuthViewModel = hiltViewModel()
     val groupRegisterViewModel: GroupRegisterViewModel = hiltViewModel()
 
-    Box(
+    NavHost(
+        navController = navigator.navController,
+        startDestination = navigator.startDestination,
         modifier = modifier
             .fillMaxSize()
             .padding(
@@ -52,25 +53,20 @@ fun MainNavHost(
                 }
             )
     ) {
-        NavHost(
+        composable(route = NavigationRoute.SplashRoute.SPLASH) { SplashScreen(navController = navigator.navController) }
+        onboardingNavGraph(navigator.navController)
+        authNavGraph(
             navController = navigator.navController,
-            startDestination = navigator.startDestination
-        ) {
-            composable(route = NavigationRoute.SplashRoute.SPLASH) { SplashScreen(navController = navigator.navController) }
-            onboardingNavGraph(navigator.navController)
-            authNavGraph(
-                navController = navigator.navController,
-                viewModel = authViewModel
-            )
-            groupListNavGraph(navigator.navController)
-            groupRegisterNavGraph(
-                navController = navigator.navController,
-                viewModel = groupRegisterViewModel
-            )
-            groupDetailNavGraph(navigator.navController)
-            myGroupNavGraph(navigator.navController)
-            groupRoomNavGraph(navigator.navController)
-            homeNavGraph(navigator.navController)
-        }
+            viewModel = authViewModel
+        )
+        groupListNavGraph(navigator.navController)
+        groupRegisterNavGraph(
+            navController = navigator.navController,
+            viewModel = groupRegisterViewModel
+        )
+        groupDetailNavGraph(navigator.navController)
+        myGroupNavGraph(navigator.navController)
+        groupRoomNavGraph(navigator.navController)
+        homeNavGraph(navigator.navController)
     }
 }
