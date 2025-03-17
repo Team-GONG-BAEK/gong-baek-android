@@ -16,7 +16,6 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import com.sopt.gongbaek.presentation.model.NavigationRoute
 import com.sopt.gongbaek.presentation.ui.auth.navigation.authNavGraph
-import com.sopt.gongbaek.presentation.ui.auth.screen.AuthViewModel
 import com.sopt.gongbaek.presentation.ui.groupdetail.navigation.groupDetailNavGraph
 import com.sopt.gongbaek.presentation.ui.grouplist.navigation.groupListNavGraph
 import com.sopt.gongbaek.presentation.ui.groupregister.navigation.groupRegisterNavGraph
@@ -35,7 +34,6 @@ fun MainNavHost(
 ) {
     val currentBackStackEntry by navigator.navController.currentBackStackEntryAsState()
     val currentRoute = currentBackStackEntry?.destination?.route
-    val authViewModel: AuthViewModel = hiltViewModel()
     val groupRegisterViewModel: GroupRegisterViewModel = hiltViewModel()
 
     NavHost(
@@ -55,10 +53,7 @@ fun MainNavHost(
     ) {
         composable(route = NavigationRoute.SplashRoute.SPLASH) { SplashScreen(navController = navigator.navController) }
         onboardingNavGraph(navigator.navController)
-        authNavGraph(
-            navController = navigator.navController,
-            viewModel = authViewModel
-        )
+        authNavGraph(navigator.navController)
         groupListNavGraph(navigator.navController)
         groupRegisterNavGraph(
             navController = navigator.navController,
