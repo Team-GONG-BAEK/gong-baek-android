@@ -16,10 +16,10 @@ import com.sopt.gongbaek.presentation.ui.groupregister.screen.GroupTimeRoute
 import com.sopt.gongbaek.presentation.ui.groupregister.screen.SelectDayOfWeekRoute
 import com.sopt.gongbaek.presentation.ui.groupregister.screen.SelectDayRoute
 import com.sopt.gongbaek.presentation.ui.mygroup.navigation.navigateMyGroup
+import com.sopt.gongbaek.presentation.util.extension.sharedViewModel
 
 fun NavGraphBuilder.groupRegisterNavGraph(
-    navController: NavHostController,
-    viewModel: GroupRegisterViewModel
+    navController: NavHostController
 ) {
     navigation(
         startDestination = NavigationRoute.GroupRegisterNavGraphRoute.GROUP_CYCLE,
@@ -27,7 +27,8 @@ fun NavGraphBuilder.groupRegisterNavGraph(
     ) {
         composable(
             route = NavigationRoute.GroupRegisterNavGraphRoute.GROUP_CYCLE
-        ) {
+        ) { backStackEntry ->
+            val viewModel = backStackEntry.sharedViewModel<GroupRegisterViewModel>(navController)
             GroupCycleRoute(
                 viewModel = viewModel,
                 navigateDay = navController::navigateSelectDay,
@@ -38,7 +39,8 @@ fun NavGraphBuilder.groupRegisterNavGraph(
 
         composable(
             route = NavigationRoute.GroupRegisterNavGraphRoute.SELECT_DAY
-        ) {
+        ) { backStackEntry ->
+            val viewModel = backStackEntry.sharedViewModel<GroupRegisterViewModel>(navController)
             SelectDayRoute(
                 viewModel = viewModel,
                 navigateGroupTime = navController::navigateGroupTime,
@@ -48,7 +50,8 @@ fun NavGraphBuilder.groupRegisterNavGraph(
 
         composable(
             route = NavigationRoute.GroupRegisterNavGraphRoute.SELECT_DAY_OF_WEEK
-        ) {
+        ) { backStackEntry ->
+            val viewModel = backStackEntry.sharedViewModel<GroupRegisterViewModel>(navController)
             SelectDayOfWeekRoute(
                 viewModel = viewModel,
                 navigateGroupTime = navController::navigateGroupTime,
@@ -58,7 +61,8 @@ fun NavGraphBuilder.groupRegisterNavGraph(
 
         composable(
             route = NavigationRoute.GroupRegisterNavGraphRoute.GROUP_TIME
-        ) {
+        ) { backStackEntry ->
+            val viewModel = backStackEntry.sharedViewModel<GroupRegisterViewModel>(navController)
             GroupTimeRoute(
                 viewModel = viewModel,
                 navigateGroupCategory = navController::navigateGroupCategory,
@@ -68,7 +72,8 @@ fun NavGraphBuilder.groupRegisterNavGraph(
 
         composable(
             route = NavigationRoute.GroupRegisterNavGraphRoute.GROUP_CATEGORY
-        ) {
+        ) { backStackEntry ->
+            val viewModel = backStackEntry.sharedViewModel<GroupRegisterViewModel>(navController)
             GroupCategoryRoute(
                 viewModel = viewModel,
                 navigateGroupCover = navController::navigateGroupCover,
@@ -78,7 +83,8 @@ fun NavGraphBuilder.groupRegisterNavGraph(
 
         composable(
             route = NavigationRoute.GroupRegisterNavGraphRoute.GROUP_COVER
-        ) {
+        ) { backStackEntry ->
+            val viewModel = backStackEntry.sharedViewModel<GroupRegisterViewModel>(navController)
             GroupCoverRoute(
                 viewModel = viewModel,
                 navigateGroupPlacePeople = navController::navigateGroupPlacePeople,
@@ -88,7 +94,8 @@ fun NavGraphBuilder.groupRegisterNavGraph(
 
         composable(
             route = NavigationRoute.GroupRegisterNavGraphRoute.GROUP_PLACE_PEOPLE
-        ) {
+        ) { backStackEntry ->
+            val viewModel = backStackEntry.sharedViewModel<GroupRegisterViewModel>(navController)
             GroupPlacePeopleRoute(
                 viewModel = viewModel,
                 navigateGroupIntroduction = navController::navigateGroupIntroduction,
@@ -98,7 +105,8 @@ fun NavGraphBuilder.groupRegisterNavGraph(
 
         composable(
             route = NavigationRoute.GroupRegisterNavGraphRoute.GROUP_INTRODUCTION
-        ) {
+        ) { backStackEntry ->
+            val viewModel = backStackEntry.sharedViewModel<GroupRegisterViewModel>(navController)
             GroupIntroductionRoute(
                 viewModel = viewModel,
                 navigateRegister = navController::navigateGroupRegister,
@@ -108,7 +116,8 @@ fun NavGraphBuilder.groupRegisterNavGraph(
 
         composable(
             route = NavigationRoute.GroupRegisterNavGraphRoute.GROUP_REGISTER
-        ) {
+        ) { backStackEntry ->
+            val viewModel = backStackEntry.sharedViewModel<GroupRegisterViewModel>(navController)
             GroupRegisterRoute(
                 viewModel = viewModel,
                 navigateMyGroup = navController::navigateMyGroup,

@@ -10,7 +10,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
@@ -19,7 +18,6 @@ import com.sopt.gongbaek.presentation.ui.auth.navigation.authNavGraph
 import com.sopt.gongbaek.presentation.ui.groupdetail.navigation.groupDetailNavGraph
 import com.sopt.gongbaek.presentation.ui.grouplist.navigation.groupListNavGraph
 import com.sopt.gongbaek.presentation.ui.groupregister.navigation.groupRegisterNavGraph
-import com.sopt.gongbaek.presentation.ui.groupregister.screen.GroupRegisterViewModel
 import com.sopt.gongbaek.presentation.ui.grouproom.navigation.groupRoomNavGraph
 import com.sopt.gongbaek.presentation.ui.home.navigation.homeNavGraph
 import com.sopt.gongbaek.presentation.ui.mygroup.navigation.myGroupNavGraph
@@ -34,7 +32,6 @@ fun MainNavHost(
 ) {
     val currentBackStackEntry by navigator.navController.currentBackStackEntryAsState()
     val currentRoute = currentBackStackEntry?.destination?.route
-    val groupRegisterViewModel: GroupRegisterViewModel = hiltViewModel()
 
     NavHost(
         navController = navigator.navController,
@@ -55,10 +52,7 @@ fun MainNavHost(
         onboardingNavGraph(navigator.navController)
         authNavGraph(navigator.navController)
         groupListNavGraph(navigator.navController)
-        groupRegisterNavGraph(
-            navController = navigator.navController,
-            viewModel = groupRegisterViewModel
-        )
+        groupRegisterNavGraph(navigator.navController)
         groupDetailNavGraph(navigator.navController)
         myGroupNavGraph(navigator.navController)
         groupRoomNavGraph(navigator.navController)
