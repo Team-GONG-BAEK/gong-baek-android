@@ -17,12 +17,6 @@ enum class MainBottomNavBarTabType(
         label = R.string.main_bottom_navbar_group_list,
         route = NavigationRoute.MainBottomNavBarTabRoute.GROUP_LIST_TAB
     ),
-    MY_GROUP(
-        selectedIconRes = R.drawable.ic_navi_my_fill_black_26,
-        unselectedIconRes = R.drawable.ic_navi_my_fill_gray_26,
-        label = R.string.main_bottom_navbar_my_group,
-        route = NavigationRoute.MainBottomNavBarTabRoute.MY_GROUP_TAB
-    ),
     HOME(
         selectedIconRes = R.drawable.ic_navi_home_black_26,
         unselectedIconRes = R.drawable.ic_navi_home_gray_26,

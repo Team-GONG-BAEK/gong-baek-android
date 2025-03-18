@@ -36,11 +36,7 @@ class MainNavigator(
         }
         when (mainBottomNavBarTabType) {
             MainBottomNavBarTabType.GROUP_LIST -> navController.navigateGroupListNavGraph(navOptions)
-
-            MainBottomNavBarTabType.MY_GROUP -> navController.navigateMyGroupNavGraph(navOptions)
-
             MainBottomNavBarTabType.HOME -> navController.navigateHomeNavGraph(navOptions)
-
 //            MainBottomNavBarTabType.TIMETABLE -> {}
             MainBottomNavBarTabType.MY_PAGE -> {}
         }
@@ -51,7 +47,6 @@ class MainNavigator(
         val currentRoute = currentDestination?.route ?: return false
         val bottomBarRoutes = listOf(
             NavigationRoute.MainBottomNavBarTabRoute.GROUP_LIST_TAB,
-            NavigationRoute.MainBottomNavBarTabRoute.MY_GROUP_TAB,
             NavigationRoute.MainBottomNavBarTabRoute.HOME_TAB,
 //            NavigationRoute.MainBottomNavBarTabRoute.TIMETABLE_TAB,
             NavigationRoute.MainBottomNavBarTabRoute.MY_PAGE_TAB
