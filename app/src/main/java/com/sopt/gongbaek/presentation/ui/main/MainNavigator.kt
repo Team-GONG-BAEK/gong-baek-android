@@ -18,13 +18,12 @@ class MainNavigator(
     val navController: NavHostController
 ) {
     val startDestination = NavigationRoute.SPLASH
-    private val currentDestination: NavDestination?
-        @Composable get() = navController.currentBackStackEntryAsState().value?.destination
 
     val currentMainBottomNavBarTab: MainBottomNavBarTabType?
-        @Composable get() = currentDestination
-            ?.route
-            ?.let(MainBottomNavBarTabType.Companion::find)
+        @Composable get() = currentDestination?.route?.let(MainBottomNavBarTabType.Companion::find)
+
+    private val currentDestination: NavDestination?
+        @Composable get() = navController.currentBackStackEntryAsState().value?.destination
 
     fun navigate(mainBottomNavBarTabType: MainBottomNavBarTabType) {
         val navOptions = navOptions {

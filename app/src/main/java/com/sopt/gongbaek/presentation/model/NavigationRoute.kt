@@ -6,6 +6,13 @@ object NavigationRoute {
     const val GROUP_DETAIL = "group_detail/{groupId}/{groupCycle}"
     const val GROUP_ROOM = "group_room/{groupId}/{groupCycle}"
 
+    object MainBottomNavBarTabRoute {
+        const val GROUP_LIST_TAB = "group_list_route"
+        const val HOME_TAB = "home_route"
+//        const val TIMETABLE_TAB = "timetable_route"
+        const val MY_PAGE_TAB = "my_page_route"
+    }
+
     object AuthNavGraphRoute {
         const val AUTH_NAV_GRAPH = "auth_route"
         const val SELECT_PROFILE = "select_profile"
@@ -21,13 +28,6 @@ object NavigationRoute {
         const val COMPLETE_AUTH = "complete_auth"
         const val UNIV_SEARCH = "univ_search"
         const val MAJOR_SEARCH = "major_search"
-    }
-
-    object MainBottomNavBarTabRoute {
-        const val GROUP_LIST_TAB = "group_list_route"
-        const val HOME_TAB = "home_route"
-//        const val TIMETABLE_TAB = "timetable_route"
-        const val MY_PAGE_TAB = "my_page_route"
     }
 
     object GroupRegisterNavGraphRoute {
