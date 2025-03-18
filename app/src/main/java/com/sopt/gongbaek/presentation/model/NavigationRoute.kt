@@ -52,10 +52,6 @@ object NavigationRoute {
         const val GROUP_REGISTER = "group_register"
     }
 
-    object HomeNavGraphNavGraphRoute {
-        const val HOME = "home"
-    }
-
     object MyGroupNavGraphRoute {
         const val MY_GROUP = "my_group"
     }

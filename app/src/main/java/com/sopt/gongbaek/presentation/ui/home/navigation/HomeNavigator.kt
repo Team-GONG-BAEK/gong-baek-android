@@ -10,7 +10,3 @@ fun NavController.navigateHomeNavGraph(navOptions: NavOptions) {
         navOptions = navOptions
     )
 }
-
-fun NavController.navigateHome() {
-    navigate(route = NavigationRoute.HomeNavGraphNavGraphRoute.HOME)
-}

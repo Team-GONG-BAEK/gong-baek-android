@@ -13,26 +13,17 @@ import com.sopt.gongbaek.presentation.ui.home.screen.HomeRoute
 fun NavGraphBuilder.homeNavGraph(
     navController: NavHostController
 ) {
-    navigation(
-        startDestination = NavigationRoute.HomeNavGraphNavGraphRoute.HOME,
+    composable(
         route = NavigationRoute.MainBottomNavBarTabRoute.HOME_TAB
     ) {
-        composable(
-            route = NavigationRoute.HomeNavGraphNavGraphRoute.HOME
-        ) {
-            HomeRoute(
-                navigateGroupDetail = { groupId, groupCycle ->
-                    navController.navigateGroupDetail(groupId, groupCycle)
-                },
-
-                navigateGroupRoom = { groupId, groupType ->
-                    navController.navigateGroupRoom(groupId, groupType)
-                },
-
-                navigateGroupList = {
-                    navController.navigateGroupList()
-                }
-            )
-        }
+        HomeRoute(
+            navigateGroupDetail = { groupId, groupCycle ->
+                navController.navigateGroupDetail(groupId, groupCycle)
+            },
+            navigateGroupRoom = { groupId, groupType ->
+                navController.navigateGroupRoom(groupId, groupType)
+            },
+            navigateGroupList = navController::navigateGroupList
+        )
     }
 }
