@@ -3,9 +3,10 @@ package com.sopt.gongbaek.presentation.ui.groupregister.navigation
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.composable
+import androidx.navigation.navOptions
 import androidx.navigation.navigation
 import com.sopt.gongbaek.presentation.model.NavigationRoute
-import com.sopt.gongbaek.presentation.ui.grouplist.navigation.navigateGroupList
+import com.sopt.gongbaek.presentation.ui.grouplist.navigation.navigateGroupListNavGraph
 import com.sopt.gongbaek.presentation.ui.groupregister.screen.GroupCategoryRoute
 import com.sopt.gongbaek.presentation.ui.groupregister.screen.GroupCoverRoute
 import com.sopt.gongbaek.presentation.ui.groupregister.screen.GroupCycleRoute
@@ -118,9 +119,14 @@ fun NavGraphBuilder.groupRegisterNavGraph(
             route = NavigationRoute.GroupRegisterNavGraphRoute.GROUP_REGISTER
         ) { backStackEntry ->
             val viewModel = backStackEntry.sharedViewModel<GroupRegisterViewModel>(navController)
+            val navOptions = navOptions {
+                popUpTo(NavigationRoute.GroupRegisterNavGraphRoute.GROUP_REGISTER_NAV_GRAPH) {
+                    inclusive = true
+                }
+            }
             GroupRegisterRoute(
                 viewModel = viewModel,
-                navigateMyGroup = navController::navigateGroupList,
+                navigateMyGroup = { navController.navigateGroupListNavGraph(navOptions) },
                 navigateBack = navController::popBackStack
             )
         }
