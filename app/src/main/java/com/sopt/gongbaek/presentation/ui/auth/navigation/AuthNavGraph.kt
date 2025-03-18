@@ -3,6 +3,7 @@ package com.sopt.gongbaek.presentation.ui.auth.navigation
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.composable
+import androidx.navigation.navOptions
 import androidx.navigation.navigation
 import com.sopt.gongbaek.presentation.model.NavigationRoute
 import com.sopt.gongbaek.presentation.ui.auth.screen.AuthViewModel
@@ -19,7 +20,7 @@ import com.sopt.gongbaek.presentation.ui.auth.screen.SelfIntroductionRoute
 import com.sopt.gongbaek.presentation.ui.auth.screen.TimetableConvertRoute
 import com.sopt.gongbaek.presentation.ui.auth.screen.UnivMajorRoute
 import com.sopt.gongbaek.presentation.ui.auth.screen.UnivSearchRoute
-import com.sopt.gongbaek.presentation.ui.home.navigation.navigateHome
+import com.sopt.gongbaek.presentation.ui.home.navigation.navigateHomeNavGraph
 import com.sopt.gongbaek.presentation.util.extension.sharedViewModel
 
 fun NavGraphBuilder.authNavGraph(
@@ -173,9 +174,14 @@ fun NavGraphBuilder.authNavGraph(
             route = NavigationRoute.AuthNavGraphRoute.COMPLETE_AUTH
         ) { backStackEntry ->
             val viewModel = backStackEntry.sharedViewModel<AuthViewModel>(navController)
+            val navOptions = navOptions {
+                popUpTo(NavigationRoute.ONBOARDING) {
+                    inclusive = true
+                }
+            }
             CompleteAuthRoute(
                 viewModel = viewModel,
-                navigateHome = navController::navigateHome
+                navigateHome = { navController.navigateHomeNavGraph(navOptions) }
             )
         }
     }
