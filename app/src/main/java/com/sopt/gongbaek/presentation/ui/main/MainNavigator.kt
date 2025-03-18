@@ -41,8 +41,7 @@ class MainNavigator(
 
             MainBottomNavBarTabType.HOME -> navController.navigateHomeNavGraph(navOptions)
 
-            MainBottomNavBarTabType.TIMETABLE -> {}
-
+//            MainBottomNavBarTabType.TIMETABLE -> {}
             MainBottomNavBarTabType.MY_PAGE -> {}
         }
     }
@@ -54,7 +53,7 @@ class MainNavigator(
             NavigationRoute.MainBottomNavBarTabRoute.GROUP_LIST_TAB,
             NavigationRoute.MainBottomNavBarTabRoute.MY_GROUP_TAB,
             NavigationRoute.MainBottomNavBarTabRoute.HOME_TAB,
-            NavigationRoute.MainBottomNavBarTabRoute.TIMETABLE_TAB,
+//            NavigationRoute.MainBottomNavBarTabRoute.TIMETABLE_TAB,
             NavigationRoute.MainBottomNavBarTabRoute.MY_PAGE_TAB
         )
         return bottomBarRoutes.contains(currentRoute + "_route")

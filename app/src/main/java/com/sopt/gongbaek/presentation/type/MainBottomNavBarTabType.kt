@@ -29,12 +29,12 @@ enum class MainBottomNavBarTabType(
         label = R.string.main_bottom_navbar_home,
         route = NavigationRoute.MainBottomNavBarTabRoute.HOME_TAB
     ),
-    TIMETABLE(
-        selectedIconRes = R.drawable.ic_navi_timetable_black_26,
-        unselectedIconRes = R.drawable.ic_navi_timetable_gray_26,
-        label = R.string.main_bottom_navbar_timetable,
-        route = NavigationRoute.MainBottomNavBarTabRoute.TIMETABLE_TAB
-    ),
+//    TIMETABLE(
+//        selectedIconRes = R.drawable.ic_navi_timetable_black_26,
+//        unselectedIconRes = R.drawable.ic_navi_timetable_gray_26,
+//        label = R.string.main_bottom_navbar_timetable,
+//        route = NavigationRoute.MainBottomNavBarTabRoute.TIMETABLE_TAB
+//    ),
     MY_PAGE(
         selectedIconRes = R.drawable.ic_navi_my_black_26,
         unselectedIconRes = R.drawable.ic_navi_my_gray_26,
