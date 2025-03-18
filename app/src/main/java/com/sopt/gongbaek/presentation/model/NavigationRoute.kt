@@ -2,8 +2,8 @@ package com.sopt.gongbaek.presentation.model
 
 object NavigationRoute {
     const val SPLASH = "splash"
-
     const val ONBOARDING = "onboarding"
+    const val GROUP_DETAIL = "group_detail/{groupId}/{groupCycle}"
 
     object AuthNavGraphRoute {
         const val AUTH_NAV_GRAPH = "auth_route"
@@ -27,11 +27,6 @@ object NavigationRoute {
         const val HOME_TAB = "home_route"
 //        const val TIMETABLE_TAB = "timetable_route"
         const val MY_PAGE_TAB = "my_page_route"
-    }
-
-    object GroupDetailNavGraphRoute {
-        const val GROUP_DETAIL_NAV_GRAPH = "group_detail_route"
-        const val GROUP_DETAIL = "group_detail/{groupId}/{groupCycle}"
     }
 
     object GroupRegisterNavGraphRoute {

@@ -4,9 +4,13 @@ import androidx.navigation.NavController
 import com.sopt.gongbaek.presentation.model.NavigationRoute
 
 fun NavController.navigateGroupDetailNavGraph() {
-    navigate(route = NavigationRoute.GroupDetailNavGraphRoute.GROUP_DETAIL_NAV_GRAPH)
+    navigate(route = NavigationRoute.GROUP_DETAIL)
 }
 
 fun NavController.navigateGroupDetail(groupId: Int, groupCycle: String) {
-    navigate(route = NavigationRoute.GroupDetailNavGraphRoute.GROUP_DETAIL.replace("{groupId}", groupId.toString()).replace("{groupCycle}", groupCycle))
+    navigate(
+        route = NavigationRoute.GROUP_DETAIL
+            .replace("{groupId}", groupId.toString())
+            .replace("{groupCycle}", groupCycle)
+    )
 }
