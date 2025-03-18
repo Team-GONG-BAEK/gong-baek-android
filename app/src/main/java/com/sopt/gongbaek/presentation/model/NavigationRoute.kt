@@ -5,6 +5,7 @@ object NavigationRoute {
         const val ONBOARDING_NAV_GRAPH = "onboarding_route"
         const val ONBOARDING_MAIN = "onboarding"
     }
+    const val SPLASH = "splash"
 
     object AuthNavGraphRoute {
         const val AUTH_NAV_GRAPH = "auth_route"
@@ -64,9 +65,5 @@ object NavigationRoute {
     object GroupRoomNavGraphRoute {
         const val GROUP_ROOM_NAV_GRAPH = "group_room_route"
         const val GROUP_ROOM = "group_room/{groupId}/{groupCycle}"
-    }
-
-    object SplashRoute {
-        const val SPLASH = "splash"
     }
 }

@@ -48,7 +48,7 @@ fun MainNavHost(
                 }
             )
     ) {
-        composable(route = NavigationRoute.SplashRoute.SPLASH) { SplashScreen(navController = navigator.navController) }
+        composable(NavigationRoute.SPLASH) { SplashScreen(navController = navigator.navController) }
         onboardingNavGraph(navigator.navController)
         authNavGraph(navigator.navController)
         groupListNavGraph(navigator.navController)
