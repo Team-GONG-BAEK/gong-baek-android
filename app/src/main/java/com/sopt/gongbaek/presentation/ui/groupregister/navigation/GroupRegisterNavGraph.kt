@@ -5,6 +5,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.composable
 import androidx.navigation.navigation
 import com.sopt.gongbaek.presentation.model.NavigationRoute
+import com.sopt.gongbaek.presentation.ui.grouplist.navigation.navigateGroupList
 import com.sopt.gongbaek.presentation.ui.groupregister.screen.GroupCategoryRoute
 import com.sopt.gongbaek.presentation.ui.groupregister.screen.GroupCoverRoute
 import com.sopt.gongbaek.presentation.ui.groupregister.screen.GroupCycleRoute
@@ -15,7 +16,6 @@ import com.sopt.gongbaek.presentation.ui.groupregister.screen.GroupRegisterViewM
 import com.sopt.gongbaek.presentation.ui.groupregister.screen.GroupTimeRoute
 import com.sopt.gongbaek.presentation.ui.groupregister.screen.SelectDayOfWeekRoute
 import com.sopt.gongbaek.presentation.ui.groupregister.screen.SelectDayRoute
-import com.sopt.gongbaek.presentation.ui.mygroup.navigation.navigateMyGroup
 import com.sopt.gongbaek.presentation.util.extension.sharedViewModel
 
 fun NavGraphBuilder.groupRegisterNavGraph(
@@ -120,7 +120,7 @@ fun NavGraphBuilder.groupRegisterNavGraph(
             val viewModel = backStackEntry.sharedViewModel<GroupRegisterViewModel>(navController)
             GroupRegisterRoute(
                 viewModel = viewModel,
-                navigateMyGroup = navController::navigateMyGroup,
+                navigateMyGroup = navController::navigateGroupList,
                 navigateBack = navController::popBackStack
             )
         }

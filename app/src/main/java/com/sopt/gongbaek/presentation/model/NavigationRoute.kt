@@ -24,7 +24,6 @@ object NavigationRoute {
 
     object MainBottomNavBarTabRoute {
         const val GROUP_LIST_TAB = "group_list_route"
-        const val MY_GROUP_TAB = "my_group_route"
         const val HOME_TAB = "home_route"
 //        const val TIMETABLE_TAB = "timetable_route"
         const val MY_PAGE_TAB = "my_page_route"
@@ -50,10 +49,6 @@ object NavigationRoute {
         const val GROUP_PLACE_PEOPLE = "group_place_people"
         const val GROUP_INTRODUCTION = "group_introduction"
         const val GROUP_REGISTER = "group_register"
-    }
-
-    object MyGroupNavGraphRoute {
-        const val MY_GROUP = "my_group"
     }
 
     object GroupRoomNavGraphRoute {

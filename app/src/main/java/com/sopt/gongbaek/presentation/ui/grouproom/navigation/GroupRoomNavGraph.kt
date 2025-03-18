@@ -8,7 +8,6 @@ import androidx.navigation.navArgument
 import androidx.navigation.navigation
 import com.sopt.gongbaek.presentation.model.NavigationRoute
 import com.sopt.gongbaek.presentation.ui.grouproom.screen.GroupRoomRoute
-import com.sopt.gongbaek.presentation.ui.mygroup.navigation.navigateMyGroup
 
 fun NavGraphBuilder.groupRoomNavGraph(
     navController: NavHostController
@@ -25,7 +24,8 @@ fun NavGraphBuilder.groupRoomNavGraph(
             )
         ) {
             GroupRoomRoute(
-                navigateMyGroup = { navController.navigateMyGroup() }
+                // TODO 마이 페이지 작업 시 기획의도에 맞게 반영예정
+                navigateMyGroup = { }
             )
         }
     }

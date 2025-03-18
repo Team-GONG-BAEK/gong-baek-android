@@ -9,20 +9,15 @@ import com.sopt.gongbaek.presentation.ui.groupdetail.navigation.navigateGroupDet
 import com.sopt.gongbaek.presentation.ui.grouproom.navigation.navigateGroupRoom
 import com.sopt.gongbaek.presentation.ui.mygroup.screen.MyGroupRoute
 
-fun NavGraphBuilder.myGroupNavGraph(
-    navController: NavHostController
-) {
-    navigation(
-        startDestination = NavigationRoute.MyGroupNavGraphRoute.MY_GROUP,
-        route = NavigationRoute.MainBottomNavBarTabRoute.MY_GROUP_TAB
-    ) {
-        composable(
-            route = NavigationRoute.MyGroupNavGraphRoute.MY_GROUP
-        ) {
-            MyGroupRoute(
-                navigateGroupDetail = { groupId, groupCycle -> navController.navigateGroupDetail(groupId, groupCycle) },
-                navigateGroupRoom = { groupId, groupCycle -> navController.navigateGroupRoom(groupId, groupCycle) }
-            )
-        }
-    }
-}
+//fun NavGraphBuilder.myGroupNavGraph(
+//    navController: NavHostController
+//) {
+//    composable(
+//        route = NavigationRoute.MyGroupNavGraphRoute.MY_GROUP
+//    ) {
+//        MyGroupRoute(
+//            navigateGroupDetail = { groupId, groupCycle -> navController.navigateGroupDetail(groupId, groupCycle) },
+//            navigateGroupRoom = { groupId, groupCycle -> navController.navigateGroupRoom(groupId, groupCycle) }
+//        )
+//    }
+//}

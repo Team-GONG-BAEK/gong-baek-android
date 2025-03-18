@@ -20,7 +20,6 @@ import com.sopt.gongbaek.presentation.ui.grouplist.navigation.groupListNavGraph
 import com.sopt.gongbaek.presentation.ui.groupregister.navigation.groupRegisterNavGraph
 import com.sopt.gongbaek.presentation.ui.grouproom.navigation.groupRoomNavGraph
 import com.sopt.gongbaek.presentation.ui.home.navigation.homeNavGraph
-import com.sopt.gongbaek.presentation.ui.mygroup.navigation.myGroupNavGraph
 import com.sopt.gongbaek.presentation.ui.onboarding.navigation.onboardingNavGraph
 import com.sopt.gongbaek.presentation.ui.splash.SplashScreen
 
@@ -54,8 +53,8 @@ fun MainNavHost(
         groupListNavGraph(navigator.navController)
         groupRegisterNavGraph(navigator.navController)
         groupDetailNavGraph(navigator.navController)
-        myGroupNavGraph(navigator.navController)
-        groupRoomNavGraph(navigator.navController)
         homeNavGraph(navigator.navController)
+        groupRoomNavGraph(navigator.navController)
+//        myGroupNavGraph(navigator.navController)
     }
 }
