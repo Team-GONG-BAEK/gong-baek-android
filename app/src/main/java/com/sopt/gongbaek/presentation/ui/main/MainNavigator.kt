@@ -44,13 +44,15 @@ class MainNavigator(
     @Composable
     fun showBottomBar(): Boolean {
         val currentRoute = currentDestination?.route ?: return false
-        val bottomBarRoutes = listOf(
-            NavigationRoute.MainBottomNavBarTabRoute.GROUP_LIST_TAB,
-            NavigationRoute.MainBottomNavBarTabRoute.HOME_TAB,
-//            NavigationRoute.MainBottomNavBarTabRoute.TIMETABLE_TAB,
-            NavigationRoute.MainBottomNavBarTabRoute.MY_PAGE_TAB
+        return bottomBarRoutes.contains(currentRoute)
+    }
+
+    companion object {
+        private val bottomBarRoutes = setOf(
+            MainBottomNavBarTabType.GROUP_LIST.route,
+            MainBottomNavBarTabType.HOME.route,
+            MainBottomNavBarTabType.MY_PAGE.route
         )
-        return bottomBarRoutes.contains(currentRoute + "_route")
     }
 }
 

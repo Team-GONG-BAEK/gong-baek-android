@@ -37,7 +37,7 @@ enum class MainBottomNavBarTabType(
     );
 
     companion object {
-        fun find(route: String): MainBottomNavBarTabType? = entries.find { it.route == route + "_route" }
+        fun find(route: String): MainBottomNavBarTabType? = entries.find { it.route == route }
         fun contains(route: String): Boolean = entries.any { it.route == route }
     }
 }
