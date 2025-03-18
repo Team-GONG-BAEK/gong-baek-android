@@ -12,19 +12,14 @@ import com.sopt.gongbaek.presentation.ui.groupregister.navigation.navigateGroupR
 fun NavGraphBuilder.groupListNavGraph(
     navController: NavHostController
 ) {
-    navigation(
-        startDestination = NavigationRoute.GroupListNavGraphRoute.GROUP_LIST,
+    composable(
         route = NavigationRoute.MainBottomNavBarTabRoute.GROUP_LIST_TAB
     ) {
-        composable(
-            route = NavigationRoute.GroupListNavGraphRoute.GROUP_LIST
-        ) {
-            GroupListRoute(
-                navigateGroupDetail = { groupId, groupCycle ->
-                    navController.navigateGroupDetail(groupId, groupCycle)
-                },
-                navigateGroupRegister = { navController.navigateGroupRegisterNavGraph() }
-            )
-        }
+        GroupListRoute(
+            navigateGroupDetail = { groupId, groupCycle ->
+                navController.navigateGroupDetail(groupId, groupCycle)
+            },
+            navigateGroupRegister = navController::navigateGroupRegisterNavGraph
+        )
     }
 }
