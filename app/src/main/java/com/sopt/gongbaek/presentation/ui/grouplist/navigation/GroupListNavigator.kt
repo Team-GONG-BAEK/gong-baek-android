@@ -12,5 +12,5 @@ fun NavController.navigateGroupListNavGraph(navOptions: NavOptions) {
 }
 
 fun NavController.navigateGroupList() {
-    navigate(route = NavigationRoute.GroupListNavGraphRoute.GROUP_LIST)
+    navigate(route = NavigationRoute.MainBottomNavBarTabRoute.GROUP_LIST_TAB)
 }

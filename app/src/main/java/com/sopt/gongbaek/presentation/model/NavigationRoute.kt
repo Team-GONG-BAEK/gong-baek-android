@@ -34,10 +34,6 @@ object NavigationRoute {
         const val GROUP_DETAIL = "group_detail/{groupId}/{groupCycle}"
     }
 
-    object GroupListNavGraphRoute {
-        const val GROUP_LIST = "group_list"
-    }
-
     object GroupRegisterNavGraphRoute {
         const val GROUP_REGISTER_NAV_GRAPH = "group_register_route"
         const val GROUP_CYCLE = "group_cycle"
