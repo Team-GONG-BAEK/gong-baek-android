@@ -39,7 +39,7 @@ fun MainNavHost(
             .fillMaxSize()
             .padding(
                 if (currentRoute == NavigationRoute.MainBottomNavBarTabRoute.HOME_TAB ||
-                    currentRoute == NavigationRoute.GroupRoomNavGraphRoute.GROUP_ROOM
+                    currentRoute == NavigationRoute.GROUP_ROOM
                 ) {
                     PaddingValues(0.dp)
                 } else {
