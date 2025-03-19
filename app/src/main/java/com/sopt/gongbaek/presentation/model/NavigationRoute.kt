@@ -14,22 +14,6 @@ object NavigationRoute {
         const val MY_PAGE_TAB = "my_page_route"
     }
 
-    object AuthNavGraphRoute {
-        const val AUTH_NAV_GRAPH = "auth_route"
-        const val SELECT_PROFILE = "select_profile"
-        const val NICKNAME = "nickname"
-        const val UNIV_MAJOR = "univ_major"
-        const val GRADE = "grade"
-        const val MBTI = "mbti"
-        const val GENDER = "gender"
-        const val SELF_INTRODUCTION = "self_introduction"
-        const val ENTER_TIMETABLE = "enter_timetable"
-        const val GAP_TIMETABLE = "gap_timetable"
-        const val TIMETABLE_CONVERT = "timetable_convert"
-        const val COMPLETE_AUTH = "complete_auth"
-        const val UNIV_SEARCH = "univ_search"
-        const val MAJOR_SEARCH = "major_search"
-    }
 
     object GroupRegisterNavGraphRoute {
         const val GROUP_REGISTER_NAV_GRAPH = "group_register_route"
