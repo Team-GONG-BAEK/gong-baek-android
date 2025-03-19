@@ -183,4 +183,5 @@
 
     <!--GroupRegister-->
     <string name="groupregister_complete_title">입력한 정보가 맞는지 확인해주세요!</string>
+    <string name="terms_of_service_title">약관동의</string>
 </resources>
