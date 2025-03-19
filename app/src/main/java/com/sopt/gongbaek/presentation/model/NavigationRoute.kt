@@ -1,12 +1,23 @@
 package com.sopt.gongbaek.presentation.model
 
-object NavigationRoute {
-    const val SPLASH = "splash"
-    const val ONBOARDING = "onboarding"
-    const val GROUP_DETAIL = "group_detail/{groupId}/{groupCycle}"
-    const val GROUP_ROOM = "group_room/{groupId}/{groupCycle}"
+import kotlinx.serialization.Serializable
 
+sealed interface NavigationRoute {
+    @Serializable
+    data object Splash : NavigationRoute
 
+    @Serializable
+    data object Onboarding : NavigationRoute
 
+    @Serializable
+    data class GroupDetail(
+        val groupId: Int,
+        val groupCycle: String
+    ) : NavigationRoute
 
+    @Serializable
+    data class GroupRoom(
+        val groupId: Int,
+        val groupCycle: String
+    ) : NavigationRoute
 }
