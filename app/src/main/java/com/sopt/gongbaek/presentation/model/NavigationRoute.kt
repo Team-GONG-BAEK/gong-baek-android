@@ -9,6 +9,7 @@ object NavigationRoute {
     object MainBottomNavBarTabRoute {
         const val GROUP_LIST_TAB = "group_list_route"
         const val HOME_TAB = "home_route"
+
 //        const val TIMETABLE_TAB = "timetable_route"
         const val MY_PAGE_TAB = "my_page_route"
     }

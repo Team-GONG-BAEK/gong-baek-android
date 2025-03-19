@@ -10,7 +10,7 @@ fun NavGraphBuilder.myPageNavGraph(
     navController: NavController
 ) {
     composable(
-        route = NavigationRoute.MainBottomNavBarTabRoute.MY_PAGE_TAB,
+        route = NavigationRoute.MainBottomNavBarTabRoute.MY_PAGE_TAB
     ) {
         MyPageRoute()
     }
