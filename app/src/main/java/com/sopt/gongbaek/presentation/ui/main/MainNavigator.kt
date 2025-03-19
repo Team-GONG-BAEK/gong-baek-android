@@ -9,7 +9,6 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navOptions
-import com.sopt.gongbaek.presentation.model.MainBottomTabRoute
 import com.sopt.gongbaek.presentation.model.NavigationRoute
 import com.sopt.gongbaek.presentation.type.MainBottomNavBarTabType
 import com.sopt.gongbaek.presentation.ui.grouplist.navigation.navigateGroupListNavGraph
