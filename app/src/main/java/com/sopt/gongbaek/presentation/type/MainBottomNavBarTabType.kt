@@ -2,6 +2,7 @@ package com.sopt.gongbaek.presentation.type
 
 import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
+import androidx.compose.runtime.Composable
 import com.sopt.gongbaek.R
 import com.sopt.gongbaek.presentation.model.MainBottomTabRoute
 import com.sopt.gongbaek.presentation.model.NavigationRoute
@@ -39,7 +40,12 @@ enum class MainBottomNavBarTabType(
     );
 
     companion object {
-        fun find(route: String): MainBottomNavBarTabType? = entries.find { it.route == route }
-        fun contains(route: String): Boolean = entries.any { it.route == route }
+        @Composable
+        fun find(predicate: @Composable (MainBottomTabRoute) -> Boolean): MainBottomNavBarTabType? =
+            entries.find { predicate(it.route) }
+
+        @Composable
+        fun contains(predicate: @Composable (NavigationRoute) -> Boolean): Boolean =
+            entries.map { it.route }.any { predicate(it) }
     }
 }

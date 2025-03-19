@@ -3,11 +3,13 @@ package com.sopt.gongbaek.presentation.ui.main
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.navigation.NavDestination
+import androidx.navigation.NavDestination.Companion.hasRoute
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navOptions
+import com.sopt.gongbaek.presentation.model.MainBottomTabRoute
 import com.sopt.gongbaek.presentation.model.NavigationRoute
 import com.sopt.gongbaek.presentation.type.MainBottomNavBarTabType
 import com.sopt.gongbaek.presentation.ui.grouplist.navigation.navigateGroupListNavGraph
@@ -20,7 +22,7 @@ class MainNavigator(
     val startDestination = NavigationRoute.Splash
 
     val currentMainBottomNavBarTab: MainBottomNavBarTabType?
-        @Composable get() = currentDestination?.route?.let(MainBottomNavBarTabType.Companion::find)
+        @Composable get() = MainBottomNavBarTabType.find { tab -> currentDestination?.hasRoute(tab::class) == true }
 
     private val currentDestination: NavDestination?
         @Composable get() = navController.currentBackStackEntryAsState().value?.destination
@@ -42,17 +44,8 @@ class MainNavigator(
     }
 
     @Composable
-    fun showBottomBar(): Boolean {
-        val currentRoute = currentDestination?.route ?: return false
-        return bottomBarRoutes.contains(currentRoute)
-    }
-
-    companion object {
-        private val bottomBarRoutes = setOf(
-            MainBottomNavBarTabType.GROUP_LIST.route,
-            MainBottomNavBarTabType.HOME.route,
-            MainBottomNavBarTabType.MY_PAGE.route
-        )
+    fun showBottomBar() = MainBottomNavBarTabType.contains {
+        currentDestination?.hasRoute(it::class) == true
     }
 }
 
