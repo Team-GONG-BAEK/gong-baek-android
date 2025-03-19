@@ -17,7 +17,7 @@ import com.sopt.gongbaek.presentation.ui.mypage.navigation.navigateMyPage
 class MainNavigator(
     val navController: NavHostController
 ) {
-    val startDestination = NavigationRoute.SPLASH
+    val startDestination = NavigationRoute.Splash
 
     val currentMainBottomNavBarTab: MainBottomNavBarTabType?
         @Composable get() = currentDestination?.route?.let(MainBottomNavBarTabType.Companion::find)

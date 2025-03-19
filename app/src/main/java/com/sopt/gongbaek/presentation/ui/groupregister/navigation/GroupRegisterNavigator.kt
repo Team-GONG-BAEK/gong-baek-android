@@ -1,44 +1,24 @@
 package com.sopt.gongbaek.presentation.ui.groupregister.navigation
 
 import androidx.navigation.NavController
-import com.sopt.gongbaek.presentation.model.NavigationRoute
+import com.sopt.gongbaek.presentation.model.GroupRegisterNavGraphRoute
 
-fun NavController.navigateGroupRegisterNavGraph() {
-    navigate(route = NavigationRoute.GroupRegisterNavGraphRoute.GROUP_REGISTER_NAV_GRAPH)
-}
+fun NavController.navigateGroupRegisterNavGraph() = navigate(GroupRegisterNavGraphRoute.GroupRegisterNavGraph)
 
-fun NavController.navigateGroupCycle() {
-    navigate(route = NavigationRoute.GroupRegisterNavGraphRoute.GROUP_CYCLE)
-}
+fun NavController.navigateGroupCycle() = navigate(GroupRegisterNavGraphRoute.GroupCycle)
 
-fun NavController.navigateSelectDay() {
-    navigate(route = NavigationRoute.GroupRegisterNavGraphRoute.SELECT_DAY)
-}
+fun NavController.navigateSelectDay() = navigate(GroupRegisterNavGraphRoute.SelectDay)
 
-fun NavController.navigateSelectDayOfWeek() {
-    navigate(route = NavigationRoute.GroupRegisterNavGraphRoute.SELECT_DAY_OF_WEEK)
-}
+fun NavController.navigateSelectDayOfWeek() = navigate(GroupRegisterNavGraphRoute.SelectDayOfWeek)
 
-fun NavController.navigateGroupTime() {
-    navigate(route = NavigationRoute.GroupRegisterNavGraphRoute.GROUP_TIME)
-}
+fun NavController.navigateGroupTime() = navigate(GroupRegisterNavGraphRoute.GroupTime)
 
-fun NavController.navigateGroupCategory() {
-    navigate(route = NavigationRoute.GroupRegisterNavGraphRoute.GROUP_CATEGORY)
-}
+fun NavController.navigateGroupCategory() = navigate(GroupRegisterNavGraphRoute.GroupCategory)
 
-fun NavController.navigateGroupCover() {
-    navigate(route = NavigationRoute.GroupRegisterNavGraphRoute.GROUP_COVER)
-}
+fun NavController.navigateGroupCover() = navigate(GroupRegisterNavGraphRoute.GroupCover)
 
-fun NavController.navigateGroupPlacePeople() {
-    navigate(route = NavigationRoute.GroupRegisterNavGraphRoute.GROUP_PLACE_PEOPLE)
-}
+fun NavController.navigateGroupPlacePeople() = navigate(GroupRegisterNavGraphRoute.GroupPlacePeople)
 
-fun NavController.navigateGroupIntroduction() {
-    navigate(route = NavigationRoute.GroupRegisterNavGraphRoute.GROUP_INTRODUCTION)
-}
+fun NavController.navigateGroupIntroduction() = navigate(GroupRegisterNavGraphRoute.GroupIntroduction)
 
-fun NavController.navigateGroupRegister() {
-    navigate(route = NavigationRoute.GroupRegisterNavGraphRoute.GROUP_REGISTER)
-}
+fun NavController.navigateGroupRegister() = navigate(GroupRegisterNavGraphRoute.GroupRegister)

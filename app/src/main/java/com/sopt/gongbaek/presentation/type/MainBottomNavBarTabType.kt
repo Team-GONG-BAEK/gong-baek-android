@@ -3,25 +3,26 @@ package com.sopt.gongbaek.presentation.type
 import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
 import com.sopt.gongbaek.R
+import com.sopt.gongbaek.presentation.model.MainBottomTabRoute
 import com.sopt.gongbaek.presentation.model.NavigationRoute
 
 enum class MainBottomNavBarTabType(
     @DrawableRes val selectedIconRes: Int,
     @DrawableRes val unselectedIconRes: Int,
     @StringRes val label: Int,
-    val route: String
+    val route: MainBottomTabRoute
 ) {
     GROUP_LIST(
         selectedIconRes = R.drawable.ic_navi_fill_black_26,
         unselectedIconRes = R.drawable.ic_navi_fill_gray_26,
         label = R.string.main_bottom_navbar_group_list,
-        route = NavigationRoute.MainBottomNavBarTabRoute.GROUP_LIST_TAB
+        route = MainBottomTabRoute.GroupList
     ),
     HOME(
         selectedIconRes = R.drawable.ic_navi_home_black_26,
         unselectedIconRes = R.drawable.ic_navi_home_gray_26,
         label = R.string.main_bottom_navbar_home,
-        route = NavigationRoute.MainBottomNavBarTabRoute.HOME_TAB
+        route = MainBottomTabRoute.Home
     ),
 
 //    TIMETABLE(
@@ -34,7 +35,7 @@ enum class MainBottomNavBarTabType(
         selectedIconRes = R.drawable.ic_navi_my_black_26,
         unselectedIconRes = R.drawable.ic_navi_my_gray_26,
         label = R.string.main_bottom_navbar_my_page,
-        route = NavigationRoute.MainBottomNavBarTabRoute.MY_PAGE_TAB
+        route = MainBottomTabRoute.MyPage
     );
 
     companion object {

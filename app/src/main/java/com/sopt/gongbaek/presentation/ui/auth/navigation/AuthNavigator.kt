@@ -1,30 +1,30 @@
 package com.sopt.gongbaek.presentation.ui.auth.navigation
 
 import androidx.navigation.NavController
-import com.sopt.gongbaek.presentation.model.NavigationRoute
+import com.sopt.gongbaek.presentation.model.AuthNavGraphRoute
 
-fun NavController.navigateAuthRoute() = navigate(route = NavigationRoute.AuthNavGraphRoute.AUTH_NAV_GRAPH)
+fun NavController.navigateAuthRoute() = navigate(AuthNavGraphRoute.AuthNavGraph)
 
-fun NavController.navigateNickname() = navigate(route = NavigationRoute.AuthNavGraphRoute.NICKNAME)
+fun NavController.navigateNickname() = navigate(AuthNavGraphRoute.Nickname)
 
-fun NavController.navigateUnivMajor() = navigate(route = NavigationRoute.AuthNavGraphRoute.UNIV_MAJOR)
+fun NavController.navigateUnivMajor() = navigate(AuthNavGraphRoute.UnivMajor)
 
-fun NavController.navigateUnivSearch() = navigate(route = NavigationRoute.AuthNavGraphRoute.UNIV_SEARCH)
+fun NavController.navigateUnivSearch() = navigate(AuthNavGraphRoute.UnivSearch)
 
-fun NavController.navigateMajorSearch() = navigate(route = NavigationRoute.AuthNavGraphRoute.MAJOR_SEARCH)
+fun NavController.navigateMajorSearch() = navigate(AuthNavGraphRoute.MajorSearch)
 
-fun NavController.navigateGrade() = navigate(route = NavigationRoute.AuthNavGraphRoute.GRADE)
+fun NavController.navigateGrade() = navigate(AuthNavGraphRoute.Grade)
 
-fun NavController.navigateMbti() = navigate(route = NavigationRoute.AuthNavGraphRoute.MBTI)
+fun NavController.navigateMbti() = navigate(AuthNavGraphRoute.Mbti)
 
-fun NavController.navigateGender() = navigate(route = NavigationRoute.AuthNavGraphRoute.GENDER)
+fun NavController.navigateGender() = navigate(AuthNavGraphRoute.Gender)
 
-fun NavController.navigateSelfIntroduction() = navigate(route = NavigationRoute.AuthNavGraphRoute.SELF_INTRODUCTION)
+fun NavController.navigateSelfIntroduction() = navigate(AuthNavGraphRoute.SelfIntroduction)
 
-fun NavController.navigateEnterTimetable() = navigate(route = NavigationRoute.AuthNavGraphRoute.ENTER_TIMETABLE)
+fun NavController.navigateEnterTimetable() = navigate(AuthNavGraphRoute.EnterTimetable)
 
-fun NavController.navigateGapTimetable() = navigate(route = NavigationRoute.AuthNavGraphRoute.GAP_TIMETABLE)
+fun NavController.navigateGapTimetable() = navigate(AuthNavGraphRoute.GapTimetable)
 
-fun NavController.navigateTimetableConvert() = navigate(route = NavigationRoute.AuthNavGraphRoute.TIMETABLE_CONVERT)
+fun NavController.navigateTimetableConvert() = navigate(AuthNavGraphRoute.TimetableConvert)
 
-fun NavController.navigateCompleteAuth() = navigate(route = NavigationRoute.AuthNavGraphRoute.COMPLETE_AUTH)
+fun NavController.navigateCompleteAuth() = navigate(AuthNavGraphRoute.CompleteAuth)

@@ -10,9 +10,7 @@ import com.sopt.gongbaek.presentation.ui.onboarding.screen.OnboardingScreen
 fun NavGraphBuilder.onboardingNavGraph(
     navController: NavHostController
 ) {
-    composable(
-        route = NavigationRoute.ONBOARDING
-    ) {
+    composable<NavigationRoute.Onboarding> {
         OnboardingScreen(
             navigateAuth = navController::navigateAuthRoute
         )
