@@ -10,9 +10,11 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavDestination.Companion.hasRoute
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
+import com.sopt.gongbaek.presentation.model.MainBottomTabRoute
 import com.sopt.gongbaek.presentation.model.NavigationRoute
 import com.sopt.gongbaek.presentation.ui.auth.navigation.authNavGraph
 import com.sopt.gongbaek.presentation.ui.groupdetail.navigation.groupDetailNavGraph
@@ -31,7 +33,10 @@ fun MainNavHost(
     modifier: Modifier = Modifier
 ) {
     val currentBackStackEntry by navigator.navController.currentBackStackEntryAsState()
-    val currentRoute = currentBackStackEntry?.destination?.route
+    val isNoStatusBarPaddingRoute = listOf(
+        currentBackStackEntry?.destination?.hasRoute<MainBottomTabRoute.Home>(),
+        currentBackStackEntry?.destination?.hasRoute<NavigationRoute.GroupRoom>()
+    ).any { it == true }
 
     NavHost(
         navController = navigator.navController,
@@ -39,9 +44,7 @@ fun MainNavHost(
         modifier = modifier
             .fillMaxSize()
             .padding(
-                if (currentRoute == NavigationRoute.MainBottomNavBarTabRoute.HOME_TAB ||
-                    currentRoute == NavigationRoute.GROUP_ROOM
-                ) {
+                if (isNoStatusBarPaddingRoute) {
                     PaddingValues(0.dp)
                 } else {
                     WindowInsets.statusBars.asPaddingValues()
