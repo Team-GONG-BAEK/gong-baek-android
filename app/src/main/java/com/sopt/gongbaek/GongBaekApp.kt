@@ -2,6 +2,7 @@ package com.sopt.gongbaek
 
 import android.app.Application
 import androidx.appcompat.app.AppCompatDelegate
+import com.kakao.sdk.common.KakaoSdk
 import com.sopt.gongbaek.BuildConfig.DEBUG
 import dagger.hilt.android.HiltAndroidApp
 import timber.log.Timber
@@ -12,6 +13,7 @@ class GongBaekApp : Application() {
         super.onCreate()
         setTimber()
         setDarkMode()
+        initKakaoSdk()
     }
 
     private fun setTimber() {
@@ -21,4 +23,10 @@ class GongBaekApp : Application() {
     private fun setDarkMode() {
         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
     }
+
+    private fun initKakaoSdk() {
+        KakaoSdk.init(this, BuildConfig.KAKAO_NATIVE_APP_KEY)
+    }
+
+
 }
