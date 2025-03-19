@@ -2,11 +2,13 @@ package com.sopt.gongbaek.presentation.ui.grouproom.screen
 
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
+import androidx.navigation.toRoute
 import com.sopt.gongbaek.domain.model.Comment
 import com.sopt.gongbaek.domain.model.GroupRoom
 import com.sopt.gongbaek.domain.usecase.GetGroupCommentsUseCase
 import com.sopt.gongbaek.domain.usecase.LoadGroupRoomScreenUseCase
 import com.sopt.gongbaek.domain.usecase.PostCommentUseCase
+import com.sopt.gongbaek.presentation.model.NavigationRoute
 import com.sopt.gongbaek.presentation.util.base.BaseViewModel
 import com.sopt.gongbaek.presentation.util.base.UiLoadState
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -22,8 +24,8 @@ class GroupRoomViewModel @Inject constructor(
 ) : BaseViewModel<GroupRoomContract.State, GroupRoomContract.Event, GroupRoomContract.SideEffect>() {
 
     init {
-        val groupId: Int = savedStateHandle["groupId"] ?: 0
-        val groupCycle: String = savedStateHandle["groupCycle"] ?: ""
+        val groupId: Int = savedStateHandle.toRoute<NavigationRoute.GroupRoom>().groupId
+        val groupCycle: String = savedStateHandle.toRoute<NavigationRoute.GroupRoom>().groupCycle
         updateGroupRoom {
             copy(
                 groupInfo = groupInfo.copy(
