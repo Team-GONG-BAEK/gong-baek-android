@@ -18,6 +18,7 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import com.sopt.gongbaek.presentation.model.NavigationRoute
 import com.sopt.gongbaek.presentation.ui.auth.navigation.authNavGraph
 import com.sopt.gongbaek.presentation.ui.auth.screen.AuthViewModel
+import com.sopt.gongbaek.presentation.ui.auth.screen.TermsOfServiceScreen
 import com.sopt.gongbaek.presentation.ui.groupdetail.navigation.groupDetailNavGraph
 import com.sopt.gongbaek.presentation.ui.grouplist.navigation.groupListNavGraph
 import com.sopt.gongbaek.presentation.ui.groupregister.navigation.groupRegisterNavGraph
@@ -26,6 +27,7 @@ import com.sopt.gongbaek.presentation.ui.grouproom.navigation.groupRoomNavGraph
 import com.sopt.gongbaek.presentation.ui.home.navigation.homeNavGraph
 import com.sopt.gongbaek.presentation.ui.mygroup.navigation.myGroupNavGraph
 import com.sopt.gongbaek.presentation.ui.onboarding.navigation.onboardingNavGraph
+import com.sopt.gongbaek.presentation.ui.signin.SocialLoginScreen
 import com.sopt.gongbaek.presentation.ui.splash.SplashScreen
 
 @Composable
@@ -57,6 +59,8 @@ fun MainNavHost(
             startDestination = navigator.startDestination
         ) {
             composable(route = NavigationRoute.SplashRoute.SPLASH) { SplashScreen(navController = navigator.navController) }
+            composable(route = NavigationRoute.LOGIN) { SocialLoginScreen(navController = navigator.navController) }
+            composable(route = NavigationRoute.TERMS_OF_SERVICE) { TermsOfServiceScreen(navController = navigator.navController) }
             onboardingNavGraph(navigator.navController)
             authNavGraph(
                 navController = navigator.navController,

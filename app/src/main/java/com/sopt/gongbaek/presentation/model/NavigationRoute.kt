@@ -69,4 +69,7 @@ object NavigationRoute {
     object SplashRoute {
         const val SPLASH = "splash"
     }
+
+    const val LOGIN = "login"
+    const val TERMS_OF_SERVICE = "terms_of_service"
 }
