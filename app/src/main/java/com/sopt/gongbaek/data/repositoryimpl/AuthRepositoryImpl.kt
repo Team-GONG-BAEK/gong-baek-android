@@ -3,6 +3,7 @@ package com.sopt.gongbaek.data.repositoryimpl
 import com.sopt.gongbaek.data.mapper.todata.toData
 import com.sopt.gongbaek.data.mapper.todomain.toDomain
 import com.sopt.gongbaek.data.remote.datasource.AuthRemoteDataSource
+import com.sopt.gongbaek.data.remote.dto.request.LoginRequestDto
 import com.sopt.gongbaek.data.remote.util.handleApiResponse
 import com.sopt.gongbaek.data.remote.util.handleNullableApiResponse
 import com.sopt.gongbaek.domain.model.UserAuth
@@ -14,6 +15,14 @@ import javax.inject.Inject
 class AuthRepositoryImpl @Inject constructor(
     private val authRemoteDatasource: AuthRemoteDataSource
 ) : AuthRepository {
+
+    override suspend fun login(platform: String): Result<UserAuth> =
+        runCatching {
+            authRemoteDatasource.login(loginRequestDto = LoginRequestDto(platform = platform))
+                .handleApiResponse()
+                .getOrThrow()
+                .toDomain()
+        }
 
     override suspend fun registerUserInfo(userInfo: UserInfo): Result<UserAuth> =
         runCatching {

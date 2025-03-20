@@ -3,7 +3,9 @@ package com.sopt.gongbaek.data.remote.datasourceimpl
 import com.sopt.gongbaek.data.remote.datasource.AuthRemoteDataSource
 import com.sopt.gongbaek.data.remote.dto.base.ApiResponse
 import com.sopt.gongbaek.data.remote.dto.base.NullableApiResponse
+import com.sopt.gongbaek.data.remote.dto.request.LoginRequestDto
 import com.sopt.gongbaek.data.remote.dto.request.RegisterUserInfoRequestDto
+import com.sopt.gongbaek.data.remote.dto.response.LoginResponseDto
 import com.sopt.gongbaek.data.remote.dto.response.RegisterUserInfoResponseDto
 import com.sopt.gongbaek.data.remote.dto.response.UserProfileResponseDto
 import com.sopt.gongbaek.data.remote.dto.response.UserTimeTableResponseDto
@@ -13,6 +15,9 @@ import javax.inject.Inject
 class AuthRemoteDatasourceImpl @Inject constructor(
     private val authService: AuthService
 ) : AuthRemoteDataSource {
+
+    override suspend fun login(loginRequestDto: LoginRequestDto): ApiResponse<LoginResponseDto> =
+        authService.login(loginRequestDto)
 
     override suspend fun registerUserInfo(registerUserInfoRequestDto: RegisterUserInfoRequestDto): ApiResponse<RegisterUserInfoResponseDto> =
         authService.requestUserInfo(registerUserInfoRequestDto)
