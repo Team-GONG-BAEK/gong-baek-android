@@ -24,7 +24,9 @@ class MainNavigator(
         @Composable get() = MainBottomNavBarTabType.find { tab -> currentDestination?.hasRoute(tab::class) == true }
 
     private val currentDestination: NavDestination?
-        @Composable get() = navController.currentBackStackEntryAsState().value?.destination
+        @Composable get() = navController.currentBackStackEntryAsState()
+            .value
+            ?.destination
 
     fun navigate(mainBottomNavBarTabType: MainBottomNavBarTabType) {
         val navOptions = navOptions {
