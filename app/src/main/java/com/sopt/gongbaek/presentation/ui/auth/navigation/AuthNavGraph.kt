@@ -3,7 +3,9 @@ package com.sopt.gongbaek.presentation.ui.auth.navigation
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.composable
+import androidx.navigation.navOptions
 import androidx.navigation.navigation
+import com.sopt.gongbaek.presentation.model.AuthNavGraphRoute
 import com.sopt.gongbaek.presentation.model.NavigationRoute
 import com.sopt.gongbaek.presentation.ui.auth.screen.AuthViewModel
 import com.sopt.gongbaek.presentation.ui.auth.screen.CompleteAuthRoute
@@ -19,28 +21,25 @@ import com.sopt.gongbaek.presentation.ui.auth.screen.SelfIntroductionRoute
 import com.sopt.gongbaek.presentation.ui.auth.screen.TimetableConvertRoute
 import com.sopt.gongbaek.presentation.ui.auth.screen.UnivMajorRoute
 import com.sopt.gongbaek.presentation.ui.auth.screen.UnivSearchRoute
-import com.sopt.gongbaek.presentation.ui.home.navigation.navigateHome
+import com.sopt.gongbaek.presentation.ui.home.navigation.navigateHomeNavGraph
+import com.sopt.gongbaek.presentation.util.extension.sharedViewModel
 
 fun NavGraphBuilder.authNavGraph(
-    navController: NavHostController,
-    viewModel: AuthViewModel
+    navController: NavHostController
 ) {
-    navigation(
-        startDestination = NavigationRoute.AuthNavGraphRoute.SELECT_PROFILE,
-        route = NavigationRoute.AuthNavGraphRoute.AUTH_NAV_GRAPH
+    navigation<AuthNavGraphRoute.AuthNavGraph>(
+        startDestination = AuthNavGraphRoute.SelectProfile
     ) {
-        composable(
-            route = NavigationRoute.AuthNavGraphRoute.SELECT_PROFILE
-        ) {
+        composable<AuthNavGraphRoute.SelectProfile> { backStackEntry ->
+            val viewModel = backStackEntry.sharedViewModel<AuthViewModel>(navController)
             SelectProfileRoute(
                 viewModel = viewModel,
                 navigateNickname = navController::navigateNickname
             )
         }
 
-        composable(
-            route = NavigationRoute.AuthNavGraphRoute.NICKNAME
-        ) {
+        composable<AuthNavGraphRoute.Nickname> { backStackEntry ->
+            val viewModel = backStackEntry.sharedViewModel<AuthViewModel>(navController)
             NicknameRoute(
                 viewModel = viewModel,
                 navigateUnivMajor = navController::navigateUnivMajor,
@@ -48,9 +47,8 @@ fun NavGraphBuilder.authNavGraph(
             )
         }
 
-        composable(
-            route = NavigationRoute.AuthNavGraphRoute.UNIV_MAJOR
-        ) {
+        composable<AuthNavGraphRoute.UnivMajor> { backStackEntry ->
+            val viewModel = backStackEntry.sharedViewModel<AuthViewModel>(navController)
             UnivMajorRoute(
                 viewModel = viewModel,
                 navigateGrade = navController::navigateGrade,
@@ -60,27 +58,24 @@ fun NavGraphBuilder.authNavGraph(
             )
         }
 
-        composable(
-            route = NavigationRoute.AuthNavGraphRoute.UNIV_SEARCH
-        ) {
+        composable<AuthNavGraphRoute.UnivSearch> { backStackEntry ->
+            val viewModel = backStackEntry.sharedViewModel<AuthViewModel>(navController)
             UnivSearchRoute(
                 viewModel = viewModel,
                 navigateBack = navController::popBackStack
             )
         }
 
-        composable(
-            route = NavigationRoute.AuthNavGraphRoute.MAJOR_SEARCH
-        ) {
+        composable<AuthNavGraphRoute.MajorSearch> { backStackEntry ->
+            val viewModel = backStackEntry.sharedViewModel<AuthViewModel>(navController)
             MajorSearchRoute(
                 viewModel = viewModel,
                 navigateBack = navController::popBackStack
             )
         }
 
-        composable(
-            route = NavigationRoute.AuthNavGraphRoute.GRADE
-        ) {
+        composable<AuthNavGraphRoute.Grade> { backStackEntry ->
+            val viewModel = backStackEntry.sharedViewModel<AuthViewModel>(navController)
             GradeRoute(
                 viewModel = viewModel,
                 navigateMbti = navController::navigateMbti,
@@ -88,9 +83,8 @@ fun NavGraphBuilder.authNavGraph(
             )
         }
 
-        composable(
-            route = NavigationRoute.AuthNavGraphRoute.MBTI
-        ) {
+        composable<AuthNavGraphRoute.Mbti> { backStackEntry ->
+            val viewModel = backStackEntry.sharedViewModel<AuthViewModel>(navController)
             MbtiRoute(
                 viewModel = viewModel,
                 navigateGender = navController::navigateGender,
@@ -98,9 +92,8 @@ fun NavGraphBuilder.authNavGraph(
             )
         }
 
-        composable(
-            route = NavigationRoute.AuthNavGraphRoute.GENDER
-        ) {
+        composable<AuthNavGraphRoute.Gender> { backStackEntry ->
+            val viewModel = backStackEntry.sharedViewModel<AuthViewModel>(navController)
             GenderRoute(
                 viewModel = viewModel,
                 navigateSelfIntroduction = navController::navigateSelfIntroduction,
@@ -108,9 +101,8 @@ fun NavGraphBuilder.authNavGraph(
             )
         }
 
-        composable(
-            route = NavigationRoute.AuthNavGraphRoute.SELF_INTRODUCTION
-        ) {
+        composable<AuthNavGraphRoute.SelfIntroduction> { backStackEntry ->
+            val viewModel = backStackEntry.sharedViewModel<AuthViewModel>(navController)
             SelfIntroductionRoute(
                 viewModel = viewModel,
                 navigateEnterTimetable = navController::navigateEnterTimetable,
@@ -118,9 +110,8 @@ fun NavGraphBuilder.authNavGraph(
             )
         }
 
-        composable(
-            route = NavigationRoute.AuthNavGraphRoute.ENTER_TIMETABLE
-        ) {
+        composable<AuthNavGraphRoute.EnterTimetable> { backStackEntry ->
+            val viewModel = backStackEntry.sharedViewModel<AuthViewModel>(navController)
             EnterTimeTableRoute(
                 viewModel = viewModel,
                 navigateTimetableConvert = navController::navigateTimetableConvert,
@@ -128,18 +119,16 @@ fun NavGraphBuilder.authNavGraph(
             )
         }
 
-        composable(
-            route = NavigationRoute.AuthNavGraphRoute.TIMETABLE_CONVERT
-        ) {
+        composable<AuthNavGraphRoute.TimetableConvert> { backStackEntry ->
+            val viewModel = backStackEntry.sharedViewModel<AuthViewModel>(navController)
             TimetableConvertRoute(
                 viewModel = viewModel,
                 navigateGapTimeTable = navController::navigateGapTimetable
             )
         }
 
-        composable(
-            route = NavigationRoute.AuthNavGraphRoute.GAP_TIMETABLE
-        ) {
+        composable<AuthNavGraphRoute.GapTimetable> { backStackEntry ->
+            val viewModel = backStackEntry.sharedViewModel<AuthViewModel>(navController)
             GapTimeTableRoute(
                 viewModel = viewModel,
                 navigateCompleteAuth = navController::navigateCompleteAuth,
@@ -147,21 +136,16 @@ fun NavGraphBuilder.authNavGraph(
             )
         }
 
-        composable(
-            route = NavigationRoute.AuthNavGraphRoute.TIMETABLE_CONVERT
-        ) {
-            TimetableConvertRoute(
-                viewModel = viewModel,
-                navigateGapTimeTable = navController::navigateGapTimetable
-            )
-        }
-
-        composable(
-            route = NavigationRoute.AuthNavGraphRoute.COMPLETE_AUTH
-        ) {
+        composable<AuthNavGraphRoute.CompleteAuth> { backStackEntry ->
+            val viewModel = backStackEntry.sharedViewModel<AuthViewModel>(navController)
+            val navOptions = navOptions {
+                popUpTo(NavigationRoute.Onboarding) {
+                    inclusive = true
+                }
+            }
             CompleteAuthRoute(
                 viewModel = viewModel,
-                navigateHome = navController::navigateHome
+                navigateHome = { navController.navigateHomeNavGraph(navOptions) }
             )
         }
     }

@@ -2,15 +2,15 @@ package com.sopt.gongbaek.presentation.ui.grouplist.navigation
 
 import androidx.navigation.NavController
 import androidx.navigation.NavOptions
-import com.sopt.gongbaek.presentation.model.NavigationRoute
+import com.sopt.gongbaek.presentation.model.MainBottomTabRoute
 
 fun NavController.navigateGroupListNavGraph(navOptions: NavOptions) {
     navigate(
-        route = NavigationRoute.MainBottomNavBarTabRoute.GROUP_LIST_TAB,
+        route = MainBottomTabRoute.GroupList,
         navOptions = navOptions
     )
 }
 
 fun NavController.navigateGroupList() {
-    navigate(route = NavigationRoute.GroupListNavGraphRoute.GROUP_LIST)
+    navigate(MainBottomTabRoute.GroupList)
 }

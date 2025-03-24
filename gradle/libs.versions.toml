@@ -20,7 +20,7 @@ ktlint = "11.5.1"
 # Jetpack Compose
 activityCompose = "1.9.3"
 composeBom = "2024.04.01"
-androidxComposeNavigation = "2.8.2"
+androidxComposeNavigation = "2.8.9"
 hiltNavigationCompose = "1.2.0"
 
 # Dependency Injection

@@ -1,12 +1,12 @@
-package com.sopt.gongbaek.presentation.ui.home.navigation
+package com.sopt.gongbaek.presentation.ui.mypage.navigation
 
 import androidx.navigation.NavController
 import androidx.navigation.NavOptions
 import com.sopt.gongbaek.presentation.model.MainBottomTabRoute
 
-fun NavController.navigateHomeNavGraph(navOptions: NavOptions) {
+fun NavController.navigateMyPage(navOptions: NavOptions) {
     navigate(
-        route = MainBottomTabRoute.Home,
+        route = MainBottomTabRoute.MyPage,
         navOptions = navOptions
     )
 }
