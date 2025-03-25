@@ -38,6 +38,7 @@
     <string name="topbar_search">검색하기</string>
     <string name="topbar_group">채우기</string>
     <string name="topbar_my_group">나의 채움</string>
+    <string name="topbar_my_page">마이페이지</string>
 
     <!--CommentSection -->
     <string name="comment_section_group_closed_description">해당 모임이 종료되어 더 이상 댓글을 작성할 수 없습니다.</string>
