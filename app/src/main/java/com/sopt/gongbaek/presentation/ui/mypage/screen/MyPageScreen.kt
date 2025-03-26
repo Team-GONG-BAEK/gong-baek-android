@@ -13,6 +13,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.navigationBars
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.PagerState
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -37,7 +38,9 @@ import androidx.lifecycle.flowWithLifecycle
 import com.sopt.gongbaek.R
 import com.sopt.gongbaek.presentation.model.ProfileImageList
 import com.sopt.gongbaek.presentation.type.MyGroupPagerType
+import com.sopt.gongbaek.presentation.ui.component.tabpager.CustomTabPager
 import com.sopt.gongbaek.presentation.ui.component.topbar.CenterTitleTopBar
+import com.sopt.gongbaek.presentation.ui.mygroup.screen.MyGroupScreenContent
 import com.sopt.gongbaek.presentation.util.extension.roundedBackgroundWithBorder
 import com.sopt.gongbaek.ui.theme.GongBaekTheme
 
@@ -111,13 +114,20 @@ fun MyPageScreen(
             thickness = 8.dp,
             color = GongBaekTheme.colors.gray02
         )
+
+        MyGroupSection(
+            uiState = uiState,
+            myGroupTabs = myPageTabs,
+            pagerState = pagerState,
+            onGroupDetailButtonClick = onGroupDetailButtonClick,
+            onGroupRoomButtonClick = onGroupRoomButtonClick
+        )
     }
 }
 
 @Composable
 private fun MyInfoSection(
-    uiState: MyPageContract.State,
-    modifier: Modifier = Modifier
+    uiState: MyPageContract.State
 ) {
     val imageList = ProfileImageList.profileImageList
     val profileImageResId = if (imageList.isNotEmpty() && uiState.myPageInfo.profileImage in 1..imageList.size) {
@@ -162,6 +172,52 @@ private fun MyInfoSection(
                 style = GongBaekTheme.typography.body2.r14
             )
         }
+    }
+}
+
+@Composable
+fun MyGroupSection(
+    uiState: MyPageContract.State,
+    myGroupTabs: List<String>,
+    pagerState: PagerState,
+    onGroupDetailButtonClick: (Int, String) -> Unit,
+    onGroupRoomButtonClick: (Int, String) -> Unit
+) {
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(top = 10.dp)
+            .padding(WindowInsets.navigationBars.asPaddingValues())
+            .padding(WindowInsets.navigationBars.asPaddingValues())
+    ) {
+        CustomTabPager(
+            tabs = myGroupTabs,
+            pagerState = pagerState
+        )
+        HorizontalPager(
+            state = pagerState,
+            pageContent = { page ->
+                when (page) {
+                    0 -> {
+                        MyGroupScreenContent(
+                            activeGroups = uiState.registerActiveGroups,
+                            closedGroups = uiState.registerClosedGroups,
+                            onGroupDetailButtonClick = onGroupDetailButtonClick,
+                            onGroupRoomButtonClick = onGroupRoomButtonClick
+                        )
+                    }
+
+                    1 -> {
+                        MyGroupScreenContent(
+                            activeGroups = uiState.applyActiveGroups,
+                            closedGroups = uiState.applyClosedGroups,
+                            onGroupDetailButtonClick = onGroupDetailButtonClick,
+                            onGroupRoomButtonClick = onGroupRoomButtonClick
+                        )
+                    }
+                }
+            }
+        )
     }
 }
 
