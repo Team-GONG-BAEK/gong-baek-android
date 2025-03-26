@@ -5,30 +5,20 @@ import com.sopt.gongbaek.presentation.model.AuthNavGraphRoute
 
 fun NavController.navigateAuthRoute() = navigate(AuthNavGraphRoute.AuthNavGraph)
 
-fun NavController.navigateNicknameGender() = navigate(AuthNavGraphRoute.NicknameGender)
-
-fun NavController.navigateAcademicInfo() = navigate(AuthNavGraphRoute.AcademicInfo)
-
 fun NavController.navigateUnivSearch() = navigate(AuthNavGraphRoute.UnivSearch)
 
 fun NavController.navigateMajorSearch() = navigate(AuthNavGraphRoute.MajorSearch)
 
-fun NavController.navigateGrade() = navigate(AuthNavGraphRoute.Grade)
+fun NavController.navigateEmailVerification() = navigate(AuthNavGraphRoute.EmailVerification)
+
+fun NavController.navigateNicknameGender() = navigate(AuthNavGraphRoute.NicknameGender)
+
+fun NavController.navigateSelectProfile() = navigate(AuthNavGraphRoute.SelectProfile)
 
 fun NavController.navigateMbti() = navigate(AuthNavGraphRoute.Mbti)
-
-fun NavController.navigateGender() = navigate(AuthNavGraphRoute.Gender)
 
 fun NavController.navigateSelfIntroduction() = navigate(AuthNavGraphRoute.SelfIntroduction)
 
 fun NavController.navigateEnterTimetable() = navigate(AuthNavGraphRoute.EnterTimetable)
 
-fun NavController.navigateGapTimetable() = navigate(AuthNavGraphRoute.GapTimetable)
-
-fun NavController.navigateTimetableConvert() = navigate(AuthNavGraphRoute.TimetableConvert)
-
 fun NavController.navigateCompleteAuth() = navigate(AuthNavGraphRoute.CompleteAuth)
-
-fun NavController.navigateEmailVerification() = navigate(AuthNavGraphRoute.EmailVerification)
-
-fun NavController.navigateSelectProfile() = navigate(AuthNavGraphRoute.SelectProfile)
