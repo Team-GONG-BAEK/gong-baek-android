@@ -71,7 +71,6 @@ fun NavGraphBuilder.authNavGraph(
             )
         }
 
-
         composable<AuthNavGraphRoute.SelectProfile> { backStackEntry ->
             val viewModel = backStackEntry.sharedViewModel<AuthViewModel>(navController)
             SelectProfileRoute(
