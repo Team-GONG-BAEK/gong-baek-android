@@ -28,8 +28,19 @@ fun NavGraphBuilder.authNavGraph(
     navController: NavHostController
 ) {
     navigation<AuthNavGraphRoute.AuthNavGraph>(
-        startDestination = AuthNavGraphRoute.SelectProfile
+        startDestination = AuthNavGraphRoute.AcademicInfo
     ) {
+        composable<AuthNavGraphRoute.AcademicInfo> { backStackEntry ->
+            val viewModel = backStackEntry.sharedViewModel<AuthViewModel>(navController)
+            AcademicInfoRoute(
+                viewModel = viewModel,
+                navigateGrade = navController::navigateGrade,
+                navigateUnivSearch = navController::navigateUnivSearch,
+                navigateMajorSearch = navController::navigateMajorSearch,
+                navigateBack = navController::popBackStack
+            )
+        }
+
         composable<AuthNavGraphRoute.SelectProfile> { backStackEntry ->
             val viewModel = backStackEntry.sharedViewModel<AuthViewModel>(navController)
             SelectProfileRoute(
@@ -43,17 +54,6 @@ fun NavGraphBuilder.authNavGraph(
             NicknameRoute(
                 viewModel = viewModel,
                 navigateAcademicInfo = navController::navigateAcademicInfo,
-                navigateBack = navController::popBackStack
-            )
-        }
-
-        composable<AuthNavGraphRoute.AcademicInfo> { backStackEntry ->
-            val viewModel = backStackEntry.sharedViewModel<AuthViewModel>(navController)
-            AcademicInfoRoute(
-                viewModel = viewModel,
-                navigateGrade = navController::navigateGrade,
-                navigateUnivSearch = navController::navigateUnivSearch,
-                navigateMajorSearch = navController::navigateMajorSearch,
                 navigateBack = navController::popBackStack
             )
         }
