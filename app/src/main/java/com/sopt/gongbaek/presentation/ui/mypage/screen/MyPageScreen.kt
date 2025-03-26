@@ -40,7 +40,7 @@ import com.sopt.gongbaek.presentation.model.ProfileImageList
 import com.sopt.gongbaek.presentation.type.MyGroupPagerType
 import com.sopt.gongbaek.presentation.ui.component.tabpager.CustomTabPager
 import com.sopt.gongbaek.presentation.ui.component.topbar.CenterTitleTopBar
-import com.sopt.gongbaek.presentation.ui.mygroup.screen.MyGroupScreenContent
+import com.sopt.gongbaek.presentation.ui.mypage.component.MyGroupScreenContent
 import com.sopt.gongbaek.presentation.util.extension.roundedBackgroundWithBorder
 import com.sopt.gongbaek.ui.theme.GongBaekTheme
 
