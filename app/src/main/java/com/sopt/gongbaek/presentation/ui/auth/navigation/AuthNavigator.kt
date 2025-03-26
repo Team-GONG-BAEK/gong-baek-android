@@ -28,3 +28,5 @@ fun NavController.navigateGapTimetable() = navigate(AuthNavGraphRoute.GapTimetab
 fun NavController.navigateTimetableConvert() = navigate(AuthNavGraphRoute.TimetableConvert)
 
 fun NavController.navigateCompleteAuth() = navigate(AuthNavGraphRoute.CompleteAuth)
+
+fun NavController.navigateEmailVerification() = navigate(AuthNavGraphRoute.EmailVerification)

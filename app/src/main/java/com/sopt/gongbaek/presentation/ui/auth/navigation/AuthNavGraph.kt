@@ -20,6 +20,7 @@ import com.sopt.gongbaek.presentation.ui.auth.screen.SelectProfileRoute
 import com.sopt.gongbaek.presentation.ui.auth.screen.SelfIntroductionRoute
 import com.sopt.gongbaek.presentation.ui.auth.screen.TimetableConvertRoute
 import com.sopt.gongbaek.presentation.ui.auth.screen.AcademicInfoRoute
+import com.sopt.gongbaek.presentation.ui.auth.screen.EmailVerificationRoute
 import com.sopt.gongbaek.presentation.ui.auth.screen.UnivSearchRoute
 import com.sopt.gongbaek.presentation.ui.home.navigation.navigateHomeNavGraph
 import com.sopt.gongbaek.presentation.util.extension.sharedViewModel
@@ -39,6 +40,10 @@ fun NavGraphBuilder.authNavGraph(
                 navigateMajorSearch = navController::navigateMajorSearch,
                 navigateBack = navController::popBackStack
             )
+        }
+
+        composable<AuthNavGraphRoute.EmailVerification> {
+            EmailVerificationRoute()
         }
 
         composable<AuthNavGraphRoute.SelectProfile> { backStackEntry ->

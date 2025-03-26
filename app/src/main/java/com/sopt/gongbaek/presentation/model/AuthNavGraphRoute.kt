@@ -16,6 +16,9 @@ sealed interface AuthNavGraphRoute : NavigationRoute {
     data object AcademicInfo : AuthNavGraphRoute
 
     @Serializable
+    data object EmailVerification : AuthNavGraphRoute
+
+    @Serializable
     data object Grade : AuthNavGraphRoute
 
     @Serializable
