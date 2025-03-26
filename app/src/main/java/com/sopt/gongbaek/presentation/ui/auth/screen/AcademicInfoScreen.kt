@@ -26,7 +26,7 @@ import com.sopt.gongbaek.presentation.ui.component.topbar.StartTitleTopBar
 @Composable
 fun AcademicInfoRoute(
     viewModel: AuthViewModel,
-    navigateGrade: () -> Unit,
+    navigateEmailVerification: () -> Unit,
     navigateUnivSearch: () -> Unit,
     navigateMajorSearch: () -> Unit,
     navigateBack: () -> Unit
@@ -47,8 +47,8 @@ fun AcademicInfoRoute(
                 if (sideEffect is AuthContract.SideEffect.NavigateMajorSearch) {
                     navigateMajorSearch()
                 }
-                if (sideEffect is AuthContract.SideEffect.NavigateGrade) {
-                    navigateGrade()
+                if (sideEffect is AuthContract.SideEffect.NavigateEmailVerification) {
+                    navigateEmailVerification()
                 }
             }
     }
@@ -56,7 +56,7 @@ fun AcademicInfoRoute(
     AcademicInfoScreen(
         univSearchResult = uiState.userInfo.school,
         majorSearchResult = uiState.userInfo.major,
-        navigateGrade = { viewModel.sendSideEffect(AuthContract.SideEffect.NavigateGrade) },
+        navigateEmailVerification = { viewModel.sendSideEffect(AuthContract.SideEffect.NavigateEmailVerification) },
         onUnivSearchClick = { viewModel.sendSideEffect(AuthContract.SideEffect.NavigateUnivSearch) },
         onMajorSearchClick = { viewModel.sendSideEffect(AuthContract.SideEffect.NavigateMajorSearch) },
         onBackClick = { viewModel.sendSideEffect(AuthContract.SideEffect.NavigateBack) }
@@ -67,7 +67,7 @@ fun AcademicInfoRoute(
 private fun AcademicInfoScreen(
     univSearchResult: String,
     majorSearchResult: String,
-    navigateGrade: () -> Unit,
+    navigateEmailVerification: () -> Unit,
     onUnivSearchClick: () -> Unit,
     onMajorSearchClick: () -> Unit,
     onBackClick: () -> Unit
@@ -89,7 +89,7 @@ private fun AcademicInfoScreen(
         GongBaekBasicButton(
             title = "다음",
             enabled = univSearchResult.isNotEmpty() && majorSearchResult.isNotEmpty(),
-            onClick = navigateGrade,
+            onClick = navigateEmailVerification,
             modifier = Modifier
                 .align(Alignment.BottomCenter)
                 .padding(horizontal = 16.dp, vertical = 12.dp)
@@ -150,7 +150,7 @@ private fun AcademicInfoScreenPreview() {
     AcademicInfoScreen(
         univSearchResult = "서울대학교",
         majorSearchResult = "",
-        navigateGrade = {},
+        navigateEmailVerification = {},
         onUnivSearchClick = {},
         onMajorSearchClick = {},
         onBackClick = {}

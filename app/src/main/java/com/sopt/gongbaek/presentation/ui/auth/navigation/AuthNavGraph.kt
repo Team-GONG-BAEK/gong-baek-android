@@ -35,7 +35,7 @@ fun NavGraphBuilder.authNavGraph(
             val viewModel = backStackEntry.sharedViewModel<AuthViewModel>(navController)
             AcademicInfoRoute(
                 viewModel = viewModel,
-                navigateGrade = navController::navigateGrade,
+                navigateEmailVerification = navController::navigateEmailVerification,
                 navigateUnivSearch = navController::navigateUnivSearch,
                 navigateMajorSearch = navController::navigateMajorSearch,
                 navigateBack = navController::popBackStack
