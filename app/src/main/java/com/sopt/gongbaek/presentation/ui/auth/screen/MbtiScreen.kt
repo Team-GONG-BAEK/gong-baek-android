@@ -31,7 +31,7 @@ import com.sopt.gongbaek.ui.theme.GongBaekTheme
 @Composable
 fun MbtiRoute(
     viewModel: AuthViewModel,
-    navigateGender: () -> Unit,
+    navigateSelfIntroduction: () -> Unit,
     navigateBack: () -> Unit
 ) {
     val uiState by viewModel.state.collectAsStateWithLifecycle()
@@ -44,8 +44,8 @@ fun MbtiRoute(
                 if (sideEffect is AuthContract.SideEffect.NavigateBack) {
                     navigateBack()
                 }
-                if (sideEffect is AuthContract.SideEffect.NavigateGender) {
-                    navigateGender()
+                if (sideEffect is AuthContract.SideEffect.NavigateSelfIntroduction) {
+                    navigateSelfIntroduction()
                 }
             }
     }
@@ -61,7 +61,7 @@ fun MbtiRoute(
         onDecisionMakingOptionSelected = { viewModel.setEvent(AuthContract.Event.OnDecisionMakingOptionSelected(it)) },
         onLifestyleOrientationOptionSelected = { viewModel.setEvent(AuthContract.Event.OnLifestyleOrientationOptionSelected(it)) },
         navigateBack = { viewModel.sendSideEffect(AuthContract.SideEffect.NavigateBack) },
-        navigateGender = { viewModel.sendSideEffect(AuthContract.SideEffect.NavigateGender) }
+        navigateSelfIntroduction = { viewModel.sendSideEffect(AuthContract.SideEffect.NavigateSelfIntroduction) }
     )
 }
 
@@ -76,7 +76,7 @@ private fun MbtiScreen(
     onInformationGatheringOptionSelected: (String) -> Unit,
     onDecisionMakingOptionSelected: (String) -> Unit,
     onLifestyleOrientationOptionSelected: (String) -> Unit,
-    navigateGender: () -> Unit,
+    navigateSelfIntroduction: () -> Unit,
     navigateBack: () -> Unit
 ) {
     Scaffold(
@@ -84,7 +84,7 @@ private fun MbtiScreen(
             GongBaekBasicButton(
                 title = "다음",
                 enabled = mbti.length == 4,
-                onClick = navigateGender,
+                onClick = navigateSelfIntroduction,
                 modifier = Modifier
                     .padding(horizontal = 16.dp, vertical = 12.dp)
             )
@@ -208,7 +208,7 @@ private fun MbtiScreenContent(
 private fun PreviewMbtiScreen() {
     GONGBAEKTheme {
         MbtiScreen(
-            navigateGender = {},
+            navigateSelfIntroduction = {},
             navigateBack = {},
             mbti = "",
             energyDirectionOptions = "",

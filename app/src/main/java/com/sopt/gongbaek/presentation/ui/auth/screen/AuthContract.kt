@@ -53,18 +53,18 @@ class AuthContract {
 
     sealed interface SideEffect : UiSideEffect {
         data object NavigateBack : SideEffect
-        data object NavigateNickname : SideEffect
-        data object NavigateUnivMajor : SideEffect
+        data object NavigateAcademicInfo : SideEffect
         data object NavigateUnivSearch : SideEffect
         data object NavigateMajorSearch : SideEffect
-        data object NavigateGrade : SideEffect
-        data object NavigateGender : SideEffect
+        data object NavigateEmailVerification : SideEffect
+        data object NavigateNicknameGender : SideEffect
+        data object NavigateSelectProfile : SideEffect
         data object NavigateMbti : SideEffect
         data object NavigateSelfIntroduction : SideEffect
         data object NavigateEnterTimetable : SideEffect
-        data object NavigateTimetableConvert : SideEffect
-        data object NavigateGapTimetable : SideEffect
         data object NavigateCompleteAuth : SideEffect
         data object NavigateHome : SideEffect
+
+        data object NavigateGapTimetable : SideEffect
     }
 }

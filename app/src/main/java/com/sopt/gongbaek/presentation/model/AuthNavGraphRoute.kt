@@ -10,10 +10,13 @@ sealed interface AuthNavGraphRoute : NavigationRoute {
     data object SelectProfile : AuthNavGraphRoute
 
     @Serializable
-    data object Nickname : AuthNavGraphRoute
+    data object NicknameGender : AuthNavGraphRoute
 
     @Serializable
-    data object UnivMajor : AuthNavGraphRoute
+    data object AcademicInfo : AuthNavGraphRoute
+
+    @Serializable
+    data object EmailVerification : AuthNavGraphRoute
 
     @Serializable
     data object Grade : AuthNavGraphRoute

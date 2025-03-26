@@ -32,7 +32,7 @@ import com.sopt.gongbaek.ui.theme.GongBaekTheme
 @Composable
 fun EnterTimeTableRoute(
     viewModel: AuthViewModel,
-    navigateTimetableConvert: () -> Unit,
+    navigateCompleteAuth: () -> Unit,
     navigateBack: () -> Unit
 ) {
     val uiState by viewModel.state.collectAsStateWithLifecycle()
@@ -45,15 +45,15 @@ fun EnterTimeTableRoute(
                 if (sideEffect is AuthContract.SideEffect.NavigateBack) {
                     navigateBack()
                 }
-                if (sideEffect is AuthContract.SideEffect.NavigateTimetableConvert) {
-                    navigateTimetableConvert()
+                if (sideEffect is AuthContract.SideEffect.NavigateCompleteAuth) {
+                    navigateCompleteAuth()
                 }
             }
     }
 
     EnterTimeTableScreen(
         selectedTimeSlotsByDay = uiState.selectedTimeSlotsByDay,
-        navigateTimetableConvert = { viewModel.sendSideEffect(AuthContract.SideEffect.NavigateTimetableConvert) },
+        navigateCompleteAuth = { viewModel.sendSideEffect(AuthContract.SideEffect.NavigateCompleteAuth) },
         navigateBack = { viewModel.sendSideEffect(AuthContract.SideEffect.NavigateBack) },
         onTimeSlotSelectionChange = { day, timeSlots ->
             viewModel.setEvent(AuthContract.Event.OnTimeSlotSelectionChange(day, timeSlots))
@@ -63,7 +63,7 @@ fun EnterTimeTableRoute(
 
 @Composable
 private fun EnterTimeTableScreen(
-    navigateTimetableConvert: () -> Unit,
+    navigateCompleteAuth: () -> Unit,
     navigateBack: () -> Unit,
     selectedTimeSlotsByDay: Map<String, List<Int>>,
     onTimeSlotSelectionChange: (String, List<Int>) -> Unit
@@ -73,7 +73,7 @@ private fun EnterTimeTableScreen(
             GongBaekBasicButton(
                 title = "다음",
                 enabled = true,
-                onClick = navigateTimetableConvert,
+                onClick = navigateCompleteAuth,
                 modifier = Modifier
                     .padding(horizontal = 16.dp, vertical = 12.dp)
             )
@@ -154,7 +154,7 @@ private fun EnterTimeTableSection(
 private fun PreviewEnterTimeTableScreen() {
     GONGBAEKTheme {
         EnterTimeTableScreen(
-            navigateTimetableConvert = {},
+            navigateCompleteAuth = {},
             navigateBack = {},
             selectedTimeSlotsByDay = mapOf(),
             onTimeSlotSelectionChange = { _, _ -> }
