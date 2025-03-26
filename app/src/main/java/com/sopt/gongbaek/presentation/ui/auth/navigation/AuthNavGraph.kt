@@ -96,7 +96,7 @@ fun NavGraphBuilder.authNavGraph(
             val viewModel = backStackEntry.sharedViewModel<AuthViewModel>(navController)
             MbtiRoute(
                 viewModel = viewModel,
-                navigateGender = navController::navigateGender,
+                navigateSelfIntroduction = navController::navigateSelfIntroduction,
                 navigateBack = navController::popBackStack
             )
         }
