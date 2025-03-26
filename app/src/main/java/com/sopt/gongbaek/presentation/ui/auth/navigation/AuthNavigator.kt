@@ -5,7 +5,7 @@ import com.sopt.gongbaek.presentation.model.AuthNavGraphRoute
 
 fun NavController.navigateAuthRoute() = navigate(AuthNavGraphRoute.AuthNavGraph)
 
-fun NavController.navigateNickname() = navigate(AuthNavGraphRoute.Nickname)
+fun NavController.navigateNicknameGender() = navigate(AuthNavGraphRoute.NicknameGender)
 
 fun NavController.navigateAcademicInfo() = navigate(AuthNavGraphRoute.AcademicInfo)
 

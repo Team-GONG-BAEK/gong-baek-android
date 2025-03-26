@@ -15,7 +15,7 @@ import com.sopt.gongbaek.presentation.ui.auth.screen.GenderRoute
 import com.sopt.gongbaek.presentation.ui.auth.screen.GradeRoute
 import com.sopt.gongbaek.presentation.ui.auth.screen.MajorSearchRoute
 import com.sopt.gongbaek.presentation.ui.auth.screen.MbtiRoute
-import com.sopt.gongbaek.presentation.ui.auth.screen.NicknameRoute
+import com.sopt.gongbaek.presentation.ui.auth.screen.NicknameGenderRoute
 import com.sopt.gongbaek.presentation.ui.auth.screen.SelectProfileRoute
 import com.sopt.gongbaek.presentation.ui.auth.screen.SelfIntroductionRoute
 import com.sopt.gongbaek.presentation.ui.auth.screen.TimetableConvertRoute
@@ -50,13 +50,13 @@ fun NavGraphBuilder.authNavGraph(
             val viewModel = backStackEntry.sharedViewModel<AuthViewModel>(navController)
             SelectProfileRoute(
                 viewModel = viewModel,
-                navigateNickname = navController::navigateNickname
+                navigateNicknameGender = navController::navigateNicknameGender
             )
         }
 
-        composable<AuthNavGraphRoute.Nickname> { backStackEntry ->
+        composable<AuthNavGraphRoute.NicknameGender> { backStackEntry ->
             val viewModel = backStackEntry.sharedViewModel<AuthViewModel>(navController)
-            NicknameRoute(
+            NicknameGenderRoute(
                 viewModel = viewModel,
                 navigateAcademicInfo = navController::navigateAcademicInfo,
                 navigateBack = navController::popBackStack

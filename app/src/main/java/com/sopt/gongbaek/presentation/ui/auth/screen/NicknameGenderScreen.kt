@@ -24,10 +24,9 @@ import com.sopt.gongbaek.presentation.ui.component.section.PageDescriptionSectio
 import com.sopt.gongbaek.presentation.ui.component.textfield.GongBaekBasicTextField
 import com.sopt.gongbaek.presentation.ui.component.topbar.StartTitleTopBar
 import com.sopt.gongbaek.presentation.util.extension.hasCompleteKoreanCharacters
-import com.sopt.gongbaek.ui.theme.GONGBAEKTheme
 
 @Composable
-fun NicknameRoute(
+fun NicknameGenderRoute(
     viewModel: AuthViewModel,
     navigateAcademicInfo: () -> Unit,
     navigateBack: () -> Unit
@@ -48,7 +47,7 @@ fun NicknameRoute(
             }
     }
 
-    NicknameScreen(
+    NicknameGenderScreen(
         nickname = uiState.userInfo.nickname,
         errorMessage = uiState.nicknameErrorMessage,
         onNicknameChanged = { viewModel.setEvent(AuthContract.Event.OnNicknameChanged(it)) },
@@ -58,7 +57,7 @@ fun NicknameRoute(
 }
 
 @Composable
-private fun NicknameScreen(
+private fun NicknameGenderScreen(
     nickname: String,
     errorMessage: String?,
     onNicknameChanged: (String) -> Unit,
@@ -127,12 +126,10 @@ private fun NickNameInputSection(
 
 @Preview(showBackground = true)
 @Composable
-private fun PreviewNicknameScreen() {
-    GONGBAEKTheme {
-        NicknameScreen(
-            nickname = "닉네임",
-            onNicknameChanged = {},
-            errorMessage = null
-        )
-    }
+private fun NicknameGenderScreenPreview() {
+    NicknameGenderScreen(
+        nickname = "닉네임",
+        onNicknameChanged = {},
+        errorMessage = null
+    )
 }

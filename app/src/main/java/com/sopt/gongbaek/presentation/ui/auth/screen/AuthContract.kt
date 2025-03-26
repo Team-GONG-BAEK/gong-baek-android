@@ -53,7 +53,7 @@ class AuthContract {
 
     sealed interface SideEffect : UiSideEffect {
         data object NavigateBack : SideEffect
-        data object NavigateNickname : SideEffect
+        data object NavigateNicknameGender : SideEffect
         data object NavigateAcademicInfo : SideEffect
         data object NavigateUnivSearch : SideEffect
         data object NavigateMajorSearch : SideEffect
