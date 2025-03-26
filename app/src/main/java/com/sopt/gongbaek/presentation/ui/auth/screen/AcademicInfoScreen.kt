@@ -22,10 +22,9 @@ import com.sopt.gongbaek.presentation.ui.component.button.GongBaekBasicButton
 import com.sopt.gongbaek.presentation.ui.component.progressBar.GongBaekProgressBar
 import com.sopt.gongbaek.presentation.ui.component.section.PageDescriptionSection
 import com.sopt.gongbaek.presentation.ui.component.topbar.StartTitleTopBar
-import com.sopt.gongbaek.ui.theme.GONGBAEKTheme
 
 @Composable
-fun UnivMajorRoute(
+fun AcademicInfoRoute(
     viewModel: AuthViewModel,
     navigateGrade: () -> Unit,
     navigateUnivSearch: () -> Unit,
@@ -54,7 +53,7 @@ fun UnivMajorRoute(
             }
     }
 
-    UnivMajorScreen(
+    AcademicInfoScreen(
         univSearchResult = uiState.userInfo.school,
         majorSearchResult = uiState.userInfo.major,
         navigateGrade = { viewModel.sendSideEffect(AuthContract.SideEffect.NavigateGrade) },
@@ -65,7 +64,7 @@ fun UnivMajorRoute(
 }
 
 @Composable
-private fun UnivMajorScreen(
+private fun AcademicInfoScreen(
     univSearchResult: String,
     majorSearchResult: String,
     navigateGrade: () -> Unit,
@@ -76,7 +75,7 @@ private fun UnivMajorScreen(
     Box(
         modifier = Modifier.fillMaxSize()
     ) {
-        UnivAndMajorSelectionSection(
+        AcademicInfoSelectionSection(
             univSearchResult = univSearchResult,
             majorSearchResult = majorSearchResult,
             onBackClick = onBackClick,
@@ -99,7 +98,7 @@ private fun UnivMajorScreen(
 }
 
 @Composable
-private fun UnivAndMajorSelectionSection(
+private fun AcademicInfoSelectionSection(
     univSearchResult: String,
     majorSearchResult: String,
     onBackClick: () -> Unit,
@@ -120,8 +119,8 @@ private fun UnivAndMajorSelectionSection(
             Spacer(modifier = Modifier.height(54.dp))
 
             PageDescriptionSection(
-                titleResId = R.string.auth_univ_major_title,
-                descriptionResId = R.string.auth_univ_major_description
+                titleResId = R.string.auth_academic_info_title,
+                descriptionResId = R.string.auth_academic_info_description
             )
 
             Spacer(modifier = Modifier.height(44.dp))
@@ -147,15 +146,13 @@ private fun UnivAndMajorSelectionSection(
 
 @Preview(showBackground = true)
 @Composable
-private fun ShowUnivMajorScreen() {
-    GONGBAEKTheme {
-        UnivMajorScreen(
-            univSearchResult = "서울대학교",
-            majorSearchResult = "",
-            navigateGrade = {},
-            onUnivSearchClick = {},
-            onMajorSearchClick = {},
-            onBackClick = {}
-        )
-    }
+private fun AcademicInfoScreenPreview() {
+    AcademicInfoScreen(
+        univSearchResult = "서울대학교",
+        majorSearchResult = "",
+        navigateGrade = {},
+        onUnivSearchClick = {},
+        onMajorSearchClick = {},
+        onBackClick = {}
+    )
 }

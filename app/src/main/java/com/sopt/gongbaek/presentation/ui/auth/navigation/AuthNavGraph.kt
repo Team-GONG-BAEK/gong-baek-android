@@ -19,7 +19,7 @@ import com.sopt.gongbaek.presentation.ui.auth.screen.NicknameRoute
 import com.sopt.gongbaek.presentation.ui.auth.screen.SelectProfileRoute
 import com.sopt.gongbaek.presentation.ui.auth.screen.SelfIntroductionRoute
 import com.sopt.gongbaek.presentation.ui.auth.screen.TimetableConvertRoute
-import com.sopt.gongbaek.presentation.ui.auth.screen.UnivMajorRoute
+import com.sopt.gongbaek.presentation.ui.auth.screen.AcademicInfoRoute
 import com.sopt.gongbaek.presentation.ui.auth.screen.UnivSearchRoute
 import com.sopt.gongbaek.presentation.ui.home.navigation.navigateHomeNavGraph
 import com.sopt.gongbaek.presentation.util.extension.sharedViewModel
@@ -42,14 +42,14 @@ fun NavGraphBuilder.authNavGraph(
             val viewModel = backStackEntry.sharedViewModel<AuthViewModel>(navController)
             NicknameRoute(
                 viewModel = viewModel,
-                navigateUnivMajor = navController::navigateUnivMajor,
+                navigateAcademicInfo = navController::navigateAcademicInfo,
                 navigateBack = navController::popBackStack
             )
         }
 
-        composable<AuthNavGraphRoute.UnivMajor> { backStackEntry ->
+        composable<AuthNavGraphRoute.AcademicInfo> { backStackEntry ->
             val viewModel = backStackEntry.sharedViewModel<AuthViewModel>(navController)
-            UnivMajorRoute(
+            AcademicInfoRoute(
                 viewModel = viewModel,
                 navigateGrade = navController::navigateGrade,
                 navigateUnivSearch = navController::navigateUnivSearch,

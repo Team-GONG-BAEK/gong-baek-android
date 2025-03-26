@@ -29,7 +29,7 @@ import com.sopt.gongbaek.ui.theme.GONGBAEKTheme
 @Composable
 fun NicknameRoute(
     viewModel: AuthViewModel,
-    navigateUnivMajor: () -> Unit,
+    navigateAcademicInfo: () -> Unit,
     navigateBack: () -> Unit
 ) {
     val uiState by viewModel.state.collectAsStateWithLifecycle()
@@ -42,8 +42,8 @@ fun NicknameRoute(
                 if (sideEffect is AuthContract.SideEffect.NavigateBack) {
                     navigateBack()
                 }
-                if (sideEffect is AuthContract.SideEffect.NavigateUnivMajor) {
-                    navigateUnivMajor()
+                if (sideEffect is AuthContract.SideEffect.NavigateAcademicInfo) {
+                    navigateAcademicInfo()
                 }
             }
     }
@@ -52,7 +52,7 @@ fun NicknameRoute(
         nickname = uiState.userInfo.nickname,
         errorMessage = uiState.nicknameErrorMessage,
         onNicknameChanged = { viewModel.setEvent(AuthContract.Event.OnNicknameChanged(it)) },
-        navigateUnivMajor = { viewModel.setEvent(AuthContract.Event.ValidateNickname) },
+        navigateAcademicInfo = { viewModel.setEvent(AuthContract.Event.ValidateNickname) },
         onBackClick = { viewModel.sendSideEffect(AuthContract.SideEffect.NavigateBack) }
     )
 }
@@ -62,7 +62,7 @@ private fun NicknameScreen(
     nickname: String,
     errorMessage: String?,
     onNicknameChanged: (String) -> Unit,
-    navigateUnivMajor: () -> Unit = {},
+    navigateAcademicInfo: () -> Unit = {},
     onBackClick: () -> Unit = {}
 ) {
     Box(
@@ -81,7 +81,7 @@ private fun NicknameScreen(
         GongBaekBasicButton(
             title = "다음",
             enabled = nickname.hasCompleteKoreanCharacters(2) && errorMessage.isNullOrEmpty(),
-            onClick = navigateUnivMajor,
+            onClick = navigateAcademicInfo,
             modifier = Modifier
                 .align(Alignment.BottomCenter)
                 .padding(horizontal = 16.dp, vertical = 12.dp)

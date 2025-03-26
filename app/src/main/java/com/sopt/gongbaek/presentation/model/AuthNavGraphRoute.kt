@@ -13,7 +13,7 @@ sealed interface AuthNavGraphRoute : NavigationRoute {
     data object Nickname : AuthNavGraphRoute
 
     @Serializable
-    data object UnivMajor : AuthNavGraphRoute
+    data object AcademicInfo : AuthNavGraphRoute
 
     @Serializable
     data object Grade : AuthNavGraphRoute

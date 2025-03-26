@@ -7,7 +7,7 @@ fun NavController.navigateAuthRoute() = navigate(AuthNavGraphRoute.AuthNavGraph)
 
 fun NavController.navigateNickname() = navigate(AuthNavGraphRoute.Nickname)
 
-fun NavController.navigateUnivMajor() = navigate(AuthNavGraphRoute.UnivMajor)
+fun NavController.navigateAcademicInfo() = navigate(AuthNavGraphRoute.AcademicInfo)
 
 fun NavController.navigateUnivSearch() = navigate(AuthNavGraphRoute.UnivSearch)
 
