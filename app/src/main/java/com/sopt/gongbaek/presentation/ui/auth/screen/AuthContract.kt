@@ -67,5 +67,6 @@ class AuthContract {
         data object NavigateCompleteAuth : SideEffect
         data object NavigateHome : SideEffect
         data object NavigateEmailVerification : SideEffect
+        data object NavigateSelectProfile : SideEffect
     }
 }

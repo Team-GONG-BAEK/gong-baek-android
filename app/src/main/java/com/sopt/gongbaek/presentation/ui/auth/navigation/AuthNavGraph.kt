@@ -62,7 +62,7 @@ fun NavGraphBuilder.authNavGraph(
             val viewModel = backStackEntry.sharedViewModel<AuthViewModel>(navController)
             NicknameGenderRoute(
                 viewModel = viewModel,
-                navigateAcademicInfo = navController::navigateAcademicInfo,
+                navigateSelectProfile = navController::navigateSelectProfile,
                 navigateBack = navController::popBackStack
             )
         }

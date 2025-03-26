@@ -28,7 +28,7 @@ import com.sopt.gongbaek.presentation.util.extension.hasCompleteKoreanCharacters
 @Composable
 fun NicknameGenderRoute(
     viewModel: AuthViewModel,
-    navigateAcademicInfo: () -> Unit,
+    navigateSelectProfile: () -> Unit,
     navigateBack: () -> Unit
 ) {
     val uiState by viewModel.state.collectAsStateWithLifecycle()
@@ -41,8 +41,8 @@ fun NicknameGenderRoute(
                 if (sideEffect is AuthContract.SideEffect.NavigateBack) {
                     navigateBack()
                 }
-                if (sideEffect is AuthContract.SideEffect.NavigateAcademicInfo) {
-                    navigateAcademicInfo()
+                if (sideEffect is AuthContract.SideEffect.NavigateSelectProfile) {
+                    navigateSelectProfile()
                 }
             }
     }
@@ -51,7 +51,7 @@ fun NicknameGenderRoute(
         nickname = uiState.userInfo.nickname,
         errorMessage = uiState.nicknameErrorMessage,
         onNicknameChanged = { viewModel.setEvent(AuthContract.Event.OnNicknameChanged(it)) },
-        navigateAcademicInfo = { viewModel.setEvent(AuthContract.Event.ValidateNickname) },
+        navigateSelectProfile = { viewModel.setEvent(AuthContract.Event.ValidateNickname) },
         onBackClick = { viewModel.sendSideEffect(AuthContract.SideEffect.NavigateBack) }
     )
 }
@@ -61,7 +61,7 @@ private fun NicknameGenderScreen(
     nickname: String,
     errorMessage: String?,
     onNicknameChanged: (String) -> Unit,
-    navigateAcademicInfo: () -> Unit = {},
+    navigateSelectProfile: () -> Unit = {},
     onBackClick: () -> Unit = {}
 ) {
     Box(
@@ -80,7 +80,7 @@ private fun NicknameGenderScreen(
         GongBaekBasicButton(
             title = "다음",
             enabled = nickname.hasCompleteKoreanCharacters(2) && errorMessage.isNullOrEmpty(),
-            onClick = navigateAcademicInfo,
+            onClick = navigateSelectProfile,
             modifier = Modifier
                 .align(Alignment.BottomCenter)
                 .padding(horizontal = 16.dp, vertical = 12.dp)

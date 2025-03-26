@@ -129,7 +129,7 @@ class AuthViewModel @Inject constructor(
             is AuthContract.Event.ValidateNickname -> {
                 validateNickname(currentState.userInfo.nickname) { isValid ->
                     if (isValid) {
-                        sendSideEffect(AuthContract.SideEffect.NavigateAcademicInfo)
+                        sendSideEffect(AuthContract.SideEffect.NavigateSelectProfile)
                     }
                 }
             }

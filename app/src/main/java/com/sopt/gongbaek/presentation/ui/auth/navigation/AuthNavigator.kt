@@ -30,3 +30,5 @@ fun NavController.navigateTimetableConvert() = navigate(AuthNavGraphRoute.Timeta
 fun NavController.navigateCompleteAuth() = navigate(AuthNavGraphRoute.CompleteAuth)
 
 fun NavController.navigateEmailVerification() = navigate(AuthNavGraphRoute.EmailVerification)
+
+fun NavController.navigateSelectProfile() = navigate(AuthNavGraphRoute.SelectProfile)
