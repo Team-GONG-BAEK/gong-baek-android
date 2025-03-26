@@ -54,7 +54,7 @@ fun NavGraphBuilder.authNavGraph(
             val viewModel = backStackEntry.sharedViewModel<AuthViewModel>(navController)
             SelectProfileRoute(
                 viewModel = viewModel,
-                navigateNicknameGender = navController::navigateNicknameGender
+                navigateMbti = navController::navigateMbti
             )
         }
 

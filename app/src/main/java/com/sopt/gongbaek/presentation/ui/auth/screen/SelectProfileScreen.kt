@@ -29,7 +29,7 @@ import com.sopt.gongbaek.ui.theme.GONGBAEKTheme
 @Composable
 fun SelectProfileRoute(
     viewModel: AuthViewModel,
-    navigateNicknameGender: () -> Unit
+    navigateMbti: () -> Unit
 ) {
     val uiState by viewModel.state.collectAsStateWithLifecycle()
     val lifecycleOwner = LocalLifecycleOwner.current
@@ -38,8 +38,8 @@ fun SelectProfileRoute(
         viewModel.sideEffect
             .flowWithLifecycle(lifecycleOwner.lifecycle)
             .collect { sideEffect ->
-                if (sideEffect is AuthContract.SideEffect.NavigateNicknameGender) {
-                    navigateNicknameGender()
+                if (sideEffect is AuthContract.SideEffect.NavigateMbti) {
+                    navigateMbti()
                 }
             }
     }
@@ -52,7 +52,7 @@ fun SelectProfileRoute(
             )
         },
         onNextButtonClicked = {
-            viewModel.sendSideEffect(AuthContract.SideEffect.NavigateNicknameGender)
+            viewModel.sendSideEffect(AuthContract.SideEffect.NavigateMbti)
         }
     )
 }
