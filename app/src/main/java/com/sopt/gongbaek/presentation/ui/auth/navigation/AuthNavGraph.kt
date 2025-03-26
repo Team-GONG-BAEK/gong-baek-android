@@ -123,7 +123,7 @@ fun NavGraphBuilder.authNavGraph(
             val viewModel = backStackEntry.sharedViewModel<AuthViewModel>(navController)
             EnterTimeTableRoute(
                 viewModel = viewModel,
-                navigateTimetableConvert = navController::navigateTimetableConvert,
+                navigateCompleteAuth = navController::navigateCompleteAuth,
                 navigateBack = navController::popBackStack
             )
         }
