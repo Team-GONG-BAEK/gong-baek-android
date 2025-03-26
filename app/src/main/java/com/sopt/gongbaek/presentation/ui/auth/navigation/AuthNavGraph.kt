@@ -42,8 +42,12 @@ fun NavGraphBuilder.authNavGraph(
             )
         }
 
-        composable<AuthNavGraphRoute.EmailVerification> {
-            EmailVerificationRoute()
+        composable<AuthNavGraphRoute.EmailVerification> { backStackEntry ->
+            val viewModel = backStackEntry.sharedViewModel<AuthViewModel>(navController)
+            EmailVerificationRoute(
+                viewModel = viewModel,
+                navigateNicknameGender = navController::navigateNicknameGender
+            )
         }
 
         composable<AuthNavGraphRoute.SelectProfile> { backStackEntry ->
