@@ -37,9 +37,6 @@ sealed interface AuthNavGraphRoute : NavigationRoute {
     data object GapTimetable : AuthNavGraphRoute
 
     @Serializable
-    data object TimetableConvert : AuthNavGraphRoute
-
-    @Serializable
     data object CompleteAuth : AuthNavGraphRoute
 
     @Serializable
