@@ -1,11 +1,13 @@
 package com.sopt.gongbaek.presentation.ui.auth.screen
 
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -18,12 +20,15 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.flowWithLifecycle
 import com.sopt.gongbaek.R
 import com.sopt.gongbaek.presentation.type.GongBaekBasicTextFieldType
+import com.sopt.gongbaek.presentation.type.SelectableButtonType
 import com.sopt.gongbaek.presentation.ui.component.button.GongBaekBasicButton
+import com.sopt.gongbaek.presentation.ui.component.button.GongBaekSelectableButtons
 import com.sopt.gongbaek.presentation.ui.component.progressBar.GongBaekProgressBar
 import com.sopt.gongbaek.presentation.ui.component.section.PageDescriptionSection
 import com.sopt.gongbaek.presentation.ui.component.textfield.GongBaekBasicTextField
 import com.sopt.gongbaek.presentation.ui.component.topbar.StartTitleTopBar
 import com.sopt.gongbaek.presentation.util.extension.hasCompleteKoreanCharacters
+import com.sopt.gongbaek.ui.theme.GongBaekTheme
 
 @Composable
 fun NicknameGenderRoute(
@@ -48,18 +53,24 @@ fun NicknameGenderRoute(
     }
 
     NicknameGenderScreen(
+        gender = uiState.userInfo.gender,
         nickname = uiState.userInfo.nickname,
         errorMessage = uiState.nicknameErrorMessage,
+        selectedGender = uiState.selectedGender,
         onNicknameChanged = { viewModel.setEvent(AuthContract.Event.OnNicknameChanged(it)) },
         navigateSelectProfile = { viewModel.setEvent(AuthContract.Event.ValidateNickname) },
+        onGenderSelected = { gender -> viewModel.setEvent(AuthContract.Event.OnGenderSelected(gender)) },
         onBackClick = { viewModel.sendSideEffect(AuthContract.SideEffect.NavigateBack) }
     )
 }
 
 @Composable
 private fun NicknameGenderScreen(
+    gender: String,
     nickname: String,
     errorMessage: String?,
+    selectedGender: String,
+    onGenderSelected: (String) -> Unit,
     onNicknameChanged: (String) -> Unit,
     navigateSelectProfile: () -> Unit = {},
     onBackClick: () -> Unit = {}
@@ -72,6 +83,8 @@ private fun NicknameGenderScreen(
             onNicknameChanged = onNicknameChanged,
             errorMessage = errorMessage,
             onBackClick = onBackClick,
+            selectedGender = selectedGender,
+            onSelectedGender = onGenderSelected,
             modifier = Modifier
                 .padding(horizontal = 16.dp)
                 .align(Alignment.Center)
@@ -79,7 +92,7 @@ private fun NicknameGenderScreen(
 
         GongBaekBasicButton(
             title = "다음",
-            enabled = nickname.hasCompleteKoreanCharacters(2) && errorMessage.isNullOrEmpty(),
+            enabled = nickname.hasCompleteKoreanCharacters(2) && errorMessage.isNullOrEmpty() && gender.isNotEmpty(),
             onClick = navigateSelectProfile,
             modifier = Modifier
                 .align(Alignment.BottomCenter)
@@ -93,13 +106,15 @@ private fun NickNameInputSection(
     nickname: String,
     onNicknameChanged: (String) -> Unit,
     errorMessage: String?,
+    selectedGender: String,
+    onSelectedGender: (String) -> Unit,
     modifier: Modifier = Modifier,
     onBackClick: () -> Unit = {}
 ) {
     Column {
         StartTitleTopBar(onClick = onBackClick)
 
-        GongBaekProgressBar(progressPercent = 0.25f)
+        GongBaekProgressBar(progressPercent = 3 / 7f)
 
         Column(
             modifier = modifier
@@ -107,11 +122,11 @@ private fun NickNameInputSection(
             Spacer(modifier = Modifier.height(54.dp))
 
             PageDescriptionSection(
-                titleResId = R.string.auth_nickname_title,
-                descriptionResId = R.string.auth_nickname_description
+                titleResId = R.string.auth_nickname_gender_title,
+                descriptionResId = R.string.auth_nickname_gender_description
             )
 
-            Spacer(modifier = Modifier.height(44.dp))
+            Spacer(modifier = Modifier.height(42.dp))
 
             GongBaekBasicTextField(
                 value = nickname,
@@ -120,6 +135,24 @@ private fun NickNameInputSection(
                 isError = !errorMessage.isNullOrEmpty(),
                 errorMessage = errorMessage.orEmpty()
             )
+
+            Spacer(modifier = Modifier.height(24.dp))
+
+            Column(
+                verticalArrangement = Arrangement.spacedBy(10.dp)
+            ) {
+                Text(
+                    text = "성별",
+                    color = GongBaekTheme.colors.gray08,
+                    style = GongBaekTheme.typography.body2.sb14
+                )
+
+                GongBaekSelectableButtons(
+                    selectableButtonType = SelectableButtonType.GENDER,
+                    onOptionSelected = onSelectedGender,
+                    selectedOption = selectedGender
+                )
+            }
         }
     }
 }
@@ -130,6 +163,9 @@ private fun NicknameGenderScreenPreview() {
     NicknameGenderScreen(
         nickname = "닉네임",
         onNicknameChanged = {},
-        errorMessage = null
+        errorMessage = null,
+        selectedGender = "",
+        onGenderSelected = { },
+        gender = ""
     )
 }

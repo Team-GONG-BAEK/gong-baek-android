@@ -90,8 +90,8 @@
     <!-- AuthScreen-->
     <string name="auth_select_profile_title">프로필 사진을 선택해주세요.</string>
     <string name="auth_select_profile_description">제공된 프로필 중 하나를 선택할 수 있어요.</string>
-    <string name="auth_nickname_title">닉네임을 설정해주세요.</string>
-    <string name="auth_nickname_description">프로필에 표시되는 이름으로, 언제든 변경할 수 있어요.</string>
+    <string name="auth_nickname_gender_title">닉네임과 성별을 입력해주세요.</string>
+    <string name="auth_nickname_gender_description">닉네임은 한글 최대 8자 이내로 입력할 수 있어요.</string>
     <string name="auth_academic_info_title">학적정보를 입력해주세요.</string>
     <string name="auth_academic_info_description">자신의 학교와 학과, 입학년도를 선택해주세요.</string>
     <string name="auth_grade_title">학년과 입학년도를 입력해주세요.</string>
