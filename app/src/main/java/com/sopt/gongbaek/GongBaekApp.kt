@@ -27,6 +27,4 @@ class GongBaekApp : Application() {
     private fun initKakaoSdk() {
         KakaoSdk.init(this, BuildConfig.KAKAO_NATIVE_APP_KEY)
     }
-
-
 }
