@@ -16,8 +16,8 @@ class AuthRemoteDatasourceImpl @Inject constructor(
     private val authService: AuthService
 ) : AuthRemoteDataSource {
 
-    override suspend fun login(loginRequestDto: LoginRequestDto): ApiResponse<LoginResponseDto> =
-        authService.login(loginRequestDto)
+    override suspend fun login(kakaoToken: String, loginRequestDto: LoginRequestDto): ApiResponse<LoginResponseDto> =
+        authService.login(kakaoToken, loginRequestDto)
 
     override suspend fun registerUserInfo(registerUserInfoRequestDto: RegisterUserInfoRequestDto): ApiResponse<RegisterUserInfoResponseDto> =
         authService.requestUserInfo(registerUserInfoRequestDto)
@@ -30,4 +30,10 @@ class AuthRemoteDatasourceImpl @Inject constructor(
 
     override suspend fun getUserLectureTimeTable(): ApiResponse<UserTimeTableResponseDto> =
         authService.getUserLectureTimeTable()
+
+    override suspend fun reissueToken(refreshToken: String): ApiResponse<LoginResponseDto> =
+        authService.reissueToken(refreshToken)
+
+    override suspend fun logout(): ApiResponse<Unit> =
+        authService.logout()
 }

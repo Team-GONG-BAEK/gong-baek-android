@@ -9,14 +9,18 @@ import com.sopt.gongbaek.data.remote.dto.response.RegisterUserInfoResponseDto
 import com.sopt.gongbaek.data.remote.dto.response.UserProfileResponseDto
 import com.sopt.gongbaek.data.remote.dto.response.UserTimeTableResponseDto
 import retrofit2.http.Body
+import retrofit2.http.DELETE
 import retrofit2.http.GET
+import retrofit2.http.Header
+import retrofit2.http.PATCH
 import retrofit2.http.POST
 import retrofit2.http.Query
 
 interface AuthService {
 
-    @POST("/api/v1/user/login")
+    @POST("/api/v1/login")
     suspend fun login(
+        @Header("Authorization") kakaoToken: String,
         @Body loginRequestDto: LoginRequestDto
     ): ApiResponse<LoginResponseDto>
 
@@ -35,4 +39,12 @@ interface AuthService {
 
     @GET("/api/v1/my/timeTable")
     suspend fun getUserLectureTimeTable(): ApiResponse<UserTimeTableResponseDto>
+
+    @PATCH("/api/v1/reissue/token")
+    suspend fun reissueToken(
+        @Header("Authorization") refreshToken: String
+    ): ApiResponse<LoginResponseDto>
+
+    @DELETE("/api/v1/logout")
+    suspend fun logout(): ApiResponse<Unit>
 }

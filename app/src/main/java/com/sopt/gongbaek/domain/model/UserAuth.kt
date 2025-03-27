@@ -1,7 +1,7 @@
 package com.sopt.gongbaek.domain.model
 
 data class UserAuth(
-    val userId: Long,
+    val userId: Long?,
     val accessToken: String,
     val refreshToken: String
 )

@@ -16,9 +16,9 @@ class AuthRepositoryImpl @Inject constructor(
     private val authRemoteDatasource: AuthRemoteDataSource
 ) : AuthRepository {
 
-    override suspend fun login(platform: String): Result<UserAuth> =
+    override suspend fun login(kakaoToken: String, platform: String): Result<UserAuth> =
         runCatching {
-            authRemoteDatasource.login(loginRequestDto = LoginRequestDto(platform = platform))
+            authRemoteDatasource.login(kakaoToken = kakaoToken, loginRequestDto = LoginRequestDto(platform = platform))
                 .handleApiResponse()
                 .getOrThrow()
                 .toDomain()
@@ -53,5 +53,20 @@ class AuthRepositoryImpl @Inject constructor(
                 .handleApiResponse()
                 .getOrThrow()
                 .toDomain()
+        }
+
+    override suspend fun reissueToken(refreshToken: String): Result<UserAuth> =
+        runCatching {
+            authRemoteDatasource.reissueToken(refreshToken)
+                .handleApiResponse()
+                .getOrThrow()
+                .toDomain()
+        }
+
+    override suspend fun logout(): Result<Unit> =
+        runCatching {
+            authRemoteDatasource.logout()
+                .handleApiResponse()
+                .getOrThrow()
         }
 }

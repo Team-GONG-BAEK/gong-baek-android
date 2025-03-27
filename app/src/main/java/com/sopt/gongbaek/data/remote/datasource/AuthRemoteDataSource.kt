@@ -10,9 +10,11 @@ import com.sopt.gongbaek.data.remote.dto.response.UserProfileResponseDto
 import com.sopt.gongbaek.data.remote.dto.response.UserTimeTableResponseDto
 
 interface AuthRemoteDataSource {
-    suspend fun login(loginRequestDto: LoginRequestDto): ApiResponse<LoginResponseDto>
+    suspend fun login(kakaoToken: String, loginRequestDto: LoginRequestDto): ApiResponse<LoginResponseDto>
     suspend fun registerUserInfo(registerUserInfoRequestDto: RegisterUserInfoRequestDto): ApiResponse<RegisterUserInfoResponseDto>
     suspend fun validateNickname(nickname: String): NullableApiResponse<Unit>
     suspend fun getUserProfile(): ApiResponse<UserProfileResponseDto>
     suspend fun getUserLectureTimeTable(): ApiResponse<UserTimeTableResponseDto>
+    suspend fun reissueToken(refreshToken: String): ApiResponse<LoginResponseDto>
+    suspend fun logout(): ApiResponse<Unit>
 }
