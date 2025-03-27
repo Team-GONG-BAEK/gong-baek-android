@@ -71,7 +71,7 @@ private fun EnterTimeTableScreen(
     Scaffold(
         bottomBar = {
             GongBaekBasicButton(
-                title = "다음",
+                title = "가입 완료",
                 enabled = true,
                 onClick = navigateCompleteAuth,
                 modifier = Modifier
@@ -111,25 +111,8 @@ private fun EnterTimeTableSection(
             Spacer(modifier = Modifier.height(54.dp))
 
             PageDescriptionSection(
-                titleResId = R.string.auth_enter_timetable_title
-            )
-
-            Spacer(modifier = Modifier.height(10.dp))
-
-            Text(
-                text = buildAnnotatedString {
-                    append(stringResource(R.string.auth_enter_timetable_description))
-
-                    addStyle(
-                        style = SpanStyle(
-                            color = GongBaekTheme.colors.mainOrange
-                        ),
-                        start = 0,
-                        end = 6
-                    )
-                },
-                color = GongBaekTheme.colors.gray07,
-                style = GongBaekTheme.typography.body1.m16
+                titleResId = R.string.auth_enter_timetable_title,
+                descriptionResId = R.string.auth_enter_timetable_description
             )
 
             Spacer(modifier = Modifier.height(14.dp))
