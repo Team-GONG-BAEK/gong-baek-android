@@ -31,9 +31,6 @@ sealed interface AuthNavGraphRoute : NavigationRoute {
     data object EnterTimetable : AuthNavGraphRoute
 
     @Serializable
-    data object GapTimetable : AuthNavGraphRoute
-
-    @Serializable
     data object CompleteAuth : AuthNavGraphRoute
 
     @Serializable

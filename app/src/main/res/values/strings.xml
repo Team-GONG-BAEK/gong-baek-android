@@ -106,8 +106,6 @@
     <string name="auth_self_introduction_description">연락처나 SNS 입력이 아닌,\n자신을 소개하는 글을 적어주세요.</string>
     <string name="auth_enter_timetable_title">수업 시간표를 입력해주세요.</string>
     <string name="auth_enter_timetable_description">수업이 있는 시간대를 선택해주세요.</string>
-    <string name="auth_gap_timetable_title">공강시간표가 완성되었어요!</string>
-    <string name="auth_gap_timetable_description">잘못된 시간표가 있는지 확인해주세요.</string>
     <string name="auth_complete_title">가입을 축하드려요!\n0을 100으로 채우러 가볼까요?</string>
 
     <!--MyGroupScreen-->
