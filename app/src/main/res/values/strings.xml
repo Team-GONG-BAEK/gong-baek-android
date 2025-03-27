@@ -183,5 +183,15 @@
 
     <!--GroupRegister-->
     <string name="groupregister_complete_title">입력한 정보가 맞는지 확인해주세요!</string>
+
+    <!--TermsOfService-->
     <string name="terms_of_service_title">약관동의</string>
+    <string name="terms_of_service_full_acceptance">약관 전체동의</string>
+    <string name="terms_of_service_terms_of_service">[필수] 서비스 이용약관</string>
+    <string name="terms_of_service_privacy_policy">[필수] 개인정보 처리 방침</string>
+    <string name="terms_of_service_marketing_policy">[선택] 마케팅 정보 수신 동의</string>
+    <string name="terms_of_service_next">다음</string>
+
+    <!--SocialLogin-->
+    <string name="login_screen_greeting">공강을 백으로 채우다</string>
 </resources>
