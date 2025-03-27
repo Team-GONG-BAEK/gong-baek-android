@@ -94,8 +94,6 @@
     <string name="auth_nickname_gender_description">닉네임은 한글 최대 8자 이내로 입력할 수 있어요.</string>
     <string name="auth_academic_info_title">학적정보를 입력해주세요.</string>
     <string name="auth_academic_info_description">자신의 학교와 학과, 입학년도를 선택해주세요.</string>
-    <string name="auth_grade_title">학년과 입학년도를 입력해주세요.</string>
-    <string name="auth_grade_description">프로필에 표시되는 정보로, 언제든 변경할 수 있어요.</string>
     <string name="auth_mbti_title">MBTI를 선택해주세요.</string>
     <string name="auth_mbti_i_e">외향형/내향형</string>
     <string name="auth_mbti_n_s">감각형/직관형</string>
