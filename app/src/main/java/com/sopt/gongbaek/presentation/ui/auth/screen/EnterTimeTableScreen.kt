@@ -115,7 +115,7 @@ private fun EnterTimeTableSection(
                 descriptionResId = R.string.auth_enter_timetable_description
             )
 
-            Spacer(modifier = Modifier.height(14.dp))
+            Spacer(modifier = Modifier.height(24.dp))
 
             LazyColumn {
                 item {
