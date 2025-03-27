@@ -25,9 +25,6 @@ sealed interface AuthNavGraphRoute : NavigationRoute {
     data object Mbti : AuthNavGraphRoute
 
     @Serializable
-    data object Gender : AuthNavGraphRoute
-
-    @Serializable
     data object SelfIntroduction : AuthNavGraphRoute
 
     @Serializable
