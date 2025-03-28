@@ -3,6 +3,7 @@ package com.sopt.gongbaek.presentation.ui.main
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.navigation.NavDestination
+import androidx.navigation.NavDestination.Companion.hasRoute
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
@@ -12,19 +13,20 @@ import com.sopt.gongbaek.presentation.model.NavigationRoute
 import com.sopt.gongbaek.presentation.type.MainBottomNavBarTabType
 import com.sopt.gongbaek.presentation.ui.grouplist.navigation.navigateGroupListNavGraph
 import com.sopt.gongbaek.presentation.ui.home.navigation.navigateHomeNavGraph
-import com.sopt.gongbaek.presentation.ui.mygroup.navigation.navigateMyGroupNavGraph
+import com.sopt.gongbaek.presentation.ui.mypage.navigation.navigateMyPage
 
 class MainNavigator(
     val navController: NavHostController
 ) {
-    val startDestination = NavigationRoute.SplashRoute.SPLASH
-    private val currentDestination: NavDestination?
-        @Composable get() = navController.currentBackStackEntryAsState().value?.destination
+    val startDestination = NavigationRoute.Splash
 
     val currentMainBottomNavBarTab: MainBottomNavBarTabType?
-        @Composable get() = currentDestination
-            ?.route
-            ?.let(MainBottomNavBarTabType.Companion::find)
+        @Composable get() = MainBottomNavBarTabType.find { tab -> currentDestination?.hasRoute(tab::class) == true }
+
+    private val currentDestination: NavDestination?
+        @Composable get() = navController.currentBackStackEntryAsState()
+            .value
+            ?.destination
 
     fun navigate(mainBottomNavBarTabType: MainBottomNavBarTabType) {
         val navOptions = navOptions {
@@ -36,28 +38,15 @@ class MainNavigator(
         }
         when (mainBottomNavBarTabType) {
             MainBottomNavBarTabType.GROUP_LIST -> navController.navigateGroupListNavGraph(navOptions)
-
-            MainBottomNavBarTabType.MY_GROUP -> navController.navigateMyGroupNavGraph(navOptions)
-
             MainBottomNavBarTabType.HOME -> navController.navigateHomeNavGraph(navOptions)
-
-            MainBottomNavBarTabType.TIMETABLE -> {}
-
-            MainBottomNavBarTabType.MY_PAGE -> {}
+//            MainBottomNavBarTabType.TIMETABLE -> {}
+            MainBottomNavBarTabType.MY_PAGE -> navController.navigateMyPage(navOptions)
         }
     }
 
     @Composable
-    fun showBottomBar(): Boolean {
-        val currentRoute = currentDestination?.route ?: return false
-        val bottomBarRoutes = listOf(
-            NavigationRoute.MainBottomNavBarTabRoute.GROUP_LIST_TAB,
-            NavigationRoute.MainBottomNavBarTabRoute.MY_GROUP_TAB,
-            NavigationRoute.MainBottomNavBarTabRoute.HOME_TAB,
-            NavigationRoute.MainBottomNavBarTabRoute.TIMETABLE_TAB,
-            NavigationRoute.MainBottomNavBarTabRoute.MY_PAGE_TAB
-        )
-        return bottomBarRoutes.contains(currentRoute + "_route")
+    fun showBottomBar() = MainBottomNavBarTabType.contains {
+        currentDestination?.hasRoute(it::class) == true
     }
 }
 
