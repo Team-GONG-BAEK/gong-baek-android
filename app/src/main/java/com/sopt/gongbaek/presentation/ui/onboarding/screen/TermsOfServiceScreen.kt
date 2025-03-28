@@ -27,6 +27,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.flowWithLifecycle
 import androidx.navigation.NavHostController
 import com.sopt.gongbaek.R
+import com.sopt.gongbaek.presentation.model.AuthNavGraphRoute
 import com.sopt.gongbaek.presentation.model.NavigationRoute
 import com.sopt.gongbaek.presentation.ui.component.button.GongBaekBasicButton
 import com.sopt.gongbaek.presentation.ui.component.topbar.StartTitleTopBar
@@ -47,8 +48,8 @@ fun TermsOfServiceRoute(
             .collect { sideEffect ->
                 when (sideEffect) {
                     is TermsOfServiceContract.SideEffect.OnBackClick -> {
-                        navController.navigate(NavigationRoute.LOGIN) {
-                            popUpTo(NavigationRoute.TERMS_OF_SERVICE) { inclusive = true }
+                        navController.navigate(NavigationRoute.Login) {
+                            popUpTo(NavigationRoute.TermsOfService) { inclusive = true }
                         }
                     }
                     is TermsOfServiceContract.SideEffect.OnTermsOfServiceDetailClick -> {
@@ -61,7 +62,7 @@ fun TermsOfServiceRoute(
                         /* 웹뷰 이동 로직 */
                     }
                     is TermsOfServiceContract.SideEffect.OnNextClick -> {
-                        navController.navigate(NavigationRoute.OnboardingNavGraph.ONBOARDING_NAV_GRAPH)
+                        navController.navigate(AuthNavGraphRoute.AuthNavGraph)
                     }
                 }
             }

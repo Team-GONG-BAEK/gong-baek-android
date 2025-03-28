@@ -24,6 +24,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavHostController
 import com.sopt.gongbaek.R
+import com.sopt.gongbaek.presentation.model.MainBottomTabRoute
 import com.sopt.gongbaek.presentation.model.NavigationRoute
 import com.sopt.gongbaek.presentation.util.extension.clickableWithoutRipple
 import com.sopt.gongbaek.ui.theme.GONGBAEKTheme
@@ -48,15 +49,15 @@ fun SocialLoginRoute(
         viewModel.sideEffect.collect { sideEffect ->
             when (sideEffect) {
                 is SocialLoginContract.SideEffect.NavigateHome -> {
-                    navController.navigate(NavigationRoute.MainBottomNavBarTabRoute.HOME_TAB) {
-                        popUpTo(NavigationRoute.LOGIN) { inclusive = true }
+                    navController.navigate(MainBottomTabRoute.Home) {
+                        popUpTo(NavigationRoute.Login) { inclusive = true }
                         launchSingleTop = true
                     }
                 }
 
                 is SocialLoginContract.SideEffect.NavigateTermsOfService -> {
-                    navController.navigate(NavigationRoute.TERMS_OF_SERVICE) {
-                        popUpTo(NavigationRoute.LOGIN) { inclusive = true }
+                    navController.navigate(NavigationRoute.TermsOfService) {
+                        popUpTo(NavigationRoute.Login) { inclusive = true }
                     }
                 }
             }

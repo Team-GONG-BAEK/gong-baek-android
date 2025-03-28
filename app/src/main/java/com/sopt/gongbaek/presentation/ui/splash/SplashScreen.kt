@@ -29,7 +29,7 @@ fun SplashScreen(
     val defaultBackgroundColor = GongBaekTheme.colors.white
     val onComplete = {
         navController.navigate(NavigationRoute.Login) {
-            popUpTo(NavigationRoute.SplashRoute.SPLASH) { inclusive = true }
+            popUpTo(NavigationRoute.Splash) { inclusive = true }
         }
     }
 
