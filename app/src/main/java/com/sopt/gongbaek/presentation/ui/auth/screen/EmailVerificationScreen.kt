@@ -56,7 +56,6 @@ private fun EmailVerificationScreen(
                 .fillMaxSize()
                 .padding(horizontal = 16.dp)
         ) {
-
             Column {
                 Spacer(modifier = Modifier.height(54.dp))
 
@@ -89,7 +88,7 @@ private fun EmailVerificationScreen(
                     GongBaekButton(
                         onClick = {},
                         colors = GongBaekButtonDefault.gongBaekButtonColors(
-                            containerColor = GongBaekTheme.colors.black,
+                            containerColor = GongBaekTheme.colors.black
                         ),
                         contentPadding = PaddingValues(vertical = 14.dp, horizontal = 12.dp),
                         modifier = Modifier.weight(0.213f)
@@ -97,7 +96,7 @@ private fun EmailVerificationScreen(
                         Text(
                             text = "코드받기",
                             color = GongBaekTheme.colors.white,
-                            style = GongBaekTheme.typography.body1.m16,
+                            style = GongBaekTheme.typography.body1.m16
                         )
                     }
                 }
@@ -122,7 +121,7 @@ private fun EmailVerificationScreen(
                     GongBaekButton(
                         onClick = {},
                         colors = GongBaekButtonDefault.gongBaekButtonColors(
-                            containerColor = GongBaekTheme.colors.black,
+                            containerColor = GongBaekTheme.colors.black
                         ),
                         contentPadding = PaddingValues(vertical = 14.dp, horizontal = 12.dp),
                         modifier = Modifier.weight(0.213f)
@@ -130,7 +129,7 @@ private fun EmailVerificationScreen(
                         Text(
                             text = "인증하기",
                             color = GongBaekTheme.colors.white,
-                            style = GongBaekTheme.typography.body1.m16,
+                            style = GongBaekTheme.typography.body1.m16
                         )
                     }
                 }

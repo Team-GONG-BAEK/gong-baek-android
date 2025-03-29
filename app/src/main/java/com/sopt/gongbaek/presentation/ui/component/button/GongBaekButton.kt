@@ -86,7 +86,6 @@ object GongBaekButtonDefault {
     )
 }
 
-
 @PreviewFontScale
 @Preview
 @Composable
@@ -94,14 +93,14 @@ private fun GongBaekButtonPreview() {
     GongBaekButton(
         onClick = {},
         colors = GongBaekButtonDefault.gongBaekButtonColors(
-            containerColor = GongBaekTheme.colors.black,
+            containerColor = GongBaekTheme.colors.black
         ),
-        contentPadding = PaddingValues(vertical = 14.dp, horizontal = 12.dp),
+        contentPadding = PaddingValues(vertical = 14.dp, horizontal = 12.dp)
     ) {
         Text(
             text = "코드받기",
             color = GongBaekTheme.colors.white,
-            style = GongBaekTheme.typography.body1.m16,
+            style = GongBaekTheme.typography.body1.m16
         )
     }
 }

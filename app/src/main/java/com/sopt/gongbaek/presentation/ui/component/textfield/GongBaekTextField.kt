@@ -33,7 +33,7 @@ fun GongBaekTextField(
     onValueChanged: (String) -> Unit,
     modifier: Modifier = Modifier,
     keyboardOptions: KeyboardOptions = KeyboardOptions.Default,
-    keyboardActions: KeyboardActions = KeyboardActions.Default,
+    keyboardActions: KeyboardActions = KeyboardActions.Default
 ) {
     var isFocused by remember { mutableStateOf(false) }
     BasicTextField(
@@ -63,7 +63,7 @@ fun GongBaekTextField(
         ),
         keyboardOptions = keyboardOptions,
         keyboardActions = keyboardActions,
-        cursorBrush = SolidColor(GongBaekTheme.colors.gray05),
+        cursorBrush = SolidColor(GongBaekTheme.colors.gray05)
     ) { innerTextField ->
         Box(
             contentAlignment = Alignment.CenterStart
@@ -91,7 +91,7 @@ private fun GongBaekTextFieldPreview() {
     ) {
         GongBaekTextField(
             value = value,
-            onValueChanged = { newValue -> value = newValue },
+            onValueChanged = { newValue -> value = newValue }
         )
     }
 }
