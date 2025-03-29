@@ -58,7 +58,8 @@ fun NavGraphBuilder.authNavGraph(
             val viewModel = backStackEntry.sharedViewModel<AuthViewModel>(navController)
             EmailVerificationRoute(
                 viewModel = viewModel,
-                navigateNicknameGender = navController::navigateNicknameGender
+                navigateNicknameGender = navController::navigateNicknameGender,
+                navigateBack = navController::popBackStack
             )
         }
 
