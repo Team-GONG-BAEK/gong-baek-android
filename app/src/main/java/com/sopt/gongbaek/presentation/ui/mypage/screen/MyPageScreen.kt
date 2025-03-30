@@ -1,7 +1,6 @@
 package com.sopt.gongbaek.presentation.ui.mypage.screen
 
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -81,13 +80,17 @@ fun MyPageRoute(
         uiState = myPageUiState,
         myPageTabs = myPageTabs,
         pagerState = pagerState,
-        onGroupDetailButtonClick = { groupId, groupCycle -> viewModel.sendSideEffect(MyPageContract.SideEffect.NavigateGroupDetail(groupId, groupCycle)) },
-        onGroupRoomButtonClick = { groupId, groupCycle -> viewModel.sendSideEffect(MyPageContract.SideEffect.NavigateGroupRoom(groupId, groupCycle)) }
+        onGroupDetailButtonClick = { groupId, groupCycle ->
+            viewModel.sendSideEffect(MyPageContract.SideEffect.NavigateGroupDetail(groupId, groupCycle))
+        },
+        onGroupRoomButtonClick = { groupId, groupCycle ->
+            viewModel.sendSideEffect(MyPageContract.SideEffect.NavigateGroupRoom(groupId, groupCycle))
+        }
     )
 }
 
 @Composable
-fun MyPageScreen(
+private fun MyPageScreen(
     uiState: MyPageContract.State,
     myPageTabs: List<String>,
     pagerState: PagerState,
@@ -97,7 +100,6 @@ fun MyPageScreen(
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .padding(top = 10.dp)
             .padding(WindowInsets.navigationBars.asPaddingValues())
     ) {
         CenterTitleTopBar(
@@ -167,7 +169,7 @@ private fun MyInfoSection(
             )
 
             Text(
-                text = stringResource(R.string.mypage_school_major_introduction, uiState.myPageInfo.schoolName, uiState.myPageInfo.majorName),
+                text = stringResource(R.string.mypage_school_major_introduction, uiState.myPageInfo.school, uiState.myPageInfo.major),
                 color = GongBaekTheme.colors.gray08,
                 style = GongBaekTheme.typography.body2.r14
             )
@@ -176,7 +178,7 @@ private fun MyInfoSection(
 }
 
 @Composable
-fun MyGroupSection(
+private fun MyGroupSection(
     uiState: MyPageContract.State,
     myGroupTabs: List<String>,
     pagerState: PagerState,
@@ -186,9 +188,6 @@ fun MyGroupSection(
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .padding(top = 10.dp)
-            .padding(WindowInsets.navigationBars.asPaddingValues())
-            .padding(WindowInsets.navigationBars.asPaddingValues())
     ) {
         CustomTabPager(
             tabs = myGroupTabs,
@@ -221,12 +220,10 @@ fun MyGroupSection(
     }
 }
 
-@Preview
+@Preview(showBackground = true)
 @Composable
 private fun MyPageScreenPreview() {
-    Column(
-        modifier = Modifier.background(color = GongBaekTheme.colors.white)
-    ) {
+    Column {
         MyPageScreen(
             uiState = MyPageContract.State(),
             myPageTabs = MyGroupPagerType.entries.map { it.description },

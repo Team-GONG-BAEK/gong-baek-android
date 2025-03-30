@@ -1,7 +1,7 @@
 package com.sopt.gongbaek.presentation.ui.mypage.screen
 
 import com.sopt.gongbaek.domain.model.GroupInfo
-import com.sopt.gongbaek.domain.model.MyPageInfo
+import com.sopt.gongbaek.domain.model.UserInfo
 import com.sopt.gongbaek.presentation.util.base.UiEvent
 import com.sopt.gongbaek.presentation.util.base.UiLoadState
 import com.sopt.gongbaek.presentation.util.base.UiSideEffect
@@ -9,8 +9,8 @@ import com.sopt.gongbaek.presentation.util.base.UiState
 
 class MyPageContract {
     data class State(
-        val MyPageLoadState: UiLoadState = UiLoadState.Idle,
-        val myPageInfo: MyPageInfo = MyPageInfo(),
+        val myPageLoadState: UiLoadState = UiLoadState.Idle,
+        val myPageInfo: UserInfo = UserInfo(),
         val registerGroupsLoadState: UiLoadState = UiLoadState.Idle,
         val registerActiveGroups: List<GroupInfo> = listOf(),
         val registerClosedGroups: List<GroupInfo> = listOf(),
