@@ -4,6 +4,7 @@ import com.sopt.gongbaek.data.remote.datasource.AuthRemoteDataSource
 import com.sopt.gongbaek.data.remote.dto.base.ApiResponse
 import com.sopt.gongbaek.data.remote.dto.base.NullableApiResponse
 import com.sopt.gongbaek.data.remote.dto.request.RegisterUserInfoRequestDto
+import com.sopt.gongbaek.data.remote.dto.response.MyProfileResponseDto
 import com.sopt.gongbaek.data.remote.dto.response.RegisterUserInfoResponseDto
 import com.sopt.gongbaek.data.remote.dto.response.UserProfileResponseDto
 import com.sopt.gongbaek.data.remote.dto.response.UserTimeTableResponseDto
@@ -25,4 +26,7 @@ class AuthRemoteDatasourceImpl @Inject constructor(
 
     override suspend fun getUserLectureTimeTable(): ApiResponse<UserTimeTableResponseDto> =
         authService.getUserLectureTimeTable()
+
+    override suspend fun getMyProfile(): ApiResponse<MyProfileResponseDto> =
+        authService.getMyProfile()
 }
