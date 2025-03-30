@@ -1,4 +1,4 @@
-package com.sopt.gongbaek.presentation.ui.mygroup.screen
+package com.sopt.gongbaek.presentation.ui.mypage.component
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background

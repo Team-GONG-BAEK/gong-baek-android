@@ -29,7 +29,8 @@ fun CenterTitleTopBar(
     onLeadingIconClick: () -> Unit = {},
     onTrailingIconClick: () -> Unit = {},
     textColor: androidx.compose.ui.graphics.Color = GongBaekTheme.colors.gray08,
-    textStyle: androidx.compose.ui.text.TextStyle = GongBaekTheme.typography.title2.m18
+    textStyle: androidx.compose.ui.text.TextStyle = GongBaekTheme.typography.title2.m18,
+    trailingIconColor: androidx.compose.ui.graphics.Color = GongBaekTheme.colors.gray04
 ) {
     Box(
         modifier = modifier
@@ -60,7 +61,7 @@ fun CenterTitleTopBar(
             Icon(
                 imageVector = ImageVector.vectorResource(trailingIconResId),
                 contentDescription = null,
-                tint = GongBaekTheme.colors.gray04,
+                tint = trailingIconColor,
                 modifier = Modifier
                     .align(Alignment.CenterEnd)
                     .clickableWithoutRipple {

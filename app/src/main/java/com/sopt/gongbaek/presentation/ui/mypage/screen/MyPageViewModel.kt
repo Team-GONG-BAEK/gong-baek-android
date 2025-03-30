@@ -1,4 +1,4 @@
-package com.sopt.gongbaek.presentation.ui.mygroup.screen
+package com.sopt.gongbaek.presentation.ui.mypage.screen
 
 import androidx.lifecycle.viewModelScope
 import com.sopt.gongbaek.domain.usecase.GetMyGroupsUseCase
@@ -9,20 +9,19 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class MyGroupViewModel @Inject constructor(
+class MyPageViewModel @Inject constructor(
     private val getMyGroupsUseCase: GetMyGroupsUseCase
-) : BaseViewModel<MyGroupContract.State, MyGroupContract.Event, MyGroupContract.SideEffect>() {
+) : BaseViewModel<MyPageContract.State, MyPageContract.Event, MyPageContract.SideEffect>() {
+    override fun createInitialState(): MyPageContract.State = MyPageContract.State()
 
-    override fun createInitialState(): MyGroupContract.State = MyGroupContract.State()
-
-    override suspend fun handleEvent(event: MyGroupContract.Event) {
+    override suspend fun handleEvent(event: MyPageContract.Event) {
         when (event) {
-            is MyGroupContract.Event.OnRegisterGroupsTabClick -> getRegisterGroups()
-            is MyGroupContract.Event.OnApplyGroupsTabClick -> getApplyGroups()
+            is MyPageContract.Event.OnRegisterGroupsTabClick -> getRegisterGroups()
+            is MyPageContract.Event.OnApplyGroupsTabClick -> getApplyGroups()
         }
     }
 
-    fun sendSideEffect(sideEffect: MyGroupContract.SideEffect) = setSideEffect(sideEffect)
+    fun sendSideEffect(sideEffect: MyPageContract.SideEffect) = setSideEffect(sideEffect)
 
     private fun getRegisterGroups() {
         viewModelScope.launch {
