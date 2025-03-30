@@ -2,6 +2,7 @@ package com.sopt.gongbaek.presentation.ui.mypage.screen
 
 import androidx.lifecycle.viewModelScope
 import com.sopt.gongbaek.domain.usecase.GetMyGroupsUseCase
+import com.sopt.gongbaek.domain.usecase.GetMyProfileUseCase
 import com.sopt.gongbaek.presentation.util.base.BaseViewModel
 import com.sopt.gongbaek.presentation.util.base.UiLoadState
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -10,6 +11,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class MyPageViewModel @Inject constructor(
+    private val getMyProfileUseCase: GetMyProfileUseCase,
     private val getMyGroupsUseCase: GetMyGroupsUseCase
 ) : BaseViewModel<MyPageContract.State, MyPageContract.Event, MyPageContract.SideEffect>() {
     override fun createInitialState(): MyPageContract.State = MyPageContract.State()
@@ -22,6 +24,18 @@ class MyPageViewModel @Inject constructor(
     }
 
     fun sendSideEffect(sideEffect: MyPageContract.SideEffect) = setSideEffect(sideEffect)
+
+    private fun getMyProfile() {
+        viewModelScope.launch {
+            setState { copy(myPageLoadState = UiLoadState.Loading) }
+            getMyProfileUseCase().fold(
+                onSuccess = { myProfile ->
+                    setState { copy(myPageInfo = myProfile) }
+                },
+                onFailure = { setState { copy(myPageLoadState = UiLoadState.Error) } }
+            )
+        }
+    }
 
     private fun getRegisterGroups() {
         viewModelScope.launch {

@@ -17,7 +17,6 @@ class MyPageContract {
         val applyGroupsLoadState: UiLoadState = UiLoadState.Idle,
         val applyActiveGroups: List<GroupInfo> = listOf(),
         val applyClosedGroups: List<GroupInfo> = listOf()
-
     ) : UiState
 
     sealed class Event : UiEvent {
