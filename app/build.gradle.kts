@@ -28,7 +28,7 @@ android {
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         buildConfigField("String", "GONGBAEK_BASE_URL", localProperties["gongbaek.base.url"].toString())
 
-        val kakaoNativeAppKey: String = localProperties.getProperty("kakao.native.app.key") ?: throw GradleException("Missing 'kakao.native.app.key' in local.properties")
+        val kakaoNativeAppKey: String = localProperties.getProperty("kakao.native.app.key")
         buildConfigField("String", "KAKAO_NATIVE_APP_KEY", "\"$kakaoNativeAppKey\"")
         manifestPlaceholders["KAKAO_NATIVE_APP_KEY"] = kakaoNativeAppKey
     }
