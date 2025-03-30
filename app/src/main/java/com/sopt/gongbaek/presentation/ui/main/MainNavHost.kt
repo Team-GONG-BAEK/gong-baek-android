@@ -22,9 +22,11 @@ import com.sopt.gongbaek.presentation.ui.grouplist.navigation.groupListNavGraph
 import com.sopt.gongbaek.presentation.ui.groupregister.navigation.groupRegisterNavGraph
 import com.sopt.gongbaek.presentation.ui.grouproom.navigation.groupRoomNavGraph
 import com.sopt.gongbaek.presentation.ui.home.navigation.homeNavGraph
+import com.sopt.gongbaek.presentation.ui.login.SocialLoginRoute
 import com.sopt.gongbaek.presentation.ui.mypage.navigation.myPageNavGraph
 import com.sopt.gongbaek.presentation.ui.onboarding.navigation.onboardingNavGraph
-import com.sopt.gongbaek.presentation.ui.splash.SplashScreen
+import com.sopt.gongbaek.presentation.ui.onboarding.screen.TermsOfServiceRoute
+import com.sopt.gongbaek.presentation.ui.splash.SplashRoute
 
 @Composable
 fun MainNavHost(
@@ -35,7 +37,8 @@ fun MainNavHost(
     val currentBackStackEntry by navigator.navController.currentBackStackEntryAsState()
     val isNoStatusBarPaddingRoute = listOf(
         currentBackStackEntry?.destination?.hasRoute<MainBottomTabRoute.Home>(),
-        currentBackStackEntry?.destination?.hasRoute<NavigationRoute.GroupRoom>()
+        currentBackStackEntry?.destination?.hasRoute<NavigationRoute.GroupRoom>(),
+        currentBackStackEntry?.destination?.hasRoute<NavigationRoute.Login>()
     ).any { it == true }
 
     NavHost(
@@ -51,7 +54,9 @@ fun MainNavHost(
                 }
             )
     ) {
-        composable<NavigationRoute.Splash> { SplashScreen(navController = navigator.navController) }
+        composable<NavigationRoute.Splash> { SplashRoute(navController = navigator.navController) }
+        composable<NavigationRoute.Login> { SocialLoginRoute(navController = navigator.navController) }
+        composable<NavigationRoute.TermsOfService> { TermsOfServiceRoute(navController = navigator.navController) }
         onboardingNavGraph(navigator.navController)
         authNavGraph(navigator.navController)
         groupListNavGraph(navigator.navController)

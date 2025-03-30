@@ -8,6 +8,7 @@ import com.sopt.gongbaek.BuildConfig.DEBUG
 import com.sopt.gongbaek.data.local.datasource.TokenLocalDataSource
 import com.sopt.gongbaek.data.remote.util.AuthInterceptor
 import com.sopt.gongbaek.data.remote.util.NetworkManager
+import com.sopt.gongbaek.domain.usecase.ReissueTokenUseCase
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -20,6 +21,7 @@ import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Converter
 import retrofit2.Retrofit
 import java.util.concurrent.TimeUnit
+import javax.inject.Provider
 import javax.inject.Singleton
 
 @Module
@@ -51,8 +53,9 @@ object NetworkModule {
     @Singleton
     fun provideAuthInterceptor(
         tokenLocalDataSource: TokenLocalDataSource,
+        reissueTokenUseCase: Provider<ReissueTokenUseCase>,
         @ApplicationContext context: Context
-    ): AuthInterceptor = AuthInterceptor(tokenLocalDataSource, context)
+    ): AuthInterceptor = AuthInterceptor(tokenLocalDataSource, reissueTokenUseCase, context)
 
     @Provides
     @Singleton

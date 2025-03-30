@@ -9,13 +9,12 @@ class TokenLocalDataSourceImpl @Inject constructor(
     @TokenPrefs private val sharedPreferences: SharedPreferences
 ) : TokenLocalDataSource {
 
-    override var accessToken: String
-//        get() = sharedPreferences.getString(ACCESS_TOKEN, "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIyNiIsImV4cCI6MTczNzc1NzYyNCwidXNlcklkIjoyNn0.bwgS0uLVQWFAzi2OatSkVYD5VqjM_wKOnJ8HzR736sArko3RdzRsabSqLCN9-UEP5YdKyBgjz9hAo1-Fe2-xBA") ?: ""
-        get() = sharedPreferences.getString(ACCESS_TOKEN, "") ?: ""
+    override var accessToken: String?
+        get() = sharedPreferences.getString(ACCESS_TOKEN, null) // 토큰 값을 찾을 수 없는 경우를 위해 nullable로 선언
         set(value) = sharedPreferences.edit().putString(ACCESS_TOKEN, value).apply()
 
-    override var refreshToken: String
-        get() = sharedPreferences.getString(REFRESH_TOKEN, "") ?: ""
+    override var refreshToken: String?
+        get() = sharedPreferences.getString(REFRESH_TOKEN, null)
         set(value) = sharedPreferences.edit().putString(REFRESH_TOKEN, value).apply()
 
     override fun clearInfo() = sharedPreferences.edit().clear().apply()

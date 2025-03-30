@@ -5,44 +5,78 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.LocalLifecycleOwner
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.lifecycle.flowWithLifecycle
 import androidx.navigation.NavHostController
-import androidx.navigation.compose.rememberNavController
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import com.sopt.gongbaek.R
+import com.sopt.gongbaek.presentation.model.MainBottomTabRoute
 import com.sopt.gongbaek.presentation.model.NavigationRoute
 import com.sopt.gongbaek.presentation.util.GongBaekLottieAnimation
 import com.sopt.gongbaek.ui.theme.GONGBAEKTheme
 import com.sopt.gongbaek.ui.theme.GongBaekTheme
 
 @Composable
-fun SplashScreen(
-    navController: NavHostController
+fun SplashRoute(
+    navController: NavHostController,
+    viewModel: SplashViewModel = hiltViewModel()
 ) {
+    val uiState by viewModel.state.collectAsStateWithLifecycle()
+    val lifecycleOwner = LocalLifecycleOwner.current
     val systemUiController = rememberSystemUiController()
     val backgroundColor = GongBaekTheme.colors.gray10
-    val defaultBackgroundColor = GongBaekTheme.colors.white
-    val onComplete = {
-        navController.navigate(NavigationRoute.Onboarding) {
-            popUpTo(NavigationRoute.Splash) { inclusive = true }
+
+    LaunchedEffect(uiState.autoLogin) {
+        if (uiState.autoLogin != null) {
+            if (uiState.autoLogin == true) {
+                viewModel.sendSideEffect(SplashContract.SideEffect.NavigateHome)
+            } else {
+                viewModel.sendSideEffect(SplashContract.SideEffect.NavigateSocialLogin)
+            }
         }
+    }
+
+    LaunchedEffect(viewModel.sideEffect, lifecycleOwner) {
+        viewModel.sideEffect.flowWithLifecycle(lifecycleOwner.lifecycle)
+            .collect { sideEffect ->
+                when (sideEffect) {
+                    is SplashContract.SideEffect.NavigateHome -> {
+                        navController.navigate(MainBottomTabRoute.Home) {
+                            popUpTo(NavigationRoute.Splash) { inclusive = true }
+                            launchSingleTop = true
+                        }
+                    }
+
+                    is SplashContract.SideEffect.NavigateSocialLogin -> {
+                        navController.navigate(NavigationRoute.Login) {
+                            popUpTo(NavigationRoute.Splash) { inclusive = true }
+                        }
+                    }
+                }
+            }
     }
 
     LaunchedEffect(Unit) {
         systemUiController.setSystemBarsColor(color = backgroundColor)
     }
 
-    DisposableEffect(Unit) {
-        onDispose {
-            systemUiController.setSystemBarsColor(color = defaultBackgroundColor)
-        }
-    }
+    SplashScreen(
+        onComplete = { viewModel.setEvent(SplashContract.Event.ValidateAutoLogin) }
+    )
+}
 
+@Composable
+private fun SplashScreen(
+    onComplete: () -> Unit
+) {
     Box(
         modifier = Modifier
             .background(color = GongBaekTheme.colors.gray10)
@@ -62,8 +96,6 @@ fun SplashScreen(
 @Composable
 private fun SplashScreenPreview() {
     GONGBAEKTheme {
-        SplashScreen(
-            navController = rememberNavController()
-        )
+        SplashScreen(onComplete = {})
     }
 }
