@@ -54,7 +54,7 @@ fun MyPageRoute(
     val myPageTabs: List<String> = MyGroupPagerType.entries.map { it.description }
     val pagerState = rememberPagerState { myPageTabs.size }
 
-    LaunchedEffect(Unit){
+    LaunchedEffect(Unit) {
         viewModel.setEvent(MyPageContract.Event.OnGetMyProfile)
     }
 

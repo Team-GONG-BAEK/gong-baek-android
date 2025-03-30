@@ -5,6 +5,6 @@ import com.sopt.gongbaek.domain.repository.AuthRepository
 
 class GetMyProfileUseCase(
     private val authRepository: AuthRepository
-){
+) {
     suspend operator fun invoke(): Result<UserInfo> = authRepository.getMyProfile()
 }

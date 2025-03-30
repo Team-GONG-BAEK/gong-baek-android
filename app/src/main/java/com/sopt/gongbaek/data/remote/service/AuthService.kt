@@ -51,5 +51,4 @@ interface AuthService {
 
     @GET("/api/v1/user/my/profile")
     suspend fun getMyProfile(): ApiResponse<MyProfileResponseDto>
-
 }

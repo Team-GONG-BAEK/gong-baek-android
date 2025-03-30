@@ -20,7 +20,7 @@ class MyPageContract {
     ) : UiState
 
     sealed class Event : UiEvent {
-        data object OnGetMyProfile: Event()
+        data object OnGetMyProfile : Event()
         data object OnRegisterGroupsTabClick : Event()
         data object OnApplyGroupsTabClick : Event()
     }
