@@ -18,6 +18,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.flowWithLifecycle
 import com.sopt.gongbaek.R
 import com.sopt.gongbaek.presentation.ui.auth.component.SearchButton
+import com.sopt.gongbaek.presentation.ui.auth.component.YearSelectableButton
 import com.sopt.gongbaek.presentation.ui.component.button.GongBaekBasicButton
 import com.sopt.gongbaek.presentation.ui.component.progressBar.GongBaekProgressBar
 import com.sopt.gongbaek.presentation.ui.component.section.PageDescriptionSection
@@ -56,6 +57,8 @@ fun AcademicInfoRoute(
     AcademicInfoScreen(
         univSearchResult = uiState.userInfo.school,
         majorSearchResult = uiState.userInfo.major,
+        enterYear = uiState.userInfo.enterYear,
+        onYearSelected = { year -> viewModel.setEvent(AuthContract.Event.OnYearSelected(year)) },
         navigateEmailVerification = { viewModel.sendSideEffect(AuthContract.SideEffect.NavigateEmailVerification) },
         onUnivSearchClick = { viewModel.sendSideEffect(AuthContract.SideEffect.NavigateUnivSearch) },
         onMajorSearchClick = { viewModel.sendSideEffect(AuthContract.SideEffect.NavigateMajorSearch) },
@@ -70,6 +73,8 @@ private fun AcademicInfoScreen(
     navigateEmailVerification: () -> Unit,
     onUnivSearchClick: () -> Unit,
     onMajorSearchClick: () -> Unit,
+    enterYear: Int,
+    onYearSelected: (Int) -> Unit,
     onBackClick: () -> Unit
 ) {
     Box(
@@ -81,6 +86,8 @@ private fun AcademicInfoScreen(
             onBackClick = onBackClick,
             onUnivSearchClick = onUnivSearchClick,
             onMajorSearchClick = onMajorSearchClick,
+            selectedYear = enterYear,
+            onYearSelected = onYearSelected,
             modifier = Modifier
                 .padding(horizontal = 16.dp)
                 .align(Alignment.Center)
@@ -88,7 +95,7 @@ private fun AcademicInfoScreen(
 
         GongBaekBasicButton(
             title = "다음",
-            enabled = univSearchResult.isNotEmpty() && majorSearchResult.isNotEmpty(),
+            enabled = univSearchResult.isNotEmpty() && majorSearchResult.isNotEmpty() && enterYear != 0,
             onClick = navigateEmailVerification,
             modifier = Modifier
                 .align(Alignment.BottomCenter)
@@ -104,6 +111,8 @@ private fun AcademicInfoSelectionSection(
     onBackClick: () -> Unit,
     onUnivSearchClick: () -> Unit,
     onMajorSearchClick: () -> Unit,
+    selectedYear: Int,
+    onYearSelected: (Int) -> Unit,
     modifier: Modifier = Modifier
 ) {
     Column {
@@ -111,7 +120,7 @@ private fun AcademicInfoSelectionSection(
             onClick = onBackClick
         )
 
-        GongBaekProgressBar(progressPercent = 0.375f)
+        GongBaekProgressBar(progressPercent = 1 / 7f)
 
         Column(
             modifier = modifier
@@ -123,7 +132,7 @@ private fun AcademicInfoSelectionSection(
                 descriptionResId = R.string.auth_academic_info_description
             )
 
-            Spacer(modifier = Modifier.height(44.dp))
+            Spacer(modifier = Modifier.height(42.dp))
 
             SearchButton(
                 buttonLabel = "학교",
@@ -140,6 +149,13 @@ private fun AcademicInfoSelectionSection(
                 isSearched = majorSearchResult.isNotEmpty(),
                 onSearchButtonClicked = onMajorSearchClick
             )
+
+            Spacer(modifier = Modifier.height(24.dp))
+
+            YearSelectableButton(
+                selectedYear = selectedYear,
+                onYearSelected = onYearSelected
+            )
         }
     }
 }
@@ -153,6 +169,8 @@ private fun AcademicInfoScreenPreview() {
         navigateEmailVerification = {},
         onUnivSearchClick = {},
         onMajorSearchClick = {},
-        onBackClick = {}
+        onBackClick = {},
+        enterYear = 0,
+        onYearSelected = {}
     )
 }

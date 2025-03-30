@@ -94,7 +94,7 @@ private fun ImageSelectorSection(
     Column {
         StartTitleTopBar(isLeadingIconIncluded = false)
 
-        GongBaekProgressBar(progressPercent = 0.125f)
+        GongBaekProgressBar(progressPercent = 4 / 7f)
 
         Column(
             modifier = modifier
@@ -106,7 +106,7 @@ private fun ImageSelectorSection(
                 descriptionResId = R.string.auth_select_profile_description
             )
 
-            Spacer(modifier = Modifier.height(44.dp))
+            Spacer(modifier = Modifier.height(42.dp))
 
             ImageSelector(
                 imageSelectorType = ImageSelectorType.Profile,

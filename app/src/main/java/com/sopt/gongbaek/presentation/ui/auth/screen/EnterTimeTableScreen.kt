@@ -7,14 +7,10 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.SpanStyle
-import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.LocalLifecycleOwner
@@ -71,7 +67,7 @@ private fun EnterTimeTableScreen(
     Scaffold(
         bottomBar = {
             GongBaekBasicButton(
-                title = "다음",
+                title = "가입 완료",
                 enabled = true,
                 onClick = navigateCompleteAuth,
                 modifier = Modifier
@@ -111,28 +107,11 @@ private fun EnterTimeTableSection(
             Spacer(modifier = Modifier.height(54.dp))
 
             PageDescriptionSection(
-                titleResId = R.string.auth_enter_timetable_title
+                titleResId = R.string.auth_enter_timetable_title,
+                descriptionResId = R.string.auth_enter_timetable_description
             )
 
-            Spacer(modifier = Modifier.height(10.dp))
-
-            Text(
-                text = buildAnnotatedString {
-                    append(stringResource(R.string.auth_enter_timetable_description))
-
-                    addStyle(
-                        style = SpanStyle(
-                            color = GongBaekTheme.colors.mainOrange
-                        ),
-                        start = 0,
-                        end = 6
-                    )
-                },
-                color = GongBaekTheme.colors.gray07,
-                style = GongBaekTheme.typography.body1.m16
-            )
-
-            Spacer(modifier = Modifier.height(14.dp))
+            Spacer(modifier = Modifier.height(24.dp))
 
             LazyColumn {
                 item {

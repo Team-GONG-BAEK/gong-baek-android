@@ -101,7 +101,7 @@ private fun SelfIntroductionSection(
     Column {
         StartTitleTopBar(onClick = onBackClick)
 
-        GongBaekProgressBar(progressPercent = 0.875f)
+        GongBaekProgressBar(progressPercent = 6 / 7f)
 
         Column(
             modifier = modifier
@@ -130,7 +130,7 @@ private fun SelfIntroductionSection(
                 style = GongBaekTheme.typography.body1.m16
             )
 
-            Spacer(modifier = Modifier.height(44.dp))
+            Spacer(modifier = Modifier.height(22.dp))
 
             GongBaekBasicTextField(
                 value = selfIntroduction,
