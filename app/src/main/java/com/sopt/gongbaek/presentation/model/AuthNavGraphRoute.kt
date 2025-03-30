@@ -19,25 +19,13 @@ sealed interface AuthNavGraphRoute : NavigationRoute {
     data object EmailVerification : AuthNavGraphRoute
 
     @Serializable
-    data object Grade : AuthNavGraphRoute
-
-    @Serializable
     data object Mbti : AuthNavGraphRoute
-
-    @Serializable
-    data object Gender : AuthNavGraphRoute
 
     @Serializable
     data object SelfIntroduction : AuthNavGraphRoute
 
     @Serializable
     data object EnterTimetable : AuthNavGraphRoute
-
-    @Serializable
-    data object GapTimetable : AuthNavGraphRoute
-
-    @Serializable
-    data object TimetableConvert : AuthNavGraphRoute
 
     @Serializable
     data object CompleteAuth : AuthNavGraphRoute
