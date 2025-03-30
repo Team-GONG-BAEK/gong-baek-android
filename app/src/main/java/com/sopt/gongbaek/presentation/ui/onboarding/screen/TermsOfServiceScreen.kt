@@ -83,7 +83,7 @@ fun TermsOfServiceRoute(
 }
 
 @Composable
-fun TermsOfServiceScreen(
+private fun TermsOfServiceScreen(
     uiState: TermsOfServiceContract.State,
     onBackClick: () -> Unit,
     onFullAcceptClick: () -> Unit,

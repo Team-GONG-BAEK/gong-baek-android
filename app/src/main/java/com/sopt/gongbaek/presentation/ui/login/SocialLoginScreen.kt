@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -21,8 +22,10 @@ import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.lifecycle.compose.LocalLifecycleOwner
+import androidx.lifecycle.flowWithLifecycle
 import androidx.navigation.NavHostController
+import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import com.sopt.gongbaek.R
 import com.sopt.gongbaek.presentation.model.MainBottomTabRoute
 import com.sopt.gongbaek.presentation.model.NavigationRoute
@@ -35,33 +38,26 @@ fun SocialLoginRoute(
     navController: NavHostController,
     viewModel: SocialLoginViewModel = hiltViewModel()
 ) {
-    val uiState by viewModel.state.collectAsStateWithLifecycle()
     val context = LocalContext.current
+    val lifecycleOwner = LocalLifecycleOwner.current
 
-    LaunchedEffect(uiState.autoLogin) {
-        if (uiState.autoLogin) {
-            viewModel.sendSideEffect(SocialLoginContract.SideEffect.NavigateHome)
-            viewModel.setEvent(SocialLoginContract.Event.ResetAutoLogin)
-        }
-    }
-
-    LaunchedEffect(Unit) {
-        viewModel.sideEffect.collect { sideEffect ->
-            when (sideEffect) {
-                is SocialLoginContract.SideEffect.NavigateHome -> {
-                    navController.navigate(MainBottomTabRoute.Home) {
-                        popUpTo(NavigationRoute.Login) { inclusive = true }
-                        launchSingleTop = true
+    LaunchedEffect(viewModel.sideEffect, lifecycleOwner) {
+        viewModel.sideEffect.flowWithLifecycle(lifecycleOwner.lifecycle)
+            .collect { sideEffect ->
+                when (sideEffect) {
+                    is SocialLoginContract.SideEffect.NavigateHome -> {
+                        navController.navigate(MainBottomTabRoute.Home) {
+                            popUpTo(NavigationRoute.Login) { inclusive = true }
+                            launchSingleTop = true
+                        }
                     }
-                }
-
-                is SocialLoginContract.SideEffect.NavigateTermsOfService -> {
-                    navController.navigate(NavigationRoute.TermsOfService) {
-                        popUpTo(NavigationRoute.Login) { inclusive = true }
+                    is SocialLoginContract.SideEffect.NavigateTermsOfService -> {
+                        navController.navigate(NavigationRoute.TermsOfService) {
+                            popUpTo(NavigationRoute.Login) { inclusive = true }
+                        }
                     }
                 }
             }
-        }
     }
 
     SocialLoginScreen(
@@ -70,22 +66,23 @@ fun SocialLoginRoute(
 }
 
 @Composable
-fun SocialLoginScreen(
+private fun SocialLoginScreen(
     onLoginClick: () -> Unit
 ) {
-    val highlightedTextStyle = GongBaekTheme.typography.body2.sb14
-    val highlightedSpanStyle = SpanStyle(
-        color = GongBaekTheme.colors.mainOrange,
-        fontSize = highlightedTextStyle.fontSize,
-        fontWeight = highlightedTextStyle.fontWeight,
-        fontFamily = highlightedTextStyle.fontFamily,
-        letterSpacing = highlightedTextStyle.letterSpacing
-    )
+    val systemUiController = rememberSystemUiController()
+    val backgroundColor = GongBaekTheme.colors.gray10
+
+    SideEffect {
+        systemUiController.setStatusBarColor(
+            color = backgroundColor,
+            darkIcons = true
+        )
+    }
 
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .background(color = GongBaekTheme.colors.gray10),
+            .background(color = backgroundColor),
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
@@ -99,12 +96,16 @@ fun SocialLoginScreen(
             text = buildAnnotatedString {
                 append(stringResource(R.string.login_screen_greeting))
                 addStyle(
-                    style = highlightedSpanStyle,
+                    style = SpanStyle(
+                        color = GongBaekTheme.colors.mainOrange
+                    ),
                     start = 0,
                     end = 1
                 )
                 addStyle(
-                    style = highlightedSpanStyle,
+                    style = SpanStyle(
+                        color = GongBaekTheme.colors.mainOrange
+                    ),
                     start = 4,
                     end = 5
                 )

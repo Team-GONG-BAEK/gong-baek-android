@@ -10,14 +10,11 @@ class SocialLoginContract {
 
     data class State(
         val kakaoToken: String? = null,
-        val signInState: UiLoadState = UiLoadState.Idle,
-        val signUpState: UiLoadState = UiLoadState.Idle,
-        val autoLogin: Boolean = false
+        val signInState: UiLoadState = UiLoadState.Idle
     ) : UiState
 
     sealed class Event : UiEvent {
         data class OnKaKaoLoginClick(val context: Context) : Event()
-        data object ResetAutoLogin : Event()
     }
 
     sealed interface SideEffect : UiSideEffect {

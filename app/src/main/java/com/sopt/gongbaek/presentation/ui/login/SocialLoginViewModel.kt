@@ -13,7 +13,6 @@ import com.sopt.gongbaek.presentation.util.base.UiLoadState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.suspendCancellableCoroutine
-import timber.log.Timber
 import javax.inject.Inject
 import kotlin.coroutines.resume
 import kotlin.coroutines.resumeWithException
@@ -24,10 +23,6 @@ class SocialLoginViewModel @Inject constructor(
     private val tokenRepository: TokenRepository
 ) : BaseViewModel<SocialLoginContract.State, SocialLoginContract.Event, SocialLoginContract.SideEffect>() {
 
-    init {
-        validateAutoLogin()
-    }
-
     override fun createInitialState() = SocialLoginContract.State()
 
     override suspend fun handleEvent(event: SocialLoginContract.Event) {
@@ -35,20 +30,10 @@ class SocialLoginViewModel @Inject constructor(
             is SocialLoginContract.Event.OnKaKaoLoginClick -> {
                 loginWithKakao(event.context)
             }
-
-            is SocialLoginContract.Event.ResetAutoLogin -> {
-                setState { copy(autoLogin = false) }
-            }
         }
     }
 
     fun sendSideEffect(sideEffect: SocialLoginContract.SideEffect) = setSideEffect(sideEffect)
-
-    private fun validateAutoLogin() {
-        setState { copy(signInState = UiLoadState.Loading) }
-        val hasTokens = tokenRepository.getAccessToken()?.isNotBlank() == true
-        setState { copy(signInState = UiLoadState.Success, autoLogin = hasTokens) }
-    }
 
     private fun loginWithKakao(context: Context) {
         viewModelScope.launch {
@@ -65,7 +50,6 @@ class SocialLoginViewModel @Inject constructor(
                 }
             }.onSuccess {
                 setState { copy(kakaoToken = it.accessToken) }
-                Timber.tag("kakaoToken").d(it.accessToken)
                 login()
             }.onFailure {
                 setState { copy(signInState = UiLoadState.Error) }
@@ -107,11 +91,9 @@ class SocialLoginViewModel @Inject constructor(
             setState { copy(signInState = UiLoadState.Error) }
             return
         }
-
         loginUseCase(kakaoToken = token, platform = "KAKAO").fold(
             onSuccess = { response ->
                 tokenRepository.setTokens(response.accessToken, response.refreshToken)
-                Timber.tag("accessToken").d(response.accessToken)
                 setState { copy(signInState = UiLoadState.Success) }
                 setSideEffect(
                     if (response.userId != null) {
