@@ -3,6 +3,7 @@ package com.sopt.gongbaek.data.remote.service
 import com.sopt.gongbaek.data.remote.dto.base.ApiResponse
 import com.sopt.gongbaek.data.remote.dto.base.NullableApiResponse
 import com.sopt.gongbaek.data.remote.dto.request.RegisterUserInfoRequestDto
+import com.sopt.gongbaek.data.remote.dto.response.MyProfileResponseDto
 import com.sopt.gongbaek.data.remote.dto.response.RegisterUserInfoResponseDto
 import com.sopt.gongbaek.data.remote.dto.response.UserProfileResponseDto
 import com.sopt.gongbaek.data.remote.dto.response.UserTimeTableResponseDto
@@ -28,4 +29,8 @@ interface AuthService {
 
     @GET("/api/v1/my/timeTable")
     suspend fun getUserLectureTimeTable(): ApiResponse<UserTimeTableResponseDto>
+
+    @GET("/api/v1/user/my/profile")
+    suspend fun getMyProfile(): ApiResponse<MyProfileResponseDto>
+
 }
