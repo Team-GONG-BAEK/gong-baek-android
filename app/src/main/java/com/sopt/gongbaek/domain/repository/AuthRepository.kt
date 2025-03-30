@@ -10,4 +10,5 @@ interface AuthRepository {
     suspend fun validateNickname(nickname: String): Result<Unit>
     suspend fun getUserProfile(): Result<UserProfile>
     suspend fun getUserLectureTimeTable(): Result<List<UserLectureTimeTable>>
+    suspend fun getMyProfile(): Result<UserInfo>
 }
