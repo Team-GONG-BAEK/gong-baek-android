@@ -18,6 +18,7 @@ class MyPageViewModel @Inject constructor(
 
     override suspend fun handleEvent(event: MyPageContract.Event) {
         when (event) {
+            is MyPageContract.Event.OnGetMyProfile -> getMyProfile()
             is MyPageContract.Event.OnRegisterGroupsTabClick -> getRegisterGroups()
             is MyPageContract.Event.OnApplyGroupsTabClick -> getApplyGroups()
         }
