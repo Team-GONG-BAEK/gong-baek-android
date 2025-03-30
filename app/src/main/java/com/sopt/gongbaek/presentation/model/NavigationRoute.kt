@@ -7,6 +7,12 @@ sealed interface NavigationRoute {
     data object Splash : NavigationRoute
 
     @Serializable
+    data object Login : NavigationRoute
+
+    @Serializable
+    data object TermsOfService : NavigationRoute
+
+    @Serializable
     data object Onboarding : NavigationRoute
 
     @Serializable

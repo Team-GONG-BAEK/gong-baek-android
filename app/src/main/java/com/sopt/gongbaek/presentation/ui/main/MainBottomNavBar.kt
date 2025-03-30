@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -34,21 +35,28 @@ fun MainBottomNavBar(
     context: Context = LocalContext.current
 ) {
     if (isVisible) {
-        Row(
-            modifier = modifier
-                .fillMaxWidth()
-                .background(color = GongBaekTheme.colors.white),
-            horizontalArrangement = Arrangement.SpaceBetween,
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            bottomNavBarTabTypes.forEach { bottomNavBarTabType ->
-                MainBottomNavBarItem(
-                    context = context,
-                    bottomNavBarTabType = bottomNavBarTabType,
-                    isSelected = currentBottomNavBarTab == bottomNavBarTabType,
-                    onClick = { onBottomNavBarTabSelected(bottomNavBarTabType) },
-                    modifier = Modifier.weight(1f)
-                )
+        Column {
+            HorizontalDivider(
+                modifier = Modifier.fillMaxWidth(),
+                thickness = 1.dp,
+                color = GongBaekTheme.colors.gray02
+            )
+            Row(
+                modifier = modifier
+                    .fillMaxWidth()
+                    .background(color = GongBaekTheme.colors.white),
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                bottomNavBarTabTypes.forEach { bottomNavBarTabType ->
+                    MainBottomNavBarItem(
+                        context = context,
+                        bottomNavBarTabType = bottomNavBarTabType,
+                        isSelected = currentBottomNavBarTab == bottomNavBarTabType,
+                        onClick = { onBottomNavBarTabSelected(bottomNavBarTabType) },
+                        modifier = Modifier.weight(1f)
+                    )
+                }
             }
         }
     }

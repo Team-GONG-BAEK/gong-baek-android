@@ -27,6 +27,10 @@ android {
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         buildConfigField("String", "GONGBAEK_BASE_URL", localProperties["gongbaek.base.url"].toString())
+
+        val kakaoNativeAppKey: String = localProperties.getProperty("kakao.native.app.key")
+        buildConfigField("String", "KAKAO_NATIVE_APP_KEY", "\"$kakaoNativeAppKey\"")
+        manifestPlaceholders["KAKAO_NATIVE_APP_KEY"] = kakaoNativeAppKey
     }
 
     lint {
@@ -100,6 +104,9 @@ dependencies {
 
     // Lottie
     implementation(libs.lottie.compose)
+
+    // Kakao
+    implementation(libs.kakao.user)
 }
 
 ktlint {

@@ -46,6 +46,9 @@ lifecycleRuntimeComposeAndroid = "2.8.7"
 # Lottie
 lottie-compose = "6.6.0"
 
+# Kakao
+kakao = "2.21.0"
+
 [libraries]
 # Core
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -91,6 +94,9 @@ androidx-espresso-core = { group = "androidx.test.espresso", name = "espresso-co
 
 # Lottie
 lottie-compose = { group = "com.airbnb.android", name = "lottie-compose", version.ref = "lottie-compose" } # Lottie Compose 라이브러리
+
+# Kakao
+kakao-user = { group = "com.kakao.sdk", name = "v2-user", version.ref = "kakao" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

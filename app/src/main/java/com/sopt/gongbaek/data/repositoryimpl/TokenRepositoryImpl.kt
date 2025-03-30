@@ -9,9 +9,9 @@ class TokenRepositoryImpl @Inject constructor(
     private val tokenLocalDataSource: TokenLocalDataSource
 ) : TokenRepository {
 
-    override fun getAccessToken(): String = tokenLocalDataSource.accessToken
+    override fun getAccessToken(): String? = tokenLocalDataSource.accessToken
 
-    override fun getRefreshToken(): String = tokenLocalDataSource.refreshToken
+    override fun getRefreshToken(): String? = tokenLocalDataSource.refreshToken
 
     override fun setTokens(accessToken: String, refreshToken: String) {
         tokenLocalDataSource.accessToken = accessToken

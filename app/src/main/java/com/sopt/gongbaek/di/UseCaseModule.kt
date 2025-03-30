@@ -20,9 +20,12 @@ import com.sopt.gongbaek.domain.usecase.GetSearchMajorsResultUseCase
 import com.sopt.gongbaek.domain.usecase.GetSearchUniversitiesResultUseCase
 import com.sopt.gongbaek.domain.usecase.LoadGroupDetailScreenUseCase
 import com.sopt.gongbaek.domain.usecase.LoadGroupRoomScreenUseCase
+import com.sopt.gongbaek.domain.usecase.LoginUseCase
+import com.sopt.gongbaek.domain.usecase.LogoutUseCase
 import com.sopt.gongbaek.domain.usecase.PostCommentUseCase
 import com.sopt.gongbaek.domain.usecase.PostGroupUseCase
 import com.sopt.gongbaek.domain.usecase.RegisterUserInfoUseCase
+import com.sopt.gongbaek.domain.usecase.ReissueTokenUseCase
 import com.sopt.gongbaek.domain.usecase.SetLectureTimetableUseCase
 import com.sopt.gongbaek.domain.usecase.SetTokenUseCase
 import com.sopt.gongbaek.domain.usecase.ValidateNicknameUseCase
@@ -151,6 +154,24 @@ object UseCaseModule {
         groupRepository: GroupRepository,
         commentRepository: CommentRepository
     ): LoadGroupRoomScreenUseCase = LoadGroupRoomScreenUseCase(groupRepository, commentRepository)
+
+    @Provides
+    @Singleton
+    fun provideLoginUseCase(
+        authRepository: AuthRepository
+    ): LoginUseCase = LoginUseCase(authRepository)
+
+    @Provides
+    @Singleton
+    fun provideReissueTokenUseCase(
+        authRepository: AuthRepository
+    ): ReissueTokenUseCase = ReissueTokenUseCase(authRepository)
+
+    @Provides
+    @Singleton
+    fun provideLogoutUseCase(
+        authRepository: AuthRepository
+    ): LogoutUseCase = LogoutUseCase(authRepository)
 
     @Provides
     @Singleton
