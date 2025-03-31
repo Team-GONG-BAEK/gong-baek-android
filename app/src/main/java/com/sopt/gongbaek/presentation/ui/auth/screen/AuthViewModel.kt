@@ -83,12 +83,6 @@ class AuthViewModel @Inject constructor(
                 fetchMajorSearch()
             }
 
-            is AuthContract.Event.OnGradeSelected -> {
-                val grade = GradeType.toGrade(event.selectedGrade)
-                updateUserInfo { copy(grade = grade) }
-                setState { copy(selectedGrade = event.selectedGrade) }
-            }
-
             is AuthContract.Event.OnYearSelected -> updateUserInfo { copy(enterYear = event.year) }
             is AuthContract.Event.OnGenderSelected -> {
                 val gender = GenderType.toGender(event.selectedGender)

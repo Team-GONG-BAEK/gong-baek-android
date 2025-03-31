@@ -16,7 +16,6 @@ class AuthContract {
         val majors: Majors = Majors(),
         val univ: String = "",
         val enterMajor: String = "",
-        val selectedGrade: String = "",
         val univSearchSelectedItem: String = "",
         val majorSearchSelectedItem: String = "",
         val energyDirectionOptions: String = "",
@@ -38,7 +37,6 @@ class AuthContract {
         data class OnMajorSelected(val selectedMajor: String) : Event()
         data class OnMajorSearchChanged(val enterMajor: String) : Event()
         data object OnMajorSearchClick : Event()
-        data class OnGradeSelected(val selectedGrade: String) : Event()
         data class OnYearSelected(val year: Int) : Event()
         data class OnEnergyDirectionOptionSelected(val option: String) : Event()
         data class OnInformationGatheringOptionSelected(val option: String) : Event()
