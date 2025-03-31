@@ -46,7 +46,7 @@ import com.sopt.gongbaek.ui.theme.GongBaekTheme
 @Composable
 fun MyPageRoute(
     viewModel: MyPageViewModel = hiltViewModel(),
-    navigateSetting: ()-> Unit,
+    navigateSetting: () -> Unit,
     navigateGroupDetail: (Int, String) -> Unit,
     navigateGroupRoom: (Int, String) -> Unit
 ) {

@@ -5,14 +5,12 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.tooling.preview.Preview
 
 @Composable
-fun SettingRoute(
-) {
+fun SettingRoute() {
     SettingScreen()
 }
 
 @Composable
-private fun SettingScreen(
-) {
+private fun SettingScreen() {
     Text(text = "ㅋㅋ")
 }
 
