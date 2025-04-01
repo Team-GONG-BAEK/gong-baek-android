@@ -14,6 +14,11 @@ class MyPageViewModel @Inject constructor(
     private val getMyProfileUseCase: GetMyProfileUseCase,
     private val getMyGroupsUseCase: GetMyGroupsUseCase
 ) : BaseViewModel<MyPageContract.State, MyPageContract.Event, MyPageContract.SideEffect>() {
+
+    init {
+        getMyProfile()
+    }
+
     override fun createInitialState(): MyPageContract.State = MyPageContract.State()
 
     override suspend fun handleEvent(event: MyPageContract.Event) {
