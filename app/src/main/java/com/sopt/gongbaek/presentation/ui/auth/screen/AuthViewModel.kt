@@ -3,7 +3,6 @@ package com.sopt.gongbaek.presentation.ui.auth.screen
 import androidx.lifecycle.viewModelScope
 import com.sopt.gongbaek.domain.model.UserInfo
 import com.sopt.gongbaek.domain.type.GenderType
-import com.sopt.gongbaek.domain.type.GradeType
 import com.sopt.gongbaek.domain.usecase.GetSearchMajorsResultUseCase
 import com.sopt.gongbaek.domain.usecase.GetSearchUniversitiesResultUseCase
 import com.sopt.gongbaek.domain.usecase.RegisterUserInfoUseCase
@@ -34,6 +33,14 @@ class AuthViewModel @Inject constructor(
     override suspend fun handleEvent(event: AuthContract.Event) {
         when (event) {
             is AuthContract.Event.OnProfileImageSelected -> updateUserInfo { copy(profileImage = event.profileImage) }
+            // AcademicInfo Event
+            is AuthContract.Event.UniversitySearchQueryChanged -> updateUniversitySearchQuery(event.query)
+            is AuthContract.Event.UniversitySearchClicked -> fetchUniversities()
+            is AuthContract.Event.UniversitySelected -> updateSelectedUniversity(event.university)
+            is AuthContract.Event.MajorSearchQueryChanged -> updateMajorSearchQuery(event.query)
+            is AuthContract.Event.MajorSearchClicked -> fetchMajors()
+            is AuthContract.Event.MajorSelected -> updateSelectedMajor(event.major)
+            is AuthContract.Event.EnterYearSelected -> updateEnterYear(event.enterYear)
 
             is AuthContract.Event.OnNicknameChanged -> {
                 val filteredNickname = event.nickname.filter { it.isKoreanChar() }
@@ -52,38 +59,6 @@ class AuthViewModel @Inject constructor(
                 }
             }
 
-            is AuthContract.Event.OnSearchUnivChanged -> setState { copy(univ = event.univ) }
-            is AuthContract.Event.OnUnivSearchClick -> {
-                fetchUnivSearchResult()
-            }
-
-            is AuthContract.Event.OnUnivSelected -> {
-                val updatedSchool = toggleSelection(currentState.userInfo.school, event.school)
-                setState {
-                    copy(
-                        userInfo = currentState.userInfo.copy(school = updatedSchool),
-                        univSearchSelectedItem = updatedSchool
-                    )
-                }
-            }
-
-            is AuthContract.Event.OnMajorSearchChanged -> setState { copy(enterMajor = event.enterMajor) }
-
-            is AuthContract.Event.OnMajorSelected -> {
-                val updatedMajor = toggleSelection(currentState.userInfo.major, event.selectedMajor)
-                setState {
-                    copy(
-                        userInfo = currentState.userInfo.copy(major = updatedMajor),
-                        majorSearchSelectedItem = updatedMajor
-                    )
-                }
-            }
-
-            is AuthContract.Event.OnMajorSearchClick -> {
-                fetchMajorSearch()
-            }
-
-            is AuthContract.Event.OnYearSelected -> updateUserInfo { copy(enterYear = event.year) }
             is AuthContract.Event.OnGenderSelected -> {
                 val gender = GenderType.toGender(event.selectedGender)
                 updateUserInfo { copy(gender = gender) }
@@ -133,9 +108,6 @@ class AuthViewModel @Inject constructor(
     fun sendSideEffect(sideEffect: AuthContract.SideEffect) =
         setSideEffect(sideEffect)
 
-    private fun toggleSelection(current: String, newSelection: String): String =
-        if (current == newSelection) "" else newSelection
-
     private fun updateMbti() {
         val mbti = createMbti(
             firstLetter = currentState.energyDirectionOptions.takeIf { it.isNotBlank() } ?: return,
@@ -145,35 +117,6 @@ class AuthViewModel @Inject constructor(
         )
         updateUserInfo { copy(mbti = mbti) }
     }
-
-    private fun fetchUnivSearchResult() =
-        viewModelScope.launch {
-            setState { copy(loadState = UiLoadState.Loading) }
-            getSearchUniversitiesResultUseCase(currentState.univ).fold(
-                onSuccess = { universities ->
-                    setState { copy(universities = universities) }
-                },
-                onFailure = {
-                    setState { copy(loadState = UiLoadState.Error) }
-                }
-            )
-        }
-
-    private fun fetchMajorSearch() =
-        viewModelScope.launch {
-            setState { copy(loadState = UiLoadState.Loading) }
-            getSearchMajorsResultUseCase(
-                universityName = currentState.userInfo.school,
-                majorName = currentState.enterMajor
-            ).fold(
-                onSuccess = { majors ->
-                    setState { copy(majors = majors) }
-                },
-                onFailure = {
-                    setState { copy(loadState = UiLoadState.Error) }
-                }
-            )
-        }
 
     private fun submitUserInfo() =
         viewModelScope.launch {
@@ -220,6 +163,87 @@ class AuthViewModel @Inject constructor(
 
     private fun updateUserInfo(update: UserInfo.() -> UserInfo) =
         setState { copy(userInfo = userInfo.update()) }
+
+    private fun updateUniversitySearchQuery(query: String) = setState {
+        copy(
+            academicInfoState = currentState.academicInfoState.copy(
+                universitySearchQuery = query
+            )
+        )
+    }
+
+    private fun fetchUniversities() = viewModelScope.launch {
+        setState { copy(loadState = UiLoadState.Loading) }
+        // TODO usecase 네이밍 수정
+        getSearchUniversitiesResultUseCase(currentState.academicInfoState.universitySearchQuery).fold(
+            onSuccess = { universities ->
+                setState {
+                    copy(
+                        academicInfoState = currentState.academicInfoState.copy(
+                            searchedUniversities = universities.universities
+                        )
+                    )
+                }
+            },
+            onFailure = {
+                setState { copy(loadState = UiLoadState.Error) }
+            }
+        )
+    }
+
+    private fun updateSelectedUniversity(university: String) = setState {
+        copy(
+            academicInfoState = currentState.academicInfoState.copy(
+                university = university
+            )
+        )
+    }
+
+    private fun updateMajorSearchQuery(query: String) = setState {
+        copy(
+            academicInfoState = currentState.academicInfoState.copy(
+                majorSearchQuery = query
+            )
+        )
+    }
+
+    private fun fetchMajors() = viewModelScope.launch {
+        setState { copy(loadState = UiLoadState.Loading) }
+        getSearchMajorsResultUseCase(
+            // TODO usecase 네이밍 수정
+            universityName = currentState.academicInfoState.university,
+            majorName = currentState.academicInfoState.majorSearchQuery
+        ).fold(
+            onSuccess = { majors ->
+                setState {
+                    copy(
+                        academicInfoState = currentState.academicInfoState.copy(
+                            searchedMajors = majors.majors
+                        )
+                    )
+                }
+            },
+            onFailure = {
+                setState { copy(loadState = UiLoadState.Error) }
+            }
+        )
+    }
+
+    private fun updateSelectedMajor(major: String) = setState {
+        copy(
+            academicInfoState = currentState.academicInfoState.copy(
+                major = major
+            )
+        )
+    }
+
+    private fun updateEnterYear(enterYear: Int) = setState {
+        copy(
+            academicInfoState = currentState.academicInfoState.copy(
+                enterYear = enterYear
+            )
+        )
+    }
 
     companion object {
         private const val NICKNAME_VALIDATION_ERROR_MESSAGE = "중복된 닉네임입니다. 다시 입력해주세요."

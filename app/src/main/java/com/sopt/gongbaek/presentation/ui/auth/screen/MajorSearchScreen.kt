@@ -35,6 +35,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.flowWithLifecycle
 import com.sopt.gongbaek.R
 import com.sopt.gongbaek.presentation.ui.auth.component.SearchResultSection
+import com.sopt.gongbaek.presentation.ui.auth.state.AcademicInfoState
 import com.sopt.gongbaek.presentation.ui.component.button.GongBaekBasicButton
 import com.sopt.gongbaek.presentation.ui.component.topbar.CenterTitleTopBar
 import com.sopt.gongbaek.presentation.util.extension.clickableWithoutRipple
@@ -54,20 +55,18 @@ fun MajorSearchRoute(
         viewModel.sideEffect
             .flowWithLifecycle(lifecycleOwner.lifecycle)
             .collect { sideEffect ->
-                if (sideEffect is AuthContract.SideEffect.NavigateBack) {
-                    navigateBack()
+                when (sideEffect) {
+                    is AuthContract.SideEffect.NavigateBack -> navigateBack()
+                    else -> {}
                 }
             }
     }
 
     MajorSearchScreen(
-        enterMajor = uiState.enterMajor,
-        userMajor = uiState.userInfo.major,
-        selectedItem = uiState.majorSearchSelectedItem,
-        majorSearchResult = uiState.majors.majors,
-        onEnterMajorValueChange = { enterMajor -> viewModel.setEvent(AuthContract.Event.OnMajorSearchChanged(enterMajor)) },
-        onItemSelected = { selectedMajor -> viewModel.setEvent(AuthContract.Event.OnMajorSelected(selectedMajor)) },
-        onSearchButtonClicked = { viewModel.setEvent(AuthContract.Event.OnMajorSearchClick) },
+        academicInfoState = uiState.academicInfoState,
+        onSearchQueryChanged = { query -> viewModel.setEvent(AuthContract.Event.MajorSearchQueryChanged(query)) },
+        onSearchButtonClicked = { viewModel.setEvent(AuthContract.Event.MajorSearchClicked) },
+        onMajorSelected = { selectedMajor -> viewModel.setEvent(AuthContract.Event.MajorSelected(selectedMajor)) },
         onCloseClick = { viewModel.sendSideEffect(AuthContract.SideEffect.NavigateBack) },
         navigateBack = { viewModel.sendSideEffect(AuthContract.SideEffect.NavigateBack) }
     )
@@ -75,15 +74,12 @@ fun MajorSearchRoute(
 
 @Composable
 private fun MajorSearchScreen(
-    enterMajor: String,
-    onEnterMajorValueChange: (String) -> Unit,
-    userMajor: String,
-    onItemSelected: (String) -> Unit,
+    academicInfoState: AcademicInfoState,
+    onSearchQueryChanged: (String) -> Unit,
     onSearchButtonClicked: () -> Unit,
+    onMajorSelected: (String) -> Unit,
     onCloseClick: () -> Unit,
-    navigateBack: () -> Unit,
-    selectedItem: String,
-    majorSearchResult: List<String>
+    navigateBack: () -> Unit
 ) {
     Scaffold(
         topBar = {
@@ -97,11 +93,11 @@ private fun MajorSearchScreen(
         },
         bottomBar = {
             Column {
-                if (enterMajor.isNotEmpty()) {
+                if (academicInfoState.majorSearchQuery.isNotEmpty()) {
                     DirectRegistrationButton(
-                        major = enterMajor,
+                        major = academicInfoState.majorSearchQuery,
                         onClick = {
-                            onItemSelected(enterMajor)
+                            onMajorSelected(academicInfoState.majorSearchQuery)
                             navigateBack()
                         },
                         modifier = Modifier.padding(horizontal = 16.dp)
@@ -109,7 +105,7 @@ private fun MajorSearchScreen(
                 }
                 GongBaekBasicButton(
                     title = "적용",
-                    enabled = userMajor.isNotEmpty(),
+                    enabled = academicInfoState.isMajorSearchComplete,
                     onClick = navigateBack,
                     modifier = Modifier
                         .padding(horizontal = 16.dp, vertical = 12.dp)
@@ -125,8 +121,8 @@ private fun MajorSearchScreen(
                     .padding(top = 12.dp)
             ) {
                 SearchTextField(
-                    value = enterMajor,
-                    onValueChange = onEnterMajorValueChange,
+                    value = academicInfoState.majorSearchQuery,
+                    onValueChange = onSearchQueryChanged,
                     modifier = Modifier.padding(horizontal = 16.dp),
                     onSearchButtonClicked = onSearchButtonClicked
                 )
@@ -134,9 +130,9 @@ private fun MajorSearchScreen(
                 Spacer(modifier = Modifier.height(14.dp))
 
                 SearchResultSection(
-                    univSearchResult = majorSearchResult,
-                    selectedItem = selectedItem,
-                    onItemSelected = onItemSelected
+                    univSearchResult = academicInfoState.searchedMajors,
+                    selectedItem = academicInfoState.major,
+                    onItemSelected = onMajorSelected
                 )
             }
         }
@@ -267,7 +263,7 @@ private fun DirectRegistrationButton(
 
 @Preview
 @Composable
-private fun PreviewTetsts() {
+private fun DirectRegistrationButtonPreview() {
     DirectRegistrationButton(
         major = "컴퓨터공학과",
         onClick = {}
@@ -276,35 +272,15 @@ private fun PreviewTetsts() {
 
 @Preview(showBackground = true)
 @Composable
-private fun PreviewMajorSearchScreen() {
-    val universities = listOf(
-        "한양대학교",
-        "건국대학교 서울캠퍼스",
-        "서울대학교",
-        "건국대학교 서울캠퍼스",
-        "고려대학교",
-        "건국대학교 서울캠퍼스",
-        "연세대학교",
-        "한양대학교",
-        "건국대학교 서울캠퍼스",
-        "서울대학교",
-        "건국대학교 서울캠퍼스",
-        "고려대학교",
-        "건국대학교 서울캠퍼스",
-        "연세대학교"
-    )
-
+private fun MajorSearchScreenPreview() {
     GONGBAEKTheme {
         MajorSearchScreen(
-            onCloseClick = {},
-            majorSearchResult = universities,
-            enterMajor = "",
-            userMajor = "",
-            onEnterMajorValueChange = {},
+            academicInfoState = AcademicInfoState(),
+            onSearchQueryChanged = {},
             onSearchButtonClicked = {},
+            onMajorSelected = {},
             navigateBack = {},
-            onItemSelected = {},
-            selectedItem = ""
+            onCloseClick = {},
         )
     }
 }

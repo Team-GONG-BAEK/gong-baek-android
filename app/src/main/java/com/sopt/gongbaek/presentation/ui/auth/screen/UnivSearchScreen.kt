@@ -33,6 +33,7 @@ import androidx.lifecycle.flowWithLifecycle
 import com.sopt.gongbaek.R
 import com.sopt.gongbaek.presentation.ui.auth.component.EmptySearchResultView
 import com.sopt.gongbaek.presentation.ui.auth.component.SearchResultSection
+import com.sopt.gongbaek.presentation.ui.auth.state.AcademicInfoState
 import com.sopt.gongbaek.presentation.ui.component.button.GongBaekBasicButton
 import com.sopt.gongbaek.presentation.ui.component.topbar.CenterTitleTopBar
 import com.sopt.gongbaek.presentation.util.extension.clickableWithoutRipple
@@ -52,20 +53,18 @@ fun UnivSearchRoute(
         viewModel.sideEffect
             .flowWithLifecycle(lifecycleOwner.lifecycle)
             .collect { sideEffect ->
-                if (sideEffect is AuthContract.SideEffect.NavigateBack) {
-                    navigateBack()
+                when (sideEffect) {
+                    is AuthContract.SideEffect.NavigateBack -> navigateBack()
+                    else -> {}
                 }
             }
     }
 
     UnivSearchScreen(
-        univ = uiState.univ,
-        school = uiState.userInfo.school,
-        selectedItem = uiState.univSearchSelectedItem,
-        univSearchResult = uiState.universities.universities,
-        onUnivChange = { newValue -> viewModel.setEvent(AuthContract.Event.OnSearchUnivChanged(newValue)) },
-        onSearchButtonClicked = { viewModel.setEvent(AuthContract.Event.OnUnivSearchClick) },
-        onItemSelected = { selectedUniv -> viewModel.setEvent(AuthContract.Event.OnUnivSelected(selectedUniv)) },
+        academicInfoState = uiState.academicInfoState,
+        onSearchQueryChanged = { query -> viewModel.setEvent(AuthContract.Event.UniversitySearchQueryChanged(query)) },
+        onSearchButtonClicked = { viewModel.setEvent(AuthContract.Event.UniversitySearchClicked) },
+        onUniversitySelected = { selectedUniversity -> viewModel.setEvent(AuthContract.Event.UniversitySelected(selectedUniversity)) },
         navigateBack = { viewModel.sendSideEffect(AuthContract.SideEffect.NavigateBack) },
         onCloseClick = { viewModel.sendSideEffect(AuthContract.SideEffect.NavigateBack) }
     )
@@ -73,13 +72,10 @@ fun UnivSearchRoute(
 
 @Composable
 private fun UnivSearchScreen(
-    univ: String,
-    school: String,
-    selectedItem: String,
-    onUnivChange: (String) -> Unit,
+    academicInfoState: AcademicInfoState,
+    onSearchQueryChanged: (String) -> Unit,
     onSearchButtonClicked: () -> Unit,
-    univSearchResult: List<String>,
-    onItemSelected: (String) -> Unit,
+    onUniversitySelected: (String) -> Unit,
     onCloseClick: () -> Unit,
     navigateBack: () -> Unit
 ) {
@@ -96,7 +92,7 @@ private fun UnivSearchScreen(
         bottomBar = {
             GongBaekBasicButton(
                 title = "적용",
-                enabled = school.isNotEmpty(),
+                enabled = academicInfoState.isUniversitySearchComplete,
                 onClick = navigateBack,
                 modifier = Modifier
                     .padding(horizontal = 16.dp, vertical = 12.dp)
@@ -111,22 +107,22 @@ private fun UnivSearchScreen(
                     .padding(top = 12.dp)
             ) {
                 SearchTextField(
-                    value = univ,
-                    onValueChange = onUnivChange,
+                    value = academicInfoState.universitySearchQuery,
+                    onValueChange = onSearchQueryChanged,
                     modifier = Modifier.padding(horizontal = 16.dp),
                     onSearchButtonClicked = onSearchButtonClicked
                 )
 
                 Spacer(modifier = Modifier.height(14.dp))
 
-                if (univSearchResult.isEmpty()) {
+                if (academicInfoState.searchedUniversities.isEmpty()) {
                     EmptySearchResultView()
                 }
 
                 SearchResultSection(
-                    univSearchResult = univSearchResult,
-                    selectedItem = selectedItem,
-                    onItemSelected = onItemSelected
+                    univSearchResult = academicInfoState.searchedUniversities,
+                    selectedItem = academicInfoState.university,
+                    onItemSelected = onUniversitySelected
                 )
             }
         }
@@ -212,35 +208,15 @@ private fun SearchTextField(
 
 @Preview
 @Composable
-private fun PreviewUnivSearchScreen() {
-    val universities = listOf(
-        "한양대학교",
-        "건국대학교 서울캠퍼스",
-        "서울대학교",
-        "건국대학교 서울캠퍼스",
-        "고려대학교",
-        "건국대학교 서울캠퍼스",
-        "연세대학교",
-        "한양대학교",
-        "건국대학교 서울캠퍼스",
-        "서울대학교",
-        "건국대학교 서울캠퍼스",
-        "고려대학교",
-        "건국대학교 서울캠퍼스",
-        "연세대학교"
-    )
-
+private fun UnivSearchScreenPreview() {
     GONGBAEKTheme {
         UnivSearchScreen(
-            onCloseClick = {},
-            univSearchResult = universities,
+            academicInfoState = AcademicInfoState(),
+            onSearchQueryChanged = {},
             onSearchButtonClicked = {},
-            univ = "",
-            onUnivChange = {},
-            onItemSelected = {},
-            school = "",
+            onUniversitySelected = {},
             navigateBack = {},
-            selectedItem = ""
+            onCloseClick = {}
         )
     }
 }

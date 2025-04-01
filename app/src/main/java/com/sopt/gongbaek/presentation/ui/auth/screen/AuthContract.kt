@@ -1,8 +1,7 @@
 package com.sopt.gongbaek.presentation.ui.auth.screen
 
-import com.sopt.gongbaek.domain.model.Majors
-import com.sopt.gongbaek.domain.model.Universities
 import com.sopt.gongbaek.domain.model.UserInfo
+import com.sopt.gongbaek.presentation.ui.auth.state.AcademicInfoState
 import com.sopt.gongbaek.presentation.util.base.UiEvent
 import com.sopt.gongbaek.presentation.util.base.UiLoadState
 import com.sopt.gongbaek.presentation.util.base.UiSideEffect
@@ -11,13 +10,8 @@ import com.sopt.gongbaek.presentation.util.base.UiState
 class AuthContract {
     data class State(
         val loadState: UiLoadState = UiLoadState.Idle,
+        val academicInfoState: AcademicInfoState = AcademicInfoState(),
         val userInfo: UserInfo = UserInfo(),
-        val universities: Universities = Universities(),
-        val majors: Majors = Majors(),
-        val univ: String = "",
-        val enterMajor: String = "",
-        val univSearchSelectedItem: String = "",
-        val majorSearchSelectedItem: String = "",
         val energyDirectionOptions: String = "",
         val informationGatheringOptions: String = "",
         val decisionMakingOptions: String = "",
@@ -29,15 +23,15 @@ class AuthContract {
     ) : UiState
 
     sealed class Event : UiEvent {
+        data class UniversitySearchQueryChanged(val query: String) : Event()
+        data object UniversitySearchClicked : Event()
+        data class UniversitySelected(val university: String) : Event()
+        data class MajorSearchQueryChanged(val query: String) : Event()
+        data object MajorSearchClicked : Event()
+        data class MajorSelected(val major: String) : Event()
+        data class EnterYearSelected(val enterYear: Int) : Event()
         data class OnProfileImageSelected(val profileImage: Int) : Event()
         data class OnNicknameChanged(val nickname: String) : Event()
-        data class OnSearchUnivChanged(val univ: String) : Event()
-        data object OnUnivSearchClick : Event()
-        data class OnUnivSelected(val school: String) : Event()
-        data class OnMajorSelected(val selectedMajor: String) : Event()
-        data class OnMajorSearchChanged(val enterMajor: String) : Event()
-        data object OnMajorSearchClick : Event()
-        data class OnYearSelected(val year: Int) : Event()
         data class OnEnergyDirectionOptionSelected(val option: String) : Event()
         data class OnInformationGatheringOptionSelected(val option: String) : Event()
         data class OnDecisionMakingOptionSelected(val option: String) : Event()

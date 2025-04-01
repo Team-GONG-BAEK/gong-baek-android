@@ -19,6 +19,7 @@ import androidx.lifecycle.flowWithLifecycle
 import com.sopt.gongbaek.R
 import com.sopt.gongbaek.presentation.ui.auth.component.SearchButton
 import com.sopt.gongbaek.presentation.ui.auth.component.YearSelectableButton
+import com.sopt.gongbaek.presentation.ui.auth.state.AcademicInfoState
 import com.sopt.gongbaek.presentation.ui.component.button.GongBaekBasicButton
 import com.sopt.gongbaek.presentation.ui.component.progressBar.GongBaekProgressBar
 import com.sopt.gongbaek.presentation.ui.component.section.PageDescriptionSection
@@ -39,55 +40,44 @@ fun AcademicInfoRoute(
         viewModel.sideEffect
             .flowWithLifecycle(lifecycleOwner.lifecycle)
             .collect { sideEffect ->
-                if (sideEffect is AuthContract.SideEffect.NavigateBack) {
-                    navigateBack()
-                }
-                if (sideEffect is AuthContract.SideEffect.NavigateUnivSearch) {
-                    navigateUnivSearch()
-                }
-                if (sideEffect is AuthContract.SideEffect.NavigateMajorSearch) {
-                    navigateMajorSearch()
-                }
-                if (sideEffect is AuthContract.SideEffect.NavigateEmailVerification) {
-                    navigateEmailVerification()
+                when (sideEffect) {
+                    is AuthContract.SideEffect.NavigateBack -> navigateBack()
+                    is AuthContract.SideEffect.NavigateUnivSearch -> navigateUnivSearch()
+                    is AuthContract.SideEffect.NavigateMajorSearch -> navigateMajorSearch()
+                    is AuthContract.SideEffect.NavigateEmailVerification -> navigateEmailVerification()
+                    else -> {}
                 }
             }
     }
 
     AcademicInfoScreen(
-        univSearchResult = uiState.userInfo.school,
-        majorSearchResult = uiState.userInfo.major,
-        enterYear = uiState.userInfo.enterYear,
-        onYearSelected = { year -> viewModel.setEvent(AuthContract.Event.OnYearSelected(year)) },
-        navigateEmailVerification = { viewModel.sendSideEffect(AuthContract.SideEffect.NavigateEmailVerification) },
-        onUnivSearchClick = { viewModel.sendSideEffect(AuthContract.SideEffect.NavigateUnivSearch) },
-        onMajorSearchClick = { viewModel.sendSideEffect(AuthContract.SideEffect.NavigateMajorSearch) },
+        academicInfoState = uiState.academicInfoState,
+        onEnterYearSelected = { selectedEnterYear -> viewModel.setEvent(AuthContract.Event.EnterYearSelected(selectedEnterYear)) },
+        onSearchUniversityClicked = { viewModel.sendSideEffect(AuthContract.SideEffect.NavigateUnivSearch) },
+        onSearchMajorClicked = { viewModel.sendSideEffect(AuthContract.SideEffect.NavigateMajorSearch) },
+        onNextClick = { viewModel.sendSideEffect(AuthContract.SideEffect.NavigateEmailVerification) },
         onBackClick = { viewModel.sendSideEffect(AuthContract.SideEffect.NavigateBack) }
     )
 }
 
 @Composable
 private fun AcademicInfoScreen(
-    univSearchResult: String,
-    majorSearchResult: String,
-    navigateEmailVerification: () -> Unit,
-    onUnivSearchClick: () -> Unit,
-    onMajorSearchClick: () -> Unit,
-    enterYear: Int,
-    onYearSelected: (Int) -> Unit,
+    academicInfoState: AcademicInfoState,
+    onEnterYearSelected: (Int) -> Unit,
+    onSearchUniversityClicked: () -> Unit,
+    onSearchMajorClicked: () -> Unit,
+    onNextClick: () -> Unit,
     onBackClick: () -> Unit
 ) {
     Box(
         modifier = Modifier.fillMaxSize()
     ) {
         AcademicInfoSelectionSection(
-            univSearchResult = univSearchResult,
-            majorSearchResult = majorSearchResult,
+            academicInfoState = academicInfoState,
+            onEnterYearSelected = onEnterYearSelected,
+            onSearchUniversityClicked = onSearchUniversityClicked,
+            onSearchMajorClicked = onSearchMajorClicked,
             onBackClick = onBackClick,
-            onUnivSearchClick = onUnivSearchClick,
-            onMajorSearchClick = onMajorSearchClick,
-            selectedYear = enterYear,
-            onYearSelected = onYearSelected,
             modifier = Modifier
                 .padding(horizontal = 16.dp)
                 .align(Alignment.Center)
@@ -95,8 +85,8 @@ private fun AcademicInfoScreen(
 
         GongBaekBasicButton(
             title = "다음",
-            enabled = univSearchResult.isNotEmpty() && majorSearchResult.isNotEmpty() && enterYear != 0,
-            onClick = navigateEmailVerification,
+            enabled = academicInfoState.isAcademicInfoComplete,
+            onClick = onNextClick,
             modifier = Modifier
                 .align(Alignment.BottomCenter)
                 .padding(horizontal = 16.dp, vertical = 12.dp)
@@ -106,13 +96,11 @@ private fun AcademicInfoScreen(
 
 @Composable
 private fun AcademicInfoSelectionSection(
-    univSearchResult: String,
-    majorSearchResult: String,
+    academicInfoState: AcademicInfoState,
     onBackClick: () -> Unit,
-    onUnivSearchClick: () -> Unit,
-    onMajorSearchClick: () -> Unit,
-    selectedYear: Int,
-    onYearSelected: (Int) -> Unit,
+    onSearchUniversityClicked: () -> Unit,
+    onSearchMajorClicked: () -> Unit,
+    onEnterYearSelected: (Int) -> Unit,
     modifier: Modifier = Modifier
 ) {
     Column {
@@ -136,25 +124,25 @@ private fun AcademicInfoSelectionSection(
 
             SearchButton(
                 buttonLabel = "학교",
-                searchResult = univSearchResult.ifEmpty { "학교 이름을 검색하세요." },
-                isSearched = univSearchResult.isNotEmpty(),
-                onSearchButtonClicked = onUnivSearchClick
+                searchResult = academicInfoState.university.ifEmpty { "학교 이름을 검색하세요." },
+                isSearched = academicInfoState.university.isNotEmpty(),
+                onSearchButtonClicked = onSearchUniversityClicked
             )
 
             Spacer(modifier = Modifier.height(24.dp))
 
             SearchButton(
                 buttonLabel = "학과",
-                searchResult = majorSearchResult.ifEmpty { "학과 이름을 검색하세요." },
-                isSearched = majorSearchResult.isNotEmpty(),
-                onSearchButtonClicked = onMajorSearchClick
+                searchResult = academicInfoState.major.ifEmpty { "학과 이름을 검색하세요." },
+                isSearched = academicInfoState.major.isNotEmpty(),
+                onSearchButtonClicked = onSearchMajorClicked
             )
 
             Spacer(modifier = Modifier.height(24.dp))
 
             YearSelectableButton(
-                selectedYear = selectedYear,
-                onYearSelected = onYearSelected
+                selectedYear = academicInfoState.enterYear,
+                onYearSelected = onEnterYearSelected
             )
         }
     }
@@ -164,13 +152,11 @@ private fun AcademicInfoSelectionSection(
 @Composable
 private fun AcademicInfoScreenPreview() {
     AcademicInfoScreen(
-        univSearchResult = "서울대학교",
-        majorSearchResult = "",
-        navigateEmailVerification = {},
-        onUnivSearchClick = {},
-        onMajorSearchClick = {},
-        onBackClick = {},
-        enterYear = 0,
-        onYearSelected = {}
+        academicInfoState = AcademicInfoState(),
+        onNextClick = {},
+        onSearchUniversityClicked = {},
+        onSearchMajorClicked = {},
+        onEnterYearSelected = {},
+        onBackClick = {}
     )
 }
