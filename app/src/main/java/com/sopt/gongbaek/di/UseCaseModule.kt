@@ -6,6 +6,7 @@ import com.sopt.gongbaek.domain.repository.GroupRepository
 import com.sopt.gongbaek.domain.repository.LectureTimetableRepository
 import com.sopt.gongbaek.domain.repository.SearchRepository
 import com.sopt.gongbaek.domain.repository.TokenRepository
+import com.sopt.gongbaek.domain.repository.UserRepository
 import com.sopt.gongbaek.domain.usecase.ApplyGroupUseCase
 import com.sopt.gongbaek.domain.usecase.FetchHomeScreenUseCase
 import com.sopt.gongbaek.domain.usecase.FetchLatestGroupUseCase
@@ -176,6 +177,6 @@ object UseCaseModule {
     @Provides
     @Singleton
     fun provideGetMyProfileUseCase(
-        authRepository: AuthRepository
-    ): GetMyProfileUseCase = GetMyProfileUseCase(authRepository)
+        userRepository: UserRepository
+    ): GetMyProfileUseCase = GetMyProfileUseCase(userRepository)
 }

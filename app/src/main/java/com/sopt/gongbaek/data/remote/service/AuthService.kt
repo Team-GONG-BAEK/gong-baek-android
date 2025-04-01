@@ -5,7 +5,6 @@ import com.sopt.gongbaek.data.remote.dto.base.NullableApiResponse
 import com.sopt.gongbaek.data.remote.dto.request.LoginRequestDto
 import com.sopt.gongbaek.data.remote.dto.request.RegisterUserInfoRequestDto
 import com.sopt.gongbaek.data.remote.dto.response.LoginResponseDto
-import com.sopt.gongbaek.data.remote.dto.response.MyProfileResponseDto
 import com.sopt.gongbaek.data.remote.dto.response.RegisterUserInfoResponseDto
 import com.sopt.gongbaek.data.remote.dto.response.UserProfileResponseDto
 import com.sopt.gongbaek.data.remote.dto.response.UserTimeTableResponseDto
@@ -49,6 +48,4 @@ interface AuthService {
     @DELETE("/api/v1/logout")
     suspend fun logout(): ApiResponse<Unit>
 
-    @GET("/api/v1/user/my/profile")
-    suspend fun getMyProfile(): ApiResponse<MyProfileResponseDto>
 }

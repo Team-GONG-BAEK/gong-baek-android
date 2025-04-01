@@ -9,9 +9,11 @@ import com.sopt.gongbaek.data.remote.datasource.AuthRemoteDataSource
 import com.sopt.gongbaek.data.remote.datasource.GroupRemoteDataSource
 import com.sopt.gongbaek.data.remote.datasourceimpl.CommentRemoteDataSourceImpl
 import com.sopt.gongbaek.data.remote.datasource.SearchRemoteDataSource
+import com.sopt.gongbaek.data.remote.datasource.UserRemoteDataSource
 import com.sopt.gongbaek.data.remote.datasourceimpl.AuthRemoteDatasourceImpl
 import com.sopt.gongbaek.data.remote.datasourceimpl.GroupRemoteDataSourceImpl
 import com.sopt.gongbaek.data.remote.datasourceimpl.SearchRemoteDataSourceImpl
+import com.sopt.gongbaek.data.remote.datasourceimpl.UserRemoteDataSourceImpl
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn
@@ -57,4 +59,10 @@ abstract class DataSourceModule {
     abstract fun bindLectureTimetableLocalDataSource(
         lectureTimetableDataSourceImpl: LectureTimetableLocalDataSourceImpl
     ): LectureTimetableLocalDataSource
+
+    @Binds
+    @Singleton
+    abstract fun bindUserRemoteDataSource(
+        userRemoteDataSourceImpl: UserRemoteDataSourceImpl
+    ): UserRemoteDataSource
 }

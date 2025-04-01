@@ -70,11 +70,5 @@ class AuthRepositoryImpl @Inject constructor(
                 .getOrThrow()
         }
 
-    override suspend fun getMyProfile(): Result<UserInfo> =
-        runCatching {
-            authRemoteDatasource.getMyProfile()
-                .handleApiResponse()
-                .getOrThrow()
-                .toDomain()
-        }
+
 }

@@ -5,7 +5,6 @@ import com.sopt.gongbaek.data.remote.dto.base.NullableApiResponse
 import com.sopt.gongbaek.data.remote.dto.request.LoginRequestDto
 import com.sopt.gongbaek.data.remote.dto.request.RegisterUserInfoRequestDto
 import com.sopt.gongbaek.data.remote.dto.response.LoginResponseDto
-import com.sopt.gongbaek.data.remote.dto.response.MyProfileResponseDto
 import com.sopt.gongbaek.data.remote.dto.response.RegisterUserInfoResponseDto
 import com.sopt.gongbaek.data.remote.dto.response.UserProfileResponseDto
 import com.sopt.gongbaek.data.remote.dto.response.UserTimeTableResponseDto
@@ -18,5 +17,4 @@ interface AuthRemoteDataSource {
     suspend fun getUserLectureTimeTable(): ApiResponse<UserTimeTableResponseDto>
     suspend fun reissueToken(refreshToken: String): ApiResponse<LoginResponseDto>
     suspend fun logout(): ApiResponse<Unit>
-    suspend fun getMyProfile(): ApiResponse<MyProfileResponseDto>
 }

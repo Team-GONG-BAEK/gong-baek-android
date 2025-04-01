@@ -1,10 +1,10 @@
 package com.sopt.gongbaek.domain.usecase
 
 import com.sopt.gongbaek.domain.model.UserInfo
-import com.sopt.gongbaek.domain.repository.AuthRepository
+import com.sopt.gongbaek.domain.repository.UserRepository
 
 class GetMyProfileUseCase(
-    private val authRepository: AuthRepository
+    private val userRepository: UserRepository
 ) {
-    suspend operator fun invoke(): Result<UserInfo> = authRepository.getMyProfile()
+    suspend operator fun invoke(): Result<UserInfo> = userRepository.getMyProfile()
 }
