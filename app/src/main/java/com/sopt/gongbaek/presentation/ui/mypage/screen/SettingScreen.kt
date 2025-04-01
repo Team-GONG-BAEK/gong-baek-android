@@ -1,4 +1,4 @@
-package com.sopt.gongbaek.presentation.ui.setting.screen
+package com.sopt.gongbaek.presentation.ui.mypage.screen
 
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable

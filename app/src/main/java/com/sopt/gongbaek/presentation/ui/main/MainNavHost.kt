@@ -26,7 +26,6 @@ import com.sopt.gongbaek.presentation.ui.login.SocialLoginRoute
 import com.sopt.gongbaek.presentation.ui.mypage.navigation.myPageNavGraph
 import com.sopt.gongbaek.presentation.ui.onboarding.navigation.onboardingNavGraph
 import com.sopt.gongbaek.presentation.ui.onboarding.screen.TermsOfServiceRoute
-import com.sopt.gongbaek.presentation.ui.setting.navigation.settingNavGraph
 import com.sopt.gongbaek.presentation.ui.splash.SplashRoute
 
 @Composable
@@ -66,7 +65,6 @@ fun MainNavHost(
         homeNavGraph(navigator.navController)
         groupRoomNavGraph(navigator.navController)
         myPageNavGraph(navigator.navController)
-        settingNavGraph(navigator.navController)
 //        myGroupNavGraph(navigator.navController)
     }
 }

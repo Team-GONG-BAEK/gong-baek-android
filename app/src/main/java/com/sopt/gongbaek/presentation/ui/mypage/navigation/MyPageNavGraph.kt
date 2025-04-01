@@ -4,10 +4,11 @@ import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
 import com.sopt.gongbaek.presentation.model.MainBottomTabRoute
+import com.sopt.gongbaek.presentation.model.NavigationRoute
 import com.sopt.gongbaek.presentation.ui.groupdetail.navigation.navigateGroupDetail
 import com.sopt.gongbaek.presentation.ui.grouproom.navigation.navigateGroupRoom
 import com.sopt.gongbaek.presentation.ui.mypage.screen.MyPageRoute
-import com.sopt.gongbaek.presentation.ui.setting.navigation.navigateSetting
+import com.sopt.gongbaek.presentation.ui.mypage.screen.SettingRoute
 
 fun NavGraphBuilder.myPageNavGraph(
     navController: NavController
@@ -24,5 +25,9 @@ fun NavGraphBuilder.myPageNavGraph(
                 navController.navigateGroupRoom(groupId, groupCycle)
             }
         )
+    }
+
+    composable<NavigationRoute.Setting> {
+        SettingRoute()
     }
 }
