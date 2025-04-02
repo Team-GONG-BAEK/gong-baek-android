@@ -26,4 +26,7 @@ sealed interface NavigationRoute {
         val groupId: Int,
         val groupCycle: String
     ) : NavigationRoute
+
+    @Serializable
+    data object Setting : NavigationRoute
 }

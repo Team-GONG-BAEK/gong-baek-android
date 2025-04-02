@@ -2,32 +2,34 @@ package com.sopt.gongbaek.di
 
 import com.sopt.gongbaek.domain.repository.AuthRepository
 import com.sopt.gongbaek.domain.repository.CommentRepository
-import com.sopt.gongbaek.domain.repository.SearchRepository
 import com.sopt.gongbaek.domain.repository.GroupRepository
 import com.sopt.gongbaek.domain.repository.LectureTimetableRepository
+import com.sopt.gongbaek.domain.repository.SearchRepository
 import com.sopt.gongbaek.domain.repository.TokenRepository
+import com.sopt.gongbaek.domain.repository.UserRepository
 import com.sopt.gongbaek.domain.usecase.ApplyGroupUseCase
 import com.sopt.gongbaek.domain.usecase.FetchHomeScreenUseCase
 import com.sopt.gongbaek.domain.usecase.FetchLatestGroupUseCase
 import com.sopt.gongbaek.domain.usecase.FetchUserLectureTimetableUseCase
 import com.sopt.gongbaek.domain.usecase.FetchUserProfileUseCase
-import com.sopt.gongbaek.domain.usecase.GetSearchMajorsResultUseCase
+import com.sopt.gongbaek.domain.usecase.GetGroupCommentsUseCase
 import com.sopt.gongbaek.domain.usecase.GetGroupsUseCase
 import com.sopt.gongbaek.domain.usecase.GetLectureTimetableUseCase
-import com.sopt.gongbaek.domain.usecase.GetGroupCommentsUseCase
 import com.sopt.gongbaek.domain.usecase.GetMyGroupsUseCase
+import com.sopt.gongbaek.domain.usecase.GetMyProfileUseCase
+import com.sopt.gongbaek.domain.usecase.GetSearchMajorsResultUseCase
 import com.sopt.gongbaek.domain.usecase.GetSearchUniversitiesResultUseCase
-import com.sopt.gongbaek.domain.usecase.RegisterUserInfoUseCase
-import com.sopt.gongbaek.domain.usecase.SetLectureTimetableUseCase
-import com.sopt.gongbaek.domain.usecase.SetTokenUseCase
-import com.sopt.gongbaek.domain.usecase.ValidateNicknameUseCase
-import com.sopt.gongbaek.domain.usecase.PostGroupUseCase
 import com.sopt.gongbaek.domain.usecase.LoadGroupDetailScreenUseCase
 import com.sopt.gongbaek.domain.usecase.LoadGroupRoomScreenUseCase
 import com.sopt.gongbaek.domain.usecase.LoginUseCase
 import com.sopt.gongbaek.domain.usecase.LogoutUseCase
 import com.sopt.gongbaek.domain.usecase.PostCommentUseCase
+import com.sopt.gongbaek.domain.usecase.PostGroupUseCase
+import com.sopt.gongbaek.domain.usecase.RegisterUserInfoUseCase
 import com.sopt.gongbaek.domain.usecase.ReissueTokenUseCase
+import com.sopt.gongbaek.domain.usecase.SetLectureTimetableUseCase
+import com.sopt.gongbaek.domain.usecase.SetTokenUseCase
+import com.sopt.gongbaek.domain.usecase.ValidateNicknameUseCase
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -171,4 +173,10 @@ object UseCaseModule {
     fun provideLogoutUseCase(
         authRepository: AuthRepository
     ): LogoutUseCase = LogoutUseCase(authRepository)
+
+    @Provides
+    @Singleton
+    fun provideGetMyProfileUseCase(
+        userRepository: UserRepository
+    ): GetMyProfileUseCase = GetMyProfileUseCase(userRepository)
 }
