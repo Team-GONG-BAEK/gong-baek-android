@@ -13,4 +13,3 @@ fun NavController.navigateMyPage(navOptions: NavOptions) {
 }
 
 fun NavController.navigateSetting() = navigate(NavigationRoute.Setting)
-

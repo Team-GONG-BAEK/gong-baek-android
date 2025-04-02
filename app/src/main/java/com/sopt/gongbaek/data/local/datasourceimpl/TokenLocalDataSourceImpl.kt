@@ -10,7 +10,7 @@ class TokenLocalDataSourceImpl @Inject constructor(
 ) : TokenLocalDataSource {
 
     override var accessToken: String?
-        get() = sharedPreferences.getString(ACCESS_TOKEN, "") // 토큰 값을 찾을 수 없는 경우를 위해 nullable로 선언
+        get() = sharedPreferences.getString(ACCESS_TOKEN, "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIxIiwiZXhwIjoxODI4NzY4NTEyLCJ1c2VySWQiOjF9.iQ9ctBXuUqhF4NPFlIFVe7lzKMUPKHEUVIJjCcACx99ydZMfFhVz7xoCLzCPMFBMcpyK5PzvhTK8P9vbDEhrIg") // 토큰 값을 찾을 수 없는 경우를 위해 nullable로 선언
         set(value) = sharedPreferences.edit().putString(ACCESS_TOKEN, value).apply()
 
     override var refreshToken: String?

@@ -47,5 +47,4 @@ interface AuthService {
 
     @DELETE("/api/v1/logout")
     suspend fun logout(): ApiResponse<Unit>
-
 }
