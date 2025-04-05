@@ -280,7 +280,7 @@ private fun MajorSearchScreenPreview() {
             onSearchButtonClicked = {},
             onMajorSelected = {},
             navigateBack = {},
-            onCloseClick = {},
+            onCloseClick = {}
         )
     }
 }

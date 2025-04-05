@@ -7,5 +7,5 @@ data class EmailVerificationState(
     val emailMessage: String = "",
     val verificationCodeMessage: String = "",
     val isTimerRunning: Boolean = false,
-    val timeLeft: Int = 180,
+    val timeLeft: Int = 180
 )

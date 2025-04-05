@@ -128,7 +128,7 @@ private fun SelectProfileScreenPreview() {
             uiState = SelectProfileState(),
             onProfileImageSelected = {},
             onBackClick = {},
-            onNextClick = {},
+            onNextClick = {}
         )
     }
 }
