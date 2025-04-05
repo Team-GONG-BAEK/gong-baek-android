@@ -3,7 +3,6 @@ package com.sopt.gongbaek.presentation.ui.auth.screen
 import android.util.Patterns
 import androidx.lifecycle.viewModelScope
 import com.sopt.gongbaek.domain.model.UserInfo
-import com.sopt.gongbaek.domain.type.GenderType
 import com.sopt.gongbaek.domain.usecase.GetSearchMajorsResultUseCase
 import com.sopt.gongbaek.domain.usecase.GetSearchUniversitiesResultUseCase
 import com.sopt.gongbaek.domain.usecase.RegisterUserInfoUseCase
@@ -13,7 +12,6 @@ import com.sopt.gongbaek.presentation.ui.auth.state.EmailVerificationStep
 import com.sopt.gongbaek.presentation.util.base.BaseViewModel
 import com.sopt.gongbaek.presentation.util.base.UiLoadState
 import com.sopt.gongbaek.presentation.util.extension.createMbti
-import com.sopt.gongbaek.presentation.util.extension.hasCompleteKoreanCharacters
 import com.sopt.gongbaek.presentation.util.extension.isCompleteKorean
 import com.sopt.gongbaek.presentation.util.extension.isKoreanChar
 import com.sopt.gongbaek.presentation.util.timetable.convertToTimeTable
@@ -55,28 +53,11 @@ class AuthViewModel @Inject constructor(
             is AuthContract.Event.VerificationCodeChanged -> updateVerificationCode(event.code)
             is AuthContract.Event.VerificationCodeSubmitted -> handleVerificationCodeSubmitted()
 
-            is AuthContract.Event.OnNicknameChanged -> {
-                val filteredNickname = event.nickname.filter { it.isKoreanChar() }
-                val isValidNickname = filteredNickname.hasCompleteKoreanCharacters(2)
-                val containsIncompleteKorean = filteredNickname.any { it.isKoreanChar() && !it.isCompleteKorean() }
-                updateUserInfo { copy(nickname = filteredNickname) }
-                setState {
-                    copy(
-                        nicknameValidation = isValidNickname && !containsIncompleteKorean,
-                        nicknameErrorMessage = when {
-                            containsIncompleteKorean -> "완성되지 않은 글자가 포함되어 있습니다."
-                            !isValidNickname -> "닉네임은 최소 2글자 이상의 완성된 한글이어야 합니다."
-                            else -> null
-                        }
-                    )
-                }
-            }
+            // NicknameGender Event
+            is AuthContract.Event.NicknameChanged -> updateNickname(event.nickname)
+            is AuthContract.Event.GenderSelected -> updateSelectedGender(event.gender)
+            is AuthContract.Event.ValidateNickname -> handleNicknameValidation()
 
-            is AuthContract.Event.OnGenderSelected -> {
-                val gender = GenderType.toGender(event.selectedGender)
-                updateUserInfo { copy(gender = gender) }
-                setState { copy(selectedGender = event.selectedGender) }
-            }
 
             is AuthContract.Event.OnEnergyDirectionOptionSelected -> {
                 setState { copy(energyDirectionOptions = event.option) }
@@ -107,14 +88,6 @@ class AuthViewModel @Inject constructor(
             }
 
             is AuthContract.Event.SubmitUserInfo -> submitUserInfo()
-
-            is AuthContract.Event.ValidateNickname -> {
-                validateNickname(currentState.userInfo.nickname) { isValid ->
-                    if (isValid) {
-                        sendSideEffect(AuthContract.SideEffect.NavigateSelectProfile)
-                    }
-                }
-            }
         }
     }
 
@@ -146,33 +119,6 @@ class AuthViewModel @Inject constructor(
             )
         }
 
-    private fun validateNickname(nickname: String, onResult: (Boolean) -> Unit) {
-        viewModelScope.launch {
-            val result = validateNicknameUseCase(nickname)
-            result.fold(
-                onSuccess = {
-                    setState {
-                        copy(
-                            nicknameValidation = true,
-                            nicknameErrorMessage = null
-                        )
-                    }
-                    onResult(true)
-                },
-                onFailure = { exception ->
-                    if (exception.message == ERROR_CODE_DUPLICATE_NICKNAME) {
-                        setState {
-                            copy(
-                                nicknameValidation = false,
-                                nicknameErrorMessage = NICKNAME_VALIDATION_ERROR_MESSAGE
-                            )
-                        }
-                    }
-                    onResult(false)
-                }
-            )
-        }
-    }
 
     private fun updateUserInfo(update: UserInfo.() -> UserInfo) =
         setState { copy(userInfo = userInfo.update()) }
@@ -376,6 +322,65 @@ class AuthViewModel @Inject constructor(
                 stopTimer()
             }
         }
+
+    private fun updateNickname(nickname: String) = setState {
+        copy(
+            nicknameGenderState = currentState.nicknameGenderState.copy(
+                nickname = nickname
+            )
+        )
+    }
+
+    private fun updateSelectedGender(gender: String) = setState {
+        copy(
+            nicknameGenderState = currentState.nicknameGenderState.copy(
+                gender = gender
+            )
+        )
+    }
+
+    private fun validateNicknameLocally(nickname: String): String? =
+        when {
+            nickname.length < 2 -> "닉네임은 최소 2글자 이상이어야 합니다."
+            !nickname.all { it.isKoreanChar() } -> "닉네임은 한글만 사용할 수 있습니다."
+            !nickname.all { it.isCompleteKorean() } -> "닉네임은 완성된 한글만 사용할 수 있습니다."
+            else -> null
+        }
+
+    private fun handleNicknameValidation() {
+        val nickname = currentState.nicknameGenderState.nickname
+        val localValidationError = validateNicknameLocally(nickname)
+
+        if (localValidationError != null) {
+            setState {
+                copy(
+                    nicknameGenderState = currentState.nicknameGenderState.copy(
+                        nicknameErrorMessage = localValidationError
+                    )
+                )
+            }
+            return
+        }
+
+        viewModelScope.launch {
+            validateNicknameUseCase(nickname).fold(
+                onSuccess = {
+                    sendSideEffect(AuthContract.SideEffect.NavigateSelectProfile)
+                },
+                onFailure = { exception ->
+                    if (exception.message == ERROR_CODE_DUPLICATE_NICKNAME) {
+                        setState {
+                            copy(
+                                nicknameGenderState = currentState.nicknameGenderState.copy(
+                                    nicknameErrorMessage = NICKNAME_VALIDATION_ERROR_MESSAGE
+                                )
+                            )
+                        }
+                    }
+                }
+            )
+        }
+    }
 
     companion object {
         private const val NICKNAME_VALIDATION_ERROR_MESSAGE = "중복된 닉네임입니다. 다시 입력해주세요."

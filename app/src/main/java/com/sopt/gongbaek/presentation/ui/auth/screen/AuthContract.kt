@@ -36,17 +36,18 @@ class AuthContract {
         data object VerificationCodeRequested : Event()
         data class VerificationCodeChanged(val code: String) : Event()
         data object VerificationCodeSubmitted : Event()
+
+        data class NicknameChanged(val nickname: String) : Event()
+        data class GenderSelected(val gender: String) : Event()
+        data object ValidateNickname : Event()
         data class OnProfileImageSelected(val profileImage: Int) : Event()
-        data class OnNicknameChanged(val nickname: String) : Event()
         data class OnEnergyDirectionOptionSelected(val option: String) : Event()
         data class OnInformationGatheringOptionSelected(val option: String) : Event()
         data class OnDecisionMakingOptionSelected(val option: String) : Event()
         data class OnLifestyleOrientationOptionSelected(val option: String) : Event()
-        data class OnGenderSelected(val selectedGender: String) : Event()
         data class OnSelfIntroductionChanged(val selfIntroduction: String) : Event()
         data class OnTimeSlotSelectionChange(val day: String, val timeSlots: List<Int>) : Event()
         data object SubmitUserInfo : Event()
-        data object ValidateNickname : Event()
     }
 
     sealed interface SideEffect : UiSideEffect {
