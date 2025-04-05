@@ -3,6 +3,7 @@ package com.sopt.gongbaek.presentation.ui.auth.screen
 import com.sopt.gongbaek.domain.model.UserInfo
 import com.sopt.gongbaek.presentation.ui.auth.state.AcademicInfoState
 import com.sopt.gongbaek.presentation.ui.auth.state.EmailVerificationState
+import com.sopt.gongbaek.presentation.ui.auth.state.NicknameGenderState
 import com.sopt.gongbaek.presentation.util.base.UiEvent
 import com.sopt.gongbaek.presentation.util.base.UiLoadState
 import com.sopt.gongbaek.presentation.util.base.UiSideEffect
@@ -13,14 +14,12 @@ class AuthContract {
         val loadState: UiLoadState = UiLoadState.Idle,
         val academicInfoState: AcademicInfoState = AcademicInfoState(),
         val emailVerificationState: EmailVerificationState = EmailVerificationState(),
+        val nicknameGenderState: NicknameGenderState = NicknameGenderState(),
         val userInfo: UserInfo = UserInfo(),
         val energyDirectionOptions: String = "",
         val informationGatheringOptions: String = "",
         val decisionMakingOptions: String = "",
         val lifestyleOrientationOptions: String = "",
-        val selectedGender: String = "",
-        val nicknameValidation: Boolean = false,
-        val nicknameErrorMessage: String? = null,
         val selectedTimeSlotsByDay: Map<String, List<Int>> = emptyMap()
     ) : UiState
 
