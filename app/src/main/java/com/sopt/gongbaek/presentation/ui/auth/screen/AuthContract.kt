@@ -42,7 +42,8 @@ class AuthContract {
         data class NicknameChanged(val nickname: String) : Event()
         data class GenderSelected(val gender: String) : Event()
         data object ValidateNickname : Event()
-        data class OnProfileImageSelected(val profileImage: Int) : Event()
+
+        data class ProfileImageSelected(val profileImageIndex: Int) : Event()
         data class OnEnergyDirectionOptionSelected(val option: String) : Event()
         data class OnInformationGatheringOptionSelected(val option: String) : Event()
         data class OnDecisionMakingOptionSelected(val option: String) : Event()

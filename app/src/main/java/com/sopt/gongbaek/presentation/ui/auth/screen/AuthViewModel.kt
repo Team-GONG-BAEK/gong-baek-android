@@ -37,7 +37,6 @@ class AuthViewModel @Inject constructor(
 
     override suspend fun handleEvent(event: AuthContract.Event) {
         when (event) {
-            is AuthContract.Event.OnProfileImageSelected -> updateUserInfo { copy(profileImage = event.profileImage) }
             // AcademicInfo Event
             is AuthContract.Event.UniversitySearchQueryChanged -> updateUniversitySearchQuery(event.query)
             is AuthContract.Event.UniversitySearchClicked -> fetchUniversities()
@@ -58,6 +57,8 @@ class AuthViewModel @Inject constructor(
             is AuthContract.Event.GenderSelected -> updateSelectedGender(event.gender)
             is AuthContract.Event.ValidateNickname -> handleNicknameValidation()
 
+            // SelectProfile Event
+            is AuthContract.Event.ProfileImageSelected -> updateProfileImage(event.profileImageIndex)
 
             is AuthContract.Event.OnEnergyDirectionOptionSelected -> {
                 setState { copy(energyDirectionOptions = event.option) }
@@ -380,6 +381,14 @@ class AuthViewModel @Inject constructor(
                 }
             )
         }
+    }
+
+    private fun updateProfileImage(profileImageIndex: Int) = setState {
+        copy(
+            selectProfileState = currentState.selectProfileState.copy(
+                profileImageIndex = profileImageIndex
+            )
+        )
     }
 
     companion object {

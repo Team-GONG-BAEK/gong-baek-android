@@ -19,6 +19,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.flowWithLifecycle
 import com.sopt.gongbaek.R
 import com.sopt.gongbaek.presentation.type.ImageSelectorType
+import com.sopt.gongbaek.presentation.ui.auth.state.SelectProfileState
 import com.sopt.gongbaek.presentation.ui.component.button.GongBaekBasicButton
 import com.sopt.gongbaek.presentation.ui.component.button.ImageSelector
 import com.sopt.gongbaek.presentation.ui.component.progressBar.GongBaekProgressBar
@@ -29,55 +30,55 @@ import com.sopt.gongbaek.ui.theme.GONGBAEKTheme
 @Composable
 fun SelectProfileRoute(
     viewModel: AuthViewModel,
-    navigateMbti: () -> Unit
+    navigateMbti: () -> Unit,
+    navigateBack: () -> Unit
 ) {
     val uiState by viewModel.state.collectAsStateWithLifecycle()
     val lifecycleOwner = LocalLifecycleOwner.current
 
-    LaunchedEffect(viewModel.sideEffect, lifecycleOwner) {
+    LaunchedEffect(Unit) {
         viewModel.sideEffect
             .flowWithLifecycle(lifecycleOwner.lifecycle)
             .collect { sideEffect ->
-                if (sideEffect is AuthContract.SideEffect.NavigateMbti) {
-                    navigateMbti()
+                when (sideEffect) {
+                    is AuthContract.SideEffect.NavigateMbti -> navigateMbti()
+                    is AuthContract.SideEffect.NavigateBack -> navigateBack()
+                    else -> {}
                 }
             }
     }
 
     SelectProfileScreen(
-        selectedProfile = uiState.userInfo.profileImage,
-        onSelectedProfile = { selectedProfileIndex ->
-            viewModel.setEvent(
-                AuthContract.Event.OnProfileImageSelected(selectedProfileIndex)
-            )
-        },
-        onNextButtonClicked = {
-            viewModel.sendSideEffect(AuthContract.SideEffect.NavigateMbti)
-        }
+        uiState = uiState.selectProfileState,
+        onProfileImageSelected = { profileIndex -> viewModel.setEvent(AuthContract.Event.ProfileImageSelected(profileIndex)) },
+        onNextClick = { viewModel.sendSideEffect(AuthContract.SideEffect.NavigateMbti) },
+        onBackClick = { viewModel.sendSideEffect(AuthContract.SideEffect.NavigateBack) }
     )
 }
 
 @Composable
 private fun SelectProfileScreen(
-    selectedProfile: Int,
-    onSelectedProfile: (Int) -> Unit = {},
-    onNextButtonClicked: () -> Unit = {}
+    uiState: SelectProfileState,
+    onProfileImageSelected: (Int) -> Unit,
+    onNextClick: () -> Unit,
+    onBackClick: () -> Unit
 ) {
     Box(
         modifier = Modifier.fillMaxSize()
     ) {
         ImageSelectorSection(
+            selectedProfileIndex = uiState.profileImageIndex,
+            onProfileImageSelected = onProfileImageSelected,
+            onBackClick = onBackClick,
             modifier = Modifier
                 .padding(horizontal = 16.dp)
-                .align(Alignment.TopCenter),
-            selectedProfileIndex = selectedProfile,
-            onIndexSelected = onSelectedProfile
+                .align(Alignment.TopCenter)
         )
 
         GongBaekBasicButton(
             title = "다음",
-            enabled = selectedProfile != 0,
-            onClick = onNextButtonClicked,
+            enabled = uiState.isNextEnabled,
+            onClick = onNextClick,
             modifier = Modifier
                 .align(Alignment.BottomCenter)
                 .padding(horizontal = 16.dp, vertical = 12.dp)
@@ -88,11 +89,12 @@ private fun SelectProfileScreen(
 @Composable
 private fun ImageSelectorSection(
     selectedProfileIndex: Int,
-    onIndexSelected: (Int) -> Unit,
+    onProfileImageSelected: (Int) -> Unit,
+    onBackClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     Column {
-        StartTitleTopBar(isLeadingIconIncluded = false)
+        StartTitleTopBar(onClick = onBackClick)
 
         GongBaekProgressBar(progressPercent = 4 / 7f)
 
@@ -112,7 +114,7 @@ private fun ImageSelectorSection(
                 imageSelectorType = ImageSelectorType.Profile,
                 modifier = Modifier.aspectRatio(1f / 1f),
                 selectedIndex = selectedProfileIndex,
-                onIndexSelected = onIndexSelected
+                onIndexSelected = onProfileImageSelected
             )
         }
     }
@@ -120,10 +122,13 @@ private fun ImageSelectorSection(
 
 @Preview(showBackground = true)
 @Composable
-private fun PreviewSelectProfileScreen() {
+private fun SelectProfileScreenPreview() {
     GONGBAEKTheme {
         SelectProfileScreen(
-            selectedProfile = 0
+            uiState = SelectProfileState(),
+            onProfileImageSelected = {},
+            onBackClick = {},
+            onNextClick = {},
         )
     }
 }
