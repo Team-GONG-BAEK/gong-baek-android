@@ -4,6 +4,7 @@ import com.sopt.gongbaek.domain.model.UserInfo
 import com.sopt.gongbaek.presentation.ui.auth.state.AcademicInfoState
 import com.sopt.gongbaek.presentation.ui.auth.state.EmailVerificationState
 import com.sopt.gongbaek.presentation.ui.auth.state.NicknameGenderState
+import com.sopt.gongbaek.presentation.ui.auth.state.SelectProfileState
 import com.sopt.gongbaek.presentation.util.base.UiEvent
 import com.sopt.gongbaek.presentation.util.base.UiLoadState
 import com.sopt.gongbaek.presentation.util.base.UiSideEffect
@@ -15,6 +16,7 @@ class AuthContract {
         val academicInfoState: AcademicInfoState = AcademicInfoState(),
         val emailVerificationState: EmailVerificationState = EmailVerificationState(),
         val nicknameGenderState: NicknameGenderState = NicknameGenderState(),
+        val selectProfileState: SelectProfileState = SelectProfileState(),
         val userInfo: UserInfo = UserInfo(),
         val energyDirectionOptions: String = "",
         val informationGatheringOptions: String = "",
