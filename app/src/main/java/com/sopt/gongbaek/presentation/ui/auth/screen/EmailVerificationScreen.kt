@@ -1,5 +1,7 @@
 package com.sopt.gongbaek.presentation.ui.auth.screen
 
+import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -11,20 +13,36 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentHeight
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.focusRequester
+import androidx.compose.ui.focus.onFocusChanged
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.sopt.gongbaek.R
+import com.sopt.gongbaek.presentation.ui.auth.state.EmailVerificationState
+import com.sopt.gongbaek.presentation.ui.auth.state.EmailVerificationStep
 import com.sopt.gongbaek.presentation.ui.component.button.GongBaekBasicButton
 import com.sopt.gongbaek.presentation.ui.component.button.GongBaekButton
 import com.sopt.gongbaek.presentation.ui.component.button.GongBaekButtonDefault
 import com.sopt.gongbaek.presentation.ui.component.progressBar.GongBaekProgressBar
-import com.sopt.gongbaek.presentation.ui.component.textfield.GongBaekTextField
 import com.sopt.gongbaek.presentation.ui.component.topbar.StartTitleTopBar
+import com.sopt.gongbaek.presentation.util.formatTimeLeft
 import com.sopt.gongbaek.ui.theme.GongBaekTheme
 
 @Composable
@@ -33,15 +51,37 @@ fun EmailVerificationRoute(
     navigateNicknameGender: () -> Unit,
     navigateBack: () -> Unit
 ) {
+    val uiState by viewModel.state.collectAsStateWithLifecycle()
+
+    LaunchedEffect(Unit) {
+        viewModel.sideEffect.collect { sideEffect ->
+            when (sideEffect) {
+                is AuthContract.SideEffect.NavigateNicknameGender -> navigateNicknameGender()
+                is AuthContract.SideEffect.NavigateBack -> navigateBack()
+                else -> {}
+            }
+        }
+    }
+
     EmailVerificationScreen(
-        onClick = navigateNicknameGender,
-        onBackClick = navigateBack
+        uiState = uiState.emailVerificationState,
+        onEmailChanged = { email -> viewModel.setEvent(AuthContract.Event.EmailChanged(email)) },
+        onVerificationCodeRequested = { viewModel.setEvent(AuthContract.Event.VerificationCodeRequested) },
+        onVerificationCodeChanged = { code -> viewModel.setEvent(AuthContract.Event.VerificationCodeChanged(code)) },
+        onVerificationCodeSubmitted = { viewModel.setEvent(AuthContract.Event.VerificationCodeSubmitted) },
+        onNextClick = { viewModel.sendSideEffect(AuthContract.SideEffect.NavigateNicknameGender) },
+        onBackClick = { viewModel.sendSideEffect(AuthContract.SideEffect.NavigateBack) }
     )
 }
 
 @Composable
 private fun EmailVerificationScreen(
-    onClick: () -> Unit,
+    uiState: EmailVerificationState,
+    onEmailChanged: (String) -> Unit,
+    onVerificationCodeRequested: () -> Unit,
+    onVerificationCodeChanged: (String) -> Unit,
+    onVerificationCodeSubmitted: () -> Unit,
+    onNextClick: () -> Unit,
     onBackClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
@@ -57,6 +97,8 @@ private fun EmailVerificationScreen(
                 .padding(horizontal = 16.dp)
         ) {
             Column {
+                val focusRequester = remember { FocusRequester() }
+
                 Spacer(modifier = Modifier.height(54.dp))
 
                 Text(
@@ -68,77 +110,201 @@ private fun EmailVerificationScreen(
 
                 Spacer(modifier = Modifier.height(42.dp))
 
-                Text(
-                    text = "이메일 주소",
-                    color = GongBaekTheme.colors.gray08,
-                    style = GongBaekTheme.typography.body2.sb14,
-                    modifier = Modifier.padding(bottom = 10.dp)
-                )
+                Column {
+                    var isFocused by remember { mutableStateOf(false) }
 
-                Row(
-                    modifier = Modifier.wrapContentHeight(),
-                    horizontalArrangement = Arrangement.spacedBy(10.dp)
-                ) {
-                    GongBaekTextField(
-                        value = "",
-                        onValueChanged = {},
-                        modifier = Modifier.weight(0.675f)
+                    Text(
+                        text = "이메일 주소",
+                        color = GongBaekTheme.colors.gray08,
+                        style = GongBaekTheme.typography.body2.sb14,
+                        modifier = Modifier.padding(bottom = 10.dp)
                     )
 
-                    GongBaekButton(
-                        onClick = {},
-                        colors = GongBaekButtonDefault.gongBaekButtonColors(
-                            containerColor = GongBaekTheme.colors.black
-                        ),
-                        contentPadding = PaddingValues(vertical = 14.dp, horizontal = 12.dp),
-                        modifier = Modifier.weight(0.213f)
+                    Row(
+                        modifier = Modifier.wrapContentHeight(),
+                        horizontalArrangement = Arrangement.spacedBy(10.dp)
                     ) {
-                        Text(
-                            text = "코드받기",
-                            color = GongBaekTheme.colors.white,
-                            style = GongBaekTheme.typography.body1.m16
-                        )
+                        BasicTextField(
+                            value = uiState.email,
+                            onValueChange = onEmailChanged,
+                            modifier = modifier
+                                .fillMaxWidth()
+                                .background(
+                                    color = GongBaekTheme.colors.gray01,
+                                    shape = RoundedCornerShape(6.dp)
+                                )
+                                .border(
+                                    width = 1.dp,
+                                    color = when {
+                                        uiState.step == EmailVerificationStep.REQUEST_FAILED -> GongBaekTheme.colors.errorRed
+                                        isFocused -> GongBaekTheme.colors.black
+                                        else -> Color.Transparent
+                                    },
+                                    shape = RoundedCornerShape(6.dp)
+                                )
+                                .onFocusChanged { focusState ->
+                                    isFocused = focusState.isFocused
+                                }
+                                .wrapContentHeight()
+                                .weight(0.675f)
+                                .padding(
+                                    vertical = 14.dp,
+                                    horizontal = 16.dp
+                                ),
+                            textStyle = GongBaekTheme.typography.body1.m16.copy(
+                                color = GongBaekTheme.colors.gray10
+                            ),
+                            cursorBrush = SolidColor(GongBaekTheme.colors.gray05)
+                        ) { innerTextField ->
+                            Box(
+                                contentAlignment = Alignment.CenterStart
+                            ) {
+                                if (uiState.email.isEmpty()) {
+                                    Text(
+                                        text = "학교 이메일을 입력해주세요.",
+                                        style = GongBaekTheme.typography.body1.m16,
+                                        color = GongBaekTheme.colors.gray04,
+                                        modifier = Modifier.align(Alignment.CenterStart)
+                                    )
+                                }
+                                innerTextField()
+                            }
+                        }
+
+                        GongBaekButton(
+                            onClick = onVerificationCodeRequested,
+                            colors = GongBaekButtonDefault.gongBaekButtonColors(
+                                containerColor = GongBaekTheme.colors.black
+                            ),
+                            contentPadding = PaddingValues(vertical = 14.dp, horizontal = 12.dp),
+                            modifier = Modifier.weight(0.213f)
+                        ) {
+                            Text(
+                                text = if (uiState.step == EmailVerificationStep.INITIAL) "코드받기" else "다시받기",
+                                color = GongBaekTheme.colors.white,
+                                style = GongBaekTheme.typography.body1.m16
+                            )
+                        }
                     }
+
+                    Text(
+                        text = uiState.emailMessage,
+                        color = when (uiState.step) {
+                            EmailVerificationStep.INITIAL -> Color.Transparent
+                            EmailVerificationStep.REQUEST_FAILED -> GongBaekTheme.colors.errorRed
+                            else -> GongBaekTheme.colors.gray08
+                        },
+                        style = GongBaekTheme.typography.caption2.r12,
+                        modifier = Modifier.padding(top = 2.dp)
+                    )
                 }
 
-                Spacer(modifier = Modifier.height(34.dp))
+                Spacer(modifier = Modifier.height(14.dp))
 
-                Text(
-                    text = "코드",
-                    color = GongBaekTheme.colors.gray08,
-                    style = GongBaekTheme.typography.body2.sb14,
-                    modifier = Modifier.padding(bottom = 10.dp)
-                )
-                Row(
-                    horizontalArrangement = Arrangement.spacedBy(10.dp)
-                ) {
-                    GongBaekTextField(
-                        value = "",
-                        onValueChanged = {},
-                        modifier = Modifier.weight(0.675f)
+                Column {
+                    var isFocused by remember { mutableStateOf(false) }
+
+                    Text(
+                        text = "코드",
+                        color = GongBaekTheme.colors.gray08,
+                        style = GongBaekTheme.typography.body2.sb14,
+                        modifier = Modifier.padding(bottom = 10.dp)
                     )
-
-                    GongBaekButton(
-                        onClick = {},
-                        colors = GongBaekButtonDefault.gongBaekButtonColors(
-                            containerColor = GongBaekTheme.colors.black
-                        ),
-                        contentPadding = PaddingValues(vertical = 14.dp, horizontal = 12.dp),
-                        modifier = Modifier.weight(0.213f)
+                    Row(
+                        horizontalArrangement = Arrangement.spacedBy(10.dp)
                     ) {
-                        Text(
-                            text = "인증하기",
-                            color = GongBaekTheme.colors.white,
-                            style = GongBaekTheme.typography.body1.m16
-                        )
+                        BasicTextField(
+                            value = uiState.verificationCode,
+                            onValueChange = onVerificationCodeChanged,
+                            modifier = modifier
+                                .fillMaxWidth()
+                                .background(
+                                    color = GongBaekTheme.colors.gray01,
+                                    shape = RoundedCornerShape(6.dp)
+                                )
+                                .border(
+                                    width = 1.dp,
+                                    color = when {
+                                        uiState.step == EmailVerificationStep.VERIFICATION_FAILED -> GongBaekTheme.colors.errorRed
+                                        isFocused -> GongBaekTheme.colors.black
+                                        else -> Color.Transparent
+                                    },
+                                    shape = RoundedCornerShape(6.dp)
+                                )
+                                .onFocusChanged { focusState ->
+                                    isFocused = focusState.isFocused
+                                }
+                                .wrapContentHeight()
+                                .weight(0.675f)
+                                .focusRequester(focusRequester)
+                                .padding(
+                                    vertical = 14.dp,
+                                    horizontal = 16.dp
+                                ),
+                            singleLine = true,
+                            textStyle = GongBaekTheme.typography.body1.m16.copy(
+                                color = GongBaekTheme.colors.gray10
+                            ),
+                            cursorBrush = SolidColor(GongBaekTheme.colors.gray05)
+                        ) { innerTextField ->
+                            Box(
+                                contentAlignment = Alignment.CenterStart
+                            ) {
+                                if (uiState.verificationCode.isEmpty()) {
+                                    Text(
+                                        text = "코드를 입력해주세요.",
+                                        style = GongBaekTheme.typography.body1.m16,
+                                        color = GongBaekTheme.colors.gray04,
+                                        modifier = Modifier.align(Alignment.CenterStart)
+                                    )
+                                }
+                                Text(
+                                    text = if (uiState.isTimerRunning) formatTimeLeft(uiState.timeLeft) else "",
+                                    color = GongBaekTheme.colors.errorRed,
+                                    style = GongBaekTheme.typography.caption2.r12,
+                                    textAlign = TextAlign.Right,
+                                    modifier = Modifier.fillMaxWidth()
+                                )
+                                innerTextField()
+                            }
+                        }
+
+                        GongBaekButton(
+                            onClick = {
+                                onVerificationCodeSubmitted()
+                                // TODO 인증받기 버튼을 먼저 누른 경우에 대한 처리
+                            },
+                            colors = GongBaekButtonDefault.gongBaekButtonColors(
+                                containerColor = GongBaekTheme.colors.black
+                            ),
+                            contentPadding = PaddingValues(vertical = 14.dp, horizontal = 12.dp),
+                            modifier = Modifier.weight(0.213f)
+                        ) {
+                            Text(
+                                text = "인증하기",
+                                color = GongBaekTheme.colors.white,
+                                style = GongBaekTheme.typography.body1.m16
+                            )
+                        }
                     }
+
+                    Text(
+                        text = uiState.verificationCodeMessage,
+                        color = when (uiState.step) {
+                            EmailVerificationStep.INITIAL -> Color.Transparent
+                            EmailVerificationStep.VERIFICATION_FAILED -> GongBaekTheme.colors.errorRed
+                            else -> GongBaekTheme.colors.gray08
+                        },
+                        style = GongBaekTheme.typography.caption2.r12,
+                        modifier = Modifier.padding(top = 2.dp)
+                    )
                 }
             }
 
             GongBaekBasicButton(
                 title = "다음",
-                enabled = true,
-                onClick = onClick,
+                enabled = uiState.step == EmailVerificationStep.VERIFIED,
+                onClick = onNextClick,
                 modifier = Modifier
                     .padding(vertical = 12.dp)
                     .align(Alignment.BottomCenter)
@@ -151,7 +317,12 @@ private fun EmailVerificationScreen(
 @Composable
 private fun EmailVerificationScreenPreview() {
     EmailVerificationScreen(
-        onClick = {},
+        uiState = EmailVerificationState(),
+        onEmailChanged = {},
+        onVerificationCodeRequested = {},
+        onVerificationCodeChanged = {},
+        onVerificationCodeSubmitted = {},
+        onNextClick = {},
         onBackClick = {}
     )
 }
