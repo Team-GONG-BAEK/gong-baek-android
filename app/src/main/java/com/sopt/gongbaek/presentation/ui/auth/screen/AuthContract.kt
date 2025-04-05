@@ -49,7 +49,8 @@ class AuthContract {
         data class PerceptionOptionSelected(val perception: String) : Event()
         data class DecisionOptionSelected(val decision: String) : Event()
         data class LifestyleOptionSelected(val lifestyle: String) : Event()
-        data class OnSelfIntroductionChanged(val selfIntroduction: String) : Event()
+
+        data class SelfIntroductionChanged(val selfIntroduction: String) : Event()
         data class OnTimeSlotSelectionChange(val day: String, val timeSlots: List<Int>) : Event()
         data object SubmitUserInfo : Event()
     }

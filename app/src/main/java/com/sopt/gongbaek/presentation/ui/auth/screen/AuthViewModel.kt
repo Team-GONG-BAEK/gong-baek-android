@@ -66,7 +66,8 @@ class AuthViewModel @Inject constructor(
             is AuthContract.Event.DecisionOptionSelected -> updateMbtiDecision(event.decision)
             is AuthContract.Event.LifestyleOptionSelected -> updateMbtiLifestyle(event.lifestyle)
 
-            is AuthContract.Event.OnSelfIntroductionChanged -> updateUserInfo { copy(introduction = event.selfIntroduction) }
+            // SelfIntroduction Event
+            is AuthContract.Event.SelfIntroductionChanged -> updateSelfIntroduction(event.selfIntroduction)
             is AuthContract.Event.OnTimeSlotSelectionChange -> {
                 val timeSlotsByDay = currentState.selectedTimeSlotsByDay.toMutableMap()
                 timeSlotsByDay[event.day] = event.timeSlots
@@ -393,6 +394,14 @@ class AuthViewModel @Inject constructor(
         copy(
             mbtiState = currentState.mbtiState.copy(
                 lifestyle = lifestyle
+            )
+        )
+    }
+
+    private fun updateSelfIntroduction(selfIntroduction: String) = setState {
+        copy(
+            selfIntroductionState = currentState.selfIntroductionState.copy(
+                selfIntroduction = selfIntroduction
             )
         )
     }
