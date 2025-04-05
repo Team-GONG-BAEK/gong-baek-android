@@ -6,6 +6,7 @@ import com.sopt.gongbaek.presentation.ui.auth.state.EmailVerificationState
 import com.sopt.gongbaek.presentation.ui.auth.state.MbtiState
 import com.sopt.gongbaek.presentation.ui.auth.state.NicknameGenderState
 import com.sopt.gongbaek.presentation.ui.auth.state.SelectProfileState
+import com.sopt.gongbaek.presentation.ui.auth.state.SelfIntroductionState
 import com.sopt.gongbaek.presentation.util.base.UiEvent
 import com.sopt.gongbaek.presentation.util.base.UiLoadState
 import com.sopt.gongbaek.presentation.util.base.UiSideEffect
@@ -19,6 +20,7 @@ class AuthContract {
         val nicknameGenderState: NicknameGenderState = NicknameGenderState(),
         val selectProfileState: SelectProfileState = SelectProfileState(),
         val mbtiState: MbtiState = MbtiState(),
+        val selfIntroductionState: SelfIntroductionState = SelfIntroductionState(),
         val userInfo: UserInfo = UserInfo(),
         val selectedTimeSlotsByDay: Map<String, List<Int>> = emptyMap()
     ) : UiState
