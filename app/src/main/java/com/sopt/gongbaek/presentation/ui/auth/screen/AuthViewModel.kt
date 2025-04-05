@@ -1,5 +1,6 @@
 package com.sopt.gongbaek.presentation.ui.auth.screen
 
+import android.util.Patterns
 import androidx.lifecycle.viewModelScope
 import com.sopt.gongbaek.domain.model.UserInfo
 import com.sopt.gongbaek.domain.type.GenderType
@@ -8,6 +9,7 @@ import com.sopt.gongbaek.domain.usecase.GetSearchUniversitiesResultUseCase
 import com.sopt.gongbaek.domain.usecase.RegisterUserInfoUseCase
 import com.sopt.gongbaek.domain.usecase.SetTokenUseCase
 import com.sopt.gongbaek.domain.usecase.ValidateNicknameUseCase
+import com.sopt.gongbaek.presentation.ui.auth.state.EmailVerificationStep
 import com.sopt.gongbaek.presentation.util.base.BaseViewModel
 import com.sopt.gongbaek.presentation.util.base.UiLoadState
 import com.sopt.gongbaek.presentation.util.extension.createMbti
@@ -16,6 +18,9 @@ import com.sopt.gongbaek.presentation.util.extension.isCompleteKorean
 import com.sopt.gongbaek.presentation.util.extension.isKoreanChar
 import com.sopt.gongbaek.presentation.util.timetable.convertToTimeTable
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -27,6 +32,8 @@ class AuthViewModel @Inject constructor(
     private val setTokenUseCase: SetTokenUseCase,
     private val validateNicknameUseCase: ValidateNicknameUseCase
 ) : BaseViewModel<AuthContract.State, AuthContract.Event, AuthContract.SideEffect>() {
+
+    private var timerJob: Job? = null
 
     override fun createInitialState(): AuthContract.State = AuthContract.State()
 
@@ -41,6 +48,12 @@ class AuthViewModel @Inject constructor(
             is AuthContract.Event.MajorSearchClicked -> fetchMajors()
             is AuthContract.Event.MajorSelected -> updateSelectedMajor(event.major)
             is AuthContract.Event.EnterYearSelected -> updateEnterYear(event.enterYear)
+
+            // EmailVerification Event
+            is AuthContract.Event.EmailChanged -> updateEmail(event.email)
+            is AuthContract.Event.VerificationCodeRequested -> handleVerificationCodeRequested()
+            is AuthContract.Event.VerificationCodeChanged -> updateVerificationCode(event.code)
+            is AuthContract.Event.VerificationCodeSubmitted -> handleVerificationCodeSubmitted()
 
             is AuthContract.Event.OnNicknameChanged -> {
                 val filteredNickname = event.nickname.filter { it.isKoreanChar() }
@@ -244,6 +257,125 @@ class AuthViewModel @Inject constructor(
             )
         )
     }
+
+    private fun updateEmail(email: String) = setState {
+        copy(
+            emailVerificationState = currentState.emailVerificationState.copy(
+                email = email
+            )
+        )
+    }
+
+    private fun updateVerificationCode(code: String) = setState {
+        copy(
+            emailVerificationState = currentState.emailVerificationState.copy(
+                verificationCode = code
+            )
+        )
+    }
+
+    private fun startTimer() {
+        if (timerJob?.isActive == true) return
+
+        timerJob = viewModelScope.launch {
+            var timeLeft = currentState.emailVerificationState.timeLeft
+            while (isActive && timeLeft > 0) {
+                delay(1000)
+                timeLeft -= 1
+                setState {
+                    copy(
+                        emailVerificationState = currentState.emailVerificationState.copy(
+                            timeLeft = timeLeft
+                        )
+                    )
+                }
+            }
+
+            if (timeLeft == 0) {
+                setState {
+                    copy(
+                        emailVerificationState = emailVerificationState.copy(
+                            isTimerRunning = false,
+                            step = EmailVerificationStep.VERIFICATION_FAILED,
+                            verificationCodeMessage = "유효시간이 만료되었습니다. 인증코드를 다시 요청해주세요."
+                        )
+                    )
+                }
+            }
+        }
+    }
+
+    private fun stopTimer() {
+        timerJob?.cancel()
+        timerJob = null
+
+        setState {
+            copy(
+                emailVerificationState = emailVerificationState.copy(
+                    isTimerRunning = false
+                )
+            )
+        }
+    }
+
+    private fun handleVerificationCodeRequested() {
+        if (!Patterns.EMAIL_ADDRESS.matcher(currentState.emailVerificationState.email).matches()) {
+            setState {
+                copy(
+                    emailVerificationState = emailVerificationState.copy(
+                        step = EmailVerificationStep.REQUEST_FAILED,
+                        emailMessage = "잘못된 이메일입니다. 다시 입력해주세요."
+                    )
+                )
+            }
+            return
+        }
+
+        setState {
+            copy(
+                emailVerificationState = emailVerificationState.copy(
+                    step = EmailVerificationStep.REQUESTED,
+                    emailMessage = "인증코드를 발송했습니다.",
+                    isTimerRunning = true,
+                )
+            )
+        }
+        startTimer()
+    }
+
+    private fun handleVerificationCodeSubmitted() =
+        when {
+            currentState.emailVerificationState.email.isEmpty() -> setState {
+                copy(
+                    emailVerificationState = emailVerificationState.copy(
+                        step = EmailVerificationStep.VERIFICATION_FAILED,
+                        verificationCodeMessage = "이메일을 먼저 입력해주세요."
+                    )
+                )
+            }
+
+            currentState.emailVerificationState.verificationCode != "123456" -> setState {
+                copy(
+                    emailVerificationState = emailVerificationState.copy(
+                        step = EmailVerificationStep.VERIFICATION_FAILED,
+                        verificationCodeMessage = "인증코드가 일치하지 않습니다."
+                    )
+                )
+            }
+
+            else -> {
+                setState {
+                    copy(
+                        emailVerificationState = emailVerificationState.copy(
+                            step = EmailVerificationStep.VERIFIED,
+                            verificationCodeMessage = "인증이 완료되었습니다.",
+                            isTimerRunning = false
+                        )
+                    )
+                }
+                stopTimer()
+            }
+        }
 
     companion object {
         private const val NICKNAME_VALIDATION_ERROR_MESSAGE = "중복된 닉네임입니다. 다시 입력해주세요."

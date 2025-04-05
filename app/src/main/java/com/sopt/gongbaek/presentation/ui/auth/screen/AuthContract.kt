@@ -32,6 +32,11 @@ class AuthContract {
         data object MajorSearchClicked : Event()
         data class MajorSelected(val major: String) : Event()
         data class EnterYearSelected(val enterYear: Int) : Event()
+
+        data class EmailChanged(val email: String) : Event()
+        data object VerificationCodeRequested : Event()
+        data class VerificationCodeChanged(val code: String) : Event()
+        data object VerificationCodeSubmitted : Event()
         data class OnProfileImageSelected(val profileImage: Int) : Event()
         data class OnNicknameChanged(val nickname: String) : Event()
         data class OnEnergyDirectionOptionSelected(val option: String) : Event()
