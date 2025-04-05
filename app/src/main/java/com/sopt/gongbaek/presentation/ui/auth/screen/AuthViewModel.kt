@@ -60,25 +60,11 @@ class AuthViewModel @Inject constructor(
             // SelectProfile Event
             is AuthContract.Event.ProfileImageSelected -> updateProfileImage(event.profileImageIndex)
 
-            is AuthContract.Event.OnEnergyDirectionOptionSelected -> {
-                setState { copy(energyDirectionOptions = event.option) }
-                updateMbti()
-            }
-
-            is AuthContract.Event.OnInformationGatheringOptionSelected -> {
-                setState { copy(informationGatheringOptions = event.option) }
-                updateMbti()
-            }
-
-            is AuthContract.Event.OnDecisionMakingOptionSelected -> {
-                setState { copy(decisionMakingOptions = event.option) }
-                updateMbti()
-            }
-
-            is AuthContract.Event.OnLifestyleOrientationOptionSelected -> {
-                setState { copy(lifestyleOrientationOptions = event.option) }
-                updateMbti()
-            }
+            // Mbti Event
+            is AuthContract.Event.EnergyOptionSelected -> updateMbtiEnergy(event.energy)
+            is AuthContract.Event.PerceptionOptionSelected -> updateMbtiPerception(event.perception)
+            is AuthContract.Event.DecisionOptionSelected -> updateMbtiDecision(event.decision)
+            is AuthContract.Event.LifestyleOptionSelected -> updateMbtiLifestyle(event.lifestyle)
 
             is AuthContract.Event.OnSelfIntroductionChanged -> updateUserInfo { copy(introduction = event.selfIntroduction) }
             is AuthContract.Event.OnTimeSlotSelectionChange -> {
@@ -92,18 +78,6 @@ class AuthViewModel @Inject constructor(
         }
     }
 
-    fun sendSideEffect(sideEffect: AuthContract.SideEffect) =
-        setSideEffect(sideEffect)
-
-    private fun updateMbti() {
-        val mbti = createMbti(
-            firstLetter = currentState.energyDirectionOptions.takeIf { it.isNotBlank() } ?: return,
-            secondLetterType = currentState.informationGatheringOptions.takeIf { it.isNotBlank() } ?: return,
-            thirdLetterType = currentState.decisionMakingOptions.takeIf { it.isNotBlank() } ?: return,
-            fourthLetterType = currentState.lifestyleOrientationOptions.takeIf { it.isNotBlank() } ?: return
-        )
-        updateUserInfo { copy(mbti = mbti) }
-    }
 
     private fun submitUserInfo() =
         viewModelScope.launch {
@@ -387,6 +361,38 @@ class AuthViewModel @Inject constructor(
         copy(
             selectProfileState = currentState.selectProfileState.copy(
                 profileImageIndex = profileImageIndex
+            )
+        )
+    }
+
+    private fun updateMbtiEnergy(energy: String) = setState {
+        copy(
+            mbtiState = currentState.mbtiState.copy(
+                energy = energy
+            )
+        )
+    }
+
+    private fun updateMbtiPerception(perception: String) = setState {
+        copy(
+            mbtiState = currentState.mbtiState.copy(
+                perception = perception
+            )
+        )
+    }
+
+    private fun updateMbtiDecision(decision: String) = setState {
+        copy(
+            mbtiState = currentState.mbtiState.copy(
+                decision = decision
+            )
+        )
+    }
+
+    private fun updateMbtiLifestyle(lifestyle: String) = setState {
+        copy(
+            mbtiState = currentState.mbtiState.copy(
+                lifestyle = lifestyle
             )
         )
     }
