@@ -33,7 +33,9 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.lifecycle.flowWithLifecycle
 import com.sopt.gongbaek.R
 import com.sopt.gongbaek.presentation.ui.auth.state.EmailVerificationState
 import com.sopt.gongbaek.presentation.ui.auth.state.EmailVerificationStep
@@ -52,15 +54,18 @@ fun EmailVerificationRoute(
     navigateBack: () -> Unit
 ) {
     val uiState by viewModel.state.collectAsStateWithLifecycle()
+    val lifecycleOwner = LocalLifecycleOwner.current
 
     LaunchedEffect(Unit) {
-        viewModel.sideEffect.collect { sideEffect ->
-            when (sideEffect) {
-                is AuthContract.SideEffect.NavigateNicknameGender -> navigateNicknameGender()
-                is AuthContract.SideEffect.NavigateBack -> navigateBack()
-                else -> {}
+        viewModel.sideEffect
+            .flowWithLifecycle(lifecycleOwner.lifecycle)
+            .collect { sideEffect ->
+                when (sideEffect) {
+                    is AuthContract.SideEffect.NavigateNicknameGender -> navigateNicknameGender()
+                    is AuthContract.SideEffect.NavigateBack -> navigateBack()
+                    else -> {}
+                }
             }
-        }
     }
 
     EmailVerificationScreen(

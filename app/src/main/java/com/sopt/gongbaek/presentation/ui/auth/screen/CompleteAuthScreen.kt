@@ -55,15 +55,17 @@ fun CompleteAuthRoute(
         }
     }
 
-    LaunchedEffect(viewModel.sideEffect, lifecycleOwner) {
+    LaunchedEffect(Unit) {
         viewModel.sideEffect
             .flowWithLifecycle(lifecycleOwner.lifecycle)
             .collect { sideEffect ->
-                if (sideEffect is AuthContract.SideEffect.NavigateHome) {
-                    navigateHome()
+                when (sideEffect) {
+                    is AuthContract.SideEffect.NavigateHome -> navigateHome()
+                    else -> {}
                 }
             }
     }
+
     CompleteAuthScreen(
         navigateHome = { viewModel.sendSideEffect(AuthContract.SideEffect.NavigateHome) }
     )
