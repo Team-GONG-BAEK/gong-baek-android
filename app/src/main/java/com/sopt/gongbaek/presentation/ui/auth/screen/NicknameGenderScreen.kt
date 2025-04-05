@@ -21,6 +21,7 @@ import androidx.lifecycle.flowWithLifecycle
 import com.sopt.gongbaek.R
 import com.sopt.gongbaek.presentation.type.GongBaekBasicTextFieldType
 import com.sopt.gongbaek.presentation.type.SelectableButtonType
+import com.sopt.gongbaek.presentation.ui.auth.state.NicknameGenderState
 import com.sopt.gongbaek.presentation.ui.component.button.GongBaekBasicButton
 import com.sopt.gongbaek.presentation.ui.component.button.GongBaekSelectableButtons
 import com.sopt.gongbaek.presentation.ui.component.progressBar.GongBaekProgressBar
@@ -39,52 +40,45 @@ fun NicknameGenderRoute(
     val uiState by viewModel.state.collectAsStateWithLifecycle()
     val lifecycleOwner = LocalLifecycleOwner.current
 
-    LaunchedEffect(viewModel.sideEffect, lifecycleOwner) {
+    LaunchedEffect(Unit) {
         viewModel.sideEffect
             .flowWithLifecycle(lifecycleOwner.lifecycle)
             .collect { sideEffect ->
-                if (sideEffect is AuthContract.SideEffect.NavigateBack) {
-                    navigateBack()
-                }
-                if (sideEffect is AuthContract.SideEffect.NavigateSelectProfile) {
-                    navigateSelectProfile()
+                when (sideEffect) {
+                    is AuthContract.SideEffect.NavigateBack -> navigateBack()
+                    is AuthContract.SideEffect.NavigateSelectProfile -> navigateSelectProfile()
+                    else -> {}
                 }
             }
     }
 
     NicknameGenderScreen(
-        gender = uiState.userInfo.gender,
-        nickname = uiState.userInfo.nickname,
-        errorMessage = uiState.nicknameErrorMessage,
-        selectedGender = uiState.selectedGender,
-        onNicknameChanged = { viewModel.setEvent(AuthContract.Event.OnNicknameChanged(it)) },
-        navigateSelectProfile = { viewModel.setEvent(AuthContract.Event.ValidateNickname) },
-        onGenderSelected = { gender -> viewModel.setEvent(AuthContract.Event.OnGenderSelected(gender)) },
+        uiState = uiState.nicknameGenderState,
+        onNicknameChanged = { nickname -> viewModel.setEvent(AuthContract.Event.NicknameChanged(nickname)) },
+        onGenderSelected = { gender -> viewModel.setEvent(AuthContract.Event.GenderSelected(gender)) },
+        onNextClick = { viewModel.setEvent(AuthContract.Event.ValidateNickname) },
         onBackClick = { viewModel.sendSideEffect(AuthContract.SideEffect.NavigateBack) }
     )
 }
 
 @Composable
 private fun NicknameGenderScreen(
-    gender: String,
-    nickname: String,
-    errorMessage: String?,
-    selectedGender: String,
+    uiState: NicknameGenderState,
     onGenderSelected: (String) -> Unit,
     onNicknameChanged: (String) -> Unit,
-    navigateSelectProfile: () -> Unit = {},
-    onBackClick: () -> Unit = {}
+    onNextClick: () -> Unit,
+    onBackClick: () -> Unit
 ) {
     Box(
         modifier = Modifier.fillMaxSize()
     ) {
         NickNameInputSection(
-            nickname = nickname,
+            nickname = uiState.nickname,
             onNicknameChanged = onNicknameChanged,
-            errorMessage = errorMessage,
-            onBackClick = onBackClick,
-            selectedGender = selectedGender,
+            errorMessage = uiState.nicknameErrorMessage,
+            selectedGender = uiState.gender,
             onSelectedGender = onGenderSelected,
+            onBackClick = onBackClick,
             modifier = Modifier
                 .padding(horizontal = 16.dp)
                 .align(Alignment.Center)
@@ -92,8 +86,8 @@ private fun NicknameGenderScreen(
 
         GongBaekBasicButton(
             title = "다음",
-            enabled = nickname.hasCompleteKoreanCharacters(2) && errorMessage.isNullOrEmpty() && gender.isNotEmpty(),
-            onClick = navigateSelectProfile,
+            enabled = uiState.isNextEnabled,
+            onClick = onNextClick,
             modifier = Modifier
                 .align(Alignment.BottomCenter)
                 .padding(horizontal = 16.dp, vertical = 12.dp)
@@ -108,8 +102,8 @@ private fun NickNameInputSection(
     errorMessage: String?,
     selectedGender: String,
     onSelectedGender: (String) -> Unit,
-    modifier: Modifier = Modifier,
-    onBackClick: () -> Unit = {}
+    onBackClick: () -> Unit,
+    modifier: Modifier = Modifier
 ) {
     Column {
         StartTitleTopBar(onClick = onBackClick)
@@ -161,11 +155,10 @@ private fun NickNameInputSection(
 @Composable
 private fun NicknameGenderScreenPreview() {
     NicknameGenderScreen(
-        nickname = "닉네임",
+        uiState = NicknameGenderState(),
         onNicknameChanged = {},
-        errorMessage = null,
-        selectedGender = "",
-        onGenderSelected = { },
-        gender = ""
+        onGenderSelected = {},
+        onNextClick = {},
+        onBackClick = {},
     )
 }
