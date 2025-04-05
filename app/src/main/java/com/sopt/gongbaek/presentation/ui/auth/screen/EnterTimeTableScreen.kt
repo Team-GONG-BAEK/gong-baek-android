@@ -17,6 +17,7 @@ import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.flowWithLifecycle
 import com.sopt.gongbaek.R
+import com.sopt.gongbaek.presentation.ui.auth.state.EnterTimeTableState
 import com.sopt.gongbaek.presentation.ui.component.button.GongBaekBasicButton
 import com.sopt.gongbaek.presentation.ui.component.progressBar.GongBaekProgressBar
 import com.sopt.gongbaek.presentation.ui.component.section.PageDescriptionSection
@@ -34,42 +35,42 @@ fun EnterTimeTableRoute(
     val uiState by viewModel.state.collectAsStateWithLifecycle()
     val lifecycleOwner = LocalLifecycleOwner.current
 
-    LaunchedEffect(viewModel.sideEffect, lifecycleOwner) {
+    LaunchedEffect(Unit) {
         viewModel.sideEffect
             .flowWithLifecycle(lifecycleOwner.lifecycle)
             .collect { sideEffect ->
-                if (sideEffect is AuthContract.SideEffect.NavigateBack) {
-                    navigateBack()
-                }
-                if (sideEffect is AuthContract.SideEffect.NavigateCompleteAuth) {
-                    navigateCompleteAuth()
+                when (sideEffect) {
+                    is AuthContract.SideEffect.NavigateCompleteAuth -> navigateCompleteAuth()
+                    is AuthContract.SideEffect.NavigateBack -> navigateBack()
+                    else -> {}
                 }
             }
     }
 
     EnterTimeTableScreen(
-        selectedTimeSlotsByDay = uiState.selectedTimeSlotsByDay,
-        navigateCompleteAuth = { viewModel.sendSideEffect(AuthContract.SideEffect.NavigateCompleteAuth) },
-        navigateBack = { viewModel.sendSideEffect(AuthContract.SideEffect.NavigateBack) },
-        onTimeSlotSelectionChange = { day, timeSlots ->
-            viewModel.setEvent(AuthContract.Event.OnTimeSlotSelectionChange(day, timeSlots))
-        }
+        uiState = uiState.enterTimeTableState,
+        onTimeSlotSelectionChanged = { day, timeSlots ->
+            viewModel.setEvent(AuthContract.Event.TimeSlotSelectionChanged(day, timeSlots))
+        },
+        // TODO 가입전송 로직으로 변경할것
+        onNextClick = { viewModel.sendSideEffect(AuthContract.SideEffect.NavigateCompleteAuth) },
+        onBackClick = { viewModel.sendSideEffect(AuthContract.SideEffect.NavigateBack) }
     )
 }
 
 @Composable
 private fun EnterTimeTableScreen(
-    navigateCompleteAuth: () -> Unit,
-    navigateBack: () -> Unit,
-    selectedTimeSlotsByDay: Map<String, List<Int>>,
-    onTimeSlotSelectionChange: (String, List<Int>) -> Unit
+    uiState: EnterTimeTableState,
+    onTimeSlotSelectionChanged: (String, List<Int>) -> Unit,
+    onNextClick: () -> Unit,
+    onBackClick: () -> Unit
 ) {
     Scaffold(
         bottomBar = {
             GongBaekBasicButton(
                 title = "가입 완료",
-                enabled = true,
-                onClick = navigateCompleteAuth,
+                enabled = uiState.isNextEnabled,
+                onClick = onNextClick,
                 modifier = Modifier
                     .padding(horizontal = 16.dp, vertical = 12.dp)
             )
@@ -78,9 +79,9 @@ private fun EnterTimeTableScreen(
         contentWindowInsets = WindowInsets(0.dp, 0.dp, 0.dp, 0.dp),
         content = { paddingValues ->
             EnterTimeTableSection(
-                onBackClick = navigateBack,
-                selectedTimeSlotsByDay = selectedTimeSlotsByDay,
-                onTimeSlotSelectionChange = onTimeSlotSelectionChange,
+                onBackClick = onBackClick,
+                selectedTimeSlotsByDay = uiState.selectedTimeSlotsByDay,
+                onTimeSlotSelectionChange = onTimeSlotSelectionChanged,
                 modifier = Modifier
                     .padding(paddingValues)
                     .padding(horizontal = 16.dp)
@@ -130,13 +131,13 @@ private fun EnterTimeTableSection(
 
 @Preview(showBackground = true)
 @Composable
-private fun PreviewEnterTimeTableScreen() {
+private fun EnterTimeTableScreenPreview() {
     GONGBAEKTheme {
         EnterTimeTableScreen(
-            navigateCompleteAuth = {},
-            navigateBack = {},
-            selectedTimeSlotsByDay = mapOf(),
-            onTimeSlotSelectionChange = { _, _ -> }
+            uiState = EnterTimeTableState(),
+            onTimeSlotSelectionChanged = { _, _ -> },
+            onNextClick = {},
+            onBackClick = {}
         )
     }
 }

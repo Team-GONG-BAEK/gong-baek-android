@@ -1,8 +1,8 @@
 package com.sopt.gongbaek.presentation.ui.auth.screen
 
-import com.sopt.gongbaek.domain.model.UserInfo
 import com.sopt.gongbaek.presentation.ui.auth.state.AcademicInfoState
 import com.sopt.gongbaek.presentation.ui.auth.state.EmailVerificationState
+import com.sopt.gongbaek.presentation.ui.auth.state.EnterTimeTableState
 import com.sopt.gongbaek.presentation.ui.auth.state.MbtiState
 import com.sopt.gongbaek.presentation.ui.auth.state.NicknameGenderState
 import com.sopt.gongbaek.presentation.ui.auth.state.SelectProfileState
@@ -21,8 +21,7 @@ class AuthContract {
         val selectProfileState: SelectProfileState = SelectProfileState(),
         val mbtiState: MbtiState = MbtiState(),
         val selfIntroductionState: SelfIntroductionState = SelfIntroductionState(),
-        val userInfo: UserInfo = UserInfo(),
-        val selectedTimeSlotsByDay: Map<String, List<Int>> = emptyMap()
+        val enterTimeTableState: EnterTimeTableState = EnterTimeTableState()
     ) : UiState
 
     sealed class Event : UiEvent {
@@ -51,8 +50,9 @@ class AuthContract {
         data class LifestyleOptionSelected(val lifestyle: String) : Event()
 
         data class SelfIntroductionChanged(val selfIntroduction: String) : Event()
-        data class OnTimeSlotSelectionChange(val day: String, val timeSlots: List<Int>) : Event()
-        data object SubmitUserInfo : Event()
+
+        data class TimeSlotSelectionChanged(val day: String, val timeSlots: List<Int>) : Event()
+//        data object SubmitUserInfo : Event()
     }
 
     sealed interface SideEffect : UiSideEffect {
@@ -68,7 +68,5 @@ class AuthContract {
         data object NavigateEnterTimetable : SideEffect
         data object NavigateCompleteAuth : SideEffect
         data object NavigateHome : SideEffect
-
-        data object NavigateGapTimetable : SideEffect
     }
 }

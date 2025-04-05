@@ -2,7 +2,6 @@ package com.sopt.gongbaek.presentation.ui.auth.screen
 
 import android.util.Patterns
 import androidx.lifecycle.viewModelScope
-import com.sopt.gongbaek.domain.model.UserInfo
 import com.sopt.gongbaek.domain.usecase.GetSearchMajorsResultUseCase
 import com.sopt.gongbaek.domain.usecase.GetSearchUniversitiesResultUseCase
 import com.sopt.gongbaek.domain.usecase.RegisterUserInfoUseCase
@@ -11,10 +10,8 @@ import com.sopt.gongbaek.domain.usecase.ValidateNicknameUseCase
 import com.sopt.gongbaek.presentation.ui.auth.state.EmailVerificationStep
 import com.sopt.gongbaek.presentation.util.base.BaseViewModel
 import com.sopt.gongbaek.presentation.util.base.UiLoadState
-import com.sopt.gongbaek.presentation.util.extension.createMbti
 import com.sopt.gongbaek.presentation.util.extension.isCompleteKorean
 import com.sopt.gongbaek.presentation.util.extension.isKoreanChar
-import com.sopt.gongbaek.presentation.util.timetable.convertToTimeTable
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
@@ -68,36 +65,31 @@ class AuthViewModel @Inject constructor(
 
             // SelfIntroduction Event
             is AuthContract.Event.SelfIntroductionChanged -> updateSelfIntroduction(event.selfIntroduction)
-            is AuthContract.Event.OnTimeSlotSelectionChange -> {
-                val timeSlotsByDay = currentState.selectedTimeSlotsByDay.toMutableMap()
-                timeSlotsByDay[event.day] = event.timeSlots
-                setState { copy(selectedTimeSlotsByDay = timeSlotsByDay) }
-                updateUserInfo { copy(timeTable = convertToTimeTable(timeSlotsByDay)) }
-            }
 
-            is AuthContract.Event.SubmitUserInfo -> submitUserInfo()
+            // EnterTimeTable Event
+            is AuthContract.Event.TimeSlotSelectionChanged -> updateTimeSlotSelectionChanged(event.day, event.timeSlots)
+
+            // TODO 전송로직 서버연결 하며 수정 예정
+//            is AuthContract.Event.SubmitUserInfo -> submitUserInfo()
         }
     }
 
+    fun sendSideEffect(sideEffect: AuthContract.SideEffect) = setSideEffect(sideEffect)
 
-    private fun submitUserInfo() =
-        viewModelScope.launch {
-            setState { copy(loadState = UiLoadState.Loading) }
-            registerUserInfoUseCase(currentState.userInfo).fold(
-                onSuccess = { userAuth ->
-                    setState { copy(loadState = UiLoadState.Success) }
-                    setSideEffect(AuthContract.SideEffect.NavigateCompleteAuth)
-                    setTokenUseCase(userAuth.accessToken, userAuth.refreshToken)
-                },
-                onFailure = {
-                    setState { copy(loadState = UiLoadState.Error) }
-                }
-            )
-        }
-
-
-    private fun updateUserInfo(update: UserInfo.() -> UserInfo) =
-        setState { copy(userInfo = userInfo.update()) }
+//    private fun submitUserInfo() =
+//        viewModelScope.launch {
+//            setState { copy(loadState = UiLoadState.Loading) }
+//            registerUserInfoUseCase(currentState.userInfo).fold(
+//                onSuccess = { userAuth ->
+//                    setState { copy(loadState = UiLoadState.Success) }
+//                    setSideEffect(AuthContract.SideEffect.NavigateCompleteAuth)
+//                    setTokenUseCase(userAuth.accessToken, userAuth.refreshToken)
+//                },
+//                onFailure = {
+//                    setState { copy(loadState = UiLoadState.Error) }
+//                }
+//            )
+//        }
 
     private fun updateUniversitySearchQuery(query: String) = setState {
         copy(
@@ -258,7 +250,7 @@ class AuthViewModel @Inject constructor(
                 emailVerificationState = emailVerificationState.copy(
                     step = EmailVerificationStep.REQUESTED,
                     emailMessage = "인증코드를 발송했습니다.",
-                    isTimerRunning = true,
+                    isTimerRunning = true
                 )
             )
         }
@@ -404,6 +396,19 @@ class AuthViewModel @Inject constructor(
                 selfIntroduction = selfIntroduction
             )
         )
+    }
+
+    private fun updateTimeSlotSelectionChanged(day: String, timeSlots: List<Int>) {
+        val updatedTimeSlotsByDay = currentState.enterTimeTableState.selectedTimeSlotsByDay
+            .plus(day to timeSlots)
+
+        setState {
+            copy(
+                enterTimeTableState = currentState.enterTimeTableState.copy(
+                    selectedTimeSlotsByDay = updatedTimeSlotsByDay
+                )
+            )
+        }
     }
 
     companion object {
