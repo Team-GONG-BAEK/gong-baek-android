@@ -8,6 +8,7 @@ import com.sopt.gongbaek.domain.usecase.RegisterUserInfoUseCase
 import com.sopt.gongbaek.domain.usecase.RequestEmailVerificationUseCase
 import com.sopt.gongbaek.domain.usecase.SetTokenUseCase
 import com.sopt.gongbaek.domain.usecase.ValidateNicknameUseCase
+import com.sopt.gongbaek.domain.usecase.VerifyEmailCodeUseCase
 import com.sopt.gongbaek.presentation.ui.auth.state.EmailVerificationStep
 import com.sopt.gongbaek.presentation.util.base.BaseViewModel
 import com.sopt.gongbaek.presentation.util.base.UiLoadState
@@ -25,6 +26,7 @@ class AuthViewModel @Inject constructor(
     private val getSearchUniversitiesResultUseCase: GetSearchUniversitiesResultUseCase,
     private val getSearchMajorsResultUseCase: GetSearchMajorsResultUseCase,
     private val requestEmailVerificationUseCase: RequestEmailVerificationUseCase,
+    private val verifyEmailCodeUseCase: VerifyEmailCodeUseCase,
     private val registerUserInfoUseCase: RegisterUserInfoUseCase,
     private val setTokenUseCase: SetTokenUseCase,
     private val validateNicknameUseCase: ValidateNicknameUseCase
@@ -282,9 +284,11 @@ class AuthViewModel @Inject constructor(
         }
     }
 
-    private fun handleVerificationCodeSubmitted() =
-        when {
-            currentState.emailVerificationState.email.isEmpty() -> setState {
+    private fun handleVerificationCodeSubmitted() {
+        val email = currentState.emailVerificationState.email
+
+        if (email.isEmpty()) {
+            setState {
                 copy(
                     emailVerificationState = emailVerificationState.copy(
                         step = EmailVerificationStep.VERIFICATION_FAILED,
@@ -292,29 +296,40 @@ class AuthViewModel @Inject constructor(
                     )
                 )
             }
-
-            currentState.emailVerificationState.verificationCode != "123456" -> setState {
-                copy(
-                    emailVerificationState = emailVerificationState.copy(
-                        step = EmailVerificationStep.VERIFICATION_FAILED,
-                        verificationCodeMessage = "인증코드가 일치하지 않습니다."
-                    )
-                )
-            }
-
-            else -> {
-                setState {
-                    copy(
-                        emailVerificationState = emailVerificationState.copy(
-                            step = EmailVerificationStep.VERIFIED,
-                            verificationCodeMessage = "인증이 완료되었습니다.",
-                            isTimerRunning = false
-                        )
-                    )
-                }
-                stopTimer()
-            }
+            return
         }
+
+        viewModelScope.launch {
+            verifyEmailCodeUseCase(
+                email = email,
+                schoolName = currentState.academicInfoState.university,
+                code = currentState.emailVerificationState.verificationCode
+            ).fold(
+                onSuccess = {
+                    setState {
+                        copy(
+                            emailVerificationState = emailVerificationState.copy(
+                                step = EmailVerificationStep.VERIFIED,
+                                verificationCodeMessage = "인증이 완료되었습니다.",
+                                isTimerRunning = false
+                            )
+                        )
+                    }
+                    stopTimer()
+                },
+                onFailure = {
+                    setState {
+                        copy(
+                            emailVerificationState = emailVerificationState.copy(
+                                step = EmailVerificationStep.VERIFICATION_FAILED,
+                                verificationCodeMessage = "인증코드가 일치하지 않습니다."
+                            )
+                        )
+                    }
+                }
+            )
+        }
+    }
 
     private fun updateNickname(nickname: String) = setState {
         copy(

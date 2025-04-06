@@ -53,4 +53,11 @@ interface AuthService {
         @Query("email") email: String,
         @Query("schoolName") schoolName: String
     ): NullableApiResponse<Unit>
+
+    @GET("/api/v1/emails/verifications")
+    suspend fun verifyEmailCode(
+        @Query("email") email: String,
+        @Query("schoolName") schoolName: String,
+        @Query("code") code: String
+    ): NullableApiResponse<Unit>
 }

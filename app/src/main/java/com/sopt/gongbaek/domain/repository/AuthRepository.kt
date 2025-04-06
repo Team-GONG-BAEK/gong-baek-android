@@ -14,4 +14,9 @@ interface AuthRepository {
     suspend fun reissueToken(refreshToken: String): Result<UserAuth>
     suspend fun logout(): Result<Unit>
     suspend fun requestEmailVerification(email: String, schoolName: String): Result<Unit>
+    suspend fun verifyEmailCode(
+        email: String,
+        schoolName: String,
+        code: String
+    ): Result<Unit>
 }

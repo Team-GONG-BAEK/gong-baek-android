@@ -39,4 +39,15 @@ class AuthRemoteDatasourceImpl @Inject constructor(
 
     override suspend fun requestEmailVerification(email: String, schoolName: String): NullableApiResponse<Unit> =
         authService.requestEmailVerification(email = email, schoolName = schoolName)
+
+    override suspend fun verifyEmailCode(
+        email: String,
+        schoolName: String,
+        code: String
+    ): NullableApiResponse<Unit> =
+        authService.verifyEmailCode(
+            email = email,
+            schoolName = schoolName,
+            code = code
+        )
 }

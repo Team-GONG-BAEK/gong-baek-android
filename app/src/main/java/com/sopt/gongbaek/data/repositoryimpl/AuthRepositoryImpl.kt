@@ -77,4 +77,19 @@ class AuthRepositoryImpl @Inject constructor(
                 .handleNullableApiResponse()
                 .getOrThrow()
         }
+
+    override suspend fun verifyEmailCode(
+        email: String,
+        schoolName: String,
+        code: String
+    ): Result<Unit> =
+        runCatching {
+            authRemoteDatasource.verifyEmailCode(
+                email = email,
+                schoolName = schoolName,
+                code = code
+            )
+                .handleNullableApiResponse()
+                .getOrThrow()
+        }
 }

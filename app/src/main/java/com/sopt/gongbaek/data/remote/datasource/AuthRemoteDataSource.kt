@@ -18,4 +18,9 @@ interface AuthRemoteDataSource {
     suspend fun reissueToken(refreshToken: String): ApiResponse<LoginResponseDto>
     suspend fun logout(): ApiResponse<Unit>
     suspend fun requestEmailVerification(email: String, schoolName: String): NullableApiResponse<Unit>
+    suspend fun verifyEmailCode(
+        email: String,
+        schoolName: String,
+        code: String
+    ): NullableApiResponse<Unit>
 }

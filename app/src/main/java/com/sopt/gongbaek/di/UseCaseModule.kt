@@ -31,6 +31,7 @@ import com.sopt.gongbaek.domain.usecase.RequestEmailVerificationUseCase
 import com.sopt.gongbaek.domain.usecase.SetLectureTimetableUseCase
 import com.sopt.gongbaek.domain.usecase.SetTokenUseCase
 import com.sopt.gongbaek.domain.usecase.ValidateNicknameUseCase
+import com.sopt.gongbaek.domain.usecase.VerifyEmailCodeUseCase
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -186,4 +187,10 @@ object UseCaseModule {
     fun provideRequestEmailVerificationUseCase(
         authRepository: AuthRepository
     ): RequestEmailVerificationUseCase = RequestEmailVerificationUseCase(authRepository)
+
+    @Provides
+    @Singleton
+    fun provideVerifyEmailCodeUseCase(
+        authRepository: AuthRepository
+    ): VerifyEmailCodeUseCase = VerifyEmailCodeUseCase(authRepository)
 }
