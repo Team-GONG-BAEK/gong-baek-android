@@ -6,12 +6,14 @@ import com.sopt.gongbaek.data.repositoryimpl.SearchRepositoryImpl
 import com.sopt.gongbaek.data.repositoryimpl.GroupRepositoryImpl
 import com.sopt.gongbaek.data.repositoryimpl.LectureTimetableRepositoryImpl
 import com.sopt.gongbaek.data.repositoryimpl.TokenRepositoryImpl
+import com.sopt.gongbaek.data.repositoryimpl.UserRepositoryImpl
 import com.sopt.gongbaek.domain.repository.CommentRepository
 import com.sopt.gongbaek.domain.repository.AuthRepository
 import com.sopt.gongbaek.domain.repository.SearchRepository
 import com.sopt.gongbaek.domain.repository.GroupRepository
 import com.sopt.gongbaek.domain.repository.LectureTimetableRepository
 import com.sopt.gongbaek.domain.repository.TokenRepository
+import com.sopt.gongbaek.domain.repository.UserRepository
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn
@@ -57,4 +59,10 @@ abstract class RepositoryModule {
     abstract fun bindLectureTimetableRepository(
         lectureTimetableRepositoryImpl: LectureTimetableRepositoryImpl
     ): LectureTimetableRepository
+
+    @Binds
+    @Singleton
+    abstract fun bindUserRepository(
+        userRepositoryImpl: UserRepositoryImpl
+    ): UserRepository
 }

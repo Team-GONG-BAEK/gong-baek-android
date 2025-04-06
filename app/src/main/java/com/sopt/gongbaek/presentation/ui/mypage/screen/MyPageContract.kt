@@ -17,15 +17,16 @@ class MyPageContract {
         val applyGroupsLoadState: UiLoadState = UiLoadState.Idle,
         val applyActiveGroups: List<GroupInfo> = listOf(),
         val applyClosedGroups: List<GroupInfo> = listOf()
-
     ) : UiState
 
     sealed class Event : UiEvent {
+        data object OnGetMyProfile : Event()
         data object OnRegisterGroupsTabClick : Event()
         data object OnApplyGroupsTabClick : Event()
     }
 
     sealed interface SideEffect : UiSideEffect {
+        data object NavigateSetting : SideEffect
         data class NavigateGroupDetail(val groupId: Int, val groupCycle: String) : SideEffect
         data class NavigateGroupRoom(val groupId: Int, val groupCycle: String) : SideEffect
     }

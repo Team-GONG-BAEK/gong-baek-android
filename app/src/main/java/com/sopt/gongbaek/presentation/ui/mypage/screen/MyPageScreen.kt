@@ -46,6 +46,7 @@ import com.sopt.gongbaek.ui.theme.GongBaekTheme
 @Composable
 fun MyPageRoute(
     viewModel: MyPageViewModel = hiltViewModel(),
+    navigateSetting: () -> Unit,
     navigateGroupDetail: (Int, String) -> Unit,
     navigateGroupRoom: (Int, String) -> Unit
 ) {
@@ -62,9 +63,11 @@ fun MyPageRoute(
     }
 
     LaunchedEffect(viewModel.sideEffect, lifecycleOwner) {
-        viewModel.sideEffect.flowWithLifecycle(lifecycleOwner.lifecycle)
+        viewModel.sideEffect
+            .flowWithLifecycle(lifecycleOwner.lifecycle)
             .collect { sideEffect ->
                 when (sideEffect) {
+                    is MyPageContract.SideEffect.NavigateSetting -> navigateSetting()
                     is MyPageContract.SideEffect.NavigateGroupDetail -> {
                         navigateGroupDetail(sideEffect.groupId, sideEffect.groupCycle)
                     }
@@ -78,6 +81,9 @@ fun MyPageRoute(
 
     MyPageScreen(
         uiState = myPageUiState,
+        onSettingButtonClicked = {
+            viewModel.sendSideEffect(MyPageContract.SideEffect.NavigateSetting)
+        },
         myPageTabs = myPageTabs,
         pagerState = pagerState,
         onGroupDetailButtonClick = { groupId, groupCycle ->
@@ -92,6 +98,7 @@ fun MyPageRoute(
 @Composable
 private fun MyPageScreen(
     uiState: MyPageContract.State,
+    onSettingButtonClicked: () -> Unit,
     myPageTabs: List<String>,
     pagerState: PagerState,
     onGroupDetailButtonClick: (Int, String) -> Unit,
@@ -105,7 +112,7 @@ private fun MyPageScreen(
         CenterTitleTopBar(
             centerTitleResId = R.string.topbar_my_page,
             trailingIconResId = R.drawable.ic_setting_48,
-            onTrailingIconClick = {},
+            onTrailingIconClick = onSettingButtonClicked,
             trailingIconColor = GongBaekTheme.colors.gray08
         )
 
@@ -226,6 +233,7 @@ private fun MyPageScreenPreview() {
     Column {
         MyPageScreen(
             uiState = MyPageContract.State(),
+            onSettingButtonClicked = {},
             myPageTabs = MyGroupPagerType.entries.map { it.description },
             pagerState = rememberPagerState { MyGroupPagerType.entries.map { it.description }.size },
             onGroupDetailButtonClick = { _, _ -> },
