@@ -13,4 +13,5 @@ interface AuthRepository {
     suspend fun getUserLectureTimeTable(): Result<List<UserLectureTimeTable>>
     suspend fun reissueToken(refreshToken: String): Result<UserAuth>
     suspend fun logout(): Result<Unit>
+    suspend fun requestEmailVerification(email: String, schoolName: String): Result<Unit>
 }

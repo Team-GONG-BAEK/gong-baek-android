@@ -3,6 +3,7 @@ package com.sopt.gongbaek.data.repositoryimpl
 import com.sopt.gongbaek.data.mapper.todata.toData
 import com.sopt.gongbaek.data.mapper.todomain.toDomain
 import com.sopt.gongbaek.data.remote.datasource.AuthRemoteDataSource
+import com.sopt.gongbaek.data.remote.dto.base.NullableApiResponse
 import com.sopt.gongbaek.data.remote.dto.request.LoginRequestDto
 import com.sopt.gongbaek.data.remote.util.handleApiResponse
 import com.sopt.gongbaek.data.remote.util.handleNullableApiResponse
@@ -67,6 +68,13 @@ class AuthRepositoryImpl @Inject constructor(
         runCatching {
             authRemoteDatasource.logout()
                 .handleApiResponse()
+                .getOrThrow()
+        }
+
+    override suspend fun requestEmailVerification(email: String, schoolName: String): Result<Unit> =
+        runCatching {
+            authRemoteDatasource.requestEmailVerification(email = email, schoolName = schoolName)
+                .handleNullableApiResponse()
                 .getOrThrow()
         }
 }

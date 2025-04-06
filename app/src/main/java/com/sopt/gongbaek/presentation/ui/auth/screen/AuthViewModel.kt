@@ -5,6 +5,7 @@ import androidx.lifecycle.viewModelScope
 import com.sopt.gongbaek.domain.usecase.GetSearchMajorsResultUseCase
 import com.sopt.gongbaek.domain.usecase.GetSearchUniversitiesResultUseCase
 import com.sopt.gongbaek.domain.usecase.RegisterUserInfoUseCase
+import com.sopt.gongbaek.domain.usecase.RequestEmailVerificationUseCase
 import com.sopt.gongbaek.domain.usecase.SetTokenUseCase
 import com.sopt.gongbaek.domain.usecase.ValidateNicknameUseCase
 import com.sopt.gongbaek.presentation.ui.auth.state.EmailVerificationStep
@@ -23,6 +24,7 @@ import javax.inject.Inject
 class AuthViewModel @Inject constructor(
     private val getSearchUniversitiesResultUseCase: GetSearchUniversitiesResultUseCase,
     private val getSearchMajorsResultUseCase: GetSearchMajorsResultUseCase,
+    private val requestEmailVerificationUseCase: RequestEmailVerificationUseCase,
     private val registerUserInfoUseCase: RegisterUserInfoUseCase,
     private val setTokenUseCase: SetTokenUseCase,
     private val validateNicknameUseCase: ValidateNicknameUseCase
@@ -233,7 +235,9 @@ class AuthViewModel @Inject constructor(
     }
 
     private fun handleVerificationCodeRequested() {
-        if (!Patterns.EMAIL_ADDRESS.matcher(currentState.emailVerificationState.email).matches()) {
+        val email = currentState.emailVerificationState.email
+
+        if (!Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
             setState {
                 copy(
                     emailVerificationState = emailVerificationState.copy(
@@ -245,16 +249,37 @@ class AuthViewModel @Inject constructor(
             return
         }
 
-        setState {
-            copy(
-                emailVerificationState = emailVerificationState.copy(
-                    step = EmailVerificationStep.REQUESTED,
-                    emailMessage = "인증코드를 발송했습니다.",
-                    isTimerRunning = true
-                )
+        viewModelScope.launch {
+            requestEmailVerificationUseCase(
+                email = email,
+                schoolName = currentState.academicInfoState.university
+            ).fold(
+                onSuccess = {
+                    stopTimer()
+                    setState {
+                        copy(
+                            emailVerificationState = emailVerificationState.copy(
+                                step = EmailVerificationStep.REQUESTED,
+                                emailMessage = "인증코드를 발송했습니다.",
+                                isTimerRunning = true,
+                                timeLeft = 180
+                            )
+                        )
+                    }
+                    startTimer()
+                },
+                onFailure = {
+                    setState {
+                        copy(
+                            emailVerificationState = emailVerificationState.copy(
+                                step = EmailVerificationStep.REQUEST_FAILED,
+                                emailMessage = "잘못된 이메일입니다. 다시 입력해주세요."
+                            )
+                        )
+                    }
+                }
             )
         }
-        startTimer()
     }
 
     private fun handleVerificationCodeSubmitted() =

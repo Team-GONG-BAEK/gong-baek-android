@@ -36,4 +36,7 @@ class AuthRemoteDatasourceImpl @Inject constructor(
 
     override suspend fun logout(): ApiResponse<Unit> =
         authService.logout()
+
+    override suspend fun requestEmailVerification(email: String, schoolName: String): NullableApiResponse<Unit> =
+        authService.requestEmailVerification(email = email, schoolName = schoolName)
 }

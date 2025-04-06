@@ -27,6 +27,7 @@ import com.sopt.gongbaek.domain.usecase.PostCommentUseCase
 import com.sopt.gongbaek.domain.usecase.PostGroupUseCase
 import com.sopt.gongbaek.domain.usecase.RegisterUserInfoUseCase
 import com.sopt.gongbaek.domain.usecase.ReissueTokenUseCase
+import com.sopt.gongbaek.domain.usecase.RequestEmailVerificationUseCase
 import com.sopt.gongbaek.domain.usecase.SetLectureTimetableUseCase
 import com.sopt.gongbaek.domain.usecase.SetTokenUseCase
 import com.sopt.gongbaek.domain.usecase.ValidateNicknameUseCase
@@ -179,4 +180,10 @@ object UseCaseModule {
     fun provideGetMyProfileUseCase(
         userRepository: UserRepository
     ): GetMyProfileUseCase = GetMyProfileUseCase(userRepository)
+
+    @Provides
+    @Singleton
+    fun provideRequestEmailVerificationUseCase(
+        authRepository: AuthRepository
+    ): RequestEmailVerificationUseCase = RequestEmailVerificationUseCase(authRepository)
 }

@@ -47,4 +47,10 @@ interface AuthService {
 
     @DELETE("/api/v1/logout")
     suspend fun logout(): ApiResponse<Unit>
+
+    @POST("/api/v1/emails/verification-requests")
+    suspend fun requestEmailVerification(
+        @Query("email") email: String,
+        @Query("schoolName") schoolName: String
+    ): NullableApiResponse<Unit>
 }
