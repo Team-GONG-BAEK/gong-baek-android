@@ -1,5 +1,6 @@
 package com.sopt.gongbaek.presentation.ui.mypage.screen
 
+import android.content.Context
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -22,8 +23,10 @@ import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.flowWithLifecycle
 import com.sopt.gongbaek.R
+import com.sopt.gongbaek.presentation.type.GongBaekWebView
 import com.sopt.gongbaek.presentation.ui.component.topbar.StartTitleTopBar
 import com.sopt.gongbaek.presentation.util.extension.clickableWithoutRipple
+import com.sopt.gongbaek.presentation.util.openWebView
 import com.sopt.gongbaek.ui.theme.GongBaekTheme
 
 @Composable
@@ -51,14 +54,16 @@ fun SettingRoute(
 
     SettingScreen(
         uiState = myPageUiState,
-        onBackClick = {viewModel.sendSideEffect(MyPageContract.SideEffect.NavigateBack)}
+        context = context,
+        onBackClick = { viewModel.sendSideEffect(MyPageContract.SideEffect.NavigateBack) }
     )
 }
 
 @Composable
 private fun SettingScreen(
     uiState: MyPageContract.State,
-    onBackClick: () -> Unit
+    context: Context,
+    onBackClick: () -> Unit,
 ) {
     Column(
         modifier = Modifier.fillMaxSize()
@@ -70,6 +75,7 @@ private fun SettingScreen(
 
         ServiceGuideSection(
             uiState = uiState,
+            context = context,
             modifier = Modifier.padding(horizontal = 16.dp)
         )
 
@@ -88,6 +94,7 @@ private fun SettingScreen(
 @Composable
 private fun ServiceGuideSection(
     uiState: MyPageContract.State,
+    context: Context,
     modifier: Modifier = Modifier
 ) {
     Column(
@@ -105,7 +112,9 @@ private fun ServiceGuideSection(
             style = GongBaekTheme.typography.body1.r16,
             color = GongBaekTheme.colors.gray10,
             modifier = Modifier
-                .clickableWithoutRipple {}
+                .clickableWithoutRipple {
+                    openWebView(context, GongBaekWebView.NOTICE.url)
+                }
                 .padding(vertical = 20.dp)
         )
 
@@ -114,7 +123,9 @@ private fun ServiceGuideSection(
             style = GongBaekTheme.typography.body1.r16,
             color = GongBaekTheme.colors.gray10,
             modifier = Modifier
-                .clickableWithoutRipple {}
+                .clickableWithoutRipple {
+                    openWebView(context, GongBaekWebView.PRIVACY_POLICY.url)
+                }
                 .padding(vertical = 20.dp)
         )
 
@@ -123,7 +134,9 @@ private fun ServiceGuideSection(
             style = GongBaekTheme.typography.body1.r16,
             color = GongBaekTheme.colors.gray10,
             modifier = Modifier
-                .clickableWithoutRipple {}
+                .clickableWithoutRipple {
+                    openWebView(context, GongBaekWebView.TERMS_OF_SERVICE.url)
+                }
                 .padding(vertical = 20.dp)
         )
 
@@ -137,16 +150,13 @@ private fun ServiceGuideSection(
                 style = GongBaekTheme.typography.body1.r16,
                 color = GongBaekTheme.colors.gray10,
                 modifier = Modifier
-                    .clickableWithoutRipple {}
                     .padding(vertical = 20.dp)
             )
 
             Text(
                 text = uiState.versionName,
                 style = GongBaekTheme.typography.body1.r16,
-                color = GongBaekTheme.colors.gray04,
-                modifier = Modifier
-                    .clickableWithoutRipple {}
+                color = GongBaekTheme.colors.gray04
             )
         }
     }
@@ -191,6 +201,7 @@ private fun AccountSection(
 private fun SettingScreenPreview() {
     SettingScreen(
         uiState = MyPageContract.State(),
+        context = LocalContext.current,
         onBackClick = {}
     )
 }
