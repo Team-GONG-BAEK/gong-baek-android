@@ -9,12 +9,12 @@ import retrofit2.http.Query
 interface SearchService {
 
     @GET("/api/v1/school/search")
-    suspend fun getSearchUniversitiesResult(
+    suspend fun searchUniversities(
         @Query("schoolName") universityName: String
     ): ApiResponse<SearchUniversitiesResponseDto>
 
     @GET("/api/v1/school/major/search")
-    suspend fun getSearchMajorsResult(
+    suspend fun searchMajors(
         @Query("schoolName") universityName: String,
         @Query("majorName") majorName: String
     ): ApiResponse<SearchMajorsResponseDto>

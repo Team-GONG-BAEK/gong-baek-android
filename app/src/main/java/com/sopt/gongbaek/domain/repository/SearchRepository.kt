@@ -4,6 +4,6 @@ import com.sopt.gongbaek.domain.model.Majors
 import com.sopt.gongbaek.domain.model.Universities
 
 interface SearchRepository {
-    suspend fun getSearchUniversitiesResult(universityName: String): Result<Universities>
-    suspend fun getSearchMajorsResult(universityName: String, majorName: String): Result<Majors>
+    suspend fun searchUniversities(universityName: String): Result<Universities>
+    suspend fun searchMajors(universityName: String, majorName: String): Result<Majors>
 }

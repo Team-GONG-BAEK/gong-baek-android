@@ -17,8 +17,8 @@ import com.sopt.gongbaek.domain.usecase.GetGroupsUseCase
 import com.sopt.gongbaek.domain.usecase.GetLectureTimetableUseCase
 import com.sopt.gongbaek.domain.usecase.GetMyGroupsUseCase
 import com.sopt.gongbaek.domain.usecase.GetMyProfileUseCase
-import com.sopt.gongbaek.domain.usecase.GetSearchMajorsResultUseCase
-import com.sopt.gongbaek.domain.usecase.GetSearchUniversitiesResultUseCase
+import com.sopt.gongbaek.domain.usecase.SearchMajorsUseCase
+import com.sopt.gongbaek.domain.usecase.SearchUniversitiesUseCase
 import com.sopt.gongbaek.domain.usecase.LoadGroupDetailScreenUseCase
 import com.sopt.gongbaek.domain.usecase.LoadGroupRoomScreenUseCase
 import com.sopt.gongbaek.domain.usecase.LoginUseCase
@@ -46,13 +46,13 @@ object UseCaseModule {
     @Singleton
     fun provideGetSearchUniversitiesResultUseCase(
         searchRepository: SearchRepository
-    ): GetSearchUniversitiesResultUseCase = GetSearchUniversitiesResultUseCase(searchRepository)
+    ): SearchUniversitiesUseCase = SearchUniversitiesUseCase(searchRepository)
 
     @Provides
     @Singleton
     fun provideGetSearchMajorsResultUseCase(
         searchRepository: SearchRepository
-    ): GetSearchMajorsResultUseCase = GetSearchMajorsResultUseCase(searchRepository)
+    ): SearchMajorsUseCase = SearchMajorsUseCase(searchRepository)
 
     @Provides
     @Singleton

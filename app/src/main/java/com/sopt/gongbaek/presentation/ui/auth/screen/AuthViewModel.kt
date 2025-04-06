@@ -2,8 +2,8 @@ package com.sopt.gongbaek.presentation.ui.auth.screen
 
 import android.util.Patterns
 import androidx.lifecycle.viewModelScope
-import com.sopt.gongbaek.domain.usecase.GetSearchMajorsResultUseCase
-import com.sopt.gongbaek.domain.usecase.GetSearchUniversitiesResultUseCase
+import com.sopt.gongbaek.domain.usecase.SearchMajorsUseCase
+import com.sopt.gongbaek.domain.usecase.SearchUniversitiesUseCase
 import com.sopt.gongbaek.domain.usecase.RegisterUserInfoUseCase
 import com.sopt.gongbaek.domain.usecase.RequestEmailVerificationUseCase
 import com.sopt.gongbaek.domain.usecase.SetTokenUseCase
@@ -23,8 +23,8 @@ import javax.inject.Inject
 
 @HiltViewModel
 class AuthViewModel @Inject constructor(
-    private val getSearchUniversitiesResultUseCase: GetSearchUniversitiesResultUseCase,
-    private val getSearchMajorsResultUseCase: GetSearchMajorsResultUseCase,
+    private val searchUniversitiesUseCase: SearchUniversitiesUseCase,
+    private val searchMajorsUseCase: SearchMajorsUseCase,
     private val requestEmailVerificationUseCase: RequestEmailVerificationUseCase,
     private val verifyEmailCodeUseCase: VerifyEmailCodeUseCase,
     private val registerUserInfoUseCase: RegisterUserInfoUseCase,
@@ -40,10 +40,10 @@ class AuthViewModel @Inject constructor(
         when (event) {
             // AcademicInfo Event
             is AuthContract.Event.UniversitySearchQueryChanged -> updateUniversitySearchQuery(event.query)
-            is AuthContract.Event.UniversitySearchClicked -> fetchUniversities()
+            is AuthContract.Event.UniversitySearchClicked -> searchUniversities()
             is AuthContract.Event.UniversitySelected -> updateSelectedUniversity(event.university)
             is AuthContract.Event.MajorSearchQueryChanged -> updateMajorSearchQuery(event.query)
-            is AuthContract.Event.MajorSearchClicked -> fetchMajors()
+            is AuthContract.Event.MajorSearchClicked -> searchMajors()
             is AuthContract.Event.MajorSelected -> updateSelectedMajor(event.major)
             is AuthContract.Event.EnterYearSelected -> updateEnterYear(event.enterYear)
 
@@ -103,23 +103,23 @@ class AuthViewModel @Inject constructor(
         )
     }
 
-    private fun fetchUniversities() = viewModelScope.launch {
+    private fun searchUniversities() = viewModelScope.launch {
         setState { copy(loadState = UiLoadState.Loading) }
-        // TODO usecase 네이밍 수정
-        getSearchUniversitiesResultUseCase(currentState.academicInfoState.universitySearchQuery).fold(
-            onSuccess = { universities ->
-                setState {
-                    copy(
-                        academicInfoState = currentState.academicInfoState.copy(
-                            searchedUniversities = universities.universities
+        searchUniversitiesUseCase(currentState.academicInfoState.universitySearchQuery)
+            .fold(
+                onSuccess = { universities ->
+                    setState {
+                        copy(
+                            academicInfoState = currentState.academicInfoState.copy(
+                                searchedUniversities = universities.universities
+                            )
                         )
-                    )
+                    }
+                },
+                onFailure = {
+                    setState { copy(loadState = UiLoadState.Error) }
                 }
-            },
-            onFailure = {
-                setState { copy(loadState = UiLoadState.Error) }
-            }
-        )
+            )
     }
 
     private fun updateSelectedUniversity(university: String) = setState {
@@ -138,10 +138,9 @@ class AuthViewModel @Inject constructor(
         )
     }
 
-    private fun fetchMajors() = viewModelScope.launch {
+    private fun searchMajors() = viewModelScope.launch {
         setState { copy(loadState = UiLoadState.Loading) }
-        getSearchMajorsResultUseCase(
-            // TODO usecase 네이밍 수정
+        searchMajorsUseCase(
             universityName = currentState.academicInfoState.university,
             majorName = currentState.academicInfoState.majorSearchQuery
         ).fold(
