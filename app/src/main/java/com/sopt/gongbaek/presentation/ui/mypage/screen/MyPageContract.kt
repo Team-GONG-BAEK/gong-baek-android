@@ -30,5 +30,6 @@ class MyPageContract {
         data object NavigateSetting : SideEffect
         data class NavigateGroupDetail(val groupId: Int, val groupCycle: String) : SideEffect
         data class NavigateGroupRoom(val groupId: Int, val groupCycle: String) : SideEffect
+        data object NavigateBack : SideEffect
     }
 }

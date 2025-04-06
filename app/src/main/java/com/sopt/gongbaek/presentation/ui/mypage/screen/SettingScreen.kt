@@ -18,7 +18,9 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.lifecycle.flowWithLifecycle
 import com.sopt.gongbaek.R
 import com.sopt.gongbaek.presentation.ui.component.topbar.StartTitleTopBar
 import com.sopt.gongbaek.presentation.util.extension.clickableWithoutRipple
@@ -26,30 +28,44 @@ import com.sopt.gongbaek.ui.theme.GongBaekTheme
 
 @Composable
 fun SettingRoute(
-    viewModel: MyPageViewModel = hiltViewModel()
+    viewModel: MyPageViewModel = hiltViewModel(),
+    navigateBack: () -> Unit
 ) {
     val myPageUiState by viewModel.state.collectAsStateWithLifecycle()
     val context = LocalContext.current
+    val lifecycleOwner = LocalLifecycleOwner.current
 
     LaunchedEffect(Unit) {
         viewModel.getVersionInfo(context)
     }
 
+    LaunchedEffect(viewModel.sideEffect, lifecycleOwner) {
+        viewModel.sideEffect.flowWithLifecycle(lifecycleOwner.lifecycle)
+            .collect { sideEffect ->
+                when (sideEffect) {
+                    is MyPageContract.SideEffect.NavigateBack -> navigateBack()
+                    else -> {}
+                }
+            }
+    }
+
     SettingScreen(
-        uiState = myPageUiState
+        uiState = myPageUiState,
+        onBackClick = {viewModel.sendSideEffect(MyPageContract.SideEffect.NavigateBack)}
     )
 }
 
 @Composable
 private fun SettingScreen(
-    uiState: MyPageContract.State
+    uiState: MyPageContract.State,
+    onBackClick: () -> Unit
 ) {
     Column(
         modifier = Modifier.fillMaxSize()
     ) {
         StartTitleTopBar(
             startTitleResId = R.string.topbar_setting,
-            onClick = {}
+            onClick = onBackClick
         )
 
         ServiceGuideSection(
@@ -173,5 +189,8 @@ private fun AccountSection(
 @Preview(showBackground = true)
 @Composable
 private fun SettingScreenPreview() {
-    SettingScreen(uiState = MyPageContract.State())
+    SettingScreen(
+        uiState = MyPageContract.State(),
+        onBackClick = {}
+    )
 }

@@ -28,6 +28,6 @@ fun NavGraphBuilder.myPageNavGraph(
     }
 
     composable<NavigationRoute.Setting> {
-        SettingRoute()
+        SettingRoute(navigateBack = navController::popBackStack)
     }
 }
