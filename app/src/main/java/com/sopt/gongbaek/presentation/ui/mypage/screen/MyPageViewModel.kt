@@ -123,5 +123,4 @@ class MyPageViewModel @Inject constructor(
             }
         }
     }
-
 }
