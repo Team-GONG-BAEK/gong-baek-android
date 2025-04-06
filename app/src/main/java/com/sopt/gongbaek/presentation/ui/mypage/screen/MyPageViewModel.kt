@@ -28,6 +28,26 @@ class MyPageViewModel @Inject constructor(
             is MyPageContract.Event.OnGetMyProfile -> getMyProfile()
             is MyPageContract.Event.OnRegisterGroupsTabClick -> getRegisterGroups()
             is MyPageContract.Event.OnApplyGroupsTabClick -> getApplyGroups()
+            is MyPageContract.Event.OnLogoutClicked -> {
+                setState { copy(logoutDialogState = UiLoadState.Success) }
+            }
+            is MyPageContract.Event.OnWithdrawClicked -> {
+                setState { copy(withdrawDialogState = UiLoadState.Success) }
+            }
+            is MyPageContract.Event.OnLogoutDialogConfirmClicked -> {
+                setState { copy(logoutDialogState = UiLoadState.Idle) }
+                setSideEffect(MyPageContract.SideEffect.NavigateLogin)
+            }
+            is MyPageContract.Event.OnLogoutDialogDismissClicked -> {
+                setState { copy(logoutDialogState = UiLoadState.Idle) }
+            }
+            is MyPageContract.Event.OnWithdrawDialogConfirmClicked -> {
+                setState { copy(withdrawDialogState = UiLoadState.Idle) }
+                setSideEffect(MyPageContract.SideEffect.NavigateLogin)
+            }
+            is MyPageContract.Event.OnWithdrawDialogDismissClicked -> {
+                setState { copy(withdrawDialogState = UiLoadState.Idle) }
+            }
         }
     }
 

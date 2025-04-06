@@ -33,5 +33,5 @@ enum class GongBaekDialogType(
         descriptionResId = R.string.dialog_description_error
     ),
     LOGOUT(titleResId = R.string.setting_dialog_logout),
-    WITHDRAW(titleResId = R.string.setting_withdraw)
+    WITHDRAW(titleResId = R.string.setting_dialog_withdraw)
 }

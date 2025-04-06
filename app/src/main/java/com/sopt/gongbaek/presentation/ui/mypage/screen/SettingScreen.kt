@@ -18,13 +18,17 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.window.Dialog
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.flowWithLifecycle
 import com.sopt.gongbaek.R
+import com.sopt.gongbaek.presentation.type.GongBaekDialogType
 import com.sopt.gongbaek.presentation.type.GongBaekWebView
+import com.sopt.gongbaek.presentation.ui.component.dialog.AccountDialog
 import com.sopt.gongbaek.presentation.ui.component.topbar.StartTitleTopBar
+import com.sopt.gongbaek.presentation.util.base.UiLoadState
 import com.sopt.gongbaek.presentation.util.extension.clickableWithoutRipple
 import com.sopt.gongbaek.presentation.util.openWebView
 import com.sopt.gongbaek.ui.theme.GongBaekTheme
@@ -32,7 +36,8 @@ import com.sopt.gongbaek.ui.theme.GongBaekTheme
 @Composable
 fun SettingRoute(
     viewModel: MyPageViewModel = hiltViewModel(),
-    navigateBack: () -> Unit
+    navigateBack: () -> Unit,
+    navigateLogin: () -> Unit
 ) {
     val myPageUiState by viewModel.state.collectAsStateWithLifecycle()
     val context = LocalContext.current
@@ -47,6 +52,7 @@ fun SettingRoute(
             .collect { sideEffect ->
                 when (sideEffect) {
                     is MyPageContract.SideEffect.NavigateBack -> navigateBack()
+                    is MyPageContract.SideEffect.NavigateLogin -> navigateLogin()
                     else -> {}
                 }
             }
@@ -55,7 +61,25 @@ fun SettingRoute(
     SettingScreen(
         uiState = myPageUiState,
         context = context,
-        onBackClick = { viewModel.sendSideEffect(MyPageContract.SideEffect.NavigateBack) }
+        onBackClick = { viewModel.sendSideEffect(MyPageContract.SideEffect.NavigateBack) },
+        onLogoutClicked = {
+            viewModel.setEvent(MyPageContract.Event.OnLogoutClicked)
+        },
+        onWithdrawClicked = {
+            viewModel.setEvent(MyPageContract.Event.OnWithdrawClicked)
+        },
+        onLogoutDialogConfirmButtonClicked = {
+            viewModel.setEvent(MyPageContract.Event.OnLogoutDialogConfirmClicked)
+        },
+        onLogoutDialogDismissClicked = {
+            viewModel.setEvent(MyPageContract.Event.OnLogoutDialogDismissClicked)
+        },
+        onWithdrawDialogConfirmButtonClicked = {
+            viewModel.setEvent(MyPageContract.Event.OnWithdrawDialogConfirmClicked)
+        },
+        onWithdrawDialogDismissClicked = {
+            viewModel.setEvent(MyPageContract.Event.OnWithdrawDialogDismissClicked)
+        }
     )
 }
 
@@ -64,6 +88,12 @@ private fun SettingScreen(
     uiState: MyPageContract.State,
     context: Context,
     onBackClick: () -> Unit,
+    onLogoutClicked: () -> Unit,
+    onWithdrawClicked: () -> Unit,
+    onLogoutDialogConfirmButtonClicked: () -> Unit,
+    onLogoutDialogDismissClicked: () -> Unit,
+    onWithdrawDialogConfirmButtonClicked: () -> Unit,
+    onWithdrawDialogDismissClicked: () -> Unit
 ) {
     Column(
         modifier = Modifier.fillMaxSize()
@@ -86,8 +116,33 @@ private fun SettingScreen(
         )
 
         AccountSection(
+            onLogoutClicked = onLogoutClicked,
+            onWithdrawClicked = onWithdrawClicked,
             modifier = Modifier.padding(horizontal = 16.dp)
         )
+
+        if (uiState.logoutDialogState == UiLoadState.Success) {
+            Dialog(
+                onDismissRequest = onLogoutDialogDismissClicked
+            ) {
+                AccountDialog(
+                    gongBaekDialogType = GongBaekDialogType.LOGOUT,
+                    onConfirmButtonClick = onLogoutDialogConfirmButtonClicked,
+                    onDismissButtonClick = onLogoutDialogDismissClicked
+                )
+            }
+        }
+        if (uiState.withdrawDialogState == UiLoadState.Success) {
+            Dialog(
+                onDismissRequest = onWithdrawDialogDismissClicked
+            ) {
+                AccountDialog(
+                    gongBaekDialogType = GongBaekDialogType.WITHDRAW,
+                    onConfirmButtonClick = onWithdrawDialogConfirmButtonClicked,
+                    onDismissButtonClick = onWithdrawDialogDismissClicked
+                )
+            }
+        }
     }
 }
 
@@ -164,6 +219,8 @@ private fun ServiceGuideSection(
 
 @Composable
 private fun AccountSection(
+    onLogoutClicked: () -> Unit,
+    onWithdrawClicked: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     Column(
@@ -181,7 +238,7 @@ private fun AccountSection(
             style = GongBaekTheme.typography.body1.r16,
             color = GongBaekTheme.colors.gray10,
             modifier = Modifier
-                .clickableWithoutRipple {}
+                .clickableWithoutRipple { onLogoutClicked() }
                 .padding(vertical = 20.dp)
         )
 
@@ -190,7 +247,7 @@ private fun AccountSection(
             style = GongBaekTheme.typography.body1.r16,
             color = GongBaekTheme.colors.gray10,
             modifier = Modifier
-                .clickableWithoutRipple {}
+                .clickableWithoutRipple { onWithdrawClicked() }
                 .padding(vertical = 20.dp)
         )
     }
@@ -202,6 +259,12 @@ private fun SettingScreenPreview() {
     SettingScreen(
         uiState = MyPageContract.State(),
         context = LocalContext.current,
-        onBackClick = {}
+        onBackClick = {},
+        onLogoutClicked = {},
+        onWithdrawClicked = {},
+        onLogoutDialogConfirmButtonClicked = {},
+        onLogoutDialogDismissClicked = {},
+        onWithdrawDialogConfirmButtonClicked = {},
+        onWithdrawDialogDismissClicked = {}
     )
 }

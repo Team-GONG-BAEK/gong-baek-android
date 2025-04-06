@@ -17,13 +17,21 @@ class MyPageContract {
         val applyGroupsLoadState: UiLoadState = UiLoadState.Idle,
         val applyActiveGroups: List<GroupInfo> = listOf(),
         val applyClosedGroups: List<GroupInfo> = listOf(),
-        val versionName: String = ""
+        val versionName: String = "",
+        val logoutDialogState: UiLoadState = UiLoadState.Idle,
+        val withdrawDialogState: UiLoadState = UiLoadState.Idle
     ) : UiState
 
     sealed class Event : UiEvent {
         data object OnGetMyProfile : Event()
         data object OnRegisterGroupsTabClick : Event()
         data object OnApplyGroupsTabClick : Event()
+        object OnLogoutClicked : Event()
+        object OnWithdrawClicked : Event()
+        data object OnLogoutDialogConfirmClicked : Event()
+        data object OnLogoutDialogDismissClicked : Event()
+        data object OnWithdrawDialogConfirmClicked : Event()
+        data object OnWithdrawDialogDismissClicked : Event()
     }
 
     sealed interface SideEffect : UiSideEffect {
@@ -31,5 +39,6 @@ class MyPageContract {
         data class NavigateGroupDetail(val groupId: Int, val groupCycle: String) : SideEffect
         data class NavigateGroupRoom(val groupId: Int, val groupCycle: String) : SideEffect
         data object NavigateBack : SideEffect
+        data object NavigateLogin : SideEffect
     }
 }
