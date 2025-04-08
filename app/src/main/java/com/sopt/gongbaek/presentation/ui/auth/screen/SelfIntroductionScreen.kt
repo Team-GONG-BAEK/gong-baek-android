@@ -23,6 +23,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.flowWithLifecycle
 import com.sopt.gongbaek.R
 import com.sopt.gongbaek.presentation.type.GongBaekBasicTextFieldType
+import com.sopt.gongbaek.presentation.ui.auth.state.SelfIntroductionState
 import com.sopt.gongbaek.presentation.ui.component.button.GongBaekBasicButton
 import com.sopt.gongbaek.presentation.ui.component.progressBar.GongBaekProgressBar
 import com.sopt.gongbaek.presentation.ui.component.section.PageDescriptionSection
@@ -40,41 +41,40 @@ fun SelfIntroductionRoute(
     val uiState by viewModel.state.collectAsStateWithLifecycle()
     val lifecycleOwner = LocalLifecycleOwner.current
 
-    LaunchedEffect(viewModel.sideEffect, lifecycleOwner) {
+    LaunchedEffect(Unit) {
         viewModel.sideEffect
             .flowWithLifecycle(lifecycleOwner.lifecycle)
             .collect { sideEffect ->
-                if (sideEffect is AuthContract.SideEffect.NavigateBack) {
-                    navigateBack()
-                }
-                if (sideEffect is AuthContract.SideEffect.NavigateEnterTimetable) {
-                    navigateEnterTimetable()
+                when (sideEffect) {
+                    is AuthContract.SideEffect.NavigateEnterTimetable -> navigateEnterTimetable()
+                    is AuthContract.SideEffect.NavigateBack -> navigateBack()
+                    else -> {}
                 }
             }
     }
 
     SelfIntroductionScreen(
-        selfIntroduction = uiState.userInfo.introduction,
-        navigateEnterTimetable = { viewModel.sendSideEffect(AuthContract.SideEffect.NavigateEnterTimetable) },
-        navigateBack = { viewModel.sendSideEffect(AuthContract.SideEffect.NavigateBack) },
-        onSelfIntroductionChanged = { selfIntroduction -> viewModel.setEvent(AuthContract.Event.OnSelfIntroductionChanged(selfIntroduction)) }
+        uiState = uiState.selfIntroductionState,
+        onSelfIntroductionChanged = { selfIntroduction -> viewModel.setEvent(AuthContract.Event.SelfIntroductionChanged(selfIntroduction)) },
+        onNextClick = { viewModel.sendSideEffect(AuthContract.SideEffect.NavigateEnterTimetable) },
+        onBackClick = { viewModel.sendSideEffect(AuthContract.SideEffect.NavigateBack) }
     )
 }
 
 @Composable
 private fun SelfIntroductionScreen(
-    navigateEnterTimetable: () -> Unit,
-    navigateBack: () -> Unit,
-    selfIntroduction: String,
-    onSelfIntroductionChanged: (String) -> Unit
+    uiState: SelfIntroductionState,
+    onSelfIntroductionChanged: (String) -> Unit,
+    onNextClick: () -> Unit,
+    onBackClick: () -> Unit
 ) {
     Box(
         modifier = Modifier.fillMaxSize()
     ) {
         SelfIntroductionSection(
-            onBackClick = navigateBack,
-            selfIntroduction = selfIntroduction,
+            selfIntroduction = uiState.selfIntroduction,
             onSelfIntroductionChanged = onSelfIntroductionChanged,
+            onBackClick = onBackClick,
             modifier = Modifier
                 .align(Alignment.TopCenter)
                 .padding(horizontal = 16.dp)
@@ -82,8 +82,8 @@ private fun SelfIntroductionScreen(
 
         GongBaekBasicButton(
             title = "다음",
-            enabled = selfIntroduction.length >= 20,
-            onClick = navigateEnterTimetable,
+            enabled = uiState.isNextEnabled,
+            onClick = onNextClick,
             modifier = Modifier
                 .align(Alignment.BottomCenter)
                 .padding(horizontal = 16.dp, vertical = 12.dp)
@@ -145,13 +145,13 @@ private fun SelfIntroductionSection(
 
 @Preview(showBackground = true)
 @Composable
-private fun PreviewSelfIntroductionScreen() {
+private fun SelfIntroductionScreenPreview() {
     GONGBAEKTheme {
         SelfIntroductionScreen(
-            navigateEnterTimetable = {},
-            navigateBack = {},
-            selfIntroduction = "",
-            onSelfIntroductionChanged = { }
+            uiState = SelfIntroductionState(),
+            onSelfIntroductionChanged = {},
+            onNextClick = {},
+            onBackClick = {}
         )
     }
 }

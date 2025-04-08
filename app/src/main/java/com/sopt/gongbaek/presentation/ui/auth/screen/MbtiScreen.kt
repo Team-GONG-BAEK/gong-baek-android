@@ -20,6 +20,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.flowWithLifecycle
 import com.sopt.gongbaek.R
 import com.sopt.gongbaek.presentation.type.SelectableButtonType
+import com.sopt.gongbaek.presentation.ui.auth.state.MbtiState
 import com.sopt.gongbaek.presentation.ui.component.button.GongBaekBasicButton
 import com.sopt.gongbaek.presentation.ui.component.button.GongBaekSelectableButtons
 import com.sopt.gongbaek.presentation.ui.component.progressBar.GongBaekProgressBar
@@ -37,54 +38,45 @@ fun MbtiRoute(
     val uiState by viewModel.state.collectAsStateWithLifecycle()
     val lifecycleOwner = LocalLifecycleOwner.current
 
-    LaunchedEffect(viewModel.sideEffect, lifecycleOwner) {
+    LaunchedEffect(Unit) {
         viewModel.sideEffect
             .flowWithLifecycle(lifecycleOwner.lifecycle)
             .collect { sideEffect ->
-                if (sideEffect is AuthContract.SideEffect.NavigateBack) {
-                    navigateBack()
-                }
-                if (sideEffect is AuthContract.SideEffect.NavigateSelfIntroduction) {
-                    navigateSelfIntroduction()
+                when (sideEffect) {
+                    is AuthContract.SideEffect.NavigateSelfIntroduction -> navigateSelfIntroduction()
+                    is AuthContract.SideEffect.NavigateBack -> navigateBack()
+                    else -> {}
                 }
             }
     }
 
     MbtiScreen(
-        mbti = uiState.userInfo.mbti,
-        energyDirectionOptions = uiState.energyDirectionOptions,
-        informationGatheringOptions = uiState.informationGatheringOptions,
-        decisionMakingOptions = uiState.decisionMakingOptions,
-        lifestyleOrientationOptions = uiState.lifestyleOrientationOptions,
-        onEnergyDirectionOptionSelected = { viewModel.setEvent(AuthContract.Event.OnEnergyDirectionOptionSelected(it)) },
-        onInformationGatheringOptionSelected = { viewModel.setEvent(AuthContract.Event.OnInformationGatheringOptionSelected(it)) },
-        onDecisionMakingOptionSelected = { viewModel.setEvent(AuthContract.Event.OnDecisionMakingOptionSelected(it)) },
-        onLifestyleOrientationOptionSelected = { viewModel.setEvent(AuthContract.Event.OnLifestyleOrientationOptionSelected(it)) },
-        navigateBack = { viewModel.sendSideEffect(AuthContract.SideEffect.NavigateBack) },
-        navigateSelfIntroduction = { viewModel.sendSideEffect(AuthContract.SideEffect.NavigateSelfIntroduction) }
+        uiState = uiState.mbtiState,
+        onEnergyOptionSelected = { energy -> viewModel.setEvent(AuthContract.Event.EnergyOptionSelected(energy)) },
+        onPerceptionOptionSelected = { perception -> viewModel.setEvent(AuthContract.Event.PerceptionOptionSelected(perception)) },
+        onDecisionOptionSelected = { decision -> viewModel.setEvent(AuthContract.Event.DecisionOptionSelected(decision)) },
+        onLifestyleOptionSelected = { lifeStyle -> viewModel.setEvent(AuthContract.Event.LifestyleOptionSelected(lifeStyle)) },
+        onNextClick = { viewModel.sendSideEffect(AuthContract.SideEffect.NavigateSelfIntroduction) },
+        onBackClick = { viewModel.sendSideEffect(AuthContract.SideEffect.NavigateBack) }
     )
 }
 
 @Composable
 private fun MbtiScreen(
-    mbti: String,
-    energyDirectionOptions: String,
-    informationGatheringOptions: String,
-    decisionMakingOptions: String,
-    lifestyleOrientationOptions: String,
-    onEnergyDirectionOptionSelected: (String) -> Unit,
-    onInformationGatheringOptionSelected: (String) -> Unit,
-    onDecisionMakingOptionSelected: (String) -> Unit,
-    onLifestyleOrientationOptionSelected: (String) -> Unit,
-    navigateSelfIntroduction: () -> Unit,
-    navigateBack: () -> Unit
+    uiState: MbtiState,
+    onEnergyOptionSelected: (String) -> Unit,
+    onPerceptionOptionSelected: (String) -> Unit,
+    onDecisionOptionSelected: (String) -> Unit,
+    onLifestyleOptionSelected: (String) -> Unit,
+    onNextClick: () -> Unit,
+    onBackClick: () -> Unit
 ) {
     Scaffold(
         bottomBar = {
             GongBaekBasicButton(
                 title = "다음",
-                enabled = mbti.length == 4,
-                onClick = navigateSelfIntroduction,
+                enabled = uiState.isNextEnabled,
+                onClick = onNextClick,
                 modifier = Modifier
                     .padding(horizontal = 16.dp, vertical = 12.dp)
             )
@@ -96,15 +88,15 @@ private fun MbtiScreen(
             modifier = Modifier.padding(innerPadding)
         ) {
             MbtiScreenContent(
-                onBackClick = navigateBack,
-                energyDirectionOptions = energyDirectionOptions,
-                onEnergyDirectionOptionSelected = onEnergyDirectionOptionSelected,
-                informationGatheringOptions = informationGatheringOptions,
-                onInformationGatheringOptionSelected = onInformationGatheringOptionSelected,
-                decisionMakingOptions = decisionMakingOptions,
-                onDecisionMakingOptionSelected = onDecisionMakingOptionSelected,
-                lifestyleOrientationOptions = lifestyleOrientationOptions,
-                onLifestyleOrientationOptionSelected = onLifestyleOrientationOptionSelected,
+                energyDirectionOptions = uiState.energy,
+                informationGatheringOptions = uiState.perception,
+                decisionMakingOptions = uiState.decision,
+                lifestyleOrientationOptions = uiState.lifestyle,
+                onEnergyOptionSelected = onEnergyOptionSelected,
+                onPerceptionOptionSelected = onPerceptionOptionSelected,
+                onDecisionOptionSelected = onDecisionOptionSelected,
+                onLifestyleOptionSelected = onLifestyleOptionSelected,
+                onBackClick = onBackClick,
                 modifier = Modifier
                     .padding(horizontal = 16.dp)
             )
@@ -118,10 +110,10 @@ private fun MbtiScreenContent(
     informationGatheringOptions: String,
     decisionMakingOptions: String,
     lifestyleOrientationOptions: String,
-    onEnergyDirectionOptionSelected: (String) -> Unit,
-    onInformationGatheringOptionSelected: (String) -> Unit,
-    onDecisionMakingOptionSelected: (String) -> Unit,
-    onLifestyleOrientationOptionSelected: (String) -> Unit,
+    onEnergyOptionSelected: (String) -> Unit,
+    onPerceptionOptionSelected: (String) -> Unit,
+    onDecisionOptionSelected: (String) -> Unit,
+    onLifestyleOptionSelected: (String) -> Unit,
     onBackClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
@@ -151,7 +143,7 @@ private fun MbtiScreenContent(
                     )
                     GongBaekSelectableButtons(
                         selectableButtonType = SelectableButtonType.MBTI_FIRST,
-                        onOptionSelected = onEnergyDirectionOptionSelected,
+                        onOptionSelected = onEnergyOptionSelected,
                         modifier = Modifier.padding(top = 10.dp, bottom = 20.dp),
                         selectedOption = energyDirectionOptions
                     )
@@ -165,7 +157,7 @@ private fun MbtiScreenContent(
                     )
                     GongBaekSelectableButtons(
                         selectableButtonType = SelectableButtonType.MBTI_SECOND,
-                        onOptionSelected = onInformationGatheringOptionSelected,
+                        onOptionSelected = onPerceptionOptionSelected,
                         modifier = Modifier.padding(top = 10.dp, bottom = 20.dp),
                         selectedOption = informationGatheringOptions
                     )
@@ -179,7 +171,7 @@ private fun MbtiScreenContent(
                     )
                     GongBaekSelectableButtons(
                         selectableButtonType = SelectableButtonType.MBTI_THIRD,
-                        onOptionSelected = onDecisionMakingOptionSelected,
+                        onOptionSelected = onDecisionOptionSelected,
                         modifier = Modifier.padding(top = 10.dp, bottom = 20.dp),
                         selectedOption = decisionMakingOptions
                     )
@@ -193,7 +185,7 @@ private fun MbtiScreenContent(
                     )
                     GongBaekSelectableButtons(
                         selectableButtonType = SelectableButtonType.MBTI_FOURTH,
-                        onOptionSelected = onLifestyleOrientationOptionSelected,
+                        onOptionSelected = onLifestyleOptionSelected,
                         modifier = Modifier.padding(top = 10.dp, bottom = 20.dp),
                         selectedOption = lifestyleOrientationOptions
                     )
@@ -208,17 +200,13 @@ private fun MbtiScreenContent(
 private fun PreviewMbtiScreen() {
     GONGBAEKTheme {
         MbtiScreen(
-            navigateSelfIntroduction = {},
-            navigateBack = {},
-            mbti = "",
-            energyDirectionOptions = "",
-            informationGatheringOptions = "",
-            decisionMakingOptions = "",
-            lifestyleOrientationOptions = "",
-            onEnergyDirectionOptionSelected = { },
-            onInformationGatheringOptionSelected = { },
-            onDecisionMakingOptionSelected = { },
-            onLifestyleOrientationOptionSelected = { }
+            uiState = MbtiState(),
+            onEnergyOptionSelected = {},
+            onPerceptionOptionSelected = {},
+            onDecisionOptionSelected = {},
+            onLifestyleOptionSelected = {},
+            onBackClick = {},
+            onNextClick = {}
         )
     }
 }

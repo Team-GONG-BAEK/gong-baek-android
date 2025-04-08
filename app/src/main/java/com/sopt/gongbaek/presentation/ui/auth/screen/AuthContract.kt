@@ -1,8 +1,12 @@
 package com.sopt.gongbaek.presentation.ui.auth.screen
 
-import com.sopt.gongbaek.domain.model.Majors
-import com.sopt.gongbaek.domain.model.Universities
-import com.sopt.gongbaek.domain.model.UserInfo
+import com.sopt.gongbaek.presentation.ui.auth.state.AcademicInfoState
+import com.sopt.gongbaek.presentation.ui.auth.state.EmailVerificationState
+import com.sopt.gongbaek.presentation.ui.auth.state.EnterTimeTableState
+import com.sopt.gongbaek.presentation.ui.auth.state.MbtiState
+import com.sopt.gongbaek.presentation.ui.auth.state.NicknameGenderState
+import com.sopt.gongbaek.presentation.ui.auth.state.SelectProfileState
+import com.sopt.gongbaek.presentation.ui.auth.state.SelfIntroductionState
 import com.sopt.gongbaek.presentation.util.base.UiEvent
 import com.sopt.gongbaek.presentation.util.base.UiLoadState
 import com.sopt.gongbaek.presentation.util.base.UiSideEffect
@@ -11,44 +15,44 @@ import com.sopt.gongbaek.presentation.util.base.UiState
 class AuthContract {
     data class State(
         val loadState: UiLoadState = UiLoadState.Idle,
-        val userInfo: UserInfo = UserInfo(),
-        val universities: Universities = Universities(),
-        val majors: Majors = Majors(),
-        val univ: String = "",
-        val enterMajor: String = "",
-        val selectedGrade: String = "",
-        val univSearchSelectedItem: String = "",
-        val majorSearchSelectedItem: String = "",
-        val energyDirectionOptions: String = "",
-        val informationGatheringOptions: String = "",
-        val decisionMakingOptions: String = "",
-        val lifestyleOrientationOptions: String = "",
-        val selectedGender: String = "",
-        val nicknameValidation: Boolean = false,
-        val nicknameErrorMessage: String? = null,
-        val selectedTimeSlotsByDay: Map<String, List<Int>> = emptyMap()
+        val academicInfoState: AcademicInfoState = AcademicInfoState(),
+        val emailVerificationState: EmailVerificationState = EmailVerificationState(),
+        val nicknameGenderState: NicknameGenderState = NicknameGenderState(),
+        val selectProfileState: SelectProfileState = SelectProfileState(),
+        val mbtiState: MbtiState = MbtiState(),
+        val selfIntroductionState: SelfIntroductionState = SelfIntroductionState(),
+        val enterTimeTableState: EnterTimeTableState = EnterTimeTableState()
     ) : UiState
 
     sealed class Event : UiEvent {
-        data class OnProfileImageSelected(val profileImage: Int) : Event()
-        data class OnNicknameChanged(val nickname: String) : Event()
-        data class OnSearchUnivChanged(val univ: String) : Event()
-        data object OnUnivSearchClick : Event()
-        data class OnUnivSelected(val school: String) : Event()
-        data class OnMajorSelected(val selectedMajor: String) : Event()
-        data class OnMajorSearchChanged(val enterMajor: String) : Event()
-        data object OnMajorSearchClick : Event()
-        data class OnGradeSelected(val selectedGrade: String) : Event()
-        data class OnYearSelected(val year: Int) : Event()
-        data class OnEnergyDirectionOptionSelected(val option: String) : Event()
-        data class OnInformationGatheringOptionSelected(val option: String) : Event()
-        data class OnDecisionMakingOptionSelected(val option: String) : Event()
-        data class OnLifestyleOrientationOptionSelected(val option: String) : Event()
-        data class OnGenderSelected(val selectedGender: String) : Event()
-        data class OnSelfIntroductionChanged(val selfIntroduction: String) : Event()
-        data class OnTimeSlotSelectionChange(val day: String, val timeSlots: List<Int>) : Event()
-        data object SubmitUserInfo : Event()
+        data class UniversitySearchQueryChanged(val query: String) : Event()
+        data object UniversitySearchClicked : Event()
+        data class UniversitySelected(val university: String) : Event()
+        data class MajorSearchQueryChanged(val query: String) : Event()
+        data object MajorSearchClicked : Event()
+        data class MajorSelected(val major: String) : Event()
+        data class EnterYearSelected(val enterYear: Int) : Event()
+
+        data class EmailChanged(val email: String) : Event()
+        data object VerificationCodeRequested : Event()
+        data class VerificationCodeChanged(val code: String) : Event()
+        data object VerificationCodeSubmitted : Event()
+
+        data class NicknameChanged(val nickname: String) : Event()
+        data class GenderSelected(val gender: String) : Event()
         data object ValidateNickname : Event()
+
+        data class ProfileImageSelected(val profileImageIndex: Int) : Event()
+
+        data class EnergyOptionSelected(val energy: String) : Event()
+        data class PerceptionOptionSelected(val perception: String) : Event()
+        data class DecisionOptionSelected(val decision: String) : Event()
+        data class LifestyleOptionSelected(val lifestyle: String) : Event()
+
+        data class SelfIntroductionChanged(val selfIntroduction: String) : Event()
+
+        data class TimeSlotSelectionChanged(val day: String, val timeSlots: List<Int>) : Event()
+//        data object SubmitUserInfo : Event()
     }
 
     sealed interface SideEffect : UiSideEffect {
@@ -64,7 +68,5 @@ class AuthContract {
         data object NavigateEnterTimetable : SideEffect
         data object NavigateCompleteAuth : SideEffect
         data object NavigateHome : SideEffect
-
-        data object NavigateGapTimetable : SideEffect
     }
 }
