@@ -52,8 +52,7 @@ fun EnterTimeTableRoute(
         onTimeSlotSelectionChanged = { day, timeSlots ->
             viewModel.setEvent(AuthContract.Event.TimeSlotSelectionChanged(day, timeSlots))
         },
-        // TODO 가입전송 로직으로 변경할것
-        onNextClick = { viewModel.sendSideEffect(AuthContract.SideEffect.NavigateCompleteAuth) },
+        onNextClick = { viewModel.setEvent(AuthContract.Event.RequestSingUp) },
         onBackClick = { viewModel.sendSideEffect(AuthContract.SideEffect.NavigateBack) }
     )
 }

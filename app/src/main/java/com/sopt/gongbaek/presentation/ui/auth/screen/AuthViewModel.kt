@@ -2,10 +2,16 @@ package com.sopt.gongbaek.presentation.ui.auth.screen
 
 import android.util.Patterns
 import androidx.lifecycle.viewModelScope
+import com.sopt.gongbaek.domain.model.SignUpInfo
+import com.sopt.gongbaek.domain.type.GenderType
+import com.sopt.gongbaek.domain.type.MbtiFirstLetterType
+import com.sopt.gongbaek.domain.type.MbtiFourthLetterType
+import com.sopt.gongbaek.domain.type.MbtiSecondLetterType
+import com.sopt.gongbaek.domain.type.MbtiThirdLetterType
+import com.sopt.gongbaek.domain.usecase.RequestEmailVerificationUseCase
+import com.sopt.gongbaek.domain.usecase.RequestSignUpUseCase
 import com.sopt.gongbaek.domain.usecase.SearchMajorsUseCase
 import com.sopt.gongbaek.domain.usecase.SearchUniversitiesUseCase
-import com.sopt.gongbaek.domain.usecase.RegisterUserInfoUseCase
-import com.sopt.gongbaek.domain.usecase.RequestEmailVerificationUseCase
 import com.sopt.gongbaek.domain.usecase.SetTokenUseCase
 import com.sopt.gongbaek.domain.usecase.ValidateNicknameUseCase
 import com.sopt.gongbaek.domain.usecase.VerifyEmailCodeUseCase
@@ -14,6 +20,7 @@ import com.sopt.gongbaek.presentation.util.base.BaseViewModel
 import com.sopt.gongbaek.presentation.util.base.UiLoadState
 import com.sopt.gongbaek.presentation.util.extension.isCompleteKorean
 import com.sopt.gongbaek.presentation.util.extension.isKoreanChar
+import com.sopt.gongbaek.presentation.util.timetable.convertToTimeTable
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
@@ -27,7 +34,7 @@ class AuthViewModel @Inject constructor(
     private val searchMajorsUseCase: SearchMajorsUseCase,
     private val requestEmailVerificationUseCase: RequestEmailVerificationUseCase,
     private val verifyEmailCodeUseCase: VerifyEmailCodeUseCase,
-    private val registerUserInfoUseCase: RegisterUserInfoUseCase,
+    private val requestSignUpUseCase: RequestSignUpUseCase,
     private val setTokenUseCase: SetTokenUseCase,
     private val validateNicknameUseCase: ValidateNicknameUseCase
 ) : BaseViewModel<AuthContract.State, AuthContract.Event, AuthContract.SideEffect>() {
@@ -72,28 +79,11 @@ class AuthViewModel @Inject constructor(
 
             // EnterTimeTable Event
             is AuthContract.Event.TimeSlotSelectionChanged -> updateTimeSlotSelectionChanged(event.day, event.timeSlots)
-
-            // TODO 전송로직 서버연결 하며 수정 예정
-//            is AuthContract.Event.SubmitUserInfo -> submitUserInfo()
+            is AuthContract.Event.RequestSingUp -> requestSingUp()
         }
     }
 
     fun sendSideEffect(sideEffect: AuthContract.SideEffect) = setSideEffect(sideEffect)
-
-//    private fun submitUserInfo() =
-//        viewModelScope.launch {
-//            setState { copy(loadState = UiLoadState.Loading) }
-//            registerUserInfoUseCase(currentState.userInfo).fold(
-//                onSuccess = { userAuth ->
-//                    setState { copy(loadState = UiLoadState.Success) }
-//                    setSideEffect(AuthContract.SideEffect.NavigateCompleteAuth)
-//                    setTokenUseCase(userAuth.accessToken, userAuth.refreshToken)
-//                },
-//                onFailure = {
-//                    setState { copy(loadState = UiLoadState.Error) }
-//                }
-//            )
-//        }
 
     private fun updateUniversitySearchQuery(query: String) = setState {
         copy(
@@ -449,6 +439,40 @@ class AuthViewModel @Inject constructor(
             )
         }
     }
+
+    private fun buildSignUpInfo(): SignUpInfo =
+        SignUpInfo(
+            platform = "KAKAO",
+            university = currentState.academicInfoState.university,
+            major = currentState.academicInfoState.major,
+            enterYear = currentState.academicInfoState.enterYear,
+            email = currentState.emailVerificationState.email,
+            nickname = currentState.nicknameGenderState.nickname,
+            gender = GenderType.fromDescription(currentState.nicknameGenderState.gender).name,
+            profileImage = currentState.selectProfileState.profileImageIndex,
+            mbti = MbtiFirstLetterType.fromDescription(currentState.mbtiState.firstLetter).name +
+                    MbtiSecondLetterType.fromDescription(currentState.mbtiState.secondLetter).name +
+                    MbtiThirdLetterType.fromDescription(currentState.mbtiState.thirdLetter).name +
+                    MbtiFourthLetterType.fromDescription(currentState.mbtiState.forthLetter).name,
+            introduction = currentState.selfIntroductionState.selfIntroduction,
+            timeTable = convertToTimeTable(currentState.enterTimeTableState.selectedTimeSlotsByDay)
+        )
+
+    private fun requestSingUp() =
+        viewModelScope.launch {
+            setState { copy(loadState = UiLoadState.Loading) }
+            requestSignUpUseCase(signUpInfo = buildSignUpInfo())
+                .fold(
+                    onSuccess = { userAuth ->
+                        setState { copy(loadState = UiLoadState.Success) }
+                        setSideEffect(AuthContract.SideEffect.NavigateCompleteAuth)
+                        setTokenUseCase(userAuth.accessToken, userAuth.refreshToken)
+                    },
+                    onFailure = {
+                        setState { copy(loadState = UiLoadState.Error) }
+                    }
+                )
+        }
 
     companion object {
         private const val NICKNAME_VALIDATION_ERROR_MESSAGE = "중복된 닉네임입니다. 다시 입력해주세요."

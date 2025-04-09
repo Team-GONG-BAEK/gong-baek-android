@@ -52,7 +52,7 @@ class AuthContract {
         data class SelfIntroductionChanged(val selfIntroduction: String) : Event()
 
         data class TimeSlotSelectionChanged(val day: String, val timeSlots: List<Int>) : Event()
-//        data object SubmitUserInfo : Event()
+        data object RequestSingUp : Event()
     }
 
     sealed interface SideEffect : UiSideEffect {
