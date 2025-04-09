@@ -62,10 +62,10 @@ class AuthViewModel @Inject constructor(
             is AuthContract.Event.ProfileImageSelected -> updateProfileImage(event.profileImageIndex)
 
             // Mbti Event
-            is AuthContract.Event.EnergyOptionSelected -> updateMbtiEnergy(event.energy)
-            is AuthContract.Event.PerceptionOptionSelected -> updateMbtiPerception(event.perception)
-            is AuthContract.Event.DecisionOptionSelected -> updateMbtiDecision(event.decision)
-            is AuthContract.Event.LifestyleOptionSelected -> updateMbtiLifestyle(event.lifestyle)
+            is AuthContract.Event.MbtiFirstOptionSelected -> updateMbtiFirstOption(event.option)
+            is AuthContract.Event.MbtiSecondOptionSelected -> updateMbtiSecondOption(event.option)
+            is AuthContract.Event.MbtiThirdOptionSelected -> updateMbtiThirdOption(event.option)
+            is AuthContract.Event.MbtiFourthOptionSelected -> updateMbtiFourthOption(event.option)
 
             // SelfIntroduction Event
             is AuthContract.Event.SelfIntroductionChanged -> updateSelfIntroduction(event.selfIntroduction)
@@ -397,34 +397,34 @@ class AuthViewModel @Inject constructor(
         )
     }
 
-    private fun updateMbtiEnergy(energy: String) = setState {
+    private fun updateMbtiFirstOption(option: String) = setState {
         copy(
             mbtiState = currentState.mbtiState.copy(
-                energy = energy
+                firstLetter = option
             )
         )
     }
 
-    private fun updateMbtiPerception(perception: String) = setState {
+    private fun updateMbtiSecondOption(option: String) = setState {
         copy(
             mbtiState = currentState.mbtiState.copy(
-                perception = perception
+                secondLetter = option
             )
         )
     }
 
-    private fun updateMbtiDecision(decision: String) = setState {
+    private fun updateMbtiThirdOption(option: String) = setState {
         copy(
             mbtiState = currentState.mbtiState.copy(
-                decision = decision
+                thirdLetter = option
             )
         )
     }
 
-    private fun updateMbtiLifestyle(lifestyle: String) = setState {
+    private fun updateMbtiFourthOption(option: String) = setState {
         copy(
             mbtiState = currentState.mbtiState.copy(
-                lifestyle = lifestyle
+                forthLetter = option
             )
         )
     }
