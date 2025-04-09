@@ -81,7 +81,7 @@ private fun SelfIntroductionScreen(
         )
 
         GongBaekBasicButton(
-            title = "다음",
+            title = stringResource(R.string.auth_self_introduction_button_next),
             enabled = uiState.isNextEnabled,
             onClick = onNextClick,
             modifier = Modifier

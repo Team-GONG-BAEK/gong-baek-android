@@ -74,7 +74,7 @@ private fun MbtiScreen(
     Scaffold(
         bottomBar = {
             GongBaekBasicButton(
-                title = "다음",
+                title = stringResource(R.string.auth_mbti_button_next),
                 enabled = uiState.isNextEnabled,
                 onClick = onNextClick,
                 modifier = Modifier

@@ -11,6 +11,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.LocalLifecycleOwner
@@ -67,7 +68,7 @@ private fun EnterTimeTableScreen(
     Scaffold(
         bottomBar = {
             GongBaekBasicButton(
-                title = "가입 완료",
+                title = stringResource(R.string.auth_enter_timetable_complete_button),
                 enabled = uiState.isNextEnabled,
                 onClick = onNextClick,
                 modifier = Modifier

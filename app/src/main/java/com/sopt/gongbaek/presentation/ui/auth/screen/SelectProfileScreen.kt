@@ -12,6 +12,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.LocalLifecycleOwner
@@ -76,7 +77,7 @@ private fun SelectProfileScreen(
         )
 
         GongBaekBasicButton(
-            title = "다음",
+            title = stringResource(R.string.auth_select_profile_button_next),
             enabled = uiState.isNextEnabled,
             onClick = onNextClick,
             modifier = Modifier

@@ -11,6 +11,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.LocalLifecycleOwner
@@ -84,7 +85,7 @@ private fun AcademicInfoScreen(
         )
 
         GongBaekBasicButton(
-            title = "다음",
+            title = stringResource(R.string.auth_academic_info_next_button),
             enabled = academicInfoState.isAcademicInfoComplete,
             onClick = onNextClick,
             modifier = Modifier
@@ -123,8 +124,8 @@ private fun AcademicInfoSelectionSection(
             Spacer(modifier = Modifier.height(42.dp))
 
             SearchButton(
-                buttonLabel = "학교",
-                searchResult = academicInfoState.university.ifEmpty { "학교 이름을 검색하세요." },
+                buttonLabel = stringResource(R.string.auth_academic_info_university),
+                searchResult = academicInfoState.university.ifEmpty { stringResource(R.string.auth_academic_info_university_search_placeholder) },
                 isSearched = academicInfoState.university.isNotEmpty(),
                 onSearchButtonClicked = onSearchUniversityClicked
             )
@@ -132,8 +133,8 @@ private fun AcademicInfoSelectionSection(
             Spacer(modifier = Modifier.height(24.dp))
 
             SearchButton(
-                buttonLabel = "학과",
-                searchResult = academicInfoState.major.ifEmpty { "학과 이름을 검색하세요." },
+                buttonLabel = stringResource(R.string.auth_academic_info_major),
+                searchResult = academicInfoState.major.ifEmpty { stringResource(R.string.auth_academic_info_major_search_placeholder) },
                 isSearched = academicInfoState.major.isNotEmpty(),
                 onSearchButtonClicked = onSearchMajorClicked
             )

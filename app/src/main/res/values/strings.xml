@@ -89,24 +89,55 @@
     <string name="select_day_calendar_sun">일</string>
 
     <!-- AuthScreen-->
-    <string name="auth_select_profile_title">프로필 사진을 선택해주세요.</string>
-    <string name="auth_select_profile_description">제공된 프로필 중 하나를 선택할 수 있어요.</string>
-    <string name="auth_nickname_gender_title">닉네임과 성별을 입력해주세요.</string>
-    <string name="auth_nickname_gender_description">닉네임은 한글 최대 8자 이내로 입력할 수 있어요.</string>
     <string name="auth_academic_info_title">학적정보를 입력해주세요.</string>
     <string name="auth_academic_info_description">자신의 학교와 학과, 입학년도를 선택해주세요.</string>
+    <string name="auth_academic_info_university">학교</string>
+    <string name="auth_academic_info_university_search_placeholder">학교 이름을 검색하세요.</string>
+    <string name="auth_academic_info_major">학과</string>
+    <string name="auth_academic_info_major_search_placeholder">"학과 이름을 검색하세요."</string>
+    <string name="auth_academic_info_next_button">"다음"</string>
+    <string name="auth_academic_info_apply_button">"적용"</string>
+    <string name="auth_academic_info_university_search_empty">검색 결과가 없습니다.\n검색어가 올바른지 확인하고 다시 검색해주세요.</string>
+    <string name="auth_academic_info_direct_register"> 으로 직접 등록할래요</string>
+
     <string name="auth_email_verification_title">%s\n이메일로 인증해주세요.</string>
+    <string name="auth_email_input_title">이메일 주소</string>
+    <string name="auth_email_input_placeholder">학교 이메일을 입력해주세요.</string>
+    <string name="auth_email_button_request_code">코드받기</string>
+    <string name="auth_email_button_resend_code">다시받기</string>
+    <string name="auth_email_verification_code_title">코드</string>
+    <string name="auth_email_verification_code_placeholder">코드를 입력해주세요.</string>
+    <string name="auth_email_button_verify_code">인증하기</string>
+    <string name="auth_email_button_next">다음</string>
+
+    <string name="auth_nickname_gender_title">닉네임과 성별을 입력해주세요.</string>
+    <string name="auth_nickname_gender_description">닉네임은 한글 최대 8자 이내로 입력할 수 있어요.</string>
+    <string name="auth_nickname_gender_gender_title">성별</string>
+    <string name="auth_nickname_gender_button_next">다음</string>
+
+    <string name="auth_select_profile_title">프로필 사진을 선택해주세요.</string>
+    <string name="auth_select_profile_description">제공된 프로필 중 하나를 선택할 수 있어요.</string>
+    <string name="auth_select_profile_button_next">다음</string>
+
     <string name="auth_mbti_title">MBTI를 선택해주세요.</string>
     <string name="auth_mbti_i_e">외향형/내향형</string>
     <string name="auth_mbti_n_s">감각형/직관형</string>
     <string name="auth_mbti_t_f">사고형/감정형</string>
     <string name="auth_mbti_p_j">판단형/인식형</string>
     <string name="auth_mbti_description">자신의 성향을 잘 나타내는 MBTI를 선택해 주세요.</string>
+    <string name="auth_mbti_button_next">다음</string>
+
     <string name="auth_self_introduction_title">회원님을 자유롭게 설명해주세요.</string>
     <string name="auth_self_introduction_description">연락처나 SNS 입력이 아닌,\n자신을 소개하는 글을 적어주세요.</string>
+    <string name="auth_self_introduction_button_next">다음</string>
+
     <string name="auth_enter_timetable_title">수업 시간표를 입력해주세요.</string>
     <string name="auth_enter_timetable_description">수업이 있는 시간대를 선택해주세요.</string>
-    <string name="auth_complete_title">가입을 축하드려요!\n0을 100으로 채우러 가볼까요?</string>
+    <string name="auth_enter_timetable_complete_button">가입 완료</string>
+
+    <string name="auth_complete_congratulations_title">가입이 완료되었어요!</string>
+    <string name="auth_complete_congratulations_description">0을 100으로 채우러 가볼까요?</string>
+    <string name="auth_complete_button_go_home">공백 채우러 가기</string>
 
     <!--MyGroupScreen-->
     <string name="my_group_top_bar_title">나의 채움</string>
