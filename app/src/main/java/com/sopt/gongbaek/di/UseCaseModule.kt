@@ -17,17 +17,17 @@ import com.sopt.gongbaek.domain.usecase.GetGroupsUseCase
 import com.sopt.gongbaek.domain.usecase.GetLectureTimetableUseCase
 import com.sopt.gongbaek.domain.usecase.GetMyGroupsUseCase
 import com.sopt.gongbaek.domain.usecase.GetMyProfileUseCase
-import com.sopt.gongbaek.domain.usecase.SearchMajorsUseCase
-import com.sopt.gongbaek.domain.usecase.SearchUniversitiesUseCase
 import com.sopt.gongbaek.domain.usecase.LoadGroupDetailScreenUseCase
 import com.sopt.gongbaek.domain.usecase.LoadGroupRoomScreenUseCase
 import com.sopt.gongbaek.domain.usecase.LoginUseCase
 import com.sopt.gongbaek.domain.usecase.LogoutUseCase
 import com.sopt.gongbaek.domain.usecase.PostCommentUseCase
 import com.sopt.gongbaek.domain.usecase.PostGroupUseCase
-import com.sopt.gongbaek.domain.usecase.RegisterUserInfoUseCase
 import com.sopt.gongbaek.domain.usecase.ReissueTokenUseCase
 import com.sopt.gongbaek.domain.usecase.RequestEmailVerificationUseCase
+import com.sopt.gongbaek.domain.usecase.RequestSignUpUseCase
+import com.sopt.gongbaek.domain.usecase.SearchMajorsUseCase
+import com.sopt.gongbaek.domain.usecase.SearchUniversitiesUseCase
 import com.sopt.gongbaek.domain.usecase.SetLectureTimetableUseCase
 import com.sopt.gongbaek.domain.usecase.SetTokenUseCase
 import com.sopt.gongbaek.domain.usecase.ValidateNicknameUseCase
@@ -89,7 +89,7 @@ object UseCaseModule {
     @Singleton
     fun provideRegisterUserInfoUseCase(
         authRepository: AuthRepository
-    ): RegisterUserInfoUseCase = RegisterUserInfoUseCase(authRepository)
+    ): RequestSignUpUseCase = RequestSignUpUseCase(authRepository)
 
     @Provides
     @Singleton

@@ -3,12 +3,11 @@ package com.sopt.gongbaek.data.repositoryimpl
 import com.sopt.gongbaek.data.mapper.todata.toData
 import com.sopt.gongbaek.data.mapper.todomain.toDomain
 import com.sopt.gongbaek.data.remote.datasource.AuthRemoteDataSource
-import com.sopt.gongbaek.data.remote.dto.base.NullableApiResponse
 import com.sopt.gongbaek.data.remote.dto.request.LoginRequestDto
 import com.sopt.gongbaek.data.remote.util.handleApiResponse
 import com.sopt.gongbaek.data.remote.util.handleNullableApiResponse
+import com.sopt.gongbaek.domain.model.SignUpInfo
 import com.sopt.gongbaek.domain.model.UserAuth
-import com.sopt.gongbaek.domain.model.UserInfo
 import com.sopt.gongbaek.domain.model.UserProfile
 import com.sopt.gongbaek.domain.repository.AuthRepository
 import javax.inject.Inject
@@ -25,9 +24,9 @@ class AuthRepositoryImpl @Inject constructor(
                 .toDomain()
         }
 
-    override suspend fun registerUserInfo(userInfo: UserInfo): Result<UserAuth> =
+    override suspend fun signUp(signUpInfo: SignUpInfo): Result<UserAuth> =
         runCatching {
-            authRemoteDatasource.registerUserInfo(registerUserInfoRequestDto = userInfo.toData())
+            authRemoteDatasource.signUp(signUpInfoRequestDto = signUpInfo.toData())
                 .handleApiResponse()
                 .getOrThrow()
                 .toDomain()

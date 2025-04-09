@@ -3,9 +3,9 @@ package com.sopt.gongbaek.data.remote.service
 import com.sopt.gongbaek.data.remote.dto.base.ApiResponse
 import com.sopt.gongbaek.data.remote.dto.base.NullableApiResponse
 import com.sopt.gongbaek.data.remote.dto.request.LoginRequestDto
-import com.sopt.gongbaek.data.remote.dto.request.RegisterUserInfoRequestDto
+import com.sopt.gongbaek.data.remote.dto.request.SignUpInfoRequestDto
 import com.sopt.gongbaek.data.remote.dto.response.LoginResponseDto
-import com.sopt.gongbaek.data.remote.dto.response.RegisterUserInfoResponseDto
+import com.sopt.gongbaek.data.remote.dto.response.SignUpInfoResponseDto
 import com.sopt.gongbaek.data.remote.dto.response.UserProfileResponseDto
 import com.sopt.gongbaek.data.remote.dto.response.UserTimeTableResponseDto
 import retrofit2.http.Body
@@ -25,9 +25,9 @@ interface AuthService {
     ): ApiResponse<LoginResponseDto>
 
     @POST("/api/v1/user/signup")
-    suspend fun requestUserInfo(
-        @Body registerUserInfoRequestDto: RegisterUserInfoRequestDto
-    ): ApiResponse<RegisterUserInfoResponseDto>
+    suspend fun signup(
+        @Body signUpInfoRequestDto: SignUpInfoRequestDto
+    ): ApiResponse<SignUpInfoResponseDto>
 
     @POST("/api/v1/user/validate/nickname")
     suspend fun validateNickname(
