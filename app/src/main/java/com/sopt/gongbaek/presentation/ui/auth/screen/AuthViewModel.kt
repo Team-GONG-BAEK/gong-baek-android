@@ -451,9 +451,9 @@ class AuthViewModel @Inject constructor(
             gender = GenderType.fromDescription(currentState.nicknameGenderState.gender).name,
             profileImage = currentState.selectProfileState.profileImageIndex,
             mbti = MbtiFirstLetterType.fromDescription(currentState.mbtiState.firstLetter).name +
-                    MbtiSecondLetterType.fromDescription(currentState.mbtiState.secondLetter).name +
-                    MbtiThirdLetterType.fromDescription(currentState.mbtiState.thirdLetter).name +
-                    MbtiFourthLetterType.fromDescription(currentState.mbtiState.forthLetter).name,
+                MbtiSecondLetterType.fromDescription(currentState.mbtiState.secondLetter).name +
+                MbtiThirdLetterType.fromDescription(currentState.mbtiState.thirdLetter).name +
+                MbtiFourthLetterType.fromDescription(currentState.mbtiState.forthLetter).name,
             introduction = currentState.selfIntroductionState.selfIntroduction,
             timeTable = convertToTimeTable(currentState.enterTimeTableState.selectedTimeSlotsByDay)
         )
