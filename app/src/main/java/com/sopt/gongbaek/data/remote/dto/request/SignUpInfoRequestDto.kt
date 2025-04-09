@@ -4,19 +4,21 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class RegisterUserInfoRequestDto(
+data class SignUpInfoRequestDto(
+    @SerialName("platform")
+    val platform: String,
     @SerialName("profileImg")
     val profileImage: Int,
     @SerialName("nickname")
     val nickname: String,
     @SerialName("mbti")
     val mbti: String,
+    @SerialName("email")
+    val email: String,
     @SerialName("schoolName")
-    val school: String,
+    val university: String,
     @SerialName("schoolMajor")
     val major: String,
-    @SerialName("schoolGrade")
-    val grade: Int,
     @SerialName("enterYear")
     val enterYear: Int,
     @SerialName("introduction")
