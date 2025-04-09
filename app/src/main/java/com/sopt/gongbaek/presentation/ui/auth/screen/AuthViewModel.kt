@@ -204,7 +204,7 @@ class AuthViewModel @Inject constructor(
                         emailVerificationState = emailVerificationState.copy(
                             isTimerRunning = false,
                             step = EmailVerificationStep.VERIFICATION_FAILED,
-                            verificationCodeMessage = "유효시간이 만료되었습니다. 인증코드를 다시 요청해주세요."
+                            verificationCodeMessage = MESSAGE_CODE_EXPIRED
                         )
                     )
                 }
@@ -233,7 +233,7 @@ class AuthViewModel @Inject constructor(
                 copy(
                     emailVerificationState = emailVerificationState.copy(
                         step = EmailVerificationStep.REQUEST_FAILED,
-                        emailMessage = "잘못된 이메일입니다. 다시 입력해주세요."
+                        emailMessage = ERROR_INVALID_EMAIL
                     )
                 )
             }
@@ -251,9 +251,9 @@ class AuthViewModel @Inject constructor(
                         copy(
                             emailVerificationState = emailVerificationState.copy(
                                 step = EmailVerificationStep.REQUESTED,
-                                emailMessage = "인증코드를 발송했습니다.",
+                                emailMessage = MESSAGE_CODE_SENT,
                                 isTimerRunning = true,
-                                timeLeft = 180
+                                timeLeft = EMAIL_VERIFICATION_TIME_LIMIT
                             )
                         )
                     }
@@ -264,7 +264,7 @@ class AuthViewModel @Inject constructor(
                         copy(
                             emailVerificationState = emailVerificationState.copy(
                                 step = EmailVerificationStep.REQUEST_FAILED,
-                                emailMessage = "잘못된 이메일입니다. 다시 입력해주세요."
+                                emailMessage = ERROR_INVALID_EMAIL
                             )
                         )
                     }
@@ -281,7 +281,7 @@ class AuthViewModel @Inject constructor(
                 copy(
                     emailVerificationState = emailVerificationState.copy(
                         step = EmailVerificationStep.VERIFICATION_FAILED,
-                        verificationCodeMessage = "이메일을 먼저 입력해주세요."
+                        verificationCodeMessage = ERROR_EMPTY_EMAIL
                     )
                 )
             }
@@ -299,7 +299,7 @@ class AuthViewModel @Inject constructor(
                         copy(
                             emailVerificationState = emailVerificationState.copy(
                                 step = EmailVerificationStep.VERIFIED,
-                                verificationCodeMessage = "인증이 완료되었습니다.",
+                                verificationCodeMessage = MESSAGE_CODE_SUCCESS,
                                 isTimerRunning = false
                             )
                         )
@@ -311,7 +311,7 @@ class AuthViewModel @Inject constructor(
                         copy(
                             emailVerificationState = emailVerificationState.copy(
                                 step = EmailVerificationStep.VERIFICATION_FAILED,
-                                verificationCodeMessage = "인증코드가 일치하지 않습니다."
+                                verificationCodeMessage = ERROR_CODE_MISMATCH
                             )
                         )
                     }
@@ -338,9 +338,9 @@ class AuthViewModel @Inject constructor(
 
     private fun validateNicknameLocally(nickname: String): String? =
         when {
-            nickname.length < 2 -> "닉네임은 최소 2글자 이상이어야 합니다."
-            !nickname.all { it.isKoreanChar() } -> "닉네임은 한글만 사용할 수 있습니다."
-            !nickname.all { it.isCompleteKorean() } -> "닉네임은 완성된 한글만 사용할 수 있습니다."
+            nickname.length < 2 -> ERROR_NICKNAME_TOO_SHORT
+            !nickname.all { it.isKoreanChar() } -> ERROR_NICKNAME_NON_KOREAN
+            !nickname.all { it.isCompleteKorean() } -> ERROR_NICKNAME_INCOMPLETE_KOREAN
             else -> null
         }
 
@@ -475,7 +475,22 @@ class AuthViewModel @Inject constructor(
         }
 
     companion object {
+        // Email Verification Messages
+        private const val ERROR_INVALID_EMAIL = "잘못된 이메일입니다. 다시 입력해주세요."
+        private const val MESSAGE_CODE_SENT = "인증코드를 발송했습니다."
+        private const val MESSAGE_CODE_EXPIRED = "유효시간이 만료되었습니다. 인증코드를 다시 요청해주세요."
+        private const val ERROR_EMPTY_EMAIL = "이메일을 먼저 입력해주세요."
+        private const val MESSAGE_CODE_SUCCESS = "인증이 완료되었습니다."
+        private const val ERROR_CODE_MISMATCH = "인증코드가 일치하지 않습니다."
+
+        // Nickname Validation Messages
+        private const val ERROR_NICKNAME_TOO_SHORT = "닉네임은 최소 2글자 이상이어야 합니다."
+        private const val ERROR_NICKNAME_NON_KOREAN = "닉네임은 한글만 사용할 수 있습니다."
+        private const val ERROR_NICKNAME_INCOMPLETE_KOREAN = "닉네임은 완성된 한글만 사용할 수 있습니다."
         private const val NICKNAME_VALIDATION_ERROR_MESSAGE = "중복된 닉네임입니다. 다시 입력해주세요."
         private const val ERROR_CODE_DUPLICATE_NICKNAME = "HTTP 409 "
+
+        // Timer
+        private const val EMAIL_VERIFICATION_TIME_LIMIT = 180
     }
 }
