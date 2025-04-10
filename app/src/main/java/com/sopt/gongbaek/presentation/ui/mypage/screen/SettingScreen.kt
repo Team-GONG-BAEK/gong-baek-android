@@ -28,7 +28,6 @@ import com.sopt.gongbaek.presentation.type.GongBaekDialogType
 import com.sopt.gongbaek.presentation.type.SettingServiceGuideItem
 import com.sopt.gongbaek.presentation.ui.component.dialog.AccountDialog
 import com.sopt.gongbaek.presentation.ui.component.topbar.StartTitleTopBar
-import com.sopt.gongbaek.presentation.util.base.UiLoadState
 import com.sopt.gongbaek.presentation.util.extension.clickableWithoutRipple
 import com.sopt.gongbaek.presentation.util.openWebView
 import com.sopt.gongbaek.ui.theme.GongBaekTheme
@@ -117,7 +116,7 @@ private fun SettingScreen(
             modifier = Modifier.padding(horizontal = 16.dp)
         )
 
-        if (uiState.logoutDialogState == UiLoadState.Success) {
+        if (uiState.logoutDialogState == true) {
             Dialog(
                 onDismissRequest = onLogoutDialogDismissClicked
             ) {
@@ -128,7 +127,7 @@ private fun SettingScreen(
                 )
             }
         }
-        if (uiState.withdrawDialogState == UiLoadState.Success) {
+        if (uiState.withdrawDialogState == true) {
             Dialog(
                 onDismissRequest = onWithdrawDialogDismissClicked
             ) {

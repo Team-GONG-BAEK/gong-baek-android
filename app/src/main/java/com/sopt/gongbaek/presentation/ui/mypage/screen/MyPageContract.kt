@@ -18,8 +18,8 @@ class MyPageContract {
         val applyActiveGroups: List<GroupInfo> = listOf(),
         val applyClosedGroups: List<GroupInfo> = listOf(),
         val versionName: String = "",
-        val logoutDialogState: UiLoadState = UiLoadState.Idle,
-        val withdrawDialogState: UiLoadState = UiLoadState.Idle
+        val logoutDialogState: Boolean = false,
+        val withdrawDialogState: Boolean = false
     ) : UiState
 
     sealed class Event : UiEvent {
