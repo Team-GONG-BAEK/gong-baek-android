@@ -31,6 +31,10 @@ fun NavGraphBuilder.myPageNavGraph(
         SettingRoute(
             navigateBack = navController::popBackStack,
             navigateLogin = {
+                navController.navigate(NavigationRoute.Login){
+                    popUpTo(NavigationRoute.Setting) { inclusive = true }
+                    launchSingleTop = true
+                }
             }
         )
     }
