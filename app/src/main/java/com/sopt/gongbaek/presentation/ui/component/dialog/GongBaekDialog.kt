@@ -41,7 +41,7 @@ fun GongBaekDialog(
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Image(
-            painter = painterResource(gongBaekDialogType.imageResId),
+            painter = painterResource(gongBaekDialogType.imageResId ?: R.drawable.img_dialog_fail),
             contentDescription = null,
             modifier = Modifier
                 .padding(bottom = 20.dp)

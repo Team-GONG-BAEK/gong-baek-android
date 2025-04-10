@@ -5,8 +5,8 @@ import androidx.annotation.StringRes
 import com.sopt.gongbaek.R
 
 enum class GongBaekDialogType(
-    @DrawableRes val imageResId: Int,
     @StringRes val titleResId: Int,
+    @DrawableRes val imageResId: Int? = null,
     @StringRes val descriptionResId: Int? = null
 ) {
     REGISTER_SUCCESS(
@@ -31,5 +31,7 @@ enum class GongBaekDialogType(
         titleResId = R.string.dialog_title_error,
         imageResId = R.drawable.img_dialog_fail,
         descriptionResId = R.string.dialog_description_error
-    )
+    ),
+    LOGOUT(titleResId = R.string.setting_dialog_logout),
+    WITHDRAW(titleResId = R.string.setting_dialog_withdraw)
 }

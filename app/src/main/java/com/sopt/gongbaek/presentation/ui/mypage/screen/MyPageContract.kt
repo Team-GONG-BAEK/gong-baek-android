@@ -1,5 +1,6 @@
 package com.sopt.gongbaek.presentation.ui.mypage.screen
 
+import com.sopt.gongbaek.BuildConfig
 import com.sopt.gongbaek.domain.model.GroupInfo
 import com.sopt.gongbaek.domain.model.UserInfo
 import com.sopt.gongbaek.presentation.util.base.UiEvent
@@ -16,18 +17,29 @@ class MyPageContract {
         val registerClosedGroups: List<GroupInfo> = listOf(),
         val applyGroupsLoadState: UiLoadState = UiLoadState.Idle,
         val applyActiveGroups: List<GroupInfo> = listOf(),
-        val applyClosedGroups: List<GroupInfo> = listOf()
+        val applyClosedGroups: List<GroupInfo> = listOf(),
+        val versionName: String = BuildConfig.VERSION_NAME,
+        val logoutDialogState: Boolean = false,
+        val withdrawDialogState: Boolean = false
     ) : UiState
 
     sealed class Event : UiEvent {
         data object OnGetMyProfile : Event()
         data object OnRegisterGroupsTabClick : Event()
         data object OnApplyGroupsTabClick : Event()
+        object OnLogoutClicked : Event()
+        object OnWithdrawClicked : Event()
+        data object OnLogoutDialogConfirmClicked : Event()
+        data object OnLogoutDialogDismissClicked : Event()
+        data object OnWithdrawDialogConfirmClicked : Event()
+        data object OnWithdrawDialogDismissClicked : Event()
     }
 
     sealed interface SideEffect : UiSideEffect {
         data object NavigateSetting : SideEffect
         data class NavigateGroupDetail(val groupId: Int, val groupCycle: String) : SideEffect
         data class NavigateGroupRoom(val groupId: Int, val groupCycle: String) : SideEffect
+        data object NavigateBack : SideEffect
+        data object NavigateLogin : SideEffect
     }
 }

@@ -75,6 +75,7 @@ fun MyPageRoute(
                     is MyPageContract.SideEffect.NavigateGroupRoom -> {
                         navigateGroupRoom(sideEffect.groupId, sideEffect.groupCycle)
                     }
+                    else -> {}
                 }
             }
     }

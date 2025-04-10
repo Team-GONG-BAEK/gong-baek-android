@@ -68,7 +68,7 @@ fun MyGroupScreenContent(
                 Text(
                     text = stringResource(R.string.my_group_active_group_title),
                     color = GongBaekTheme.colors.gray10,
-                    style = GongBaekTheme.typography.title2.sb18
+                    style = GongBaekTheme.typography.title2.m18
                 )
             }
         }
@@ -122,7 +122,7 @@ fun MyGroupScreenContent(
                 Text(
                     text = stringResource(R.string.my_group_closed_group_title),
                     color = GongBaekTheme.colors.gray10,
-                    style = GongBaekTheme.typography.title2.sb18
+                    style = GongBaekTheme.typography.title2.m18
                 )
             }
         }

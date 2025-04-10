@@ -65,6 +65,5 @@ fun MainNavHost(
         homeNavGraph(navigator.navController)
         groupRoomNavGraph(navigator.navController)
         myPageNavGraph(navigator.navController)
-//        myGroupNavGraph(navigator.navController)
     }
 }
