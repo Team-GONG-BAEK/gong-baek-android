@@ -1,5 +1,6 @@
 package com.sopt.gongbaek.presentation.ui.mypage.screen
 
+import com.sopt.gongbaek.BuildConfig
 import com.sopt.gongbaek.domain.model.GroupInfo
 import com.sopt.gongbaek.domain.model.UserInfo
 import com.sopt.gongbaek.presentation.util.base.UiEvent
@@ -17,7 +18,7 @@ class MyPageContract {
         val applyGroupsLoadState: UiLoadState = UiLoadState.Idle,
         val applyActiveGroups: List<GroupInfo> = listOf(),
         val applyClosedGroups: List<GroupInfo> = listOf(),
-        val versionName: String = "",
+        val versionName: String = BuildConfig.VERSION_NAME,
         val logoutDialogState: Boolean = false,
         val withdrawDialogState: Boolean = false
     ) : UiState

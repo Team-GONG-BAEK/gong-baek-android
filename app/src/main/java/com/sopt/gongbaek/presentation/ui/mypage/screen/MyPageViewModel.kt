@@ -1,7 +1,6 @@
 package com.sopt.gongbaek.presentation.ui.mypage.screen
 
 import androidx.lifecycle.viewModelScope
-import com.sopt.gongbaek.BuildConfig
 import com.sopt.gongbaek.domain.usecase.GetMyGroupsUseCase
 import com.sopt.gongbaek.domain.usecase.GetMyProfileUseCase
 import com.sopt.gongbaek.presentation.util.base.BaseViewModel
@@ -18,7 +17,6 @@ class MyPageViewModel @Inject constructor(
 
     init {
         getMyProfile()
-        getVersionInfo()
     }
 
     override fun createInitialState(): MyPageContract.State = MyPageContract.State()
@@ -114,10 +112,5 @@ class MyPageViewModel @Inject constructor(
                 onFailure = { setState { copy(applyGroupsLoadState = UiLoadState.Error) } }
             )
         }
-    }
-
-    fun getVersionInfo() {
-        val versionName = BuildConfig.VERSION_NAME
-        setState { copy(versionName = versionName) }
     }
 }
