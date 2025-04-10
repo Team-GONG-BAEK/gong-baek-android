@@ -11,6 +11,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.LocalLifecycleOwner
@@ -52,8 +53,7 @@ fun EnterTimeTableRoute(
         onTimeSlotSelectionChanged = { day, timeSlots ->
             viewModel.setEvent(AuthContract.Event.TimeSlotSelectionChanged(day, timeSlots))
         },
-        // TODO 가입전송 로직으로 변경할것
-        onNextClick = { viewModel.sendSideEffect(AuthContract.SideEffect.NavigateCompleteAuth) },
+        onNextClick = { viewModel.setEvent(AuthContract.Event.RequestSingUp) },
         onBackClick = { viewModel.sendSideEffect(AuthContract.SideEffect.NavigateBack) }
     )
 }
@@ -68,7 +68,7 @@ private fun EnterTimeTableScreen(
     Scaffold(
         bottomBar = {
             GongBaekBasicButton(
-                title = "가입 완료",
+                title = stringResource(R.string.auth_enter_timetable_complete_button),
                 enabled = uiState.isNextEnabled,
                 onClick = onNextClick,
                 modifier = Modifier

@@ -2,16 +2,25 @@ package com.sopt.gongbaek.presentation.ui.auth.screen
 
 import android.util.Patterns
 import androidx.lifecycle.viewModelScope
-import com.sopt.gongbaek.domain.usecase.GetSearchMajorsResultUseCase
-import com.sopt.gongbaek.domain.usecase.GetSearchUniversitiesResultUseCase
-import com.sopt.gongbaek.domain.usecase.RegisterUserInfoUseCase
+import com.sopt.gongbaek.domain.model.SignUpInfo
+import com.sopt.gongbaek.domain.type.GenderType
+import com.sopt.gongbaek.domain.type.MbtiFirstLetterType
+import com.sopt.gongbaek.domain.type.MbtiFourthLetterType
+import com.sopt.gongbaek.domain.type.MbtiSecondLetterType
+import com.sopt.gongbaek.domain.type.MbtiThirdLetterType
+import com.sopt.gongbaek.domain.usecase.RequestEmailVerificationUseCase
+import com.sopt.gongbaek.domain.usecase.RequestSignUpUseCase
+import com.sopt.gongbaek.domain.usecase.SearchMajorsUseCase
+import com.sopt.gongbaek.domain.usecase.SearchUniversitiesUseCase
 import com.sopt.gongbaek.domain.usecase.SetTokenUseCase
 import com.sopt.gongbaek.domain.usecase.ValidateNicknameUseCase
+import com.sopt.gongbaek.domain.usecase.VerifyEmailCodeUseCase
 import com.sopt.gongbaek.presentation.ui.auth.state.EmailVerificationStep
 import com.sopt.gongbaek.presentation.util.base.BaseViewModel
 import com.sopt.gongbaek.presentation.util.base.UiLoadState
 import com.sopt.gongbaek.presentation.util.extension.isCompleteKorean
 import com.sopt.gongbaek.presentation.util.extension.isKoreanChar
+import com.sopt.gongbaek.presentation.util.timetable.convertToTimeTable
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
@@ -21,9 +30,11 @@ import javax.inject.Inject
 
 @HiltViewModel
 class AuthViewModel @Inject constructor(
-    private val getSearchUniversitiesResultUseCase: GetSearchUniversitiesResultUseCase,
-    private val getSearchMajorsResultUseCase: GetSearchMajorsResultUseCase,
-    private val registerUserInfoUseCase: RegisterUserInfoUseCase,
+    private val searchUniversitiesUseCase: SearchUniversitiesUseCase,
+    private val searchMajorsUseCase: SearchMajorsUseCase,
+    private val requestEmailVerificationUseCase: RequestEmailVerificationUseCase,
+    private val verifyEmailCodeUseCase: VerifyEmailCodeUseCase,
+    private val requestSignUpUseCase: RequestSignUpUseCase,
     private val setTokenUseCase: SetTokenUseCase,
     private val validateNicknameUseCase: ValidateNicknameUseCase
 ) : BaseViewModel<AuthContract.State, AuthContract.Event, AuthContract.SideEffect>() {
@@ -36,10 +47,10 @@ class AuthViewModel @Inject constructor(
         when (event) {
             // AcademicInfo Event
             is AuthContract.Event.UniversitySearchQueryChanged -> updateUniversitySearchQuery(event.query)
-            is AuthContract.Event.UniversitySearchClicked -> fetchUniversities()
+            is AuthContract.Event.UniversitySearchClicked -> searchUniversities()
             is AuthContract.Event.UniversitySelected -> updateSelectedUniversity(event.university)
             is AuthContract.Event.MajorSearchQueryChanged -> updateMajorSearchQuery(event.query)
-            is AuthContract.Event.MajorSearchClicked -> fetchMajors()
+            is AuthContract.Event.MajorSearchClicked -> searchMajors()
             is AuthContract.Event.MajorSelected -> updateSelectedMajor(event.major)
             is AuthContract.Event.EnterYearSelected -> updateEnterYear(event.enterYear)
 
@@ -58,38 +69,21 @@ class AuthViewModel @Inject constructor(
             is AuthContract.Event.ProfileImageSelected -> updateProfileImage(event.profileImageIndex)
 
             // Mbti Event
-            is AuthContract.Event.EnergyOptionSelected -> updateMbtiEnergy(event.energy)
-            is AuthContract.Event.PerceptionOptionSelected -> updateMbtiPerception(event.perception)
-            is AuthContract.Event.DecisionOptionSelected -> updateMbtiDecision(event.decision)
-            is AuthContract.Event.LifestyleOptionSelected -> updateMbtiLifestyle(event.lifestyle)
+            is AuthContract.Event.MbtiFirstOptionSelected -> updateMbtiFirstOption(event.option)
+            is AuthContract.Event.MbtiSecondOptionSelected -> updateMbtiSecondOption(event.option)
+            is AuthContract.Event.MbtiThirdOptionSelected -> updateMbtiThirdOption(event.option)
+            is AuthContract.Event.MbtiFourthOptionSelected -> updateMbtiFourthOption(event.option)
 
             // SelfIntroduction Event
             is AuthContract.Event.SelfIntroductionChanged -> updateSelfIntroduction(event.selfIntroduction)
 
             // EnterTimeTable Event
             is AuthContract.Event.TimeSlotSelectionChanged -> updateTimeSlotSelectionChanged(event.day, event.timeSlots)
-
-            // TODO 전송로직 서버연결 하며 수정 예정
-//            is AuthContract.Event.SubmitUserInfo -> submitUserInfo()
+            is AuthContract.Event.RequestSingUp -> requestSingUp()
         }
     }
 
     fun sendSideEffect(sideEffect: AuthContract.SideEffect) = setSideEffect(sideEffect)
-
-//    private fun submitUserInfo() =
-//        viewModelScope.launch {
-//            setState { copy(loadState = UiLoadState.Loading) }
-//            registerUserInfoUseCase(currentState.userInfo).fold(
-//                onSuccess = { userAuth ->
-//                    setState { copy(loadState = UiLoadState.Success) }
-//                    setSideEffect(AuthContract.SideEffect.NavigateCompleteAuth)
-//                    setTokenUseCase(userAuth.accessToken, userAuth.refreshToken)
-//                },
-//                onFailure = {
-//                    setState { copy(loadState = UiLoadState.Error) }
-//                }
-//            )
-//        }
 
     private fun updateUniversitySearchQuery(query: String) = setState {
         copy(
@@ -99,23 +93,23 @@ class AuthViewModel @Inject constructor(
         )
     }
 
-    private fun fetchUniversities() = viewModelScope.launch {
+    private fun searchUniversities() = viewModelScope.launch {
         setState { copy(loadState = UiLoadState.Loading) }
-        // TODO usecase 네이밍 수정
-        getSearchUniversitiesResultUseCase(currentState.academicInfoState.universitySearchQuery).fold(
-            onSuccess = { universities ->
-                setState {
-                    copy(
-                        academicInfoState = currentState.academicInfoState.copy(
-                            searchedUniversities = universities.universities
+        searchUniversitiesUseCase(currentState.academicInfoState.universitySearchQuery)
+            .fold(
+                onSuccess = { universities ->
+                    setState {
+                        copy(
+                            academicInfoState = currentState.academicInfoState.copy(
+                                searchedUniversities = universities.universities
+                            )
                         )
-                    )
+                    }
+                },
+                onFailure = {
+                    setState { copy(loadState = UiLoadState.Error) }
                 }
-            },
-            onFailure = {
-                setState { copy(loadState = UiLoadState.Error) }
-            }
-        )
+            )
     }
 
     private fun updateSelectedUniversity(university: String) = setState {
@@ -134,10 +128,9 @@ class AuthViewModel @Inject constructor(
         )
     }
 
-    private fun fetchMajors() = viewModelScope.launch {
+    private fun searchMajors() = viewModelScope.launch {
         setState { copy(loadState = UiLoadState.Loading) }
-        getSearchMajorsResultUseCase(
-            // TODO usecase 네이밍 수정
+        searchMajorsUseCase(
             universityName = currentState.academicInfoState.university,
             majorName = currentState.academicInfoState.majorSearchQuery
         ).fold(
@@ -211,7 +204,7 @@ class AuthViewModel @Inject constructor(
                         emailVerificationState = emailVerificationState.copy(
                             isTimerRunning = false,
                             step = EmailVerificationStep.VERIFICATION_FAILED,
-                            verificationCodeMessage = "유효시간이 만료되었습니다. 인증코드를 다시 요청해주세요."
+                            verificationCodeMessage = MESSAGE_CODE_EXPIRED
                         )
                     )
                 }
@@ -233,63 +226,99 @@ class AuthViewModel @Inject constructor(
     }
 
     private fun handleVerificationCodeRequested() {
-        if (!Patterns.EMAIL_ADDRESS.matcher(currentState.emailVerificationState.email).matches()) {
+        val email = currentState.emailVerificationState.email
+
+        if (!Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
             setState {
                 copy(
                     emailVerificationState = emailVerificationState.copy(
                         step = EmailVerificationStep.REQUEST_FAILED,
-                        emailMessage = "잘못된 이메일입니다. 다시 입력해주세요."
+                        emailMessage = ERROR_INVALID_EMAIL
                     )
                 )
             }
             return
         }
 
-        setState {
-            copy(
-                emailVerificationState = emailVerificationState.copy(
-                    step = EmailVerificationStep.REQUESTED,
-                    emailMessage = "인증코드를 발송했습니다.",
-                    isTimerRunning = true
-                )
+        viewModelScope.launch {
+            requestEmailVerificationUseCase(
+                email = email,
+                schoolName = currentState.academicInfoState.university
+            ).fold(
+                onSuccess = {
+                    stopTimer()
+                    setState {
+                        copy(
+                            emailVerificationState = emailVerificationState.copy(
+                                step = EmailVerificationStep.REQUESTED,
+                                emailMessage = MESSAGE_CODE_SENT,
+                                isTimerRunning = true,
+                                timeLeft = EMAIL_VERIFICATION_TIME_LIMIT
+                            )
+                        )
+                    }
+                    startTimer()
+                },
+                onFailure = {
+                    setState {
+                        copy(
+                            emailVerificationState = emailVerificationState.copy(
+                                step = EmailVerificationStep.REQUEST_FAILED,
+                                emailMessage = ERROR_INVALID_EMAIL
+                            )
+                        )
+                    }
+                }
             )
         }
-        startTimer()
     }
 
-    private fun handleVerificationCodeSubmitted() =
-        when {
-            currentState.emailVerificationState.email.isEmpty() -> setState {
+    private fun handleVerificationCodeSubmitted() {
+        val email = currentState.emailVerificationState.email
+
+        if (email.isEmpty()) {
+            setState {
                 copy(
                     emailVerificationState = emailVerificationState.copy(
                         step = EmailVerificationStep.VERIFICATION_FAILED,
-                        verificationCodeMessage = "이메일을 먼저 입력해주세요."
+                        verificationCodeMessage = ERROR_EMPTY_EMAIL
                     )
                 )
             }
-
-            currentState.emailVerificationState.verificationCode != "123456" -> setState {
-                copy(
-                    emailVerificationState = emailVerificationState.copy(
-                        step = EmailVerificationStep.VERIFICATION_FAILED,
-                        verificationCodeMessage = "인증코드가 일치하지 않습니다."
-                    )
-                )
-            }
-
-            else -> {
-                setState {
-                    copy(
-                        emailVerificationState = emailVerificationState.copy(
-                            step = EmailVerificationStep.VERIFIED,
-                            verificationCodeMessage = "인증이 완료되었습니다.",
-                            isTimerRunning = false
-                        )
-                    )
-                }
-                stopTimer()
-            }
+            return
         }
+
+        viewModelScope.launch {
+            verifyEmailCodeUseCase(
+                email = email,
+                schoolName = currentState.academicInfoState.university,
+                code = currentState.emailVerificationState.verificationCode
+            ).fold(
+                onSuccess = {
+                    setState {
+                        copy(
+                            emailVerificationState = emailVerificationState.copy(
+                                step = EmailVerificationStep.VERIFIED,
+                                verificationCodeMessage = MESSAGE_CODE_SUCCESS,
+                                isTimerRunning = false
+                            )
+                        )
+                    }
+                    stopTimer()
+                },
+                onFailure = {
+                    setState {
+                        copy(
+                            emailVerificationState = emailVerificationState.copy(
+                                step = EmailVerificationStep.VERIFICATION_FAILED,
+                                verificationCodeMessage = ERROR_CODE_MISMATCH
+                            )
+                        )
+                    }
+                }
+            )
+        }
+    }
 
     private fun updateNickname(nickname: String) = setState {
         copy(
@@ -309,9 +338,9 @@ class AuthViewModel @Inject constructor(
 
     private fun validateNicknameLocally(nickname: String): String? =
         when {
-            nickname.length < 2 -> "닉네임은 최소 2글자 이상이어야 합니다."
-            !nickname.all { it.isKoreanChar() } -> "닉네임은 한글만 사용할 수 있습니다."
-            !nickname.all { it.isCompleteKorean() } -> "닉네임은 완성된 한글만 사용할 수 있습니다."
+            nickname.length < 2 -> ERROR_NICKNAME_TOO_SHORT
+            !nickname.all { it.isKoreanChar() } -> ERROR_NICKNAME_NON_KOREAN
+            !nickname.all { it.isCompleteKorean() } -> ERROR_NICKNAME_INCOMPLETE_KOREAN
             else -> null
         }
 
@@ -358,34 +387,34 @@ class AuthViewModel @Inject constructor(
         )
     }
 
-    private fun updateMbtiEnergy(energy: String) = setState {
+    private fun updateMbtiFirstOption(option: String) = setState {
         copy(
             mbtiState = currentState.mbtiState.copy(
-                energy = energy
+                firstLetter = option
             )
         )
     }
 
-    private fun updateMbtiPerception(perception: String) = setState {
+    private fun updateMbtiSecondOption(option: String) = setState {
         copy(
             mbtiState = currentState.mbtiState.copy(
-                perception = perception
+                secondLetter = option
             )
         )
     }
 
-    private fun updateMbtiDecision(decision: String) = setState {
+    private fun updateMbtiThirdOption(option: String) = setState {
         copy(
             mbtiState = currentState.mbtiState.copy(
-                decision = decision
+                thirdLetter = option
             )
         )
     }
 
-    private fun updateMbtiLifestyle(lifestyle: String) = setState {
+    private fun updateMbtiFourthOption(option: String) = setState {
         copy(
             mbtiState = currentState.mbtiState.copy(
-                lifestyle = lifestyle
+                forthLetter = option
             )
         )
     }
@@ -411,8 +440,57 @@ class AuthViewModel @Inject constructor(
         }
     }
 
+    private fun buildSignUpInfo(): SignUpInfo =
+        SignUpInfo(
+            platform = "KAKAO",
+            university = currentState.academicInfoState.university,
+            major = currentState.academicInfoState.major,
+            enterYear = currentState.academicInfoState.enterYear,
+            email = currentState.emailVerificationState.email,
+            nickname = currentState.nicknameGenderState.nickname,
+            gender = GenderType.fromDescription(currentState.nicknameGenderState.gender).name,
+            profileImage = currentState.selectProfileState.profileImageIndex,
+            mbti = MbtiFirstLetterType.fromDescription(currentState.mbtiState.firstLetter).name +
+                MbtiSecondLetterType.fromDescription(currentState.mbtiState.secondLetter).name +
+                MbtiThirdLetterType.fromDescription(currentState.mbtiState.thirdLetter).name +
+                MbtiFourthLetterType.fromDescription(currentState.mbtiState.forthLetter).name,
+            introduction = currentState.selfIntroductionState.selfIntroduction,
+            timeTable = convertToTimeTable(currentState.enterTimeTableState.selectedTimeSlotsByDay)
+        )
+
+    private fun requestSingUp() =
+        viewModelScope.launch {
+            setState { copy(loadState = UiLoadState.Loading) }
+            requestSignUpUseCase(signUpInfo = buildSignUpInfo())
+                .fold(
+                    onSuccess = { userAuth ->
+                        setState { copy(loadState = UiLoadState.Success) }
+                        setSideEffect(AuthContract.SideEffect.NavigateCompleteAuth)
+                        setTokenUseCase(userAuth.accessToken, userAuth.refreshToken)
+                    },
+                    onFailure = {
+                        setState { copy(loadState = UiLoadState.Error) }
+                    }
+                )
+        }
+
     companion object {
+        // Email Verification Messages
+        private const val ERROR_INVALID_EMAIL = "잘못된 이메일입니다. 다시 입력해주세요."
+        private const val MESSAGE_CODE_SENT = "인증코드를 발송했습니다."
+        private const val MESSAGE_CODE_EXPIRED = "유효시간이 만료되었습니다. 인증코드를 다시 요청해주세요."
+        private const val ERROR_EMPTY_EMAIL = "이메일을 먼저 입력해주세요."
+        private const val MESSAGE_CODE_SUCCESS = "인증이 완료되었습니다."
+        private const val ERROR_CODE_MISMATCH = "인증코드가 일치하지 않습니다."
+
+        // Nickname Validation Messages
+        private const val ERROR_NICKNAME_TOO_SHORT = "닉네임은 최소 2글자 이상이어야 합니다."
+        private const val ERROR_NICKNAME_NON_KOREAN = "닉네임은 한글만 사용할 수 있습니다."
+        private const val ERROR_NICKNAME_INCOMPLETE_KOREAN = "닉네임은 완성된 한글만 사용할 수 있습니다."
         private const val NICKNAME_VALIDATION_ERROR_MESSAGE = "중복된 닉네임입니다. 다시 입력해주세요."
         private const val ERROR_CODE_DUPLICATE_NICKNAME = "HTTP 409 "
+
+        // Timer
+        private const val EMAIL_VERIFICATION_TIME_LIMIT = 180
     }
 }

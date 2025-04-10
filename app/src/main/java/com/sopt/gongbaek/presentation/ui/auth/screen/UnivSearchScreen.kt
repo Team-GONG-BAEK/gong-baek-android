@@ -24,6 +24,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -91,7 +92,7 @@ private fun UnivSearchScreen(
         },
         bottomBar = {
             GongBaekBasicButton(
-                title = "적용",
+                title = stringResource(R.string.auth_academic_info_apply_button),
                 enabled = academicInfoState.isUniversitySearchComplete,
                 onClick = navigateBack,
                 modifier = Modifier
@@ -146,7 +147,7 @@ private fun SearchTextField(
             horizontalArrangement = Arrangement.Start
         ) {
             Text(
-                text = "학교",
+                text = stringResource(R.string.auth_academic_info_university),
                 color = GongBaekTheme.colors.gray08,
                 style = GongBaekTheme.typography.body2.sb14
             )
@@ -185,7 +186,7 @@ private fun SearchTextField(
                 ) {
                     if (value.isEmpty()) {
                         Text(
-                            text = "학교 이름을 검색하세요.",
+                            text = stringResource(R.string.auth_academic_info_university_search_placeholder),
                             color = GongBaekTheme.colors.gray04,
                             style = GongBaekTheme.typography.body1.m16
                         )

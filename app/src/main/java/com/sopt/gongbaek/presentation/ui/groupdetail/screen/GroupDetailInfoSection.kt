@@ -135,7 +135,7 @@ fun GroupDetailInfoSection(
                                     color = GongBaekTheme.colors.gray09,
                                     style = GongBaekTheme.typography.body1.b16
                                 )
-                                when (GenderType.toGenderType(groupHost.gender)) {
+                                when (GenderType.fromName(groupHost.gender)) {
                                     GenderType.MAN -> Image(
                                         imageVector = ImageVector.vectorResource(R.drawable.ic_male_20),
                                         contentDescription = null

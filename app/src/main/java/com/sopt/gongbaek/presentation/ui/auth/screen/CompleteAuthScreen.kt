@@ -23,6 +23,7 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.style.TextAlign
@@ -84,7 +85,7 @@ private fun CompleteAuthScreen(
             modifier = Modifier.fillMaxWidth()
         ) {
             Text(
-                text = "가입이 완료되었어요!",
+                text = stringResource(R.string.auth_complete_congratulations_title),
                 color = GongBaekTheme.colors.black,
                 style = GongBaekTheme.typography.head2.b24,
                 textAlign = TextAlign.Center,
@@ -95,7 +96,7 @@ private fun CompleteAuthScreen(
 
             Text(
                 text = buildAnnotatedString {
-                    append("0을 100으로 채우러 가볼까요?")
+                    append(stringResource(R.string.auth_complete_congratulations_description))
 
                     addStyle(
                         style = SpanStyle(
@@ -132,7 +133,7 @@ private fun CompleteAuthScreen(
         )
 
         GongBaekBasicButton(
-            title = "공백 채우러 가기",
+            title = stringResource(R.string.auth_complete_button_go_home),
             enabled = true,
             onClick = navigateHome,
             modifier = Modifier

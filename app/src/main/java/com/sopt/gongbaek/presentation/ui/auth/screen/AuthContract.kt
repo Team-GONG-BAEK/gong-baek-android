@@ -44,15 +44,15 @@ class AuthContract {
 
         data class ProfileImageSelected(val profileImageIndex: Int) : Event()
 
-        data class EnergyOptionSelected(val energy: String) : Event()
-        data class PerceptionOptionSelected(val perception: String) : Event()
-        data class DecisionOptionSelected(val decision: String) : Event()
-        data class LifestyleOptionSelected(val lifestyle: String) : Event()
+        data class MbtiFirstOptionSelected(val option: String) : Event()
+        data class MbtiSecondOptionSelected(val option: String) : Event()
+        data class MbtiThirdOptionSelected(val option: String) : Event()
+        data class MbtiFourthOptionSelected(val option: String) : Event()
 
         data class SelfIntroductionChanged(val selfIntroduction: String) : Event()
 
         data class TimeSlotSelectionChanged(val day: String, val timeSlots: List<Int>) : Event()
-//        data object SubmitUserInfo : Event()
+        data object RequestSingUp : Event()
     }
 
     sealed interface SideEffect : UiSideEffect {

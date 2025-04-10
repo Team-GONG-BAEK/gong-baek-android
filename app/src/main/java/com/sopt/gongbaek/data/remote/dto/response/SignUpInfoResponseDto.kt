@@ -4,9 +4,9 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class RegisterUserInfoResponseDto(
+data class SignUpInfoResponseDto(
     @SerialName("userId")
-    val userId: Int,
+    val userId: Long,
     @SerialName("accessToken")
     val accessToken: String,
     @SerialName("refreshToken")

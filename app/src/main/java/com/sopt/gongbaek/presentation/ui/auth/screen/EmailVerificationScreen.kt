@@ -70,6 +70,7 @@ fun EmailVerificationRoute(
 
     EmailVerificationScreen(
         uiState = uiState.emailVerificationState,
+        university = uiState.academicInfoState.university,
         onEmailChanged = { email -> viewModel.setEvent(AuthContract.Event.EmailChanged(email)) },
         onVerificationCodeRequested = { viewModel.setEvent(AuthContract.Event.VerificationCodeRequested) },
         onVerificationCodeChanged = { code -> viewModel.setEvent(AuthContract.Event.VerificationCodeChanged(code)) },
@@ -82,6 +83,7 @@ fun EmailVerificationRoute(
 @Composable
 private fun EmailVerificationScreen(
     uiState: EmailVerificationState,
+    university: String,
     onEmailChanged: (String) -> Unit,
     onVerificationCodeRequested: () -> Unit,
     onVerificationCodeChanged: (String) -> Unit,
@@ -107,7 +109,7 @@ private fun EmailVerificationScreen(
                 Spacer(modifier = Modifier.height(54.dp))
 
                 Text(
-                    text = stringResource(R.string.auth_email_verification_title, "건국대학교"),
+                    text = stringResource(R.string.auth_email_verification_title, university),
                     color = GongBaekTheme.colors.gray10,
                     style = GongBaekTheme.typography.head2.b24,
                     modifier = Modifier.fillMaxWidth()
@@ -119,7 +121,7 @@ private fun EmailVerificationScreen(
                     var isFocused by remember { mutableStateOf(false) }
 
                     Text(
-                        text = "이메일 주소",
+                        text = stringResource(R.string.auth_email_input_title),
                         color = GongBaekTheme.colors.gray08,
                         style = GongBaekTheme.typography.body2.sb14,
                         modifier = Modifier.padding(bottom = 10.dp)
@@ -166,7 +168,7 @@ private fun EmailVerificationScreen(
                             ) {
                                 if (uiState.email.isEmpty()) {
                                     Text(
-                                        text = "학교 이메일을 입력해주세요.",
+                                        text = stringResource(R.string.auth_email_input_placeholder),
                                         style = GongBaekTheme.typography.body1.m16,
                                         color = GongBaekTheme.colors.gray04,
                                         modifier = Modifier.align(Alignment.CenterStart)
@@ -185,7 +187,7 @@ private fun EmailVerificationScreen(
                             modifier = Modifier.weight(0.213f)
                         ) {
                             Text(
-                                text = if (uiState.step == EmailVerificationStep.INITIAL) "코드받기" else "다시받기",
+                                text = if (uiState.step == EmailVerificationStep.INITIAL) stringResource(R.string.auth_email_button_request_code) else stringResource(R.string.auth_email_button_resend_code),
                                 color = GongBaekTheme.colors.white,
                                 style = GongBaekTheme.typography.body1.m16
                             )
@@ -210,7 +212,7 @@ private fun EmailVerificationScreen(
                     var isFocused by remember { mutableStateOf(false) }
 
                     Text(
-                        text = "코드",
+                        text = stringResource(R.string.auth_email_verification_code_title),
                         color = GongBaekTheme.colors.gray08,
                         style = GongBaekTheme.typography.body2.sb14,
                         modifier = Modifier.padding(bottom = 10.dp)
@@ -257,7 +259,7 @@ private fun EmailVerificationScreen(
                             ) {
                                 if (uiState.verificationCode.isEmpty()) {
                                     Text(
-                                        text = "코드를 입력해주세요.",
+                                        text = stringResource(R.string.auth_email_verification_code_placeholder),
                                         style = GongBaekTheme.typography.body1.m16,
                                         color = GongBaekTheme.colors.gray04,
                                         modifier = Modifier.align(Alignment.CenterStart)
@@ -275,10 +277,7 @@ private fun EmailVerificationScreen(
                         }
 
                         GongBaekButton(
-                            onClick = {
-                                onVerificationCodeSubmitted()
-                                // TODO 인증받기 버튼을 먼저 누른 경우에 대한 처리
-                            },
+                            onClick = onVerificationCodeSubmitted,
                             colors = GongBaekButtonDefault.gongBaekButtonColors(
                                 containerColor = GongBaekTheme.colors.black
                             ),
@@ -286,7 +285,7 @@ private fun EmailVerificationScreen(
                             modifier = Modifier.weight(0.213f)
                         ) {
                             Text(
-                                text = "인증하기",
+                                text = stringResource(R.string.auth_email_button_verify_code),
                                 color = GongBaekTheme.colors.white,
                                 style = GongBaekTheme.typography.body1.m16
                             )
@@ -307,7 +306,7 @@ private fun EmailVerificationScreen(
             }
 
             GongBaekBasicButton(
-                title = "다음",
+                title = stringResource(R.string.auth_email_button_next),
                 enabled = uiState.step == EmailVerificationStep.VERIFIED,
                 onClick = onNextClick,
                 modifier = Modifier
@@ -323,6 +322,7 @@ private fun EmailVerificationScreen(
 private fun EmailVerificationScreenPreview() {
     EmailVerificationScreen(
         uiState = EmailVerificationState(),
+        university = "공백대학교",
         onEmailChanged = {},
         onVerificationCodeRequested = {},
         onVerificationCodeChanged = {},

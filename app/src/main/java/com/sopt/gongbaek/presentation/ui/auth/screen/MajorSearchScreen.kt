@@ -24,6 +24,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
@@ -104,7 +105,7 @@ private fun MajorSearchScreen(
                     )
                 }
                 GongBaekBasicButton(
-                    title = "적용",
+                    title = stringResource(R.string.auth_academic_info_apply_button),
                     enabled = academicInfoState.isMajorSearchComplete,
                     onClick = navigateBack,
                     modifier = Modifier
@@ -158,7 +159,7 @@ private fun SearchTextField(
             horizontalArrangement = Arrangement.Start
         ) {
             Text(
-                text = "학과",
+                text = stringResource(R.string.auth_academic_info_major),
                 color = GongBaekTheme.colors.gray08,
                 style = GongBaekTheme.typography.body2.sb14
             )
@@ -202,7 +203,7 @@ private fun SearchTextField(
                 ) {
                     if (value.isEmpty()) {
                         Text(
-                            text = "학과 이름을 검색하세요.",
+                            text = stringResource(R.string.auth_academic_info_major_search_placeholder),
                             color = GongBaekTheme.colors.gray04,
                             style = GongBaekTheme.typography.body1.m16
                         )
@@ -246,7 +247,7 @@ private fun DirectRegistrationButton(
                 withStyle(style = SpanStyle(color = GongBaekTheme.colors.mainOrange)) {
                     append("\"${major}\"")
                 }
-                append(" 으로 직접 등록할래요")
+                append(stringResource(R.string.auth_academic_info_direct_register))
             },
             color = GongBaekTheme.colors.gray08,
             style = GongBaekTheme.typography.caption2.m12,

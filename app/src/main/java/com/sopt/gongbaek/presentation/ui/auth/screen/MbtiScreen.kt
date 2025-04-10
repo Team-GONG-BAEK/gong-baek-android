@@ -52,10 +52,10 @@ fun MbtiRoute(
 
     MbtiScreen(
         uiState = uiState.mbtiState,
-        onEnergyOptionSelected = { energy -> viewModel.setEvent(AuthContract.Event.EnergyOptionSelected(energy)) },
-        onPerceptionOptionSelected = { perception -> viewModel.setEvent(AuthContract.Event.PerceptionOptionSelected(perception)) },
-        onDecisionOptionSelected = { decision -> viewModel.setEvent(AuthContract.Event.DecisionOptionSelected(decision)) },
-        onLifestyleOptionSelected = { lifeStyle -> viewModel.setEvent(AuthContract.Event.LifestyleOptionSelected(lifeStyle)) },
+        onMbtiFirstOptionSelected = { option -> viewModel.setEvent(AuthContract.Event.MbtiFirstOptionSelected(option)) },
+        onMbtiSecondOptionSelected = { option -> viewModel.setEvent(AuthContract.Event.MbtiSecondOptionSelected(option)) },
+        onMbtiThirdOptionSelected = { option -> viewModel.setEvent(AuthContract.Event.MbtiThirdOptionSelected(option)) },
+        onMbtiFourthOptionSelected = { option -> viewModel.setEvent(AuthContract.Event.MbtiFourthOptionSelected(option)) },
         onNextClick = { viewModel.sendSideEffect(AuthContract.SideEffect.NavigateSelfIntroduction) },
         onBackClick = { viewModel.sendSideEffect(AuthContract.SideEffect.NavigateBack) }
     )
@@ -64,17 +64,17 @@ fun MbtiRoute(
 @Composable
 private fun MbtiScreen(
     uiState: MbtiState,
-    onEnergyOptionSelected: (String) -> Unit,
-    onPerceptionOptionSelected: (String) -> Unit,
-    onDecisionOptionSelected: (String) -> Unit,
-    onLifestyleOptionSelected: (String) -> Unit,
+    onMbtiFirstOptionSelected: (String) -> Unit,
+    onMbtiSecondOptionSelected: (String) -> Unit,
+    onMbtiThirdOptionSelected: (String) -> Unit,
+    onMbtiFourthOptionSelected: (String) -> Unit,
     onNextClick: () -> Unit,
     onBackClick: () -> Unit
 ) {
     Scaffold(
         bottomBar = {
             GongBaekBasicButton(
-                title = "다음",
+                title = stringResource(R.string.auth_mbti_button_next),
                 enabled = uiState.isNextEnabled,
                 onClick = onNextClick,
                 modifier = Modifier
@@ -88,14 +88,14 @@ private fun MbtiScreen(
             modifier = Modifier.padding(innerPadding)
         ) {
             MbtiScreenContent(
-                energyDirectionOptions = uiState.energy,
-                informationGatheringOptions = uiState.perception,
-                decisionMakingOptions = uiState.decision,
-                lifestyleOrientationOptions = uiState.lifestyle,
-                onEnergyOptionSelected = onEnergyOptionSelected,
-                onPerceptionOptionSelected = onPerceptionOptionSelected,
-                onDecisionOptionSelected = onDecisionOptionSelected,
-                onLifestyleOptionSelected = onLifestyleOptionSelected,
+                energyDirectionOptions = uiState.firstLetter,
+                informationGatheringOptions = uiState.secondLetter,
+                decisionMakingOptions = uiState.thirdLetter,
+                lifestyleOrientationOptions = uiState.forthLetter,
+                onMbtiFirstOptionSelected = onMbtiFirstOptionSelected,
+                onMbtiSecondOptionSelected = onMbtiSecondOptionSelected,
+                onMbtiThirdOptionSelected = onMbtiThirdOptionSelected,
+                onMbtiFourthOptionSelected = onMbtiFourthOptionSelected,
                 onBackClick = onBackClick,
                 modifier = Modifier
                     .padding(horizontal = 16.dp)
@@ -110,10 +110,10 @@ private fun MbtiScreenContent(
     informationGatheringOptions: String,
     decisionMakingOptions: String,
     lifestyleOrientationOptions: String,
-    onEnergyOptionSelected: (String) -> Unit,
-    onPerceptionOptionSelected: (String) -> Unit,
-    onDecisionOptionSelected: (String) -> Unit,
-    onLifestyleOptionSelected: (String) -> Unit,
+    onMbtiFirstOptionSelected: (String) -> Unit,
+    onMbtiSecondOptionSelected: (String) -> Unit,
+    onMbtiThirdOptionSelected: (String) -> Unit,
+    onMbtiFourthOptionSelected: (String) -> Unit,
     onBackClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
@@ -143,7 +143,7 @@ private fun MbtiScreenContent(
                     )
                     GongBaekSelectableButtons(
                         selectableButtonType = SelectableButtonType.MBTI_FIRST,
-                        onOptionSelected = onEnergyOptionSelected,
+                        onOptionSelected = onMbtiFirstOptionSelected,
                         modifier = Modifier.padding(top = 10.dp, bottom = 20.dp),
                         selectedOption = energyDirectionOptions
                     )
@@ -157,7 +157,7 @@ private fun MbtiScreenContent(
                     )
                     GongBaekSelectableButtons(
                         selectableButtonType = SelectableButtonType.MBTI_SECOND,
-                        onOptionSelected = onPerceptionOptionSelected,
+                        onOptionSelected = onMbtiSecondOptionSelected,
                         modifier = Modifier.padding(top = 10.dp, bottom = 20.dp),
                         selectedOption = informationGatheringOptions
                     )
@@ -171,7 +171,7 @@ private fun MbtiScreenContent(
                     )
                     GongBaekSelectableButtons(
                         selectableButtonType = SelectableButtonType.MBTI_THIRD,
-                        onOptionSelected = onDecisionOptionSelected,
+                        onOptionSelected = onMbtiThirdOptionSelected,
                         modifier = Modifier.padding(top = 10.dp, bottom = 20.dp),
                         selectedOption = decisionMakingOptions
                     )
@@ -185,7 +185,7 @@ private fun MbtiScreenContent(
                     )
                     GongBaekSelectableButtons(
                         selectableButtonType = SelectableButtonType.MBTI_FOURTH,
-                        onOptionSelected = onLifestyleOptionSelected,
+                        onOptionSelected = onMbtiFourthOptionSelected,
                         modifier = Modifier.padding(top = 10.dp, bottom = 20.dp),
                         selectedOption = lifestyleOrientationOptions
                     )
@@ -201,10 +201,10 @@ private fun PreviewMbtiScreen() {
     GONGBAEKTheme {
         MbtiScreen(
             uiState = MbtiState(),
-            onEnergyOptionSelected = {},
-            onPerceptionOptionSelected = {},
-            onDecisionOptionSelected = {},
-            onLifestyleOptionSelected = {},
+            onMbtiFirstOptionSelected = {},
+            onMbtiSecondOptionSelected = {},
+            onMbtiThirdOptionSelected = {},
+            onMbtiFourthOptionSelected = {},
             onBackClick = {},
             onNextClick = {}
         )

@@ -12,17 +12,17 @@ class SearchRepositoryImpl @Inject constructor(
     private val searchRemoteDataSource: SearchRemoteDataSource
 ) : SearchRepository {
 
-    override suspend fun getSearchUniversitiesResult(universityName: String): Result<Universities> =
+    override suspend fun searchUniversities(universityName: String): Result<Universities> =
         runCatching {
-            searchRemoteDataSource.getSearchUniversitiesResult(universityName = universityName)
+            searchRemoteDataSource.searchUniversities(universityName = universityName)
                 .handleApiResponse()
                 .getOrThrow()
                 .toDomain()
         }
 
-    override suspend fun getSearchMajorsResult(universityName: String, majorName: String): Result<Majors> =
+    override suspend fun searchMajors(universityName: String, majorName: String): Result<Majors> =
         runCatching {
-            searchRemoteDataSource.getSearchMajorsResult(universityName = universityName, majorName = majorName)
+            searchRemoteDataSource.searchMajors(universityName = universityName, majorName = majorName)
                 .handleApiResponse()
                 .getOrThrow()
                 .toDomain()

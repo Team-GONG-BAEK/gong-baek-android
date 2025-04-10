@@ -17,19 +17,21 @@ import com.sopt.gongbaek.domain.usecase.GetGroupsUseCase
 import com.sopt.gongbaek.domain.usecase.GetLectureTimetableUseCase
 import com.sopt.gongbaek.domain.usecase.GetMyGroupsUseCase
 import com.sopt.gongbaek.domain.usecase.GetMyProfileUseCase
-import com.sopt.gongbaek.domain.usecase.GetSearchMajorsResultUseCase
-import com.sopt.gongbaek.domain.usecase.GetSearchUniversitiesResultUseCase
 import com.sopt.gongbaek.domain.usecase.LoadGroupDetailScreenUseCase
 import com.sopt.gongbaek.domain.usecase.LoadGroupRoomScreenUseCase
 import com.sopt.gongbaek.domain.usecase.LoginUseCase
 import com.sopt.gongbaek.domain.usecase.LogoutUseCase
 import com.sopt.gongbaek.domain.usecase.PostCommentUseCase
 import com.sopt.gongbaek.domain.usecase.PostGroupUseCase
-import com.sopt.gongbaek.domain.usecase.RegisterUserInfoUseCase
 import com.sopt.gongbaek.domain.usecase.ReissueTokenUseCase
+import com.sopt.gongbaek.domain.usecase.RequestEmailVerificationUseCase
+import com.sopt.gongbaek.domain.usecase.RequestSignUpUseCase
+import com.sopt.gongbaek.domain.usecase.SearchMajorsUseCase
+import com.sopt.gongbaek.domain.usecase.SearchUniversitiesUseCase
 import com.sopt.gongbaek.domain.usecase.SetLectureTimetableUseCase
 import com.sopt.gongbaek.domain.usecase.SetTokenUseCase
 import com.sopt.gongbaek.domain.usecase.ValidateNicknameUseCase
+import com.sopt.gongbaek.domain.usecase.VerifyEmailCodeUseCase
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -44,13 +46,13 @@ object UseCaseModule {
     @Singleton
     fun provideGetSearchUniversitiesResultUseCase(
         searchRepository: SearchRepository
-    ): GetSearchUniversitiesResultUseCase = GetSearchUniversitiesResultUseCase(searchRepository)
+    ): SearchUniversitiesUseCase = SearchUniversitiesUseCase(searchRepository)
 
     @Provides
     @Singleton
     fun provideGetSearchMajorsResultUseCase(
         searchRepository: SearchRepository
-    ): GetSearchMajorsResultUseCase = GetSearchMajorsResultUseCase(searchRepository)
+    ): SearchMajorsUseCase = SearchMajorsUseCase(searchRepository)
 
     @Provides
     @Singleton
@@ -87,7 +89,7 @@ object UseCaseModule {
     @Singleton
     fun provideRegisterUserInfoUseCase(
         authRepository: AuthRepository
-    ): RegisterUserInfoUseCase = RegisterUserInfoUseCase(authRepository)
+    ): RequestSignUpUseCase = RequestSignUpUseCase(authRepository)
 
     @Provides
     @Singleton
@@ -179,4 +181,16 @@ object UseCaseModule {
     fun provideGetMyProfileUseCase(
         userRepository: UserRepository
     ): GetMyProfileUseCase = GetMyProfileUseCase(userRepository)
+
+    @Provides
+    @Singleton
+    fun provideRequestEmailVerificationUseCase(
+        authRepository: AuthRepository
+    ): RequestEmailVerificationUseCase = RequestEmailVerificationUseCase(authRepository)
+
+    @Provides
+    @Singleton
+    fun provideVerifyEmailCodeUseCase(
+        authRepository: AuthRepository
+    ): VerifyEmailCodeUseCase = VerifyEmailCodeUseCase(authRepository)
 }

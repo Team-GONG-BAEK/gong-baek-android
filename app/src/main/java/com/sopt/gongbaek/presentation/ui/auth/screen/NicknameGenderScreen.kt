@@ -13,6 +13,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.LocalLifecycleOwner
@@ -84,7 +85,7 @@ private fun NicknameGenderScreen(
         )
 
         GongBaekBasicButton(
-            title = "다음",
+            title = stringResource(R.string.auth_nickname_gender_button_next),
             enabled = uiState.isNextEnabled,
             onClick = onNextClick,
             modifier = Modifier
@@ -135,7 +136,7 @@ private fun NickNameInputSection(
                 verticalArrangement = Arrangement.spacedBy(10.dp)
             ) {
                 Text(
-                    text = "성별",
+                    text = stringResource(R.string.auth_nickname_gender_title),
                     color = GongBaekTheme.colors.gray08,
                     style = GongBaekTheme.typography.body2.sb14
                 )
