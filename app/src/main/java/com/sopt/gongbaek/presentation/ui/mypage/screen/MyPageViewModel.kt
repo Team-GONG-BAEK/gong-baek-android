@@ -1,8 +1,7 @@
 package com.sopt.gongbaek.presentation.ui.mypage.screen
 
-import android.content.Context
 import androidx.lifecycle.viewModelScope
-import com.sopt.gongbaek.R
+import com.sopt.gongbaek.BuildConfig
 import com.sopt.gongbaek.domain.usecase.GetMyGroupsUseCase
 import com.sopt.gongbaek.domain.usecase.GetMyProfileUseCase
 import com.sopt.gongbaek.presentation.util.base.BaseViewModel
@@ -19,6 +18,7 @@ class MyPageViewModel @Inject constructor(
 
     init {
         getMyProfile()
+        getVersionInfo()
     }
 
     override fun createInitialState(): MyPageContract.State = MyPageContract.State()
@@ -31,20 +31,25 @@ class MyPageViewModel @Inject constructor(
             is MyPageContract.Event.OnLogoutClicked -> {
                 setState { copy(logoutDialogState = UiLoadState.Success) }
             }
+
             is MyPageContract.Event.OnWithdrawClicked -> {
                 setState { copy(withdrawDialogState = UiLoadState.Success) }
             }
+
             is MyPageContract.Event.OnLogoutDialogConfirmClicked -> {
                 setState { copy(logoutDialogState = UiLoadState.Idle) }
                 setSideEffect(MyPageContract.SideEffect.NavigateLogin)
             }
+
             is MyPageContract.Event.OnLogoutDialogDismissClicked -> {
                 setState { copy(logoutDialogState = UiLoadState.Idle) }
             }
+
             is MyPageContract.Event.OnWithdrawDialogConfirmClicked -> {
                 setState { copy(withdrawDialogState = UiLoadState.Idle) }
                 setSideEffect(MyPageContract.SideEffect.NavigateLogin)
             }
+
             is MyPageContract.Event.OnWithdrawDialogDismissClicked -> {
                 setState { copy(withdrawDialogState = UiLoadState.Idle) }
             }
@@ -111,16 +116,8 @@ class MyPageViewModel @Inject constructor(
         }
     }
 
-    fun getVersionInfo(context: Context) {
-        viewModelScope.launch {
-            runCatching {
-                val packageInfo = context.packageManager.getPackageInfo(context.packageName, 0)
-                packageInfo.versionName
-            }.onSuccess { versionName ->
-                setState { copy(versionName = versionName) }
-            }.onFailure {
-                setState { copy(versionName = context.getString(R.string.setting_version_info_failed)) }
-            }
-        }
+    fun getVersionInfo() {
+        val versionName = BuildConfig.VERSION_NAME
+        setState { copy(versionName = versionName) }
     }
 }
