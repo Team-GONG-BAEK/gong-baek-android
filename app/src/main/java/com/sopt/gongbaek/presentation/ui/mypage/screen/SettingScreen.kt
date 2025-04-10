@@ -25,7 +25,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.flowWithLifecycle
 import com.sopt.gongbaek.R
 import com.sopt.gongbaek.presentation.type.GongBaekDialogType
-import com.sopt.gongbaek.presentation.type.GongBaekWebView
+import com.sopt.gongbaek.presentation.type.SettingServiceGuideItem
 import com.sopt.gongbaek.presentation.ui.component.dialog.AccountDialog
 import com.sopt.gongbaek.presentation.ui.component.topbar.StartTitleTopBar
 import com.sopt.gongbaek.presentation.util.base.UiLoadState
@@ -158,57 +158,39 @@ private fun ServiceGuideSection(
             modifier = Modifier.padding(vertical = 20.dp)
         )
 
-        Text(
-            text = stringResource(R.string.setting_notice),
-            style = GongBaekTheme.typography.body1.r16,
-            color = GongBaekTheme.colors.gray10,
-            modifier = Modifier
-                .clickableWithoutRipple {
-                    openWebView(context, GongBaekWebView.NOTICE.url)
+        SettingServiceGuideItem.entries.forEach { item ->
+            if (item.url != null) {
+                Text(
+                    text = stringResource(item.titleResId),
+                    style = GongBaekTheme.typography.body1.r16,
+                    color = GongBaekTheme.colors.gray10,
+                    modifier = Modifier
+                        .clickableWithoutRipple {
+                            openWebView(context, item.url)
+                        }
+                        .fillMaxWidth()
+                        .padding(vertical = 20.dp)
+                )
+            } else {
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Text(
+                        text = stringResource(item.titleResId),
+                        style = GongBaekTheme.typography.body1.r16,
+                        color = GongBaekTheme.colors.gray10,
+                        modifier = Modifier.padding(vertical = 20.dp)
+                    )
+
+                    Text(
+                        text = uiState.versionName,
+                        style = GongBaekTheme.typography.body1.r16,
+                        color = GongBaekTheme.colors.gray04
+                    )
                 }
-                .padding(vertical = 20.dp)
-        )
-
-        Text(
-            text = stringResource(R.string.setting_privacy_policy),
-            style = GongBaekTheme.typography.body1.r16,
-            color = GongBaekTheme.colors.gray10,
-            modifier = Modifier
-                .clickableWithoutRipple {
-                    openWebView(context, GongBaekWebView.PRIVACY_POLICY.url)
-                }
-                .padding(vertical = 20.dp)
-        )
-
-        Text(
-            text = stringResource(R.string.setting_terms_of_service),
-            style = GongBaekTheme.typography.body1.r16,
-            color = GongBaekTheme.colors.gray10,
-            modifier = Modifier
-                .clickableWithoutRipple {
-                    openWebView(context, GongBaekWebView.TERMS_OF_SERVICE.url)
-                }
-                .padding(vertical = 20.dp)
-        )
-
-        Row(
-            modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.SpaceBetween,
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            Text(
-                text = stringResource(R.string.setting_version_info),
-                style = GongBaekTheme.typography.body1.r16,
-                color = GongBaekTheme.colors.gray10,
-                modifier = Modifier
-                    .padding(vertical = 20.dp)
-            )
-
-            Text(
-                text = uiState.versionName,
-                style = GongBaekTheme.typography.body1.r16,
-                color = GongBaekTheme.colors.gray04
-            )
+            }
         }
     }
 }
@@ -235,6 +217,7 @@ private fun AccountSection(
             color = GongBaekTheme.colors.gray10,
             modifier = Modifier
                 .clickableWithoutRipple { onLogoutClicked() }
+                .fillMaxWidth()
                 .padding(vertical = 20.dp)
         )
 
@@ -244,6 +227,7 @@ private fun AccountSection(
             color = GongBaekTheme.colors.gray10,
             modifier = Modifier
                 .clickableWithoutRipple { onWithdrawClicked() }
+                .fillMaxWidth()
                 .padding(vertical = 20.dp)
         )
     }
