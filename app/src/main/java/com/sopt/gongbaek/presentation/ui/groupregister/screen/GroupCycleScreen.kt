@@ -151,18 +151,11 @@ private fun GroupCycleSection(
                 Spacer(Modifier.width(6.dp))
 
                 Text(
-                    text = stringResource(R.string.groupregister_cycle_weekly_title),
+                    text = stringResource(R.string.groupregister_cycle_description),
                     color = GongBaekTheme.colors.mainOrange,
-                    style = GongBaekTheme.typography.body2.sb14
+                    style = GongBaekTheme.typography.caption1.m13
                 )
             }
-            Spacer(Modifier.height(10.dp))
-
-            Text(
-                text = stringResource(R.string.groupregister_cycle_weekly_description),
-                color = GongBaekTheme.colors.gray08,
-                style = GongBaekTheme.typography.caption2.r12
-            )
         }
     }
 }

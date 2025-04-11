@@ -154,5 +154,14 @@ private fun GroupIntroductionSection(
 @Composable
 fun ShowGroupIntroductionScreen() {
     GONGBAEKTheme {
+        GroupIntroductionScreen(
+            groupTitle = "",
+            titleErrorMessage = null,
+            onGroupTitleChange = {},
+            introduction = "",
+            onIntroductionChange = {},
+            onNextButtonClicked = {},
+            onBackClick = {}
+        )
     }
 }
