@@ -161,24 +161,24 @@ fun GroupListScreen(
                     )
                 }
 
-                item {
-                    Row(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(start = 16.dp, end = 16.dp, top = 12.dp)
-                            .height(IntrinsicSize.Min),
-                        horizontalArrangement = Arrangement.SpaceBetween,
-                        verticalAlignment = Alignment.CenterVertically
-                    ) {
-                        CycleBottomSheetPresenter()
-
-                        GongBaekToggleButton(
-                            checkedState = toggleCheckedState,
-                            onClick = onToggleStateChanged,
-                            modifier = Modifier.align(Alignment.Top)
-                        )
-                    }
-                }
+//                item {
+//                    Row(
+//                        modifier = Modifier
+//                            .fillMaxWidth()
+//                            .padding(start = 16.dp, end = 16.dp, top = 12.dp)
+//                            .height(IntrinsicSize.Min),
+//                        horizontalArrangement = Arrangement.SpaceBetween,
+//                        verticalAlignment = Alignment.CenterVertically
+//                    ) {
+//                        CycleBottomSheetPresenter()
+//
+//                        GongBaekToggleButton(
+//                            checkedState = toggleCheckedState,
+//                            onClick = onToggleStateChanged,
+//                            modifier = Modifier.align(Alignment.Top)
+//                        )
+//                    }
+//                }
 
                 if (groupList.isEmpty()) {
                     item {
