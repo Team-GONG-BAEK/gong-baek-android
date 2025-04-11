@@ -73,7 +73,7 @@ private fun MainBottomNavBarItem(
     Column(
         modifier = modifier
             .clickableWithoutRipple(onClick = onClick)
-            .padding(vertical = 14.dp),
+            .padding(vertical = 8.dp),
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
@@ -87,7 +87,7 @@ private fun MainBottomNavBarItem(
             ),
             contentDescription = null
         )
-        Spacer(modifier = Modifier.height(4.dp))
+        Spacer(modifier = Modifier.height(2.dp))
         Text(
             text = context.getString(bottomNavBarTabType.label),
             style = GongBaekTheme.typography.body2.m14,
