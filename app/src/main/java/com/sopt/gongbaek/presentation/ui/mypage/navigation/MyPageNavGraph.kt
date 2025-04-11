@@ -1,5 +1,6 @@
 package com.sopt.gongbaek.presentation.ui.mypage.navigation
 
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
@@ -11,7 +12,8 @@ import com.sopt.gongbaek.presentation.ui.mypage.screen.MyPageRoute
 import com.sopt.gongbaek.presentation.ui.mypage.screen.SettingRoute
 
 fun NavGraphBuilder.myPageNavGraph(
-    navController: NavController
+    navController: NavController,
+    innerPadding: PaddingValues
 ) {
     composable<MainBottomTabRoute.MyPage> {
         MyPageRoute(
@@ -23,7 +25,8 @@ fun NavGraphBuilder.myPageNavGraph(
             },
             navigateGroupRoom = { groupId, groupCycle ->
                 navController.navigateGroupRoom(groupId, groupCycle)
-            }
+            },
+            innerPadding = innerPadding
         )
     }
 

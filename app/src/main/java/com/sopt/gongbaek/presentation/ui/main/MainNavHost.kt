@@ -67,6 +67,9 @@ fun MainNavHost(
             innerPadding = paddingValues
         )
         groupRoomNavGraph(navigator.navController)
-        myPageNavGraph(navigator.navController)
+        myPageNavGraph(
+            navController = navigator.navController,
+            innerPadding = paddingValues
+        )
     }
 }
