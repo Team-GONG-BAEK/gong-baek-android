@@ -1,6 +1,7 @@
 package com.sopt.gongbaek.presentation.ui.groupregister.screen
 
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -85,6 +86,7 @@ fun GroupCoverScreen(
                     .padding(horizontal = 16.dp, vertical = 12.dp)
             )
         },
+        contentWindowInsets = WindowInsets(0.dp),
         containerColor = GongBaekTheme.colors.white
     ) { innerPadding ->
         Column(
