@@ -1,10 +1,7 @@
 package com.sopt.gongbaek.presentation.ui.grouplist.screen
 
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.IntrinsicSize
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.asPaddingValues
@@ -43,9 +40,6 @@ import com.sopt.gongbaek.presentation.type.GroupInfoChipType
 import com.sopt.gongbaek.presentation.ui.component.section.GroupInfoSection
 import com.sopt.gongbaek.presentation.ui.component.topbar.CenterTitleTopBar
 import com.sopt.gongbaek.presentation.ui.grouplist.component.CategoryBar
-import com.sopt.gongbaek.presentation.ui.grouplist.component.CycleBottomSheetPresenter
-import com.sopt.gongbaek.presentation.ui.grouplist.component.DayOfWeekBar
-import com.sopt.gongbaek.presentation.ui.grouplist.component.GongBaekToggleButton
 import com.sopt.gongbaek.presentation.util.extension.clickableWithoutRipple
 import com.sopt.gongbaek.presentation.util.formatGroupTimeDescription
 import com.sopt.gongbaek.ui.theme.GONGBAEKTheme
@@ -199,7 +193,6 @@ fun GroupListScreen(
                 } else {
                     items(items = groupList) { groupList ->
                         GroupInfoSection(
-                            groupStatus = GroupInfoChipType.getChipTypeFromStatus(groupList.status),
                             groupCategory = GroupInfoChipType.getChipTypeFromCategory(groupList.category),
                             groupCycle = GroupInfoChipType.getChipTypeFromCycle(groupList.cycle),
                             groupCover = groupList.coverImg,
