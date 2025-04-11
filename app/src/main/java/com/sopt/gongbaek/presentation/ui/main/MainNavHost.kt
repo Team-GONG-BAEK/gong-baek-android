@@ -59,7 +59,10 @@ fun MainNavHost(
         composable<NavigationRoute.TermsOfService> { TermsOfServiceRoute(navController = navigator.navController) }
         onboardingNavGraph(navigator.navController)
         authNavGraph(navigator.navController)
-        groupListNavGraph(navigator.navController)
+        groupListNavGraph(
+            navController = navigator.navController,
+            innerPadding = paddingValues
+        )
         groupRegisterNavGraph(navigator.navController)
         groupDetailNavGraph(navigator.navController)
         homeNavGraph(
