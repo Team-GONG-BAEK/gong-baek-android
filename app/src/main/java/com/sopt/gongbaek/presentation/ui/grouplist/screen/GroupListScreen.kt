@@ -48,6 +48,7 @@ import com.sopt.gongbaek.presentation.ui.grouplist.component.DayOfWeekBar
 import com.sopt.gongbaek.presentation.ui.grouplist.component.GongBaekToggleButton
 import com.sopt.gongbaek.presentation.util.extension.clickableWithoutRipple
 import com.sopt.gongbaek.presentation.util.formatGroupTimeDescription
+import com.sopt.gongbaek.ui.theme.GONGBAEKTheme
 import com.sopt.gongbaek.ui.theme.GongBaekTheme
 
 @Composable
@@ -138,11 +139,11 @@ fun GroupListScreen(
                 .padding(innerPadding)
                 .fillMaxSize()
         ) {
-            DayOfWeekBar(
-                selectedIndex = selectedDayOfWeekIndex,
-                onIndexSelected = onDayOfWeekSelected
-            )
-            Spacer(Modifier.height(8.dp))
+//            DayOfWeekBar(
+//                selectedIndex = selectedDayOfWeekIndex,
+//                onIndexSelected = onDayOfWeekSelected
+//            )
+//            Spacer(Modifier.height(8.dp))
 
             CategoryBar(
                 selectedIndex = selectedCategoryIndex,
@@ -227,4 +228,17 @@ fun GroupListScreen(
 @Preview(showBackground = true)
 @Composable
 fun ShowGroupListScreen() {
+    GONGBAEKTheme {
+        GroupListScreen(
+            selectedDayOfWeekIndex = 0,
+            onDayOfWeekSelected = {},
+            selectedCategoryIndex = 0,
+            onCategorySelected = {},
+            toggleCheckedState = false,
+            onToggleStateChanged = {},
+            navigateGroupDetail = { _, _ -> },
+            navigateGroupRegister = {},
+            groupList = listOf()
+        )
+    }
 }
