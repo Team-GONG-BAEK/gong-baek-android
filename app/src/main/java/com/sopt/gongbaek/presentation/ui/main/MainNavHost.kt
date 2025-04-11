@@ -62,7 +62,10 @@ fun MainNavHost(
         groupListNavGraph(navigator.navController)
         groupRegisterNavGraph(navigator.navController)
         groupDetailNavGraph(navigator.navController)
-        homeNavGraph(navigator.navController)
+        homeNavGraph(
+            navController = navigator.navController,
+            innerPadding = paddingValues
+        )
         groupRoomNavGraph(navigator.navController)
         myPageNavGraph(navigator.navController)
     }
