@@ -33,6 +33,7 @@ import com.sopt.gongbaek.domain.model.RecommendGroupInfo
 import com.sopt.gongbaek.presentation.type.GroupInfoChipType
 import com.sopt.gongbaek.presentation.type.ImageSelectorType
 import com.sopt.gongbaek.presentation.ui.component.chip.GroupInfoChip
+import com.sopt.gongbaek.presentation.ui.component.section.GroupPlaceDescription
 import com.sopt.gongbaek.presentation.ui.component.section.GroupTimeDescription
 import com.sopt.gongbaek.presentation.util.extension.clickableWithoutRipple
 import com.sopt.gongbaek.presentation.util.homeOnceGroupFormatSchedule
@@ -48,39 +49,38 @@ fun WeekRecommendSection(
     Column(
         modifier = modifier
     ) {
-        Column(
-            modifier = Modifier.padding(horizontal = 16.dp)
-        ) {
-            Text(
-                text = "공강시간에 정기적인 활동 어때요?",
-                color = GongBaekTheme.colors.gray10,
-                style = GongBaekTheme.typography.title2.b18
-            )
+        Text(
+            text = "공강시간에 정기적인 활동 어때요?",
+            color = GongBaekTheme.colors.gray10,
+            style = GongBaekTheme.typography.title2.b18,
+            modifier = Modifier.padding(start = 16.dp)
+        )
 
-            Spacer(modifier = Modifier.height(4.dp))
+        Spacer(modifier = Modifier.height(4.dp))
 
-            Row(verticalAlignment = Alignment.CenterVertically) {
-                Text(
-                    text = userNickname,
-                    color = GongBaekTheme.colors.gray06,
-                    style = GongBaekTheme.typography.body2.m14
-                )
-                Text(
-                    text = buildAnnotatedString {
-                        append("님과 딱 맞는 매주 봐요 모임 추천이에요.")
-                        addStyle(
-                            style = SpanStyle(
-                                color = GongBaekTheme.colors.mainOrange
-                            ),
-                            start = 8,
-                            end = 14
-                        )
-                    },
-                    color = GongBaekTheme.colors.gray06,
-                    style = GongBaekTheme.typography.body2.m14
-                )
-            }
-        }
+        Text(
+            text = buildAnnotatedString {
+                val fullText = "${userNickname}님과 딱 맞는 매주 봐요 모임 추천이에요."
+                append(fullText)
+
+                val highlightText = "매주 봐요"
+                val start = fullText.indexOf(highlightText)
+                val end = start + highlightText.length
+
+                if (start != -1) {
+                    addStyle(
+                        style = SpanStyle(
+                            color = GongBaekTheme.colors.mainOrange
+                        ),
+                        start = start,
+                        end = end
+                    )
+                }
+            },
+            color = GongBaekTheme.colors.gray06,
+            style = GongBaekTheme.typography.body2.m14,
+            modifier = Modifier.padding(start = 16.dp)
+        )
 
         Spacer(modifier = Modifier.height(16.dp))
 
@@ -169,33 +169,11 @@ private fun WeekRecommendItem(
 
         Spacer(modifier = Modifier.height(2.dp))
 
-        Row(
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.spacedBy(2.dp)
-        ) {
-            Image(
-                painter = painterResource(
-                    when (weekRecommendGroupInfo.profileImg) {
-                        1 -> R.drawable.img_home_profile_small_1
-                        2 -> R.drawable.img_home_profile_small_2
-                        3 -> R.drawable.img_home_profile_small_3
-                        4 -> R.drawable.img_home_profile_small_4
-                        5 -> R.drawable.img_home_profile_small_5
-                        6 -> R.drawable.img_home_profile_small_6
-                        else -> R.drawable.img_home_profile_small_4
-                    }
-                ),
-                contentDescription = null,
-                contentScale = ContentScale.Crop,
-                modifier = Modifier.padding(vertical = 1.dp)
-            )
-            Text(
-                text = weekRecommendGroupInfo.nickname,
-                color = GongBaekTheme.colors.gray09,
-                maxLines = 1,
-                style = GongBaekTheme.typography.caption2.m12
-            )
-        }
+        GroupPlaceDescription(
+            description = weekRecommendGroupInfo.location,
+            textColor = GongBaekTheme.colors.gray06,
+            textStyle = GongBaekTheme.typography.caption2.m12
+        )
     }
 }
 

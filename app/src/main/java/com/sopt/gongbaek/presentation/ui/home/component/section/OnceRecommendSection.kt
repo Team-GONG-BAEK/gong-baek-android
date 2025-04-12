@@ -5,7 +5,6 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -33,6 +32,7 @@ import com.sopt.gongbaek.domain.model.RecommendGroupInfo
 import com.sopt.gongbaek.presentation.type.GroupInfoChipType
 import com.sopt.gongbaek.presentation.type.ImageSelectorType
 import com.sopt.gongbaek.presentation.ui.component.chip.GroupInfoChip
+import com.sopt.gongbaek.presentation.ui.component.section.GroupPlaceDescription
 import com.sopt.gongbaek.presentation.ui.component.section.GroupTimeDescription
 import com.sopt.gongbaek.presentation.util.extension.clickableWithoutRipple
 import com.sopt.gongbaek.presentation.util.nearestGroupFormatSchedule
@@ -47,34 +47,30 @@ fun OnceRecommendSection(
     Column(
         modifier = modifier
     ) {
-        Column(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(horizontal = 16.dp)
-        ) {
-            Text(
-                text = "한번만 만나도 특별할 우리",
-                color = GongBaekTheme.colors.gray10,
-                style = GongBaekTheme.typography.title2.b18
-            )
+        Text(
+            text = "한번만 만나도 특별할 우리",
+            color = GongBaekTheme.colors.gray10,
+            style = GongBaekTheme.typography.title2.b18,
+            modifier = Modifier.padding(start = 16.dp)
+        )
 
-            Spacer(modifier = Modifier.height(4.dp))
+        Spacer(modifier = Modifier.height(4.dp))
 
-            Text(
-                text = buildAnnotatedString {
-                    append("한번만 봐요 모임으로 잊지 못할 추억을 만들어보세요!")
-                    addStyle(
-                        style = SpanStyle(
-                            color = GongBaekTheme.colors.mainOrange
-                        ),
-                        start = 0,
-                        end = 7
-                    )
-                },
-                color = GongBaekTheme.colors.gray06,
-                style = GongBaekTheme.typography.body2.m14
-            )
-        }
+        Text(
+            text = buildAnnotatedString {
+                append("한번만 봐요 모임으로 잊지 못할 추억을 만들어보세요!")
+                addStyle(
+                    style = SpanStyle(
+                        color = GongBaekTheme.colors.mainOrange
+                    ),
+                    start = 0,
+                    end = 7
+                )
+            },
+            color = GongBaekTheme.colors.gray06,
+            style = GongBaekTheme.typography.body2.m14,
+            modifier = Modifier.padding(start = 16.dp)
+        )
 
         Spacer(modifier = Modifier.height(16.dp))
 
@@ -157,33 +153,11 @@ private fun OnceRecommendItem(
 
         Spacer(modifier = Modifier.height(2.dp))
 
-        Row(
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.spacedBy(2.dp)
-        ) {
-            Image(
-                painter = painterResource(
-                    when (onceRecommendGroupInfo.profileImg) {
-                        1 -> R.drawable.img_home_profile_small_1
-                        2 -> R.drawable.img_home_profile_small_2
-                        3 -> R.drawable.img_home_profile_small_3
-                        4 -> R.drawable.img_home_profile_small_4
-                        5 -> R.drawable.img_home_profile_small_5
-                        6 -> R.drawable.img_home_profile_small_6
-                        else -> R.drawable.img_home_profile_small_4
-                    }
-                ),
-                contentDescription = null,
-                contentScale = ContentScale.Crop,
-                modifier = Modifier.padding(vertical = 1.dp)
-            )
-            Text(
-                text = onceRecommendGroupInfo.nickname,
-                color = GongBaekTheme.colors.gray09,
-                maxLines = 1,
-                style = GongBaekTheme.typography.caption2.m12
-            )
-        }
+        GroupPlaceDescription(
+            description = onceRecommendGroupInfo.location,
+            textColor = GongBaekTheme.colors.gray06,
+            textStyle = GongBaekTheme.typography.caption2.m12
+        )
     }
 }
 
@@ -198,13 +172,15 @@ private fun PreviewOnceRecommendSection() {
                 weekDate = "2021-09-20",
                 startTime = 18.0,
                 endTime = 20.0,
-                profileImg = 5
+                profileImg = 5,
+                location = "서울특별시 강남구"
             ),
             RecommendGroupInfo(
                 groupTitle = "운동 모임",
                 nickname = "김대현1",
                 weekDate = "2021-09-20",
-                profileImg = 1
+                profileImg = 1,
+                location = "서울특별시 강남구"
             ),
             RecommendGroupInfo(
                 groupTitle = "스터디 모임",
@@ -212,13 +188,15 @@ private fun PreviewOnceRecommendSection() {
                 weekDate = "2021-09-20",
                 startTime = 18.0,
                 endTime = 20.0,
-                profileImg = 3
+                profileImg = 3,
+                location = "서울특별시 강남구"
             ),
             RecommendGroupInfo(
                 groupTitle = "운동 모임",
                 nickname = "김대현3",
                 weekDate = "2021-09-20",
-                profileImg = 4
+                profileImg = 4,
+                location = "서울특별시 강남구"
             )
         ),
         onClickOnceRecommendItem = { _, _ -> }
