@@ -14,8 +14,6 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.flowWithLifecycle
-import com.sopt.gongbaek.domain.model.NearestGroup
-import com.sopt.gongbaek.domain.model.RecommendGroupInfo
 import com.sopt.gongbaek.presentation.ui.home.component.section.HomeBannerSection
 import com.sopt.gongbaek.presentation.ui.home.component.section.MemberRecommendSection
 import com.sopt.gongbaek.presentation.ui.home.component.section.NearestGroupSection
@@ -34,18 +32,14 @@ fun HomeRoute(
     val uiState by viewModel.state.collectAsStateWithLifecycle()
     val lifecycleOwner = LocalLifecycleOwner.current
 
-    LaunchedEffect(viewModel.sideEffect, lifecycleOwner) {
+    LaunchedEffect(Unit) {
         viewModel.sideEffect
             .flowWithLifecycle(lifecycleOwner.lifecycle)
             .collect { sideEffect ->
-                if (sideEffect is HomeContract.SideEffect.NavigateToGroupDetail) {
-                    navigateGroupDetail(sideEffect.groupId, sideEffect.groupType)
-                }
-                if (sideEffect is HomeContract.SideEffect.NavigateToGroupRoom) {
-                    navigateGroupRoom(sideEffect.groupId, sideEffect.groupType)
-                }
-                if (sideEffect is HomeContract.SideEffect.NavigateToGroupList) {
-                    navigateGroupList()
+                when (sideEffect) {
+                    is HomeContract.SideEffect.NavigateToGroupDetail -> navigateGroupDetail(sideEffect.groupId, sideEffect.groupType)
+                    is HomeContract.SideEffect.NavigateToGroupRoom -> navigateGroupRoom(sideEffect.groupId, sideEffect.groupType)
+                    is HomeContract.SideEffect.NavigateToGroupList -> navigateGroupList()
                 }
             }
     }
@@ -59,11 +53,7 @@ fun HomeRoute(
     }
 
     HomeScreen(
-        university = uiState.userProfile.schoolName,
-        userNickname = uiState.userProfile.nickname,
-        nearestGroup = uiState.nearestGroup,
-        onceRecommendGroupInfo = uiState.onceRecommendGroupList,
-        weekRecommendGroupInfo = uiState.weekRecommendGroupList,
+        uiState = uiState,
         onClickWeekRecommendItem = { groupId, groupCycle ->
             viewModel.sendSideEffect(HomeContract.SideEffect.NavigateToGroupDetail(groupId, groupCycle))
         },
@@ -73,7 +63,7 @@ fun HomeRoute(
         onFillGroupClick = {
             viewModel.sendSideEffect(HomeContract.SideEffect.NavigateToGroupList)
         },
-        navigateGroupRoom = { groupId, groupType ->
+        onNearestGroupClick = { groupId, groupType ->
             viewModel.sendSideEffect(HomeContract.SideEffect.NavigateToGroupRoom(groupId, groupType))
         },
         modifier = Modifier.padding(innerPadding)
@@ -82,15 +72,11 @@ fun HomeRoute(
 
 @Composable
 private fun HomeScreen(
-    university: String,
-    userNickname: String,
-    nearestGroup: NearestGroup,
-    weekRecommendGroupInfo: List<RecommendGroupInfo>,
-    onceRecommendGroupInfo: List<RecommendGroupInfo>,
+    uiState: HomeContract.State,
     onClickWeekRecommendItem: (Int, String) -> Unit,
     onClickOnceRecommendItem: (Int, String) -> Unit,
     onFillGroupClick: () -> Unit,
-    navigateGroupRoom: (Int, String) -> Unit,
+    onNearestGroupClick: (Int, String) -> Unit,
     modifier: Modifier = Modifier
 ) {
     LazyColumn(
@@ -98,9 +84,9 @@ private fun HomeScreen(
     ) {
         item {
             NearestGroupSection(
-                university = university,
-                nearestGroup = nearestGroup,
-                onNearestGroupClick = navigateGroupRoom,
+                university = uiState.userProfile.schoolName,
+                nearestGroup = uiState.nearestGroup,
+                onNearestGroupClick = onNearestGroupClick,
                 onFillGroupClick = onFillGroupClick,
                 modifier = Modifier.padding(bottom = 30.dp)
             )
@@ -108,8 +94,8 @@ private fun HomeScreen(
 
         item {
             WeekRecommendSection(
-                userNickname = userNickname,
-                weekRecommendGroupInfo = weekRecommendGroupInfo,
+                userNickname = uiState.userProfile.nickname,
+                weekRecommendGroupInfo = uiState.weekRecommendGroupList,
                 onClickWeekRecommendItem = onClickWeekRecommendItem,
                 modifier = Modifier.padding(bottom = 30.dp)
             )
@@ -117,7 +103,7 @@ private fun HomeScreen(
 
         item {
             OnceRecommendSection(
-                onceRecommendGroupInfo = onceRecommendGroupInfo,
+                onceRecommendGroupInfo = uiState.onceRecommendGroupList,
                 onClickOnceRecommendItem = onClickOnceRecommendItem,
                 modifier = Modifier.padding(bottom = 30.dp)
             )
@@ -130,7 +116,9 @@ private fun HomeScreen(
         }
 
         item {
-            MemberRecommendSection()
+            MemberRecommendSection(
+                modifier = Modifier.padding(bottom = 30.dp)
+            )
         }
     }
 }
@@ -140,67 +128,11 @@ private fun HomeScreen(
 private fun PreviewHomeScreen() {
     GONGBAEKTheme {
         HomeScreen(
-            university = "건국대학교 서울캠퍼스",
-            nearestGroup = NearestGroup(
-                weekDate = "2021-09-20",
-                startTime = 18.0,
-                endTime = 20.0
-            ),
-            userNickname = "김대현",
-            weekRecommendGroupInfo = listOf(
-                RecommendGroupInfo(
-                    groupTitle = "스터디 모임",
-                    nickname = "김대현",
-                    weekDate = "2021-09-20",
-                    profileImg = 5
-                ),
-                RecommendGroupInfo(
-                    groupTitle = "운동 모임",
-                    nickname = "김대현1",
-                    weekDate = "2021-09-20",
-                    profileImg = 1
-                ),
-                RecommendGroupInfo(
-                    groupTitle = "스터디 모임",
-                    nickname = "김대현2",
-                    weekDate = "2021-09-20",
-                    profileImg = 3
-                ),
-                RecommendGroupInfo(
-                    groupTitle = "운동 모임",
-                    nickname = "김대현3",
-                    weekDate = "2021-09-20"
-                )
-            ),
+            uiState = HomeContract.State(),
             onClickWeekRecommendItem = { _, _ -> },
             onClickOnceRecommendItem = { _, _ -> },
-            navigateGroupRoom = { _, _ -> },
+            onNearestGroupClick = { _, _ -> },
             onFillGroupClick = {},
-            onceRecommendGroupInfo = listOf(
-                RecommendGroupInfo(
-                    groupTitle = "스터디 모임",
-                    nickname = "김대현",
-                    weekDate = "2021-09-20",
-                    profileImg = 5
-                ),
-                RecommendGroupInfo(
-                    groupTitle = "운동 모임",
-                    nickname = "김대현1",
-                    weekDate = "2021-09-20",
-                    profileImg = 1
-                ),
-                RecommendGroupInfo(
-                    groupTitle = "스터디 모임",
-                    nickname = "김대현2",
-                    weekDate = "2021-09-20",
-                    profileImg = 3
-                ),
-                RecommendGroupInfo(
-                    groupTitle = "운동 모임",
-                    nickname = "김대현3",
-                    weekDate = "2021-09-20"
-                )
-            )
         )
     }
 }
