@@ -132,7 +132,7 @@ private fun PreviewHomeScreen() {
             onClickWeekRecommendItem = { _, _ -> },
             onClickOnceRecommendItem = { _, _ -> },
             onNearestGroupClick = { _, _ -> },
-            onFillGroupClick = {},
+            onFillGroupClick = {}
         )
     }
 }
