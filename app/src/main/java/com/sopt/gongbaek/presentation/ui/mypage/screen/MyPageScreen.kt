@@ -2,14 +2,12 @@ package com.sopt.gongbaek.presentation.ui.mypage.screen
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.WindowInsets
-import androidx.compose.foundation.layout.asPaddingValues
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.navigationBars
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.pager.HorizontalPager
@@ -48,7 +46,8 @@ fun MyPageRoute(
     viewModel: MyPageViewModel = hiltViewModel(),
     navigateSetting: () -> Unit,
     navigateGroupDetail: (Int, String) -> Unit,
-    navigateGroupRoom: (Int, String) -> Unit
+    navigateGroupRoom: (Int, String) -> Unit,
+    innerPadding: PaddingValues
 ) {
     val myPageUiState by viewModel.state.collectAsStateWithLifecycle()
     val lifecycleOwner = LocalLifecycleOwner.current
@@ -75,6 +74,7 @@ fun MyPageRoute(
                     is MyPageContract.SideEffect.NavigateGroupRoom -> {
                         navigateGroupRoom(sideEffect.groupId, sideEffect.groupCycle)
                     }
+
                     else -> {}
                 }
             }
@@ -92,7 +92,8 @@ fun MyPageRoute(
         },
         onGroupRoomButtonClick = { groupId, groupCycle ->
             viewModel.sendSideEffect(MyPageContract.SideEffect.NavigateGroupRoom(groupId, groupCycle))
-        }
+        },
+        modifier = Modifier.padding(innerPadding)
     )
 }
 
@@ -103,12 +104,12 @@ private fun MyPageScreen(
     myPageTabs: List<String>,
     pagerState: PagerState,
     onGroupDetailButtonClick: (Int, String) -> Unit,
-    onGroupRoomButtonClick: (Int, String) -> Unit
+    onGroupRoomButtonClick: (Int, String) -> Unit,
+    modifier: Modifier = Modifier
 ) {
     Column(
-        modifier = Modifier
+        modifier = modifier
             .fillMaxSize()
-            .padding(WindowInsets.navigationBars.asPaddingValues())
     ) {
         CenterTitleTopBar(
             centerTitleResId = R.string.topbar_my_page,
