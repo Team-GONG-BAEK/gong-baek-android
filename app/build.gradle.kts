@@ -76,25 +76,27 @@ dependencies {
     implementation(libs.kotlinx.serialization.json)
 
     // Jetpack Compose
-    implementation(platform(libs.androidx.compose.bom))
-    implementation(libs.bundles.compose)
-    androidTestImplementation(platform(libs.androidx.compose.bom))
+    implementation(platform(libs.androidx.compose.bom)) // Jetpack Compose BOM 설정
+    implementation(libs.bundles.compose) // Jetpack Compose 관련 라이브러리들
+    androidTestImplementation(platform(libs.androidx.compose.bom)) // Compose UI 테스트를 위한 BOM
 
     // Dependency Injection (Hilt)
-    implementation(libs.bundles.di)
-    ksp(libs.hilt.compiler)
+    implementation(libs.bundles.di) // Hilt 관련 라이브러리들
+    ksp(libs.hilt.compiler) // Hilt 컴파일러를 위한 KSP
 
     // Networking
-    implementation(platform(libs.okhttp.bom))
-    implementation(libs.bundles.networking)
+    implementation(platform(libs.okhttp.bom)) // OkHttp BOM 설정
+    implementation(libs.bundles.networking) // Retrofit과 OkHttp 관련 라이브러리들
 
     // Logging
     implementation(libs.timber)
 
+    // Debug Dependencies (UI Tooling for Debugging)
+    debugImplementation(libs.bundles.debug) // 디버깅을 위한 UI 툴링 관련 라이브러리들
+
     // Testing
-    testImplementation(libs.junit)
-    androidTestImplementation(platform(libs.androidx.compose.bom))
-    androidTestImplementation(libs.bundles.testing)
+    testImplementation(libs.junit) // JUnit 라이브러리
+    androidTestImplementation(libs.bundles.testing) // Android UI 테스트 관련 라이브러리들
 
     // Kakao SDK
     implementation(libs.kakao.user)

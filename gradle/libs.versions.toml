@@ -43,7 +43,6 @@ timber = "5.0.1"
 # Testing
 junit = "4.13.2"
 junitVersion = "1.2.1"
-espressoCore = "3.6.1"
 
 # Kakao SDK
 kakao = "2.21.0"
@@ -93,7 +92,6 @@ timber = { group = "com.jakewharton.timber", name = "timber", version.ref = "tim
 # --- Testing ---
 junit = { group = "junit", name = "junit", version.ref = "junit" }
 androidx-junit = { group = "androidx.test.ext", name = "junit", version.ref = "junitVersion" }
-androidx-espresso-core = { group = "androidx.test.espresso", name = "espresso-core", version.ref = "espressoCore" }
 
 # --- Kakao SDK ---
 kakao-user = { group = "com.kakao.sdk", name = "v2-user", version.ref = "kakao" }
@@ -121,8 +119,6 @@ compose = [
     "androidx-ui-graphics",
     "androidx-ui-tooling",
     "androidx-ui-tooling-preview",
-    "androidx-ui-test-manifest",
-    "androidx-ui-test-junit4",
     "androidx-material3",
     "androidx-compose-navigation",
     "hilt-navigation-compose",
@@ -144,5 +140,11 @@ networking = [
 testing = [
     "junit",
     "androidx-junit",
-    "androidx-espresso-core"
+    "androidx-ui-test-manifest",
+    "androidx-ui-test-junit4",
+]
+
+debug = [
+    "androidx-ui-tooling",
+    "androidx-ui-tooling-preview"
 ]
