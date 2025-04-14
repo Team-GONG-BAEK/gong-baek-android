@@ -20,9 +20,9 @@ android {
         versionName = libs.versions.versionName.get()
 
         buildConfigField("String", "GONGBAEK_BASE_URL", "\"${project.getLocalProperty("gongbaek.base.url")}\"")
-        buildConfigField("String", "KAKAO_API_KEY", "\"${project.getLocalProperty("kakao.api.key")}\"")
+        buildConfigField("String", "KAKAO_NATIVE_APP_KEY", "\"${project.getLocalProperty("kakao.native.app.key")}\"")
 
-        manifestPlaceholders["KAKAO_NATIVE_APP_KEY"] = project.getLocalProperty("kakao.api.key")
+        manifestPlaceholders["KAKAO_NATIVE_APP_KEY"] = project.getLocalProperty("kakao.native.app.key")
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
 
