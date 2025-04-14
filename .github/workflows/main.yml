@@ -36,10 +36,10 @@ jobs:
 
       - name: Generate local.properties
         env:
-            BASE_URL: ${{ secrets.BASE_URL }}
+            GONGBAEK_BASE_URL: ${{ secrets.BASE_URL }}
             KAKAO_API_KEY: ${{ secrets.KAKAO_NATIVE_APP_KEY }}
         run: |
-            echo "baseUrl=$BASE_URL" >> local.properties
+            echo "gongbaek.base.url=$GONGBAEK_BASE_URL" >> local.properties
             echo "kakao.native.app.key=$KAKAO_NATIVE_APP_KEY" >> local.properties
 
       - name: Lint Check
