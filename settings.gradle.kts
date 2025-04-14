@@ -11,7 +11,7 @@ pluginManagement {
         gradlePluginPortal()
     }
 }
-@Suppress("UnstableApiUsage") // 컴파일 경고 무시를 위한 어노테이션 선언
+@Suppress("UnstableApiUsage")
 dependencyResolutionManagement {
     repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
     repositories {
