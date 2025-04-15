@@ -1,6 +1,7 @@
 package com.sopt.gongbaek.presentation.ui.groupregister.screen
 
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
@@ -88,6 +89,7 @@ fun GroupTimeScreen(
                     .padding(horizontal = 16.dp, vertical = 12.dp)
             )
         },
+        contentWindowInsets = WindowInsets(0.dp),
         containerColor = GongBaekTheme.colors.white
     ) { innerPadding ->
         Column(

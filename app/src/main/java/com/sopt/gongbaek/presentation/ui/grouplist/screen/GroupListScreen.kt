@@ -2,13 +2,11 @@ package com.sopt.gongbaek.presentation.ui.grouplist.screen
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.WindowInsets
-import androidx.compose.foundation.layout.asPaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.navigationBars
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -16,7 +14,6 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
-import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -49,7 +46,8 @@ import com.sopt.gongbaek.ui.theme.GongBaekTheme
 fun GroupListRoute(
     viewModel: GroupListViewModel = hiltViewModel(),
     navigateGroupDetail: (Int, String) -> Unit,
-    navigateGroupRegister: () -> Unit
+    navigateGroupRegister: () -> Unit,
+    innerPadding: PaddingValues
 ) {
     val uiState by viewModel.state.collectAsStateWithLifecycle()
     val lifecycleOwner = LocalLifecycleOwner.current
@@ -90,12 +88,13 @@ fun GroupListRoute(
         navigateGroupRegister = {
             viewModel.sendSideEffect(GroupListContract.SideEffect.NavigateGroupRegister)
         },
-        groupList = uiState.groups
+        groupList = uiState.groups,
+        modifier = Modifier.padding(innerPadding)
     )
 }
 
 @Composable
-private fun GroupListScreen(
+fun GroupListScreen(
     selectedDayOfWeekIndex: Int,
     onDayOfWeekSelected: (Int) -> Unit,
     selectedCategoryIndex: Int,
@@ -104,40 +103,19 @@ private fun GroupListScreen(
     onToggleStateChanged: (Boolean) -> Unit,
     navigateGroupDetail: (Int, String) -> Unit,
     navigateGroupRegister: () -> Unit,
-    groupList: List<GroupInfo>
+    groupList: List<GroupInfo>,
+    modifier: Modifier = Modifier
 ) {
-    Scaffold(
-        modifier = Modifier
-            .padding(top = 10.dp)
-            .padding(WindowInsets.navigationBars.asPaddingValues()),
-        topBar = {
-            CenterTitleTopBar(R.string.topbar_group)
-        },
-        floatingActionButton = {
-            FloatingActionButton(
-                onClick = navigateGroupRegister,
-                shape = CircleShape,
-                containerColor = GongBaekTheme.colors.mainOrange
-            ) {
-                Icon(
-                    imageVector = ImageVector.vectorResource(R.drawable.ic_plus_24),
-                    contentDescription = null,
-                    tint = GongBaekTheme.colors.white
-                )
-            }
-        },
-        containerColor = GongBaekTheme.colors.white
-    ) { innerPadding ->
-        Column(
-            modifier = Modifier
-                .padding(innerPadding)
-                .fillMaxSize()
-        ) {
+    Box(
+        modifier = modifier.fillMaxSize()
+    ) {
+        Column {
+            CenterTitleTopBar(centerTitleResId = R.string.topbar_group)
 //            DayOfWeekBar(
 //                selectedIndex = selectedDayOfWeekIndex,
 //                onIndexSelected = onDayOfWeekSelected
 //            )
-//            Spacer(Modifier.height(8.dp))
+            Spacer(Modifier.height(8.dp))
 
             CategoryBar(
                 selectedIndex = selectedCategoryIndex,
@@ -193,6 +171,7 @@ private fun GroupListScreen(
                 } else {
                     items(items = groupList) { groupList ->
                         GroupInfoSection(
+                            groupStatus = GroupInfoChipType.getChipTypeFromStatus(groupList.status),
                             groupCategory = GroupInfoChipType.getChipTypeFromCategory(groupList.category),
                             groupCycle = GroupInfoChipType.getChipTypeFromCycle(groupList.cycle),
                             groupCover = groupList.coverImg,
@@ -214,6 +193,24 @@ private fun GroupListScreen(
                     }
                 }
             }
+        }
+
+        FloatingActionButton(
+            onClick = navigateGroupRegister,
+            shape = CircleShape,
+            containerColor = GongBaekTheme.colors.mainOrange,
+            modifier = Modifier
+                .align(Alignment.BottomEnd)
+                .padding(
+                    end = 16.dp,
+                    bottom = 16.dp
+                )
+        ) {
+            Icon(
+                imageVector = ImageVector.vectorResource(R.drawable.ic_plus_24),
+                contentDescription = null,
+                tint = GongBaekTheme.colors.white
+            )
         }
     }
 }

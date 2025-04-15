@@ -1,23 +1,18 @@
 package com.sopt.gongbaek.presentation.ui.home.screen
 
-import androidx.compose.foundation.layout.WindowInsets
-import androidx.compose.foundation.layout.asPaddingValues
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.navigationBars
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import androidx.lifecycle.flowWithLifecycle
 import com.sopt.gongbaek.domain.model.NearestGroup
 import com.sopt.gongbaek.domain.model.RecommendGroupInfo
@@ -33,6 +28,7 @@ fun HomeRoute(
     navigateGroupDetail: (Int, String) -> Unit,
     navigateGroupRoom: (Int, String) -> Unit,
     navigateGroupList: () -> Unit,
+    innerPadding: PaddingValues,
     viewModel: HomeViewModel = hiltViewModel()
 ) {
     val uiState by viewModel.state.collectAsStateWithLifecycle()
@@ -79,7 +75,8 @@ fun HomeRoute(
         },
         navigateGroupRoom = { groupId, groupType ->
             viewModel.sendSideEffect(HomeContract.SideEffect.NavigateToGroupRoom(groupId, groupType))
-        }
+        },
+        modifier = Modifier.padding(innerPadding)
     )
 }
 
@@ -93,24 +90,11 @@ private fun HomeScreen(
     onClickWeekRecommendItem: (Int, String) -> Unit,
     onClickOnceRecommendItem: (Int, String) -> Unit,
     onFillGroupClick: () -> Unit,
-    navigateGroupRoom: (Int, String) -> Unit
+    navigateGroupRoom: (Int, String) -> Unit,
+    modifier: Modifier = Modifier
 ) {
-    val systemUiController = rememberSystemUiController()
-
-    DisposableEffect(Unit) {
-        systemUiController.setStatusBarColor(
-            color = Color.Transparent,
-            darkIcons = true
-        )
-        onDispose {
-        }
-    }
-
     LazyColumn(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(WindowInsets.navigationBars.asPaddingValues())
-            .padding(WindowInsets.navigationBars.asPaddingValues())
+        modifier = modifier.fillMaxSize()
     ) {
         item {
             NearestGroupSection(
