@@ -106,30 +106,19 @@ private fun UnivInfo(
     modifier: Modifier = Modifier
 ) {
     Row(
-        modifier = modifier.fillMaxWidth(),
         verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.SpaceBetween
+        horizontalArrangement = Arrangement.spacedBy(6.dp),
+        modifier = modifier.fillMaxWidth()
     ) {
-        Row(
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.spacedBy(6.dp)
-        ) {
-            Icon(
-                imageVector = ImageVector.vectorResource(id = R.drawable.ic_school_20),
-                contentDescription = null,
-                tint = GongBaekTheme.colors.gray05
-            )
-            Text(
-                text = university,
-                color = GongBaekTheme.colors.gray03,
-                style = GongBaekTheme.typography.body2.m14
-            )
-        }
-
         Icon(
-            imageVector = ImageVector.vectorResource(id = R.drawable.ic_notification_20),
+            imageVector = ImageVector.vectorResource(id = R.drawable.ic_school_20),
             contentDescription = null,
-            tint = GongBaekTheme.colors.white
+            tint = GongBaekTheme.colors.gray05
+        )
+        Text(
+            text = university,
+            color = GongBaekTheme.colors.gray03,
+            style = GongBaekTheme.typography.body2.m14
         )
     }
 }
