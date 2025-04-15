@@ -241,4 +241,12 @@
     <string name="setting_dialog_logout">로그아웃을 진행하시겠습니까?</string>
     <string name="setting_dialog_withdraw">회원탈퇴를 진행하시겠습니까?</string>
 
+    <!--HomeScreen-->
+    <string name="home_week_recommend_section_title">공강시간에 정기적인 활동 어때요?</string>
+    <string name="home_week_recommend_section_subtitle">%s님과 딱 맞는 매주 봐요 모임 추천이에요.</string>
+    <string name="home_week_recommend_section_highlight">매주 봐요</string>
+    <string name="home_once_recommend_section_title">한번만 만나도 특별할 우리</string>
+    <string name="home_once_recommend_section_subtitle">한번만 봐요 모임으로 잊지 못할 추억을 만들어보세요!</string>
+    <string name="home_member_recommend_section_title">나와 딱 맞는 공백 멤버</string>
+    <string name="home_member_recommend_section_subtitle">공백 시간에 이 멤버들과 공백 활동 어때요?</string>
 </resources>

@@ -22,6 +22,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.style.TextOverflow
@@ -49,7 +50,7 @@ fun WeekRecommendSection(
         modifier = modifier
     ) {
         Text(
-            text = "공강시간에 정기적인 활동 어때요?",
+            text = stringResource(R.string.home_week_recommend_section_subtitle),
             color = GongBaekTheme.colors.gray10,
             style = GongBaekTheme.typography.title2.b18,
             modifier = Modifier.padding(start = 16.dp)
@@ -59,10 +60,10 @@ fun WeekRecommendSection(
 
         Text(
             text = buildAnnotatedString {
-                val fullText = "${userNickname}님과 딱 맞는 매주 봐요 모임 추천이에요."
+                val fullText = stringResource(R.string.home_week_recommend_section_subtitle, userNickname)
                 append(fullText)
 
-                val highlightText = "매주 봐요"
+                val highlightText = stringResource(R.string.home_week_recommend_section_highlight)
                 val start = fullText.indexOf(highlightText)
                 val end = start + highlightText.length
 

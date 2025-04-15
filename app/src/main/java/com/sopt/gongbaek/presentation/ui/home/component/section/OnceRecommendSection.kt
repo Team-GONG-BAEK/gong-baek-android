@@ -22,6 +22,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.style.TextOverflow
@@ -48,7 +49,7 @@ fun OnceRecommendSection(
         modifier = modifier
     ) {
         Text(
-            text = "한번만 만나도 특별할 우리",
+            text = stringResource(R.string.home_once_recommend_section_title),
             color = GongBaekTheme.colors.gray10,
             style = GongBaekTheme.typography.title2.b18,
             modifier = Modifier.padding(start = 16.dp)
@@ -58,7 +59,7 @@ fun OnceRecommendSection(
 
         Text(
             text = buildAnnotatedString {
-                append("한번만 봐요 모임으로 잊지 못할 추억을 만들어보세요!")
+                append(stringResource(R.string.home_once_recommend_section_subtitle))
                 addStyle(
                     style = SpanStyle(
                         color = GongBaekTheme.colors.mainOrange
@@ -113,7 +114,7 @@ private fun OnceRecommendItem(
         Box {
             Image(
                 painter = painterResource(selectedImageResId),
-                contentDescription = "null",
+                contentDescription = null,
                 contentScale = ContentScale.Crop,
                 modifier = Modifier
                     .clip(shape = RoundedCornerShape(4.dp))
