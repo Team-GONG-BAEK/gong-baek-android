@@ -1,5 +1,3 @@
-import java.util.Properties
-
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
@@ -10,10 +8,6 @@ plugins {
     alias(libs.plugins.ktlint)
 }
 
-val localProperties = Properties().apply {
-    load(project.rootProject.file("local.properties").inputStream())
-}
-
 android {
     namespace = "com.sopt.gongbaek"
     compileSdk = libs.versions.compileSdk.get().toInt()
@@ -22,37 +16,52 @@ android {
         applicationId = "com.sopt.gongbaek"
         minSdk = libs.versions.minSdk.get().toInt()
         targetSdk = libs.versions.targetSdk.get().toInt()
-        versionCode = 1
-        versionName = "1.0"
+        versionCode = libs.versions.versionCode.get().toInt()
+        versionName = libs.versions.versionName.get()
 
+        buildConfigField("String", "GONGBAEK_BASE_URL", "\"${project.getLocalProperty("gongbaek.base.url")}\"")
+        buildConfigField("String", "KAKAO_NATIVE_APP_KEY", "\"${project.getLocalProperty("kakao.native.app.key")}\"")
+
+        manifestPlaceholders["KAKAO_NATIVE_APP_KEY"] = project.getLocalProperty("kakao.native.app.key")
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
-        buildConfigField("String", "GONGBAEK_BASE_URL", localProperties["gongbaek.base.url"].toString())
-
-        val kakaoNativeAppKey: String = localProperties.getProperty("kakao.native.app.key")
-        buildConfigField("String", "KAKAO_NATIVE_APP_KEY", "\"$kakaoNativeAppKey\"")
-        manifestPlaceholders["KAKAO_NATIVE_APP_KEY"] = kakaoNativeAppKey
     }
 
     lint {
         disable.add("CoroutineCreationDuringComposition")
     }
 
+//    signingConfigs {
+//        create("release") {
+//            storeFile = file(project.getLocalProperty(""))
+//            storePassword = project.getLocalProperty("")
+//            keyAlias = project.getLocalProperty("")
+//            keyPassword = project.getLocalProperty("")
+//        }
+//    }
+
     buildTypes {
+        debug {
+            isMinifyEnabled = false
+        }
         release {
             isMinifyEnabled = false
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
             )
+//            signingConfig = signingConfig.getByName("release")
         }
     }
+
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_17
         targetCompatibility = JavaVersion.VERSION_17
     }
+
     kotlinOptions {
         jvmTarget = libs.versions.jvmTarget.get()
     }
+
     buildFeatures {
         compose = true
         buildConfig = true
@@ -60,52 +69,36 @@ android {
 }
 
 dependencies {
-    // Core Libraries
-    implementation(libs.androidx.core.ktx)
-    implementation(libs.androidx.lifecycle.runtime.ktx)
-    implementation(libs.androidx.lifecycle.runtime.compose.android)
-    implementation(libs.androidx.activity.compose)
+    // Core
+    implementation(libs.bundles.core)
 
-    // Jetpack Compose
-    implementation(platform(libs.androidx.compose.bom))
-    implementation(libs.androidx.ui)
-    implementation(libs.androidx.ui.graphics)
-    implementation(libs.androidx.ui.tooling.preview)
-    implementation(libs.androidx.material3)
-    implementation(libs.accompanist.systemuicontroller)
-    implementation(libs.androidx.compose.navigation)
-
-    // Hilt
-    implementation(libs.hilt.android)
-    implementation(libs.hilt.navigation.compose)
-    implementation(libs.androidx.appcompat)
-    implementation(libs.androidx.lifecycle.runtime.compose.android)
-    ksp(libs.hilt.compiler)
-
-    // Network
-    implementation(platform(libs.okhttp.bom))
-    implementation(libs.okhttp)
-    implementation(libs.okhttp.logging.interceptor)
-    implementation(libs.retrofit)
-    implementation(libs.retrofit.kotlin.serialization.converter)
+    // Kotlin Serialization
     implementation(libs.kotlinx.serialization.json)
 
-    // Testing
-    testImplementation(libs.junit)
-    androidTestImplementation(libs.androidx.junit)
-    androidTestImplementation(libs.androidx.espresso.core)
-    androidTestImplementation(platform(libs.androidx.compose.bom))
-    androidTestImplementation(libs.androidx.ui.test.junit4)
-    debugImplementation(libs.androidx.ui.tooling)
-    debugImplementation(libs.androidx.ui.test.manifest)
+    // Jetpack Compose
+    implementation(platform(libs.androidx.compose.bom)) // Jetpack Compose BOM 설정
+    implementation(libs.bundles.compose) // Jetpack Compose 관련 라이브러리들
+    androidTestImplementation(platform(libs.androidx.compose.bom)) // Compose UI 테스트를 위한 BOM
 
-    // Timber
+    // Dependency Injection (Hilt)
+    implementation(libs.bundles.di) // Hilt 관련 라이브러리들
+    ksp(libs.hilt.compiler) // Hilt 컴파일러를 위한 KSP
+
+    // Networking
+    implementation(platform(libs.okhttp.bom)) // OkHttp BOM 설정
+    implementation(libs.bundles.networking) // Retrofit과 OkHttp 관련 라이브러리들
+
+    // Logging
     implementation(libs.timber)
 
-    // Lottie
-    implementation(libs.lottie.compose)
+    // Debug Dependencies (UI Tooling for Debugging)
+    debugImplementation(libs.bundles.debug) // 디버깅을 위한 UI 툴링 관련 라이브러리들
 
-    // Kakao
+    // Testing
+    testImplementation(libs.junit) // JUnit 라이브러리
+    androidTestImplementation(libs.bundles.testing) // Android UI 테스트 관련 라이브러리들
+
+    // Kakao SDK
     implementation(libs.kakao.user)
 }
 
