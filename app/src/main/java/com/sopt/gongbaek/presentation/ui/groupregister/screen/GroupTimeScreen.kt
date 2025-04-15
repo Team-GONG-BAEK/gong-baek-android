@@ -110,19 +110,13 @@ fun GroupTimeScreen(
                     modifier = Modifier.padding(top = 40.dp, bottom = 20.dp)
                 )
 
-                LazyColumn(
-                    modifier = Modifier.fillMaxWidth()
-                ) {
-                    item {
-                        GroupRegisterTimeTable(
-                            timeSlotLabels = timeSlotLabels,
-                            selectedDay = selectedDay,
-                            selectedTimeSlotsByDay = selectedTimeSlotsByDay,
-                            lectureTime = lectureTime,
-                            onTimeSlotSelectionChange = onTimeSlotSelectionChange
-                        )
-                    }
-                }
+                GroupRegisterTimeTable(
+                    timeSlotLabels = timeSlotLabels,
+                    selectedDay = selectedDay,
+                    selectedTimeSlotsByDay = selectedTimeSlotsByDay,
+                    lectureTime = lectureTime,
+                    onTimeSlotSelectionChange = onTimeSlotSelectionChange
+                )
             }
         }
     }
