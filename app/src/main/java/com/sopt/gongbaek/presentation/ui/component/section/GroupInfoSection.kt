@@ -33,14 +33,14 @@ import com.sopt.gongbaek.ui.theme.GongBaekTheme
 
 @Composable
 fun GroupInfoSection(
-    groupStatus: GroupInfoChipType,
     groupCategory: GroupInfoChipType,
     groupCycle: GroupInfoChipType,
     groupCover: Int,
     groupTitle: String,
     groupTime: String,
     groupPlace: String,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    groupStatus: GroupInfoChipType? = null
 ) {
     val imageList = ImageSelectorType.getImageListFromCategory(groupCategory.toString())
 
@@ -71,7 +71,7 @@ fun GroupInfoSection(
                 horizontalArrangement = Arrangement.spacedBy(4.dp),
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                GroupInfoChip(groupInfoChipType = groupStatus)
+                if (groupStatus != null) GroupInfoChip(groupInfoChipType = groupStatus)
                 GroupInfoChip(groupInfoChipType = groupCategory)
                 GroupInfoChip(groupInfoChipType = groupCycle)
             }

@@ -1,11 +1,8 @@
 package com.sopt.gongbaek.presentation.ui.grouplist.screen
 
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -40,11 +37,9 @@ import com.sopt.gongbaek.presentation.type.GroupInfoChipType
 import com.sopt.gongbaek.presentation.ui.component.section.GroupInfoSection
 import com.sopt.gongbaek.presentation.ui.component.topbar.CenterTitleTopBar
 import com.sopt.gongbaek.presentation.ui.grouplist.component.CategoryBar
-import com.sopt.gongbaek.presentation.ui.grouplist.component.CycleBottomSheetPresenter
-import com.sopt.gongbaek.presentation.ui.grouplist.component.DayOfWeekBar
-import com.sopt.gongbaek.presentation.ui.grouplist.component.GongBaekToggleButton
 import com.sopt.gongbaek.presentation.util.extension.clickableWithoutRipple
 import com.sopt.gongbaek.presentation.util.formatGroupTimeDescription
+import com.sopt.gongbaek.ui.theme.GONGBAEKTheme
 import com.sopt.gongbaek.ui.theme.GongBaekTheme
 
 @Composable
@@ -116,10 +111,10 @@ fun GroupListScreen(
     ) {
         Column {
             CenterTitleTopBar(centerTitleResId = R.string.topbar_group)
-            DayOfWeekBar(
-                selectedIndex = selectedDayOfWeekIndex,
-                onIndexSelected = onDayOfWeekSelected
-            )
+//            DayOfWeekBar(
+//                selectedIndex = selectedDayOfWeekIndex,
+//                onIndexSelected = onDayOfWeekSelected
+//            )
             Spacer(Modifier.height(8.dp))
 
             CategoryBar(
@@ -138,24 +133,24 @@ fun GroupListScreen(
                     )
                 }
 
-                item {
-                    Row(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(start = 16.dp, end = 16.dp, top = 12.dp)
-                            .height(IntrinsicSize.Min),
-                        horizontalArrangement = Arrangement.SpaceBetween,
-                        verticalAlignment = Alignment.CenterVertically
-                    ) {
-                        CycleBottomSheetPresenter()
-
-                        GongBaekToggleButton(
-                            checkedState = toggleCheckedState,
-                            onClick = onToggleStateChanged,
-                            modifier = Modifier.align(Alignment.Top)
-                        )
-                    }
-                }
+//                item {
+//                    Row(
+//                        modifier = Modifier
+//                            .fillMaxWidth()
+//                            .padding(start = 16.dp, end = 16.dp, top = 12.dp)
+//                            .height(IntrinsicSize.Min),
+//                        horizontalArrangement = Arrangement.SpaceBetween,
+//                        verticalAlignment = Alignment.CenterVertically
+//                    ) {
+//                        CycleBottomSheetPresenter()
+//
+//                        GongBaekToggleButton(
+//                            checkedState = toggleCheckedState,
+//                            onClick = onToggleStateChanged,
+//                            modifier = Modifier.align(Alignment.Top)
+//                        )
+//                    }
+//                }
 
                 if (groupList.isEmpty()) {
                     item {
@@ -222,5 +217,18 @@ fun GroupListScreen(
 
 @Preview(showBackground = true)
 @Composable
-fun ShowGroupListScreen() {
+private fun ShowGroupListScreen() {
+    GONGBAEKTheme {
+        GroupListScreen(
+            selectedDayOfWeekIndex = 0,
+            onDayOfWeekSelected = {},
+            selectedCategoryIndex = 0,
+            onCategorySelected = {},
+            toggleCheckedState = false,
+            onToggleStateChanged = {},
+            navigateGroupDetail = { _, _ -> },
+            navigateGroupRegister = {},
+            groupList = listOf()
+        )
+    }
 }
