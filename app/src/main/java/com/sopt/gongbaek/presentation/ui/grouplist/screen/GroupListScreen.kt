@@ -95,7 +95,7 @@ fun GroupListRoute(
 }
 
 @Composable
-fun GroupListScreen(
+private fun GroupListScreen(
     selectedDayOfWeekIndex: Int,
     onDayOfWeekSelected: (Int) -> Unit,
     selectedCategoryIndex: Int,
@@ -220,7 +220,7 @@ fun GroupListScreen(
 
 @Preview(showBackground = true)
 @Composable
-fun ShowGroupListScreen() {
+private fun ShowGroupListScreen() {
     GONGBAEKTheme {
         GroupListScreen(
             selectedDayOfWeekIndex = 0,
