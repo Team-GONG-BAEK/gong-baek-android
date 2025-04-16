@@ -53,7 +53,7 @@ fun GroupDetailInfoSection(
     val profileImageResId = if (imageList.isNotEmpty() && groupHost.profileImg in 1..imageList.size) {
         imageList[groupHost.profileImg - 1]
     } else {
-        R.drawable.img_detail_profile_1
+        R.drawable.img_detail_profile_0
     }
 
     Column(

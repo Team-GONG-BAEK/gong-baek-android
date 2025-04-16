@@ -144,7 +144,7 @@ private fun MyInfoSection(
     val profileImageResId = if (imageList.isNotEmpty() && uiState.myPageInfo.profileImage in 1..imageList.size) {
         imageList[uiState.myPageInfo.profileImage - 1]
     } else {
-        R.drawable.img_detail_profile_1
+        R.drawable.img_detail_profile_0
     }
 
     Row(

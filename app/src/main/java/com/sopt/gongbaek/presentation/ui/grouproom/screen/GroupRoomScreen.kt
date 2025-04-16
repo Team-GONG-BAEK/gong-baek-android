@@ -269,7 +269,7 @@ private fun GroupRoomPeopleSection(
                 val profileImageResId = if (imageList.isNotEmpty() && member.profileImg in 1..imageList.size) {
                     imageList[member.profileImg - 1]
                 } else {
-                    R.drawable.img_detail_profile_1
+                    R.drawable.img_detail_profile_0
                 }
                 Column(horizontalAlignment = Alignment.CenterHorizontally) {
                     Box {
