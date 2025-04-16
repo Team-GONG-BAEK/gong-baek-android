@@ -49,13 +49,6 @@ fun GroupDetailInfoSection(
     groupHost: GroupHost,
     onApplyClick: () -> Unit
 ) {
-    val imageList = ProfileImageList.profileImageList
-    val profileImageResId = if (imageList.isNotEmpty() && groupHost.profileImg in 1..imageList.size) {
-        imageList[groupHost.profileImg - 1]
-    } else {
-        R.drawable.img_detail_profile_0
-    }
-
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -111,7 +104,7 @@ fun GroupDetailInfoSection(
                         verticalAlignment = Alignment.CenterVertically
                     ) {
                         Image(
-                            painter = painterResource(profileImageResId),
+                            painter = painterResource(ProfileImageList.getProfileImage(groupHost.profileImg)),
                             contentDescription = null,
                             modifier = Modifier
                                 .width((LocalConfiguration.current.screenWidthDp * 0.22).dp)

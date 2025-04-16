@@ -233,8 +233,6 @@ private fun GroupRoomInfoSection(
 private fun GroupRoomPeopleSection(
     groupMembers: GroupMembers
 ) {
-    val imageList = ProfileImageList.profileImageList
-
     Column(
         modifier = Modifier
             .fillMaxWidth()
@@ -266,15 +264,10 @@ private fun GroupRoomPeopleSection(
             contentPadding = PaddingValues(end = 16.dp)
         ) {
             items(groupMembers.members) { member ->
-                val profileImageResId = if (imageList.isNotEmpty() && member.profileImg in 1..imageList.size) {
-                    imageList[member.profileImg - 1]
-                } else {
-                    R.drawable.img_detail_profile_0
-                }
                 Column(horizontalAlignment = Alignment.CenterHorizontally) {
                     Box {
                         Image(
-                            painter = painterResource(profileImageResId),
+                            painter = painterResource(ProfileImageList.getProfileImage(member.profileImg)),
                             contentDescription = null,
                             modifier = Modifier
                                 .roundedBackgroundWithBorder(
