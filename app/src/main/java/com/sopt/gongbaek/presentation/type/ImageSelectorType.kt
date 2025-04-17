@@ -62,18 +62,25 @@ enum class ImageSelectorType(
     );
 
     companion object {
-        private val categoryIndexRanges = mapOf(
-            GroupCategoryType.STUDY.name to 0..5,
-            GroupCategoryType.DINING.name to 6..11,
-            GroupCategoryType.EXERCISE.name to 12..17,
-            GroupCategoryType.PLAYING.name to 18..23,
-            GroupCategoryType.NETWORKING.name to 24..29,
-            GroupCategoryType.OTHERS.name to 30..35
+        private const val IMAGES_PER_CATEGORY = 6
+
+        private val categoryImagesMap = mapOf(
+            GroupCategoryType.STUDY to Cover.imageButtonResIdList.subList(0, IMAGES_PER_CATEGORY),
+            GroupCategoryType.DINING to Cover.imageButtonResIdList.subList(IMAGES_PER_CATEGORY, IMAGES_PER_CATEGORY * 2),
+            GroupCategoryType.EXERCISE to Cover.imageButtonResIdList.subList(IMAGES_PER_CATEGORY * 2, IMAGES_PER_CATEGORY * 3),
+            GroupCategoryType.PLAYING to Cover.imageButtonResIdList.subList(IMAGES_PER_CATEGORY * 3, IMAGES_PER_CATEGORY * 4),
+            GroupCategoryType.NETWORKING to Cover.imageButtonResIdList.subList(IMAGES_PER_CATEGORY * 4, IMAGES_PER_CATEGORY * 5),
+            GroupCategoryType.OTHERS to Cover.imageButtonResIdList.subList(IMAGES_PER_CATEGORY * 5, IMAGES_PER_CATEGORY * 6)
         )
 
         fun getImageListFromCategory(category: String): List<Int> {
-            val range = categoryIndexRanges[category] ?: 0..5
-            return Cover.imageButtonResIdList.slice(range)
+            val categoryType = GroupCategoryType.entries.find { it.name == category } ?: GroupCategoryType.STUDY
+            return categoryImagesMap[categoryType] ?: Cover.imageButtonResIdList.subList(0, IMAGES_PER_CATEGORY)
+        }
+
+        fun getCoverImage(category: String, imageIndex: Int): Int {
+            val imageList = getImageListFromCategory(category)
+            return imageList.getOrElse(imageIndex) { R.drawable.img_study_0 }
         }
     }
 }

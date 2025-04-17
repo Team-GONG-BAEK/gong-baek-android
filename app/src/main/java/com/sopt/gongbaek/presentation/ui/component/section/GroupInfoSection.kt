@@ -24,7 +24,6 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.sopt.gongbaek.R
 import com.sopt.gongbaek.presentation.type.GroupInfoChipType
 import com.sopt.gongbaek.presentation.type.ImageSelectorType
 import com.sopt.gongbaek.presentation.ui.component.chip.GroupInfoChip
@@ -42,20 +41,12 @@ fun GroupInfoSection(
     modifier: Modifier = Modifier,
     groupStatus: GroupInfoChipType? = null
 ) {
-    val imageList = ImageSelectorType.getImageListFromCategory(groupCategory.toString())
-
-    val selectedImageResId = if (imageList.isNotEmpty() && groupCover in 1..imageList.size) {
-        imageList[groupCover - 1]
-    } else {
-        R.drawable.img_study_1
-    }
-
     Row(
         modifier = modifier.background(color = GongBaekTheme.colors.white),
         verticalAlignment = Alignment.CenterVertically
     ) {
         Image(
-            painter = painterResource(selectedImageResId),
+            painter = painterResource(ImageSelectorType.getCoverImage(groupCategory.name, groupCover)),
             contentDescription = null,
             modifier = Modifier
                 .width((LocalConfiguration.current.screenWidthDp * 0.28).dp)

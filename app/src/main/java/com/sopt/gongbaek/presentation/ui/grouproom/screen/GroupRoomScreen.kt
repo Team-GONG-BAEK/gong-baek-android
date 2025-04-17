@@ -112,13 +112,6 @@ fun GroupRoomScreen(
 ) {
     var columnHeight by remember { mutableIntStateOf(0) }
     val systemUiController = rememberSystemUiController()
-    val imageList = ImageSelectorType.getImageListFromCategory(uiState.groupRoom.groupInfo.category)
-
-    val groupCoverImageResId = if (imageList.isNotEmpty() && uiState.groupRoom.groupInfo.coverImg in 1..imageList.size) {
-        imageList[uiState.groupRoom.groupInfo.coverImg - 1]
-    } else {
-        R.drawable.img_study_1
-    }
 
     DisposableEffect(Unit) {
         systemUiController.setStatusBarColor(
@@ -134,7 +127,7 @@ fun GroupRoomScreen(
     ) {
         Box {
             Image(
-                painter = painterResource(id = groupCoverImageResId),
+                painter = painterResource(ImageSelectorType.getCoverImage(uiState.groupRoom.groupInfo.category, uiState.groupRoom.groupInfo.coverImg)),
                 contentDescription = null,
                 modifier = Modifier
                     .fillMaxWidth()

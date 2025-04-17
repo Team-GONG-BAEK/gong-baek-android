@@ -103,17 +103,10 @@ private fun OnceRecommendItem(
             .width((LocalConfiguration.current.screenWidthDp * 0.43f).dp)
     ) {
         val screenWidth = LocalConfiguration.current.screenWidthDp
-        val imageList = ImageSelectorType.getImageListFromCategory(onceRecommendGroupInfo.coverImg.toString())
-
-        val selectedImageResId = if (imageList.isNotEmpty() && onceRecommendGroupInfo.coverImg in 1..imageList.size) {
-            imageList[onceRecommendGroupInfo.coverImg - 1]
-        } else {
-            R.drawable.img_study_1
-        }
 
         Box {
             Image(
-                painter = painterResource(selectedImageResId),
+                painter = painterResource(ImageSelectorType.getCoverImage(onceRecommendGroupInfo.category, onceRecommendGroupInfo.coverImg)),
                 contentDescription = null,
                 contentScale = ContentScale.Crop,
                 modifier = Modifier
@@ -174,6 +167,8 @@ private fun PreviewOnceRecommendSection() {
                 startTime = 18.0,
                 endTime = 20.0,
                 profileImg = 5,
+                category = "DINING",
+                coverImg = 3,
                 location = "서울특별시 강남구"
             ),
             RecommendGroupInfo(
