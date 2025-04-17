@@ -11,7 +11,7 @@ data class GroupRegisterInfo(
     val startTime: Double = 0.0,
     val endTime: Double = 0.0,
     val category: String = "",
-    val coverImg: Int = 0,
+    val coverImg: Int = -1,
     val location: String = "",
     val maxPeopleCount: Int = 2,
     val groupTitle: String = "",
