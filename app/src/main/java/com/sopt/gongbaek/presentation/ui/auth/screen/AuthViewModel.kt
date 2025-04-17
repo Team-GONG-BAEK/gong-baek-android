@@ -449,7 +449,7 @@ class AuthViewModel @Inject constructor(
             email = currentState.emailVerificationState.email,
             nickname = currentState.nicknameGenderState.nickname,
             gender = GenderType.fromDescription(currentState.nicknameGenderState.gender).name,
-            profileImage = currentState.selectProfileState.profileImageIndex,
+            profileImage = currentState.selectProfileState.profileImageIndex ?: DEFAULT_PROFILE_IMAGE_INDEX,
             mbti = MbtiFirstLetterType.fromDescription(currentState.mbtiState.firstLetter).name +
                 MbtiSecondLetterType.fromDescription(currentState.mbtiState.secondLetter).name +
                 MbtiThirdLetterType.fromDescription(currentState.mbtiState.thirdLetter).name +
@@ -492,5 +492,7 @@ class AuthViewModel @Inject constructor(
 
         // Timer
         private const val EMAIL_VERIFICATION_TIME_LIMIT = 180
+
+        private const val DEFAULT_PROFILE_IMAGE_INDEX: Int = 0
     }
 }
