@@ -129,7 +129,7 @@ private fun OnceRecommendItem(
                     .aspectRatio(156f / 104f)
             )
             GroupInfoChip(
-                groupInfoChipType = GroupInfoChipType.STUDY_HOME,
+                groupInfoChipType = GroupInfoChipType.getHomeChipTypeFromCategory(onceRecommendGroupInfo.category),
                 modifier = Modifier
                     .align(Alignment.BottomStart)
                     .padding(start = 8.dp, bottom = 8.dp)
