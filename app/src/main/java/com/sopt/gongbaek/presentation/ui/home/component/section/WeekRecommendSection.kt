@@ -50,7 +50,7 @@ fun WeekRecommendSection(
         modifier = modifier
     ) {
         Text(
-            text = stringResource(R.string.home_week_recommend_section_subtitle),
+            text = stringResource(R.string.home_week_recommend_section_title),
             color = GongBaekTheme.colors.gray10,
             style = GongBaekTheme.typography.title2.b18,
             modifier = Modifier.padding(start = 16.dp)
@@ -83,6 +83,13 @@ fun WeekRecommendSection(
         )
 
         Spacer(modifier = Modifier.height(16.dp))
+
+        if (weekRecommendGroupInfo.isEmpty()) {
+            EmptyRecommendSection(
+                image = R.drawable.img_my_fill_active_empty,
+                modifier = Modifier.padding(horizontal = 16.dp)
+            )
+        }
 
         LazyRow(
             modifier = Modifier.fillMaxWidth(),
@@ -137,7 +144,7 @@ private fun WeekRecommendItem(
                     .aspectRatio(116f / 108f)
             )
             GroupInfoChip(
-                groupInfoChipType = GroupInfoChipType.STUDY_HOME,
+                groupInfoChipType = GroupInfoChipType.getHomeChipTypeFromCategory(weekRecommendGroupInfo.category),
                 modifier = Modifier
                     .align(Alignment.BottomStart)
                     .padding(start = 8.dp, bottom = 8.dp)

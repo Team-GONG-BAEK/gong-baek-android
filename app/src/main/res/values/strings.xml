@@ -249,4 +249,5 @@
     <string name="home_once_recommend_section_subtitle">한번만 봐요 모임으로 잊지 못할 추억을 만들어보세요!</string>
     <string name="home_member_recommend_section_title">나와 딱 맞는 공백 멤버</string>
     <string name="home_member_recommend_section_subtitle">공백 시간에 이 멤버들과 공백 활동 어때요?</string>
+    <string name="home_empty_recommend_section_description">활동 가능한 모임이 없어요.\n직접 모임을 만들어보는건 어때요?</string>
 </resources>
