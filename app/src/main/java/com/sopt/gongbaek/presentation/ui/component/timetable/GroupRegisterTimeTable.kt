@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
@@ -66,15 +67,21 @@ fun GroupRegisterTimeTable(
         }
     )
 
-    TimeTableSection(
-        timeSlotLabels = timeSlotLabels,
-        daysOfWeek = daysOfWeek,
-        selectedDay = selectedDay,
-        selectedTimeSlotsByDay = selectedTimeSlotsByDay,
-        lectureTime = lectureTime,
-        resetState = resetState,
-        onTimeSlotSelectionChange = onTimeSlotSelectionChange
-    )
+    LazyColumn(
+        modifier = Modifier.fillMaxWidth()
+    ) {
+        item {
+            TimeTableSection(
+                timeSlotLabels = timeSlotLabels,
+                daysOfWeek = daysOfWeek,
+                selectedDay = selectedDay,
+                selectedTimeSlotsByDay = selectedTimeSlotsByDay,
+                lectureTime = lectureTime,
+                resetState = resetState,
+                onTimeSlotSelectionChange = onTimeSlotSelectionChange
+            )
+        }
+    }
 
     resetState = false
 }
