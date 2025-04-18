@@ -84,6 +84,13 @@ fun WeekRecommendSection(
 
         Spacer(modifier = Modifier.height(16.dp))
 
+        if (weekRecommendGroupInfo.isEmpty()) {
+            EmptyRecommendSection(
+                image = R.drawable.img_my_fill_active_empty,
+                modifier = Modifier.padding(horizontal = 16.dp)
+            )
+        }
+
         LazyRow(
             modifier = Modifier.fillMaxWidth(),
             contentPadding = PaddingValues(horizontal = 16.dp),
