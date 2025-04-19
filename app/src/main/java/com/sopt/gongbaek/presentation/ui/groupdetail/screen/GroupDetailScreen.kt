@@ -23,6 +23,11 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.flowWithLifecycle
+import com.sopt.gongbaek.R
+import com.sopt.gongbaek.domain.model.GroupComments
+import com.sopt.gongbaek.domain.model.GroupDetail
+import com.sopt.gongbaek.domain.model.GroupHost
+import com.sopt.gongbaek.domain.model.GroupInfo
 import com.sopt.gongbaek.presentation.type.GongBaekDialogType
 import com.sopt.gongbaek.presentation.type.GroupDetailPagerType
 import com.sopt.gongbaek.presentation.type.GroupInfoChipType
@@ -98,6 +103,7 @@ fun GroupDetailScreen(
     ) {
         StartTitleTopBar(
             modifier = Modifier.background(color = GongBaekTheme.colors.white),
+            startTitleResId = R.string.topbar_group,
             onLeadingIconClick = onBackClick,
             isTrailingIconIncluded = true
         )
@@ -186,9 +192,66 @@ fun GroupDetailScreen(
 private fun GroupDetailScreenPreview() {
     GONGBAEKTheme {
         GroupDetailScreen(
-            uiState = GroupDetailContract.State(),
+            uiState = GroupDetailContract.State(
+                groupDetail = GroupDetail(
+                    groupInfo = GroupInfo(
+                        groupId = 1,
+                        coverImg = 0,
+                        status = "RECRUITING",
+                        category = "STUDY",
+                        cycle = "WEEKLY",
+                        title = "컴포즈 공부 모임",
+                        date = "2025-04-20",
+                        dayOfWeek = "MON",
+                        startTime = 14.0,
+                        endTime = 16.0,
+                        place = "SOPT 강의실",
+                        introduction = "Jetpack Compose를 함께 공부해요!",
+                        maxPeopleCount = 10,
+                        currentPeopleCount = 5,
+                        isHost = false,
+                        isApply = false
+                    ),
+                    groupHost = GroupHost(
+                        profileImg = 0,
+                        nickname = "밍서",
+                        gender = "WOMAN",
+                        major = "컴퓨터공학과",
+                        enterYear = 2021,
+                        mbti = "INFP",
+                        introduction = "안녕하세요~ 함께 재밌게 활동해요!"
+                    ),
+                    groupComments = GroupComments(
+                        groupId = 1,
+                        groupStatus = "RECRUITING",
+                        groupCycle = "WEEKLY",
+                        commentCount = 2,
+                        groupCommentList = listOf(
+                            GroupComments.GroupComment(
+                                commentId = 1,
+                                commentWriter = "홍길동",
+                                commentContent = "정말 기대돼요!",
+                                createdAt = "2025-04-19-10-30",
+                                isGroupHost = false,
+                                isWriter = false
+                            ),
+                            GroupComments.GroupComment(
+                                commentId = 2,
+                                commentWriter = "김솝트",
+                                commentContent = "저도 참여하고 싶어요!",
+                                createdAt = "2025-04-19-11-45",
+                                isGroupHost = true,
+                                isWriter = true
+                            )
+                        )
+                    )
+                ),
+                inputComment = "이 스터디 너무 좋아 보여요!",
+                groupApplyState = UiLoadState.Idle,
+                commentState = UiLoadState.Success
+            ),
             groupDetailTabs = GroupDetailPagerType.entries.map { it.description },
-            pagerState = rememberPagerState { GroupDetailPagerType.entries.map { it.description }.size },
+            pagerState = rememberPagerState { GroupDetailPagerType.entries.size },
             onBackClick = {},
             onApplyClick = {},
             onDialogConfirmClick = { _, _ -> },
@@ -199,3 +262,4 @@ private fun GroupDetailScreenPreview() {
         )
     }
 }
+

@@ -180,7 +180,7 @@ fun GroupDetailInfoSection(
                                         )
                                     ) {
                                         Text(
-                                            text = stringResource(R.string.group_detail_enter_year_grade_title),
+                                            text = stringResource(R.string.group_detail_enter_year_title),
                                             modifier = Modifier.padding(
                                                 horizontal = 6.dp,
                                                 vertical = 1.dp
@@ -191,9 +191,8 @@ fun GroupDetailInfoSection(
                                     }
                                     Text(
                                         text = stringResource(
-                                            R.string.group_detail_enter_year_grade,
+                                            R.string.group_detail_enter_year,
                                             formatEnterYearToString(groupHost.enterYear),
-                                            groupHost.grade
                                         ),
                                         color = GongBaekTheme.colors.gray08,
                                         style = GongBaekTheme.typography.caption2.m12
@@ -322,7 +321,6 @@ fun GroupDetailInfoScreenPreview() {
                 isApply = false
             ),
             groupHost = GroupHost(
-                grade = 4,
                 enterYear = 2020,
                 mbti = "ESFP"
             ),

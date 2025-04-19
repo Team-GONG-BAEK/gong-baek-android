@@ -89,20 +89,6 @@ fun GongBaekSelectableButton(
 
 @Preview(showBackground = true)
 @Composable
-private fun GongBaekSelectableButtonsPreview1() {
-    // 학년 선택
-    GONGBAEKTheme {
-        var selectedOption1 by remember { mutableStateOf("") }
-        GongBaekSelectableButtons(
-            selectableButtonType = SelectableButtonType.GRADE,
-            onOptionSelected = { option -> selectedOption1 = option },
-            selectedOption = selectedOption1
-        )
-    }
-}
-
-@Preview(showBackground = true)
-@Composable
 private fun GongBaekSelectableButtonsPreview2() {
     // MBTI 선택
     GONGBAEKTheme {
