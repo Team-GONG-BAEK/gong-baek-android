@@ -106,7 +106,7 @@ private fun AcademicInfoSelectionSection(
 ) {
     Column {
         StartTitleTopBar(
-            onClick = onBackClick
+            onLeadingIconClick = onBackClick
         )
 
         GongBaekProgressBar(progressPercent = 1 / 7f)

@@ -156,7 +156,7 @@ fun GroupRoomScreen(
                     }
                     .padding(top = WindowInsets.statusBars.asPaddingValues().calculateTopPadding())
             ) {
-                StartTitleTopBar(onClick = onBackClick)
+                StartTitleTopBar(onLeadingIconClick = onBackClick)
                 GroupRoomInfoSection(
                     groupStatus = GroupInfoChipType.getChipTypeFromStatus(uiState.groupRoom.groupInfo.status),
                     groupCategory = GroupInfoChipType.getChipTypeFromCategory(uiState.groupRoom.groupInfo.category),

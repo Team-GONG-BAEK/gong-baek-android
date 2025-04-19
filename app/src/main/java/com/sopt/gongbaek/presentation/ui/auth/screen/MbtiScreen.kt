@@ -118,7 +118,7 @@ private fun MbtiScreenContent(
     modifier: Modifier = Modifier
 ) {
     Column {
-        StartTitleTopBar(onClick = onBackClick)
+        StartTitleTopBar(onLeadingIconClick = onBackClick)
 
         GongBaekProgressBar(progressPercent = 5 / 7f)
 

@@ -95,7 +95,7 @@ private fun ImageSelectorSection(
     modifier: Modifier = Modifier
 ) {
     Column {
-        StartTitleTopBar(onClick = onBackClick)
+        StartTitleTopBar(onLeadingIconClick = onBackClick)
 
         GongBaekProgressBar(progressPercent = 4 / 7f)
 

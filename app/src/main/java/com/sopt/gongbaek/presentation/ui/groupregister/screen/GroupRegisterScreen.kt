@@ -155,7 +155,7 @@ private fun GroupRegisterSection(
         modifier = modifier
     ) {
         StartTitleTopBar(
-            onClick = onBackClick
+            onLeadingIconClick = onBackClick
         )
         GongBaekProgressBar(progressPercent = 0.125f * 8f)
 

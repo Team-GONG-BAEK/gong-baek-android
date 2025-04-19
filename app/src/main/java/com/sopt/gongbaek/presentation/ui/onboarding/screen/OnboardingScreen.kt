@@ -75,7 +75,7 @@ fun OnboardingScreen(
         if (pagerState.currentPage == 0) {
             StartTitleTopBar(isLeadingIconIncluded = false)
         } else {
-            StartTitleTopBar(onClick = onBackClick)
+            StartTitleTopBar(onLeadingIconClick = onBackClick)
         }
         HorizontalPager(
             state = pagerState,

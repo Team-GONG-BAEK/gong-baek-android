@@ -105,7 +105,7 @@ private fun SelectDayOfWeekSection(
         modifier = modifier.fillMaxWidth()
     ) {
         StartTitleTopBar(
-            onClick = onBackClick
+            onLeadingIconClick = onBackClick
         )
         GongBaekProgressBar(progressPercent = 0.125f * 2f)
 

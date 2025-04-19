@@ -98,7 +98,7 @@ private fun EnterTimeTableSection(
     modifier: Modifier = Modifier
 ) {
     Column {
-        StartTitleTopBar(onClick = onBackClick)
+        StartTitleTopBar(onLeadingIconClick = onBackClick)
 
         GongBaekProgressBar(progressPercent = 1f)
 

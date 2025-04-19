@@ -98,7 +98,8 @@ fun GroupDetailScreen(
     ) {
         StartTitleTopBar(
             modifier = Modifier.background(color = GongBaekTheme.colors.white),
-            onClick = onBackClick
+            onLeadingIconClick = onBackClick,
+            isTrailingIconIncluded = true
         )
         GroupInfoSection(
             groupStatus = GroupInfoChipType.getChipTypeFromStatus(uiState.groupDetail.groupInfo.status),

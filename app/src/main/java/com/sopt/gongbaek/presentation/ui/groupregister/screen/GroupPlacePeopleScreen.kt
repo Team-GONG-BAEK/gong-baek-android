@@ -131,7 +131,7 @@ private fun GroupPlacePeopleSection(
         modifier = modifier.fillMaxWidth()
     ) {
         StartTitleTopBar(
-            onClick = onBackClick
+            onLeadingIconClick = onBackClick
         )
         GongBaekProgressBar(progressPercent = 0.125f * 6f)
 

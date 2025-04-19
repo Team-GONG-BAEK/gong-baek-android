@@ -119,7 +119,7 @@ private fun GroupCycleSection(
         modifier = modifier
             .fillMaxSize()
     ) {
-        StartTitleTopBar(onClick = onBackClick)
+        StartTitleTopBar(onLeadingIconClick = onBackClick)
         GongBaekProgressBar(0.125f)
 
         Column(
