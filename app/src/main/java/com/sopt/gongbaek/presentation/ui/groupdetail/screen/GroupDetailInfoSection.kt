@@ -197,7 +197,7 @@ fun GroupDetailInfoSection(
                                     Text(
                                         text = stringResource(
                                             R.string.group_detail_enter_year,
-                                            formatEnterYearToString(groupHost.enterYear),
+                                            formatEnterYearToString(groupHost.enterYear)
                                         ),
                                         color = GongBaekTheme.colors.gray08,
                                         style = GongBaekTheme.typography.caption2.m12

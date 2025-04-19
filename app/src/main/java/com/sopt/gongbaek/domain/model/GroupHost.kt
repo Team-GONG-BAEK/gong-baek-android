@@ -9,4 +9,3 @@ data class GroupHost(
     val mbti: String = "",
     val introduction: String = ""
 )
-
