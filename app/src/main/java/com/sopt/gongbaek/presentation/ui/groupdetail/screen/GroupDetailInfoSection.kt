@@ -135,16 +135,21 @@ fun GroupDetailInfoSection(
                                     color = GongBaekTheme.colors.gray09,
                                     style = GongBaekTheme.typography.body1.b16
                                 )
-                                when (GenderType.fromName(groupHost.gender)) {
-                                    GenderType.MAN -> Image(
-                                        imageVector = ImageVector.vectorResource(R.drawable.ic_male_20),
-                                        contentDescription = null
-                                    )
+                                when {
+                                    groupHost.gender.isEmpty() -> {}
+                                    else -> {
+                                        when (GenderType.fromName(groupHost.gender)) {
+                                            GenderType.MAN -> Image(
+                                                imageVector = ImageVector.vectorResource(R.drawable.ic_male_20),
+                                                contentDescription = null
+                                            )
 
-                                    GenderType.WOMAN -> Image(
-                                        imageVector = ImageVector.vectorResource(R.drawable.ic_female_20),
-                                        contentDescription = null
-                                    )
+                                            GenderType.WOMAN -> Image(
+                                                imageVector = ImageVector.vectorResource(R.drawable.ic_female_20),
+                                                contentDescription = null
+                                            )
+                                        }
+                                    }
                                 }
                             }
                             Spacer(modifier = Modifier.height(6.dp))
