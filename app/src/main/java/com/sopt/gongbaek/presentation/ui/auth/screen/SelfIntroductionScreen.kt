@@ -99,7 +99,7 @@ private fun SelfIntroductionSection(
     modifier: Modifier = Modifier
 ) {
     Column {
-        StartTitleTopBar(onClick = onBackClick)
+        StartTitleTopBar(onLeadingIconClick = onBackClick)
 
         GongBaekProgressBar(progressPercent = 6 / 7f)
 

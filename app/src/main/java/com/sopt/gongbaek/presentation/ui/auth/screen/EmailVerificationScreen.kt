@@ -95,7 +95,7 @@ private fun EmailVerificationScreen(
     Column(
         modifier = modifier.fillMaxSize()
     ) {
-        StartTitleTopBar(onClick = onBackClick)
+        StartTitleTopBar(onLeadingIconClick = onBackClick)
         GongBaekProgressBar(progressPercent = 2 / 7f)
 
         Box(

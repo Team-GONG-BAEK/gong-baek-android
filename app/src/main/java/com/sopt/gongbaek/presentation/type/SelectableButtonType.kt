@@ -7,7 +7,6 @@ import androidx.compose.ui.text.TextStyle
 import com.sopt.gongbaek.R
 import com.sopt.gongbaek.domain.type.DayOfWeekType
 import com.sopt.gongbaek.domain.type.GenderType
-import com.sopt.gongbaek.domain.type.GradeType
 import com.sopt.gongbaek.domain.type.GroupCategoryType
 import com.sopt.gongbaek.domain.type.GroupCycleType
 import com.sopt.gongbaek.domain.type.MbtiFirstLetterType
@@ -27,14 +26,6 @@ enum class SelectableButtonType(
     @ColorRes val unSelectedTextColor: Color = defaultGongBaekColors.gray07,
     @DrawableRes val categoryImgResIds: List<Int> = emptyList()
 ) {
-    GRADE(
-        options = listOf(
-            GradeType.FRESHMAN.description,
-            GradeType.SOPHOMORE.description,
-            GradeType.JUNIOR.description,
-            GradeType.SENIOR.description
-        )
-    ),
     MBTI_FIRST(
         options = listOf(
             MbtiFirstLetterType.E.description,

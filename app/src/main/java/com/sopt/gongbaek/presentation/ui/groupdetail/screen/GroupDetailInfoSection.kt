@@ -128,16 +128,21 @@ fun GroupDetailInfoSection(
                                     color = GongBaekTheme.colors.gray09,
                                     style = GongBaekTheme.typography.body1.b16
                                 )
-                                when (GenderType.fromName(groupHost.gender)) {
-                                    GenderType.MAN -> Image(
-                                        imageVector = ImageVector.vectorResource(R.drawable.ic_male_20),
-                                        contentDescription = null
-                                    )
+                                when {
+                                    groupHost.gender.isEmpty() -> {}
+                                    else -> {
+                                        when (GenderType.fromName(groupHost.gender)) {
+                                            GenderType.MAN -> Image(
+                                                imageVector = ImageVector.vectorResource(R.drawable.ic_male_20),
+                                                contentDescription = null
+                                            )
 
-                                    GenderType.WOMAN -> Image(
-                                        imageVector = ImageVector.vectorResource(R.drawable.ic_female_20),
-                                        contentDescription = null
-                                    )
+                                            GenderType.WOMAN -> Image(
+                                                imageVector = ImageVector.vectorResource(R.drawable.ic_female_20),
+                                                contentDescription = null
+                                            )
+                                        }
+                                    }
                                 }
                             }
                             Spacer(modifier = Modifier.height(6.dp))
@@ -173,7 +178,7 @@ fun GroupDetailInfoSection(
                                         )
                                     ) {
                                         Text(
-                                            text = stringResource(R.string.group_detail_enter_year_grade_title),
+                                            text = stringResource(R.string.group_detail_enter_year_title),
                                             modifier = Modifier.padding(
                                                 horizontal = 6.dp,
                                                 vertical = 1.dp
@@ -184,9 +189,8 @@ fun GroupDetailInfoSection(
                                     }
                                     Text(
                                         text = stringResource(
-                                            R.string.group_detail_enter_year_grade,
-                                            formatEnterYearToString(groupHost.enterYear),
-                                            groupHost.grade
+                                            R.string.group_detail_enter_year,
+                                            formatEnterYearToString(groupHost.enterYear)
                                         ),
                                         color = GongBaekTheme.colors.gray08,
                                         style = GongBaekTheme.typography.caption2.m12
@@ -315,7 +319,6 @@ fun GroupDetailInfoScreenPreview() {
                 isApply = false
             ),
             groupHost = GroupHost(
-                grade = 4,
                 enterYear = 2020,
                 mbti = "ESFP"
             ),

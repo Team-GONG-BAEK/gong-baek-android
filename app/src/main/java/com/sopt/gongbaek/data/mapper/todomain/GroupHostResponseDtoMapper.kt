@@ -9,7 +9,6 @@ fun GroupHostResponseDto.toDomain() = GroupHost(
     gender = sex,
     major = schoolMajor,
     enterYear = enterYear,
-    grade = schoolGrade,
     mbti = mbti,
     introduction = introduction
 )

@@ -10,7 +10,6 @@ data class GroupHostResponseDto(
     @SerialName("sex") val sex: String,
     @SerialName("schoolMajor") val schoolMajor: String,
     @SerialName("enterYear") val enterYear: Int,
-    @SerialName("schoolGrade") val schoolGrade: Int,
     @SerialName("mbti") val mbti: String,
     @SerialName("introduction") val introduction: String
 )

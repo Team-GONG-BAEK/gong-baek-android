@@ -116,7 +116,7 @@ private fun GroupIntroductionSection(
         modifier = modifier.fillMaxWidth()
     ) {
         StartTitleTopBar(
-            onClick = onBackClick
+            onLeadingIconClick = onBackClick
         )
         GongBaekProgressBar(progressPercent = 0.125f * 7f)
 

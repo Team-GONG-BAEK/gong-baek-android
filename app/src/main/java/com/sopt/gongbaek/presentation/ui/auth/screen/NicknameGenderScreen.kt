@@ -106,7 +106,7 @@ private fun NickNameInputSection(
     modifier: Modifier = Modifier
 ) {
     Column {
-        StartTitleTopBar(onClick = onBackClick)
+        StartTitleTopBar(onLeadingIconClick = onBackClick)
 
         GongBaekProgressBar(progressPercent = 3 / 7f)
 

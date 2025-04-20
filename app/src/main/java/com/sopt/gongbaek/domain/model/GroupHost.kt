@@ -6,7 +6,6 @@ data class GroupHost(
     val gender: String = "",
     val major: String = "",
     val enterYear: Int = 0,
-    val grade: Int = 0,
     val mbti: String = "",
     val introduction: String = ""
 )

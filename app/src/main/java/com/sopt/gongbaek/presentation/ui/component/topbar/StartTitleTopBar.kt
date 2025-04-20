@@ -4,6 +4,7 @@ import androidx.annotation.StringRes
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -15,11 +16,14 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.tooling.preview.Preview
 import com.sopt.gongbaek.R
+import com.sopt.gongbaek.presentation.type.GongBaekWebView
 import com.sopt.gongbaek.presentation.util.extension.clickableWithoutRipple
+import com.sopt.gongbaek.presentation.util.openWebView
 import com.sopt.gongbaek.ui.theme.GongBaekTheme
 
 @Composable
@@ -27,8 +31,11 @@ fun StartTitleTopBar(
     modifier: Modifier = Modifier,
     @StringRes startTitleResId: Int? = null,
     isLeadingIconIncluded: Boolean = true,
-    onClick: () -> Unit = {}
+    isTrailingIconIncluded: Boolean = false,
+    onLeadingIconClick: () -> Unit = {}
 ) {
+    val context = LocalContext.current
+
     Row(
         modifier = modifier
             .windowInsetsPadding(WindowInsets.statusBars)
@@ -42,7 +49,7 @@ fun StartTitleTopBar(
                 contentDescription = null,
                 tint = GongBaekTheme.colors.gray04,
                 modifier = Modifier.clickableWithoutRipple {
-                    onClick()
+                    onLeadingIconClick()
                 }
             )
         }
@@ -52,6 +59,18 @@ fun StartTitleTopBar(
                 text = stringResource(startTitleResId),
                 color = GongBaekTheme.colors.gray08,
                 style = GongBaekTheme.typography.title2.m18
+            )
+        }
+
+        if (isTrailingIconIncluded) {
+            Spacer(modifier = Modifier.weight(1f))
+            Icon(
+                imageVector = ImageVector.vectorResource(R.drawable.ic_report_48),
+                contentDescription = null,
+                tint = GongBaekTheme.colors.gray04,
+                modifier = Modifier.clickableWithoutRipple {
+                    openWebView(context, GongBaekWebView.REPORT_FORM.url)
+                }
             )
         }
     }
@@ -66,7 +85,7 @@ private fun PreviewStartTitleTopBar() {
     ) {
         StartTitleTopBar()
         StartTitleTopBar(isLeadingIconIncluded = false)
-        StartTitleTopBar(startTitleResId = R.string.topbar_group)
+        StartTitleTopBar(startTitleResId = R.string.topbar_group, isTrailingIconIncluded = true)
         StartTitleTopBar(startTitleResId = R.string.topbar_my_group)
     }
 }

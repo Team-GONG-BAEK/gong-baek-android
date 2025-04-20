@@ -95,7 +95,7 @@ private fun SettingScreen(
     ) {
         StartTitleTopBar(
             startTitleResId = R.string.topbar_setting,
-            onClick = onBackClick
+            onLeadingIconClick = onBackClick
         )
 
         ServiceGuideSection(

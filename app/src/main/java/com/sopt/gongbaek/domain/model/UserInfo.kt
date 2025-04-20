@@ -6,7 +6,6 @@ data class UserInfo(
     val mbti: String = "",
     val school: String = "",
     val major: String = "",
-    val grade: Int = 0,
     val enterYear: Int = 0,
     val introduction: String = "",
     val gender: String = "",

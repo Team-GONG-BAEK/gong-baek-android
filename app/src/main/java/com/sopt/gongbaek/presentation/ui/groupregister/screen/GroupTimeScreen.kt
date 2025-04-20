@@ -95,7 +95,7 @@ fun GroupTimeScreen(
             modifier = Modifier.padding(innerPadding)
         ) {
             StartTitleTopBar(
-                onClick = onBackClick
+                onLeadingIconClick = onBackClick
             )
             GongBaekProgressBar(progressPercent = 0.125f * 3f)
 
