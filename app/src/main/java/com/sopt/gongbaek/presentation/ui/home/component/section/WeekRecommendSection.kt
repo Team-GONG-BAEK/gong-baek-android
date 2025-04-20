@@ -125,17 +125,9 @@ private fun WeekRecommendItem(
     ) {
         val screenWidth = LocalConfiguration.current.screenWidthDp
 
-        val imageList = ImageSelectorType.getImageListFromCategory(weekRecommendGroupInfo.coverImg.toString())
-
-        val selectedImageResId = if (imageList.isNotEmpty() && weekRecommendGroupInfo.coverImg in 1..imageList.size) {
-            imageList[weekRecommendGroupInfo.coverImg - 1]
-        } else {
-            R.drawable.img_study_1
-        }
-
         Box {
             Image(
-                painter = painterResource(selectedImageResId),
+                painter = painterResource(ImageSelectorType.getCoverImage(weekRecommendGroupInfo.category, weekRecommendGroupInfo.coverImg)),
                 contentDescription = null,
                 contentScale = ContentScale.Crop,
                 modifier = Modifier
@@ -195,7 +187,9 @@ private fun PreviewWeekSection() {
                 groupTitle = "스터디 모임",
                 nickname = "김대현",
                 weekDate = "2021-09-20",
-                profileImg = 5
+                profileImg = 5,
+                category = "DINING",
+                coverImg = 3
             ),
             RecommendGroupInfo(
                 groupTitle = "운동 모임",

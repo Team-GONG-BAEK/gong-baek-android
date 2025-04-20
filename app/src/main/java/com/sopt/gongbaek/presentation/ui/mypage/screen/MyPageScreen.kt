@@ -140,13 +140,6 @@ private fun MyPageScreen(
 private fun MyInfoSection(
     uiState: MyPageContract.State
 ) {
-    val imageList = ProfileImageList.profileImageList
-    val profileImageResId = if (imageList.isNotEmpty() && uiState.myPageInfo.profileImage in 1..imageList.size) {
-        imageList[uiState.myPageInfo.profileImage - 1]
-    } else {
-        R.drawable.img_detail_profile_1
-    }
-
     Row(
         modifier = Modifier
             .padding(16.dp)
@@ -154,7 +147,7 @@ private fun MyInfoSection(
         verticalAlignment = Alignment.CenterVertically
     ) {
         Image(
-            painter = painterResource(profileImageResId),
+            painter = painterResource(ProfileImageList.getProfileImage(uiState.myPageInfo.profileImage)),
             contentDescription = null,
             modifier = Modifier
                 .width((LocalConfiguration.current.screenWidthDp * 0.22).dp)

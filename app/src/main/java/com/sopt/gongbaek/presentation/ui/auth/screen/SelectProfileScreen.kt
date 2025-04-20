@@ -89,7 +89,7 @@ private fun SelectProfileScreen(
 
 @Composable
 private fun ImageSelectorSection(
-    selectedProfileIndex: Int,
+    selectedProfileIndex: Int?,
     onProfileImageSelected: (Int) -> Unit,
     onBackClick: () -> Unit,
     modifier: Modifier = Modifier

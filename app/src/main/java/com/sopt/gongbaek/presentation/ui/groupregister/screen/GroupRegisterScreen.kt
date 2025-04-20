@@ -143,14 +143,6 @@ private fun GroupRegisterSection(
     onBackClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
-    val imageList = ImageSelectorType.getImageListFromCategory(groupRegisterInfo.category)
-
-    val selectedImageResId = if (imageList.isNotEmpty() && groupRegisterInfo.coverImg in 1..imageList.size) {
-        imageList[groupRegisterInfo.coverImg - 1]
-    } else {
-        R.drawable.img_study_1
-    }
-
     Column(
         modifier = modifier
     ) {
@@ -171,7 +163,7 @@ private fun GroupRegisterSection(
         ) {
             item {
                 Image(
-                    painter = painterResource(selectedImageResId),
+                    painter = painterResource(ImageSelectorType.getCoverImage(groupRegisterInfo.category, groupRegisterInfo.coverImg)),
                     contentDescription = null,
                     contentScale = ContentScale.Crop,
                     modifier = Modifier

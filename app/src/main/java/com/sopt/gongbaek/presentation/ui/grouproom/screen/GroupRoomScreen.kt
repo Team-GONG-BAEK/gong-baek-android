@@ -112,13 +112,6 @@ fun GroupRoomScreen(
 ) {
     var columnHeight by remember { mutableIntStateOf(0) }
     val systemUiController = rememberSystemUiController()
-    val imageList = ImageSelectorType.getImageListFromCategory(uiState.groupRoom.groupInfo.category)
-
-    val groupCoverImageResId = if (imageList.isNotEmpty() && uiState.groupRoom.groupInfo.coverImg in 1..imageList.size) {
-        imageList[uiState.groupRoom.groupInfo.coverImg - 1]
-    } else {
-        R.drawable.img_study_1
-    }
 
     DisposableEffect(Unit) {
         systemUiController.setStatusBarColor(
@@ -134,7 +127,7 @@ fun GroupRoomScreen(
     ) {
         Box {
             Image(
-                painter = painterResource(id = groupCoverImageResId),
+                painter = painterResource(ImageSelectorType.getCoverImage(uiState.groupRoom.groupInfo.category, uiState.groupRoom.groupInfo.coverImg)),
                 contentDescription = null,
                 modifier = Modifier
                     .fillMaxWidth()
@@ -233,8 +226,6 @@ private fun GroupRoomInfoSection(
 private fun GroupRoomPeopleSection(
     groupMembers: GroupMembers
 ) {
-    val imageList = ProfileImageList.profileImageList
-
     Column(
         modifier = Modifier
             .fillMaxWidth()
@@ -266,15 +257,10 @@ private fun GroupRoomPeopleSection(
             contentPadding = PaddingValues(end = 16.dp)
         ) {
             items(groupMembers.members) { member ->
-                val profileImageResId = if (imageList.isNotEmpty() && member.profileImg in 1..imageList.size) {
-                    imageList[member.profileImg - 1]
-                } else {
-                    R.drawable.img_detail_profile_1
-                }
                 Column(horizontalAlignment = Alignment.CenterHorizontally) {
                     Box {
                         Image(
-                            painter = painterResource(profileImageResId),
+                            painter = painterResource(ProfileImageList.getProfileImage(member.profileImg)),
                             contentDescription = null,
                             modifier = Modifier
                                 .roundedBackgroundWithBorder(

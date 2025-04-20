@@ -81,7 +81,7 @@ fun GroupCoverScreen(
             GongBaekBasicButton(
                 title = stringResource(R.string.groupregister_next),
                 onClick = onNextButtonClicked,
-                enabled = cover != 0,
+                enabled = cover != -1,
                 modifier = Modifier
                     .padding(horizontal = 16.dp, vertical = 12.dp)
             )
