@@ -253,7 +253,8 @@ class AuthViewModel @Inject constructor(
                                 step = EmailVerificationStep.REQUESTED,
                                 emailMessage = MESSAGE_CODE_SENT,
                                 isTimerRunning = true,
-                                timeLeft = EMAIL_VERIFICATION_TIME_LIMIT
+                                timeLeft = EMAIL_VERIFICATION_TIME_LIMIT,
+                                isVerificationCodeEnabled = true
                             )
                         )
                     }
@@ -275,18 +276,6 @@ class AuthViewModel @Inject constructor(
 
     private fun handleVerificationCodeSubmitted() {
         val email = currentState.emailVerificationState.email
-
-        if (email.isEmpty()) {
-            setState {
-                copy(
-                    emailVerificationState = emailVerificationState.copy(
-                        step = EmailVerificationStep.VERIFICATION_FAILED,
-                        verificationCodeMessage = ERROR_EMPTY_EMAIL
-                    )
-                )
-            }
-            return
-        }
 
         viewModelScope.launch {
             verifyEmailCodeUseCase(
