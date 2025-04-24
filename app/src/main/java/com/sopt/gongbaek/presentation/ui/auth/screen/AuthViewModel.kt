@@ -327,9 +327,9 @@ class AuthViewModel @Inject constructor(
 
     private fun validateNicknameLocally(nickname: String): String? =
         when {
-            nickname.length < 2 -> ERROR_NICKNAME_TOO_SHORT
-            !nickname.all { it.isKoreanChar() } -> ERROR_NICKNAME_NON_KOREAN
-            !nickname.all { it.isCompleteKorean() } -> ERROR_NICKNAME_INCOMPLETE_KOREAN
+            nickname.length < 2 -> ERROR_NICKNAME_VALIDATION_MESSAGE
+            !nickname.all { it.isKoreanChar() } -> ERROR_NICKNAME_VALIDATION_MESSAGE
+            !nickname.all { it.isCompleteKorean() } -> ERROR_NICKNAME_VALIDATION_MESSAGE
             else -> null
         }
 
@@ -358,7 +358,7 @@ class AuthViewModel @Inject constructor(
                         setState {
                             copy(
                                 nicknameGenderState = currentState.nicknameGenderState.copy(
-                                    nicknameErrorMessage = NICKNAME_VALIDATION_ERROR_MESSAGE
+                                    nicknameErrorMessage = ERROR_NICKNAME_DUPLICATE_MESSAGE
                                 )
                             )
                         }
@@ -467,16 +467,13 @@ class AuthViewModel @Inject constructor(
         // Email Verification Messages
         private const val ERROR_INVALID_EMAIL = "잘못된 이메일입니다. 다시 입력해주세요."
         private const val MESSAGE_CODE_SENT = "인증코드를 발송했습니다."
-        private const val MESSAGE_CODE_EXPIRED = "유효시간이 만료되었습니다. 인증코드를 다시 요청해주세요."
-        private const val ERROR_EMPTY_EMAIL = "이메일을 먼저 입력해주세요."
-        private const val MESSAGE_CODE_SUCCESS = "인증이 완료되었습니다."
-        private const val ERROR_CODE_MISMATCH = "인증코드가 일치하지 않습니다."
+        private const val MESSAGE_CODE_EXPIRED = "유효기간이 만료되었습니다. 코드를 다시 받아주세요."
+        private const val MESSAGE_CODE_SUCCESS = "코드 인증이 완료되었습니다."
+        private const val ERROR_CODE_MISMATCH = "잘못된 코드입니다. 다시 입력해주세요."
 
         // Nickname Validation Messages
-        private const val ERROR_NICKNAME_TOO_SHORT = "닉네임은 최소 2글자 이상이어야 합니다."
-        private const val ERROR_NICKNAME_NON_KOREAN = "닉네임은 한글만 사용할 수 있습니다."
-        private const val ERROR_NICKNAME_INCOMPLETE_KOREAN = "닉네임은 완성된 한글만 사용할 수 있습니다."
-        private const val NICKNAME_VALIDATION_ERROR_MESSAGE = "중복된 닉네임입니다. 다시 입력해주세요."
+        private const val ERROR_NICKNAME_VALIDATION_MESSAGE = "한글 최소 2자 이상 입력해주세요."
+        private const val ERROR_NICKNAME_DUPLICATE_MESSAGE = "중복된 닉네임입니다. 다시 입력해주세요."
         private const val ERROR_CODE_DUPLICATE_NICKNAME = "HTTP 409 "
 
         // Timer
