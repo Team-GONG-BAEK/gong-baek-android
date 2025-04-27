@@ -161,6 +161,7 @@ private fun EmailVerificationScreen(
                             textStyle = GongBaekTheme.typography.body1.m16.copy(
                                 color = GongBaekTheme.colors.gray10
                             ),
+                            singleLine = true,
                             cursorBrush = SolidColor(GongBaekTheme.colors.gray05)
                         ) { innerTextField ->
                             Box(
@@ -281,6 +282,7 @@ private fun EmailVerificationScreen(
                             colors = GongBaekButtonDefault.gongBaekButtonColors(
                                 containerColor = GongBaekTheme.colors.black
                             ),
+                            enabled = uiState.isVerificationCodeEnabled,
                             contentPadding = PaddingValues(vertical = 14.dp, horizontal = 12.dp),
                             modifier = Modifier.weight(0.213f)
                         ) {
@@ -307,7 +309,7 @@ private fun EmailVerificationScreen(
 
             GongBaekBasicButton(
                 title = stringResource(R.string.auth_email_button_next),
-                enabled = uiState.step == EmailVerificationStep.VERIFIED,
+                enabled = uiState.isNextEnabled,
                 onClick = onNextClick,
                 modifier = Modifier
                     .padding(vertical = 12.dp)
