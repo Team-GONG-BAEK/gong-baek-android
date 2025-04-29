@@ -39,6 +39,7 @@ import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.flowWithLifecycle
 import com.sopt.gongbaek.R
+import com.sopt.gongbaek.presentation.ui.auth.component.EmptySearchResultView
 import com.sopt.gongbaek.presentation.ui.auth.component.SearchResultSection
 import com.sopt.gongbaek.presentation.ui.auth.state.AcademicInfoState
 import com.sopt.gongbaek.presentation.ui.component.button.GongBaekBasicButton
@@ -134,11 +135,18 @@ private fun MajorSearchScreen(
 
                 Spacer(modifier = Modifier.height(14.dp))
 
-                SearchResultSection(
-                    searchResults = academicInfoState.searchedMajors,
-                    selectedItem = academicInfoState.major,
-                    onItemSelected = onMajorSelected
-                )
+                val majors = academicInfoState.searchedMajors
+                when {
+                    majors == null -> {}
+                    majors.isEmpty() -> EmptySearchResultView()
+                    else -> {
+                        SearchResultSection(
+                            searchResults = majors,
+                            selectedItem = academicInfoState.university,
+                            onItemSelected = onMajorSelected
+                        )
+                    }
+                }
             }
         }
     )

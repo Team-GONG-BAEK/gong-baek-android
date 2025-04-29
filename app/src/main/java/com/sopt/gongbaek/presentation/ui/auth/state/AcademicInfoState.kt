@@ -5,9 +5,9 @@ data class AcademicInfoState(
     val major: String = "",
     val enterYear: Int = DEFAULT_ENTER_YEAR,
     val universitySearchQuery: String = "",
-    val searchedUniversities: List<String> = emptyList(),
+    val searchedUniversities: List<String>? = null,
     val majorSearchQuery: String = "",
-    val searchedMajors: List<String> = emptyList()
+    val searchedMajors: List<String>? = null
 ) {
     val isAcademicInfoComplete: Boolean
         get() = isUniversitySearchComplete && isMajorSearchComplete && enterYear != DEFAULT_ENTER_YEAR

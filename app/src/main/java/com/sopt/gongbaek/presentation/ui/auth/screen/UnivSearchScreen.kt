@@ -120,15 +120,18 @@ private fun UnivSearchScreen(
 
                 Spacer(modifier = Modifier.height(14.dp))
 
-                if (academicInfoState.searchedUniversities.isEmpty()) {
-                    EmptySearchResultView()
+                val universities = academicInfoState.searchedUniversities
+                when {
+                    universities == null -> {}
+                    universities.isEmpty() -> EmptySearchResultView()
+                    else -> {
+                        SearchResultSection(
+                            searchResults = universities,
+                            selectedItem = academicInfoState.university,
+                            onItemSelected = onUniversitySelected
+                        )
+                    }
                 }
-
-                SearchResultSection(
-                    searchResults = academicInfoState.searchedUniversities,
-                    selectedItem = academicInfoState.university,
-                    onItemSelected = onUniversitySelected
-                )
             }
         }
     )
