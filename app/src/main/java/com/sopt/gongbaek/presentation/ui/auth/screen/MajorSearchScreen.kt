@@ -142,7 +142,7 @@ private fun MajorSearchScreen(
                     else -> {
                         SearchResultSection(
                             searchResults = majors,
-                            selectedItem = academicInfoState.university,
+                            selectedItem = academicInfoState.major,
                             onItemSelected = onMajorSelected
                         )
                     }
