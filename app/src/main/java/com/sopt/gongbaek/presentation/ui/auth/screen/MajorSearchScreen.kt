@@ -99,7 +99,7 @@ private fun MajorSearchScreen(
         },
         bottomBar = {
             Column {
-                if (academicInfoState.majorSearchQuery.isNotEmpty()) {
+                if (academicInfoState.searchedMajors?.isEmpty() == true) {
                     DirectRegistrationButton(
                         major = academicInfoState.majorSearchQuery,
                         onClick = {
