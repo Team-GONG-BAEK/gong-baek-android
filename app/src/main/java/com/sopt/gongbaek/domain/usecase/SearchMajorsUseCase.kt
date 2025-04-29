@@ -8,4 +8,7 @@ class SearchMajorsUseCase(
 ) {
     suspend operator fun invoke(universityName: String, majorName: String): Result<Majors> =
         searchRepository.searchMajors(universityName, majorName)
+            .map { majors ->
+                Majors(majors.majors.distinct())
+            }
 }
