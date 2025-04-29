@@ -121,7 +121,7 @@ private fun UnivSearchScreen(
                 }
 
                 SearchResultSection(
-                    univSearchResult = academicInfoState.searchedUniversities,
+                    searchResults = academicInfoState.searchedUniversities,
                     selectedItem = academicInfoState.university,
                     onItemSelected = onUniversitySelected
                 )

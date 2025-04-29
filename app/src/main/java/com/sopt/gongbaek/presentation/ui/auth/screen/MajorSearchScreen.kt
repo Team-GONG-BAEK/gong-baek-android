@@ -131,7 +131,7 @@ private fun MajorSearchScreen(
                 Spacer(modifier = Modifier.height(14.dp))
 
                 SearchResultSection(
-                    univSearchResult = academicInfoState.searchedMajors,
+                    searchResults = academicInfoState.searchedMajors,
                     selectedItem = academicInfoState.major,
                     onItemSelected = onMajorSelected
                 )

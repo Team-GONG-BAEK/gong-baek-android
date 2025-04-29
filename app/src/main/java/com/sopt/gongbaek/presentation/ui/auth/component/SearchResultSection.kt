@@ -10,8 +10,6 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
@@ -24,25 +22,19 @@ import com.sopt.gongbaek.ui.theme.GongBaekTheme
 
 @Composable
 fun SearchResultSection(
-    univSearchResult: List<String>,
-    modifier: Modifier = Modifier,
+    searchResults: List<String>,
     selectedItem: String,
-    onItemSelected: (String) -> Unit
+    onItemSelected: (String) -> Unit,
+    modifier: Modifier = Modifier
 ) {
     LazyColumn(
         modifier = modifier.fillMaxWidth()
     ) {
-        items(univSearchResult) { university ->
+        items(searchResults) { searchResultText ->
             SearchResultItem(
-                university = university,
-                isSelected = selectedItem == university,
-                onSelectionChange = { isSelected ->
-                    if (isSelected) {
-                        onItemSelected(university)
-                    } else {
-                        onItemSelected("")
-                    }
-                }
+                searchResultText = searchResultText,
+                isSelected = selectedItem == searchResultText,
+                onClick = { onItemSelected(searchResultText) }
             )
         }
     }
@@ -50,9 +42,9 @@ fun SearchResultSection(
 
 @Composable
 private fun SearchResultItem(
-    university: String,
+    searchResultText: String,
     isSelected: Boolean,
-    onSelectionChange: (Boolean) -> Unit
+    onClick: () -> Unit
 ) {
     Row(
         modifier = Modifier
@@ -60,13 +52,13 @@ private fun SearchResultItem(
             .background(
                 color = if (isSelected) GongBaekTheme.colors.subOrange else GongBaekTheme.colors.white
             )
-            .clickableWithoutRipple { onSelectionChange(!isSelected) }
+            .clickableWithoutRipple { onClick() }
             .padding(horizontal = 16.dp),
         horizontalArrangement = Arrangement.SpaceBetween,
         verticalAlignment = Alignment.CenterVertically
     ) {
         Text(
-            text = university,
+            text = searchResultText,
             color = if (isSelected) GongBaekTheme.colors.mainOrange else GongBaekTheme.colors.gray08,
             style = GongBaekTheme.typography.body1.r16,
             modifier = Modifier.padding(vertical = 17.dp)
@@ -84,14 +76,14 @@ private fun SearchResultItem(
 
 @Preview
 @Composable
-private fun PreviewSearchResultSection() {
-    val universities = listOf(
+private fun SearchResultSectionPreview() {
+    val sampleSearchResults = listOf(
         "건국대학교 서울캠퍼스",
-        "건국대학교 서울캠퍼스",
-        "건국대학교 서울캠퍼스"
+        "고려대학교",
+        "연세대학교"
     )
     SearchResultSection(
-        univSearchResult = universities,
+        searchResults = sampleSearchResults,
         onItemSelected = {},
         selectedItem = ""
     )
