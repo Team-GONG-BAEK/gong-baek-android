@@ -130,7 +130,7 @@ fun GroupListScreen(
                         .fillMaxSize(),
                     horizontalAlignment = Alignment.CenterHorizontally,
                     verticalArrangement = Arrangement.Center
-                ){
+                ) {
                     LoadingViewAnimation()
                 }
             } else {
@@ -213,7 +213,7 @@ fun GroupListScreen(
             }
         }
 
-        if (loadState != UiLoadState.Loading){
+        if (loadState != UiLoadState.Loading) {
             FloatingActionButton(
                 onClick = navigateGroupRegister,
                 shape = CircleShape,
