@@ -115,7 +115,7 @@ class AuthViewModel @Inject constructor(
     private fun updateSelectedUniversity(university: String) = setState {
         copy(
             academicInfoState = currentState.academicInfoState.copy(
-                university = university
+                university = if (currentState.academicInfoState.university == university) "" else university
             )
         )
     }
@@ -152,7 +152,7 @@ class AuthViewModel @Inject constructor(
     private fun updateSelectedMajor(major: String) = setState {
         copy(
             academicInfoState = currentState.academicInfoState.copy(
-                major = major
+                major = if (currentState.academicInfoState.major == major) "" else major
             )
         )
     }
