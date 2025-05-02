@@ -31,13 +31,12 @@ import kotlinx.coroutines.delay
 
 @Composable
 fun LoadingViewAnimation() {
-    val steps = remember { mutableListOf(false, false, false) }
     val activeStep = remember { mutableIntStateOf(0) }
 
     LaunchedEffect(Unit) {
         while (true) {
-            for (i in steps.indices) {
-                activeStep.intValue = i
+            repeat(3) {
+                activeStep.intValue = it
                 delay(300L)
             }
         }
