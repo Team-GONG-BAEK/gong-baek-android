@@ -39,7 +39,7 @@ import com.sopt.gongbaek.presentation.type.GroupInfoChipType
 import com.sopt.gongbaek.presentation.ui.component.section.GroupInfoSection
 import com.sopt.gongbaek.presentation.ui.component.topbar.CenterTitleTopBar
 import com.sopt.gongbaek.presentation.ui.grouplist.component.CategoryBar
-import com.sopt.gongbaek.presentation.ui.grouplist.component.LoadingViewAnimation
+import com.sopt.gongbaek.presentation.ui.component.stateView.LoadingViewAnimation
 import com.sopt.gongbaek.presentation.util.base.UiLoadState
 import com.sopt.gongbaek.presentation.util.extension.clickableWithoutRipple
 import com.sopt.gongbaek.presentation.util.formatGroupTimeDescription

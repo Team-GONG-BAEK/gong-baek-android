@@ -1,4 +1,4 @@
-package com.sopt.gongbaek.presentation.ui.grouplist.component
+package com.sopt.gongbaek.presentation.ui.component.stateView
 
 import androidx.compose.animation.core.FastOutSlowInEasing
 import androidx.compose.animation.core.animateFloatAsState
