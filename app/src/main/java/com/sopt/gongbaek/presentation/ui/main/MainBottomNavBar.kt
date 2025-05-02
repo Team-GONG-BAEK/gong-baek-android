@@ -30,7 +30,7 @@ fun MainBottomNavBar(
     bottomNavBarTabTypes: List<MainBottomNavBarTabType>,
     currentBottomNavBarTab: MainBottomNavBarTabType?,
     onBottomNavBarTabSelected: (MainBottomNavBarTabType) -> Unit,
-    modifier: Modifier = Modifier,
+    modifier: Modifier = Modifier
 ) {
     if (isVisible) {
         Column {

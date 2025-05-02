@@ -11,8 +11,7 @@ fun NavGraphBuilder.groupRoomNavGraph(
 ) {
     composable<NavigationRoute.GroupRoom> {
         GroupRoomRoute(
-            // TODO 마이 페이지 작업 시 기획의도에 맞게 반영예정
-            navigateMyGroup = { }
+            navigateBack = navController::popBackStack
         )
     }
 }
