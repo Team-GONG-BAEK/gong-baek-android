@@ -1,26 +1,26 @@
 package com.sopt.gongbaek.data.local.datasourceimpl
 
-import android.content.SharedPreferences
+import androidx.datastore.core.DataStore
 import com.sopt.gongbaek.data.local.datasource.TokenLocalDataSource
-import com.sopt.gongbaek.di.qualifier.TokenPrefs
+import com.sopt.gongbaek.data.security.AuthTokens
+import kotlinx.coroutines.flow.first
 import javax.inject.Inject
 
 class TokenLocalDataSourceImpl @Inject constructor(
-    @TokenPrefs private val sharedPreferences: SharedPreferences
+    private val dataStore: DataStore<AuthTokens>
 ) : TokenLocalDataSource {
 
-    override var accessToken: String?
-        get() = sharedPreferences.getString(ACCESS_TOKEN, null) // 토큰 값을 찾을 수 없는 경우를 위해 nullable로 선언
-        set(value) = sharedPreferences.edit().putString(ACCESS_TOKEN, value).apply()
+    override suspend fun saveAuthTokens(tokens: AuthTokens) {
+        dataStore.updateData { tokens }
+    }
 
-    override var refreshToken: String?
-        get() = sharedPreferences.getString(REFRESH_TOKEN, null)
-        set(value) = sharedPreferences.edit().putString(REFRESH_TOKEN, value).apply()
+    override suspend fun getSignUpToken(): String = dataStore.data.first().signUpToken
 
-    override fun clearInfo() = sharedPreferences.edit().clear().apply()
+    override suspend fun getAccessToken(): String = dataStore.data.first().accessToken
 
-    companion object {
-        private const val ACCESS_TOKEN = "ACCESS_TOKEN"
-        private const val REFRESH_TOKEN = "REFRESH_TOKEN"
+    override suspend fun getRefreshToken(): String = dataStore.data.first().refreshToken
+
+    override suspend fun clearAuthTokens() {
+        dataStore.updateData { AuthTokens("", "", "") }
     }
 }

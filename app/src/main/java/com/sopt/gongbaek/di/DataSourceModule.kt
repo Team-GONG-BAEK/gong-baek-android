@@ -9,10 +9,12 @@ import com.sopt.gongbaek.data.remote.datasource.AuthRemoteDataSource
 import com.sopt.gongbaek.data.remote.datasource.GroupRemoteDataSource
 import com.sopt.gongbaek.data.remote.datasourceimpl.CommentRemoteDataSourceImpl
 import com.sopt.gongbaek.data.remote.datasource.SearchRemoteDataSource
+import com.sopt.gongbaek.data.remote.datasource.TokenReissueRemoteDataSource
 import com.sopt.gongbaek.data.remote.datasource.UserRemoteDataSource
 import com.sopt.gongbaek.data.remote.datasourceimpl.AuthRemoteDatasourceImpl
 import com.sopt.gongbaek.data.remote.datasourceimpl.GroupRemoteDataSourceImpl
 import com.sopt.gongbaek.data.remote.datasourceimpl.SearchRemoteDataSourceImpl
+import com.sopt.gongbaek.data.remote.datasourceimpl.TokenReissueRemoteDataSourceImpl
 import com.sopt.gongbaek.data.remote.datasourceimpl.UserRemoteDataSourceImpl
 import dagger.Binds
 import dagger.Module
@@ -29,6 +31,12 @@ abstract class DataSourceModule {
     abstract fun bindTokenLocalDataSource(
         tokenLocalDataSourceImpl: TokenLocalDataSourceImpl
     ): TokenLocalDataSource
+
+    @Binds
+    @Singleton
+    abstract fun bindTokenReissueRemoteDataSource(
+        tokenReissueRemoteDataSourceImpl: TokenReissueRemoteDataSourceImpl
+    ): TokenReissueRemoteDataSource
 
     @Binds
     @Singleton

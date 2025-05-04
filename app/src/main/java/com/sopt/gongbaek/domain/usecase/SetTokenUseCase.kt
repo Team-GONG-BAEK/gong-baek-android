@@ -5,6 +5,6 @@ import com.sopt.gongbaek.domain.repository.TokenRepository
 class SetTokenUseCase(
     private val tokenRepository: TokenRepository
 ) {
-    operator fun invoke(accessToken: String, refreshToken: String) =
-        tokenRepository.setTokens(accessToken, refreshToken)
+    suspend operator fun invoke(accessToken: String, refreshToken: String) =
+        tokenRepository.saveAuthTokens("", accessToken, refreshToken)
 }

@@ -32,6 +32,7 @@ import com.sopt.gongbaek.domain.usecase.SetLectureTimetableUseCase
 import com.sopt.gongbaek.domain.usecase.SetTokenUseCase
 import com.sopt.gongbaek.domain.usecase.ValidateNicknameUseCase
 import com.sopt.gongbaek.domain.usecase.VerifyEmailCodeUseCase
+import com.sopt.gongbaek.domain.usecase.WithdrawUseCase
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -167,14 +168,20 @@ object UseCaseModule {
     @Provides
     @Singleton
     fun provideReissueTokenUseCase(
-        authRepository: AuthRepository
-    ): ReissueTokenUseCase = ReissueTokenUseCase(authRepository)
+        tokenRepository: TokenRepository
+    ): ReissueTokenUseCase = ReissueTokenUseCase(tokenRepository)
 
     @Provides
     @Singleton
     fun provideLogoutUseCase(
         authRepository: AuthRepository
     ): LogoutUseCase = LogoutUseCase(authRepository)
+
+    @Provides
+    @Singleton
+    fun provideWithdrawUseCase(
+        authRepository: AuthRepository
+    ): WithdrawUseCase = WithdrawUseCase(authRepository)
 
     @Provides
     @Singleton

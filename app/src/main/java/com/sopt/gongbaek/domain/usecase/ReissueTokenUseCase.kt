@@ -1,11 +1,11 @@
 package com.sopt.gongbaek.domain.usecase
 
 import com.sopt.gongbaek.domain.model.UserAuth
-import com.sopt.gongbaek.domain.repository.AuthRepository
+import com.sopt.gongbaek.domain.repository.TokenRepository
 
 class ReissueTokenUseCase(
-    private val authRepository: AuthRepository
+    private val tokenRepository: TokenRepository
 ) {
-    suspend operator fun invoke(refreshToken: String): Result<UserAuth> =
-        authRepository.reissueToken(refreshToken)
+    suspend operator fun invoke(): Result<UserAuth> =
+        tokenRepository.reissueToken()
 }

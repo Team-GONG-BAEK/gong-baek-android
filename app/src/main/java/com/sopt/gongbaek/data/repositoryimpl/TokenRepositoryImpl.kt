@@ -1,24 +1,34 @@
 package com.sopt.gongbaek.data.repositoryimpl
 
 import com.sopt.gongbaek.data.local.datasource.TokenLocalDataSource
+import com.sopt.gongbaek.data.mapper.todomain.toDomain
+import com.sopt.gongbaek.data.remote.datasource.TokenReissueRemoteDataSource
+import com.sopt.gongbaek.data.remote.util.handleApiResponse
+import com.sopt.gongbaek.data.security.AuthTokens
+import com.sopt.gongbaek.domain.model.UserAuth
 import com.sopt.gongbaek.domain.repository.TokenRepository
-import timber.log.Timber
 import javax.inject.Inject
 
 class TokenRepositoryImpl @Inject constructor(
-    private val tokenLocalDataSource: TokenLocalDataSource
+    private val tokenLocalDataSource: TokenLocalDataSource,
+    private val tokenRemoteDataSource: TokenReissueRemoteDataSource
 ) : TokenRepository {
+    override suspend fun saveAuthTokens(signUpToken: String, accessToken: String, refreshToken: String) =
+        tokenLocalDataSource.saveAuthTokens(AuthTokens(signUpToken, accessToken, refreshToken))
 
-    override fun getAccessToken(): String? = tokenLocalDataSource.accessToken
+    override suspend fun getSignUpToken(): String = tokenLocalDataSource.getSignUpToken()
 
-    override fun getRefreshToken(): String? = tokenLocalDataSource.refreshToken
+    override suspend fun getAccessToken(): String = tokenLocalDataSource.getAccessToken()
 
-    override fun setTokens(accessToken: String, refreshToken: String) {
-        tokenLocalDataSource.accessToken = accessToken
-        tokenLocalDataSource.refreshToken = refreshToken
-        Timber.tag("TokenRepository").d("Access Token Saved: $accessToken")
-        Timber.tag("TokenRepository").d("Refresh Token Saved: $refreshToken")
-    }
+    override suspend fun getRefreshToken(): String = tokenLocalDataSource.getRefreshToken()
 
-    override fun clearInfo() = tokenLocalDataSource.clearInfo()
+    override suspend fun reissueToken(): Result<UserAuth> =
+        runCatching {
+            tokenRemoteDataSource.reissueToken("Bearer ${tokenLocalDataSource.getRefreshToken()}")
+                .handleApiResponse()
+                .getOrThrow()
+                .toDomain()
+        }
+
+    override suspend fun clearAuthTokens() = tokenLocalDataSource.clearAuthTokens()
 }

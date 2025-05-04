@@ -4,6 +4,7 @@ import com.sopt.gongbaek.data.remote.service.CommentService
 import com.sopt.gongbaek.data.remote.service.AuthService
 import com.sopt.gongbaek.data.remote.service.SearchService
 import com.sopt.gongbaek.data.remote.service.GroupService
+import com.sopt.gongbaek.data.remote.service.TokenReissueService
 import com.sopt.gongbaek.data.remote.service.UserService
 import dagger.Module
 import dagger.Provides
@@ -40,4 +41,9 @@ object ServiceModule {
     @Singleton
     fun provideUserService(retrofit: Retrofit): UserService =
         retrofit.create(UserService::class.java)
+
+    @Provides
+    @Singleton
+    fun provideTokenReissueService(retrofit: Retrofit): TokenReissueService =
+        retrofit.create(TokenReissueService::class.java)
 }
