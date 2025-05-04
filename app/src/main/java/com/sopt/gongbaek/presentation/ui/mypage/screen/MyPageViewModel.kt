@@ -1,18 +1,25 @@
 package com.sopt.gongbaek.presentation.ui.mypage.screen
 
 import androidx.lifecycle.viewModelScope
+import com.sopt.gongbaek.domain.repository.TokenRepository
 import com.sopt.gongbaek.domain.usecase.GetMyGroupsUseCase
 import com.sopt.gongbaek.domain.usecase.GetMyProfileUseCase
+import com.sopt.gongbaek.domain.usecase.LogoutUseCase
+import com.sopt.gongbaek.domain.usecase.WithdrawUseCase
 import com.sopt.gongbaek.presentation.util.base.BaseViewModel
 import com.sopt.gongbaek.presentation.util.base.UiLoadState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
+import timber.log.Timber
 import javax.inject.Inject
 
 @HiltViewModel
 class MyPageViewModel @Inject constructor(
     private val getMyProfileUseCase: GetMyProfileUseCase,
-    private val getMyGroupsUseCase: GetMyGroupsUseCase
+    private val getMyGroupsUseCase: GetMyGroupsUseCase,
+    private val tokenRepository: TokenRepository,
+    private val logoutUseCase: LogoutUseCase,
+    private val withdrawUseCase: WithdrawUseCase
 ) : BaseViewModel<MyPageContract.State, MyPageContract.Event, MyPageContract.SideEffect>() {
 
     init {
@@ -34,19 +41,13 @@ class MyPageViewModel @Inject constructor(
                 setState { copy(withdrawDialogState = true) }
             }
 
-            is MyPageContract.Event.OnLogoutDialogConfirmClicked -> {
-                setState { copy(logoutDialogState = false) }
-                setSideEffect(MyPageContract.SideEffect.NavigateLogin)
-            }
+            is MyPageContract.Event.OnLogoutDialogConfirmClicked -> logout()
 
             is MyPageContract.Event.OnLogoutDialogDismissClicked -> {
                 setState { copy(logoutDialogState = false) }
             }
 
-            is MyPageContract.Event.OnWithdrawDialogConfirmClicked -> {
-                setState { copy(withdrawDialogState = false) }
-                setSideEffect(MyPageContract.SideEffect.NavigateLogin)
-            }
+            is MyPageContract.Event.OnWithdrawDialogConfirmClicked -> withdraw()
 
             is MyPageContract.Event.OnWithdrawDialogDismissClicked -> {
                 setState { copy(withdrawDialogState = false) }
@@ -110,6 +111,36 @@ class MyPageViewModel @Inject constructor(
                     }
                 },
                 onFailure = { setState { copy(applyGroupsLoadState = UiLoadState.Error) } }
+            )
+        }
+    }
+
+    private fun logout() {
+        viewModelScope.launch {
+            logoutUseCase().fold(
+                onSuccess = {
+                    setState { copy(logoutDialogState = false) }
+                    tokenRepository.clearAuthTokens()
+                    sendSideEffect(MyPageContract.SideEffect.NavigateLogin)
+                },
+                onFailure = {
+                    Timber.tag("Logout").e(it, "Logout failed")
+                }
+            )
+        }
+    }
+
+    private fun withdraw() {
+        viewModelScope.launch {
+            withdrawUseCase().fold(
+                onSuccess = {
+                    setState { copy(withdrawDialogState = false) }
+                    tokenRepository.clearAuthTokens()
+                    sendSideEffect(MyPageContract.SideEffect.NavigateLogin)
+                },
+                onFailure = {
+                    Timber.tag("Withdraw").e(it, "Withdraw failed")
+                }
             )
         }
     }
