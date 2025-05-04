@@ -12,7 +12,6 @@ import retrofit2.http.Body
 import retrofit2.http.DELETE
 import retrofit2.http.GET
 import retrofit2.http.Header
-import retrofit2.http.PATCH
 import retrofit2.http.POST
 import retrofit2.http.Query
 
@@ -26,6 +25,7 @@ interface AuthService {
 
     @POST("/api/v1/user/signup")
     suspend fun signup(
+        @Header("Authorization") signUpToken: String,
         @Body signUpInfoRequestDto: SignUpInfoRequestDto
     ): ApiResponse<SignUpInfoResponseDto>
 
@@ -40,13 +40,11 @@ interface AuthService {
     @GET("/api/v1/my/timeTable")
     suspend fun getUserLectureTimeTable(): ApiResponse<UserTimeTableResponseDto>
 
-    @PATCH("/api/v1/reissue/token")
-    suspend fun reissueToken(
-        @Header("Authorization") refreshToken: String
-    ): ApiResponse<LoginResponseDto>
-
     @DELETE("/api/v1/logout")
-    suspend fun logout(): ApiResponse<Unit>
+    suspend fun logout(): NullableApiResponse<SignUpInfoResponseDto>
+
+    @DELETE("/api/v1/withdraw")
+    suspend fun withdraw(): NullableApiResponse<Unit>
 
     @POST("/api/v1/emails/verification-requests")
     suspend fun requestEmailVerification(
