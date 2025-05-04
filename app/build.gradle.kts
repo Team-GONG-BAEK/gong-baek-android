@@ -80,6 +80,9 @@ dependencies {
     implementation(libs.bundles.compose) // Jetpack Compose 관련 라이브러리들
     androidTestImplementation(platform(libs.androidx.compose.bom)) // Compose UI 테스트를 위한 BOM
 
+    // DataStore
+    implementation(libs.bundles.datastore)
+
     // Dependency Injection (Hilt)
     implementation(libs.bundles.di) // Hilt 관련 라이브러리들
     ksp(libs.hilt.compiler) // Hilt 컴파일러를 위한 KSP
