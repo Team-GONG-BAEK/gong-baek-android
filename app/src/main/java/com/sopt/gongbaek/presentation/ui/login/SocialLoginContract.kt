@@ -9,7 +9,7 @@ import com.sopt.gongbaek.presentation.util.base.UiState
 class SocialLoginContract {
 
     data class State(
-        val kakaoToken: String? = null,
+        val kakaoToken: String = "",
         val signInState: UiLoadState = UiLoadState.Idle
     ) : UiState
 
