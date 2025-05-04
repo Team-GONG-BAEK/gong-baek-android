@@ -16,8 +16,7 @@ class TermsOfServiceViewModel @Inject constructor() : BaseViewModel<TermsOfServi
                 setState {
                     copy(
                         termsOfService = newState,
-                        privacyPolicy = newState,
-                        marketingPolicy = newState
+                        privacyPolicy = newState
                     )
                 }
             }
@@ -28,10 +27,6 @@ class TermsOfServiceViewModel @Inject constructor() : BaseViewModel<TermsOfServi
 
             is TermsOfServiceContract.Event.OnPrivacyPolicyClick -> {
                 setState { copy(privacyPolicy = !currentState.privacyPolicy) }
-            }
-
-            is TermsOfServiceContract.Event.OnMarketingPolicyClick -> {
-                setState { copy(marketingPolicy = !currentState.marketingPolicy) }
             }
         }
     }
