@@ -1,7 +1,5 @@
 package com.sopt.gongbaek.presentation.ui.grouplist.screen
 
-import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -37,9 +35,9 @@ import com.sopt.gongbaek.domain.model.GroupInfo
 import com.sopt.gongbaek.domain.type.GroupCategoryType
 import com.sopt.gongbaek.presentation.type.GroupInfoChipType
 import com.sopt.gongbaek.presentation.ui.component.section.GroupInfoSection
+import com.sopt.gongbaek.presentation.ui.component.stateView.LoadingScreen
 import com.sopt.gongbaek.presentation.ui.component.topbar.CenterTitleTopBar
 import com.sopt.gongbaek.presentation.ui.grouplist.component.CategoryBar
-import com.sopt.gongbaek.presentation.ui.component.stateView.LoadingViewAnimation
 import com.sopt.gongbaek.presentation.util.base.UiLoadState
 import com.sopt.gongbaek.presentation.util.extension.clickableWithoutRipple
 import com.sopt.gongbaek.presentation.util.formatGroupTimeDescription
@@ -73,29 +71,32 @@ fun GroupListRoute(
             }
     }
 
-    GroupListScreen(
-        selectedDayOfWeekIndex = uiState.selectedDayOfWeekIndex,
-        onDayOfWeekSelected = { index ->
-            viewModel.setEvent(GroupListContract.Event.OnDayOfWeekSelected(index))
-        },
-        selectedCategoryIndex = uiState.selectedCategoryIndex,
-        onCategorySelected = { index ->
-            viewModel.setEvent(GroupListContract.Event.OnCategorySelected(index))
-        },
-        toggleCheckedState = uiState.toggleCheckedState,
-        onToggleStateChanged = { state ->
-            viewModel.setEvent(GroupListContract.Event.OnToggleCheckStateChanged(state))
-        },
-        navigateGroupDetail = { groupId, groupCycle ->
-            viewModel.sendSideEffect(GroupListContract.SideEffect.NavigateGroupDetail(groupId, groupCycle))
-        },
-        navigateGroupRegister = {
-            viewModel.sendSideEffect(GroupListContract.SideEffect.NavigateGroupRegister)
-        },
-        groupList = uiState.groups,
-        loadState = uiState.loadState,
-        modifier = Modifier.padding(innerPadding)
-    )
+    if (uiState.loadState == UiLoadState.Loading) {
+        LoadingScreen()
+    } else {
+        GroupListScreen(
+            selectedDayOfWeekIndex = uiState.selectedDayOfWeekIndex,
+            onDayOfWeekSelected = { index ->
+                viewModel.setEvent(GroupListContract.Event.OnDayOfWeekSelected(index))
+            },
+            selectedCategoryIndex = uiState.selectedCategoryIndex,
+            onCategorySelected = { index ->
+                viewModel.setEvent(GroupListContract.Event.OnCategorySelected(index))
+            },
+            toggleCheckedState = uiState.toggleCheckedState,
+            onToggleStateChanged = { state ->
+                viewModel.setEvent(GroupListContract.Event.OnToggleCheckStateChanged(state))
+            },
+            navigateGroupDetail = { groupId, groupCycle ->
+                viewModel.sendSideEffect(GroupListContract.SideEffect.NavigateGroupDetail(groupId, groupCycle))
+            },
+            navigateGroupRegister = {
+                viewModel.sendSideEffect(GroupListContract.SideEffect.NavigateGroupRegister)
+            },
+            groupList = uiState.groups,
+            modifier = Modifier.padding(innerPadding)
+        )
+    }
 }
 
 @Composable
@@ -109,7 +110,6 @@ fun GroupListScreen(
     navigateGroupDetail: (Int, String) -> Unit,
     navigateGroupRegister: () -> Unit,
     groupList: List<GroupInfo>,
-    loadState: UiLoadState,
     modifier: Modifier = Modifier
 ) {
     Box(
@@ -123,32 +123,21 @@ fun GroupListScreen(
 //            )
             Spacer(Modifier.height(8.dp))
 
-            if (loadState == UiLoadState.Loading) {
-                Column(
-                    modifier = Modifier
-                        .background(color = GongBaekTheme.colors.gray01)
-                        .fillMaxSize(),
-                    horizontalAlignment = Alignment.CenterHorizontally,
-                    verticalArrangement = Arrangement.Center
-                ) {
-                    LoadingViewAnimation()
-                }
-            } else {
-                CategoryBar(
-                    selectedIndex = selectedCategoryIndex,
-                    onIndexSelected = onCategorySelected
-                )
-                Spacer(Modifier.height(8.dp))
+            CategoryBar(
+                selectedIndex = selectedCategoryIndex,
+                onIndexSelected = onCategorySelected
+            )
+            Spacer(Modifier.height(8.dp))
 
-                LazyColumn(
-                    modifier = Modifier.fillMaxSize()
-                ) {
-                    item {
-                        HorizontalDivider(
-                            thickness = 8.dp,
-                            color = GongBaekTheme.colors.gray02
-                        )
-                    }
+            LazyColumn(
+                modifier = Modifier.fillMaxSize()
+            ) {
+                item {
+                    HorizontalDivider(
+                        thickness = 8.dp,
+                        color = GongBaekTheme.colors.gray02
+                    )
+                }
 
 //                item {
 //                    Row(
@@ -169,68 +158,65 @@ fun GroupListScreen(
 //                    }
 //                }
 
-                    if (groupList.isEmpty()) {
-                        item {
-                            Box(
-                                modifier = Modifier
-                                    .fillParentMaxSize()
-                                    .fillMaxSize(),
-                                contentAlignment = Alignment.Center
-                            ) {
-                                Text(
-                                    text = stringResource(R.string.grouplist_empty),
-                                    textAlign = TextAlign.Center,
-                                    color = GongBaekTheme.colors.gray06,
-                                    style = GongBaekTheme.typography.caption1.m13
-                                )
-                            }
-                        }
-                    } else {
-                        items(items = groupList) { groupList ->
-                            GroupInfoSection(
-                                groupStatus = GroupInfoChipType.getChipTypeFromStatus(groupList.status),
-                                groupCategory = GroupInfoChipType.getChipTypeFromCategory(groupList.category),
-                                groupCycle = GroupInfoChipType.getChipTypeFromCycle(groupList.cycle),
-                                groupCover = groupList.coverImg,
-                                groupTitle = groupList.title,
-                                groupTime = formatGroupTimeDescription(groupList),
-                                groupPlace = groupList.place,
-                                modifier = Modifier
-                                    .padding(vertical = 12.dp, horizontal = 16.dp)
-                                    .clickableWithoutRipple {
-                                        navigateGroupDetail(groupList.groupId, groupList.cycle)
-                                    }
+                if (groupList.isEmpty()) {
+                    item {
+                        Box(
+                            modifier = Modifier
+                                .fillParentMaxSize()
+                                .fillMaxSize(),
+                            contentAlignment = Alignment.Center
+                        ) {
+                            Text(
+                                text = stringResource(R.string.grouplist_empty),
+                                textAlign = TextAlign.Center,
+                                color = GongBaekTheme.colors.gray06,
+                                style = GongBaekTheme.typography.caption1.m13
                             )
+                        }
+                    }
+                } else {
+                    items(items = groupList) { groupList ->
+                        GroupInfoSection(
+                            groupStatus = GroupInfoChipType.getChipTypeFromStatus(groupList.status),
+                            groupCategory = GroupInfoChipType.getChipTypeFromCategory(groupList.category),
+                            groupCycle = GroupInfoChipType.getChipTypeFromCycle(groupList.cycle),
+                            groupCover = groupList.coverImg,
+                            groupTitle = groupList.title,
+                            groupTime = formatGroupTimeDescription(groupList),
+                            groupPlace = groupList.place,
+                            modifier = Modifier
+                                .padding(vertical = 12.dp, horizontal = 16.dp)
+                                .clickableWithoutRipple {
+                                    navigateGroupDetail(groupList.groupId, groupList.cycle)
+                                }
+                        )
 
-                            HorizontalDivider(
-                                modifier = Modifier.fillMaxWidth(),
-                                thickness = 1.dp,
-                                color = GongBaekTheme.colors.gray01
-                            )
-                        }
+                        HorizontalDivider(
+                            modifier = Modifier.fillMaxWidth(),
+                            thickness = 1.dp,
+                            color = GongBaekTheme.colors.gray01
+                        )
                     }
                 }
             }
         }
 
-        if (loadState != UiLoadState.Loading) {
-            FloatingActionButton(
-                onClick = navigateGroupRegister,
-                shape = CircleShape,
-                containerColor = GongBaekTheme.colors.mainOrange,
-                modifier = Modifier
-                    .align(Alignment.BottomEnd)
-                    .padding(
-                        end = 16.dp,
-                        bottom = 16.dp
-                    )
-            ) {
-                Icon(
-                    imageVector = ImageVector.vectorResource(R.drawable.ic_plus_24),
-                    contentDescription = null,
-                    tint = GongBaekTheme.colors.white
+        FloatingActionButton(
+            onClick = navigateGroupRegister,
+            shape = CircleShape,
+            containerColor = GongBaekTheme.colors.mainOrange,
+            modifier = Modifier
+                .align(Alignment.BottomEnd)
+                .padding(
+                    end = 16.dp,
+                    bottom = 16.dp
                 )
-            }
+        ) {
+            Icon(
+                imageVector = ImageVector.vectorResource(R.drawable.ic_plus_24),
+                contentDescription = null,
+                tint = GongBaekTheme.colors.white
+            )
         }
     }
 }
@@ -248,7 +234,6 @@ private fun ShowGroupListScreen() {
             onToggleStateChanged = {},
             navigateGroupDetail = { _, _ -> },
             navigateGroupRegister = {},
-            loadState = UiLoadState.Success,
             groupList = listOf()
         )
     }
