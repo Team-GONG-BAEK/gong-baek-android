@@ -8,9 +8,11 @@ class TermsOfServiceContract {
 
     data class State(
         val termsOfService: Boolean = false,
-        val privacyPolicy: Boolean = false,
-        val fullAcceptance: Boolean = false
-    ) : UiState
+        val privacyPolicy: Boolean = false
+    ) : UiState {
+        val fullAcceptance: Boolean
+            get() = termsOfService && privacyPolicy
+    }
 
     sealed class Event : UiEvent {
         data object OnFullAcceptClick : Event()
