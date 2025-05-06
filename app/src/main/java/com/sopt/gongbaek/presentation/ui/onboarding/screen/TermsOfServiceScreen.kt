@@ -16,6 +16,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -27,9 +28,11 @@ import androidx.lifecycle.flowWithLifecycle
 import androidx.navigation.NavHostController
 import com.sopt.gongbaek.R
 import com.sopt.gongbaek.presentation.model.NavigationRoute
+import com.sopt.gongbaek.presentation.type.SettingServiceGuideItem
 import com.sopt.gongbaek.presentation.ui.component.button.GongBaekBasicButton
 import com.sopt.gongbaek.presentation.ui.component.topbar.StartTitleTopBar
 import com.sopt.gongbaek.presentation.util.extension.clickableWithoutRipple
+import com.sopt.gongbaek.presentation.util.openWebView
 import com.sopt.gongbaek.ui.theme.GONGBAEKTheme
 import com.sopt.gongbaek.ui.theme.GongBaekTheme
 
@@ -40,6 +43,7 @@ fun TermsOfServiceRoute(
 ) {
     val uiState by viewModel.state.collectAsStateWithLifecycle()
     val lifecycleOwner = LocalLifecycleOwner.current
+    val context = LocalContext.current
 
     LaunchedEffect(viewModel.sideEffect, lifecycleOwner) {
         viewModel.sideEffect.flowWithLifecycle(lifecycle = lifecycleOwner.lifecycle)
@@ -51,10 +55,10 @@ fun TermsOfServiceRoute(
                         }
                     }
                     is TermsOfServiceContract.SideEffect.OnTermsOfServiceDetailClick -> {
-                        /* 웹뷰 이동 로직 */
+                        openWebView(context, SettingServiceGuideItem.TERMS_OF_SERVICE.url.orEmpty())
                     }
                     is TermsOfServiceContract.SideEffect.OnPrivacyPolicyDetailClick -> {
-                        /* 웹뷰 이동 로직 */
+                        openWebView(context, SettingServiceGuideItem.PRIVACY_POLICY.url.orEmpty())
                     }
                     is TermsOfServiceContract.SideEffect.OnNextClick -> {
                         navController.navigate(NavigationRoute.Onboarding)
