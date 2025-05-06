@@ -11,8 +11,8 @@ interface AuthRepository {
     suspend fun validateNickname(nickname: String): Result<Unit>
     suspend fun getUserProfile(): Result<UserProfile>
     suspend fun getUserLectureTimeTable(): Result<List<UserLectureTimeTable>>
-    suspend fun reissueToken(refreshToken: String): Result<UserAuth>
-    suspend fun logout(): Result<Unit>
+    suspend fun logout(): Result<UserAuth>
+    suspend fun withdraw(): Result<Unit>
     suspend fun requestEmailVerification(email: String, schoolName: String): Result<Unit>
     suspend fun verifyEmailCode(
         email: String,

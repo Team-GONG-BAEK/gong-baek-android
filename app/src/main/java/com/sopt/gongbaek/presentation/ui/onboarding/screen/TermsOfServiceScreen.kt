@@ -26,7 +26,6 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.flowWithLifecycle
 import androidx.navigation.NavHostController
 import com.sopt.gongbaek.R
-import com.sopt.gongbaek.presentation.model.AuthNavGraphRoute
 import com.sopt.gongbaek.presentation.model.NavigationRoute
 import com.sopt.gongbaek.presentation.ui.component.button.GongBaekBasicButton
 import com.sopt.gongbaek.presentation.ui.component.topbar.StartTitleTopBar
@@ -57,11 +56,8 @@ fun TermsOfServiceRoute(
                     is TermsOfServiceContract.SideEffect.OnPrivacyPolicyDetailClick -> {
                         /* 웹뷰 이동 로직 */
                     }
-                    is TermsOfServiceContract.SideEffect.OnMarketingPolicyDetailClick -> {
-                        /* 웹뷰 이동 로직 */
-                    }
                     is TermsOfServiceContract.SideEffect.OnNextClick -> {
-                        navController.navigate(AuthNavGraphRoute.AuthNavGraph)
+                        navController.navigate(NavigationRoute.Onboarding)
                     }
                 }
             }
@@ -75,8 +71,6 @@ fun TermsOfServiceRoute(
         onTermsOfServiceDetailClick = { viewModel.sendSideEffect(TermsOfServiceContract.SideEffect.OnTermsOfServiceDetailClick) },
         onPrivacyPolicyClick = { viewModel.setEvent(TermsOfServiceContract.Event.OnPrivacyPolicyClick) },
         onPrivacyPolicyDetailClick = { viewModel.sendSideEffect(TermsOfServiceContract.SideEffect.OnPrivacyPolicyDetailClick) },
-        onMarketingPolicyClick = { viewModel.setEvent(TermsOfServiceContract.Event.OnMarketingPolicyClick) },
-        onMarketingPolicyDetailClick = { viewModel.sendSideEffect(TermsOfServiceContract.SideEffect.OnMarketingPolicyDetailClick) },
         onNextClick = { viewModel.sendSideEffect(TermsOfServiceContract.SideEffect.OnNextClick) }
     )
 }
@@ -90,8 +84,6 @@ private fun TermsOfServiceScreen(
     onTermsOfServiceDetailClick: () -> Unit,
     onPrivacyPolicyClick: () -> Unit,
     onPrivacyPolicyDetailClick: () -> Unit,
-    onMarketingPolicyClick: () -> Unit,
-    onMarketingPolicyDetailClick: () -> Unit,
     onNextClick: () -> Unit
 ) {
     Column(
@@ -145,21 +137,6 @@ private fun TermsOfServiceScreen(
             acceptance = uiState.privacyPolicy,
             onAcceptClick = onPrivacyPolicyClick,
             onDetailClick = onPrivacyPolicyDetailClick
-        )
-        Spacer(modifier = Modifier.height(20.dp))
-
-        HorizontalDivider(
-            modifier = Modifier.padding(horizontal = 16.dp),
-            thickness = 1.dp,
-            color = GongBaekTheme.colors.gray02
-        )
-
-        Spacer(modifier = Modifier.height(20.dp))
-        ServiceAcceptanceSection(
-            description = stringResource(R.string.terms_of_service_marketing_policy),
-            acceptance = uiState.marketingPolicy,
-            onAcceptClick = onMarketingPolicyClick,
-            onDetailClick = onMarketingPolicyDetailClick
         )
 
         Spacer(modifier = Modifier.weight(1f))
@@ -221,8 +198,6 @@ private fun TermsOfServiceScreenPreview() {
             onTermsOfServiceDetailClick = {},
             onPrivacyPolicyClick = {},
             onPrivacyPolicyDetailClick = {},
-            onMarketingPolicyClick = {},
-            onMarketingPolicyDetailClick = {},
             onNextClick = {}
         )
     }

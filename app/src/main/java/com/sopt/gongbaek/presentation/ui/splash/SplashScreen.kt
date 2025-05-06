@@ -35,17 +35,16 @@ fun SplashRoute(
     val backgroundColor = GongBaekTheme.colors.gray10
 
     LaunchedEffect(uiState.autoLogin) {
-        if (uiState.autoLogin != null) {
-            if (uiState.autoLogin == true) {
-                viewModel.sendSideEffect(SplashContract.SideEffect.NavigateHome)
-            } else {
-                viewModel.sendSideEffect(SplashContract.SideEffect.NavigateSocialLogin)
-            }
+        if (uiState.autoLogin == true) {
+            viewModel.sendSideEffect(SplashContract.SideEffect.NavigateHome)
+        } else {
+            viewModel.sendSideEffect(SplashContract.SideEffect.NavigateSocialLogin)
         }
     }
 
-    LaunchedEffect(viewModel.sideEffect, lifecycleOwner) {
-        viewModel.sideEffect.flowWithLifecycle(lifecycleOwner.lifecycle)
+    LaunchedEffect(Unit) {
+        viewModel.sideEffect
+            .flowWithLifecycle(lifecycleOwner.lifecycle)
             .collect { sideEffect ->
                 when (sideEffect) {
                     is SplashContract.SideEffect.NavigateHome -> {
@@ -53,12 +52,14 @@ fun SplashRoute(
                             popUpTo(NavigationRoute.Splash) { inclusive = true }
                             launchSingleTop = true
                         }
+                        viewModel.setEvent(SplashContract.Event.ResetAutoLogin)
                     }
 
                     is SplashContract.SideEffect.NavigateSocialLogin -> {
                         navController.navigate(NavigationRoute.Login) {
                             popUpTo(NavigationRoute.Splash) { inclusive = true }
                         }
+                        viewModel.setEvent(SplashContract.Event.ResetAutoLogin)
                     }
                 }
             }

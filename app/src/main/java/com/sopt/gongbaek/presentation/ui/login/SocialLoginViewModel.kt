@@ -38,7 +38,6 @@ class SocialLoginViewModel @Inject constructor(
     private fun loginWithKakao(context: Context) {
         viewModelScope.launch {
             setState { copy(signInState = UiLoadState.Loading) }
-
             runCatching {
                 suspendCancellableCoroutine { continuation ->
                     performKakaoLogin(context) { token, error ->
@@ -70,40 +69,33 @@ class SocialLoginViewModel @Inject constructor(
 
     private fun login() {
         viewModelScope.launch {
-            val userResult = runCatching {
-                suspendCancellableCoroutine { continuation ->
-                    UserApiClient.instance.me { user, error ->
-                        continuation.resume(if (user != null) Result.success(user) else Result.failure(error!!))
-                    }
-                }
+            val token = currentState.kakaoToken
+            if (token.isBlank()) {
+                setState { copy(signInState = UiLoadState.Error) }
             }
-
-            userResult.fold(
-                onSuccess = { handleLoginResponse() },
+            loginUseCase(kakaoToken = token, platform = "KAKAO").fold(
+                onSuccess = { response ->
+                    setState { copy(signInState = UiLoadState.Success) }
+                    setSideEffect(
+                        if (response.userId != null) {
+                            tokenRepository.saveAuthTokens(
+                                signUpToken = "",
+                                accessToken = response.accessToken,
+                                refreshToken = response.refreshToken
+                            )
+                            SocialLoginContract.SideEffect.NavigateHome
+                        } else {
+                            tokenRepository.saveAuthTokens(
+                                signUpToken = response.accessToken,
+                                accessToken = "",
+                                refreshToken = ""
+                            )
+                            SocialLoginContract.SideEffect.NavigateTermsOfService
+                        }
+                    )
+                },
                 onFailure = { setState { copy(signInState = UiLoadState.Error) } }
             )
         }
-    }
-
-    private suspend fun handleLoginResponse() {
-        val token = currentState.kakaoToken.orEmpty()
-        if (token.isBlank()) {
-            setState { copy(signInState = UiLoadState.Error) }
-            return
-        }
-        loginUseCase(kakaoToken = token, platform = "KAKAO").fold(
-            onSuccess = { response ->
-                tokenRepository.setTokens(response.accessToken, response.refreshToken)
-                setState { copy(signInState = UiLoadState.Success) }
-                setSideEffect(
-                    if (response.userId != null) {
-                        SocialLoginContract.SideEffect.NavigateHome
-                    } else {
-                        SocialLoginContract.SideEffect.NavigateTermsOfService
-                    }
-                )
-            },
-            onFailure = { setState { copy(signInState = UiLoadState.Error) } }
-        )
     }
 }

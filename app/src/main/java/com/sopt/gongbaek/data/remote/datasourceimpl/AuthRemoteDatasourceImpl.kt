@@ -19,8 +19,8 @@ class AuthRemoteDatasourceImpl @Inject constructor(
     override suspend fun login(kakaoToken: String, loginRequestDto: LoginRequestDto): ApiResponse<LoginResponseDto> =
         authService.login(kakaoToken, loginRequestDto)
 
-    override suspend fun signUp(signUpInfoRequestDto: SignUpInfoRequestDto): ApiResponse<SignUpInfoResponseDto> =
-        authService.signup(signUpInfoRequestDto = signUpInfoRequestDto)
+    override suspend fun signUp(signUpToken: String, signUpInfoRequestDto: SignUpInfoRequestDto): ApiResponse<SignUpInfoResponseDto> =
+        authService.signup(signUpToken, signUpInfoRequestDto)
 
     override suspend fun validateNickname(nickname: String): NullableApiResponse<Unit> =
         authService.validateNickname(nickname)
@@ -31,11 +31,11 @@ class AuthRemoteDatasourceImpl @Inject constructor(
     override suspend fun getUserLectureTimeTable(): ApiResponse<UserTimeTableResponseDto> =
         authService.getUserLectureTimeTable()
 
-    override suspend fun reissueToken(refreshToken: String): ApiResponse<LoginResponseDto> =
-        authService.reissueToken(refreshToken)
-
-    override suspend fun logout(): ApiResponse<Unit> =
+    override suspend fun logout(): NullableApiResponse<SignUpInfoResponseDto> =
         authService.logout()
+
+    override suspend fun withdraw(): NullableApiResponse<Unit> =
+        authService.withdraw()
 
     override suspend fun requestEmailVerification(email: String, schoolName: String): NullableApiResponse<Unit> =
         authService.requestEmailVerification(email = email, schoolName = schoolName)

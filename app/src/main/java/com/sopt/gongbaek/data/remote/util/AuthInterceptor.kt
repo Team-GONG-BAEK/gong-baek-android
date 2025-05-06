@@ -5,6 +5,7 @@ import android.content.Intent
 import android.os.Handler
 import android.os.Looper
 import com.sopt.gongbaek.data.local.datasource.TokenLocalDataSource
+import com.sopt.gongbaek.data.security.AuthTokens
 import com.sopt.gongbaek.domain.usecase.ReissueTokenUseCase
 import com.sopt.gongbaek.presentation.ui.main.MainActivity
 import dagger.hilt.android.qualifiers.ApplicationContext
@@ -30,37 +31,39 @@ class AuthInterceptor @Inject constructor(
     private val mutex = Mutex()
     private var tokenRefreshJob: Deferred<Boolean>? = null
 
-    override fun intercept(chain: Interceptor.Chain): Response {
-        return runBlocking {
-            val originalRequest = chain.request()
-            val url = originalRequest.url.toString()
+    override fun intercept(chain: Interceptor.Chain): Response = runBlocking {
+        val originalRequest = chain.request()
+        val url = originalRequest.url.toString()
 
-            if (shouldAddAuthorization(url)) {
-                val response = proceedWithAuthorization(chain, originalRequest)
-                if (response.code == ACCESS_TOKEN_EXPIRED) {
-                    response.close()
-                    handleAccessTokenExpired(chain, originalRequest)
-                }
-                response
-            } else {
-                chain.proceed(originalRequest)
-            }
+        if (!shouldAddAuthorization(url)) {
+            return@runBlocking chain.proceed(originalRequest)
         }
+
+        val response = proceedWithAuthorization(chain, originalRequest)
+
+        if (response.code == ACCESS_TOKEN_EXPIRED) {
+            response.close()
+            val retriedResponse = handleAccessTokenExpired(chain, originalRequest)
+            return@runBlocking retriedResponse
+        }
+
+        return@runBlocking response
     }
 
     private fun shouldAddAuthorization(url: String): Boolean {
         return !url.contains("api/v1/login") &&
+            !url.contains("/api/v1/user/signup") &&
             !url.contains("/api/v1/reissue/token")
     }
 
-    private fun proceedWithAuthorization(chain: Interceptor.Chain, request: Request): Response {
+    private suspend fun proceedWithAuthorization(chain: Interceptor.Chain, request: Request): Response {
         val authRequest = addAuthorizationHeader(request)
         return chain.proceed(authRequest)
     }
 
-    private fun addAuthorizationHeader(request: Request): Request =
+    private suspend fun addAuthorizationHeader(request: Request): Request =
         request.newBuilder()
-            .addHeader(AUTHORIZATION, "$BEARER ${tokenLocalDataSource.accessToken}")
+            .addHeader(AUTHORIZATION, "$BEARER ${tokenLocalDataSource.getAccessToken()}")
             .build()
 
     private fun handleAccessTokenExpired(chain: Interceptor.Chain, originalRequest: Request): Response {
@@ -73,8 +76,9 @@ class AuthInterceptor @Inject constructor(
 
             val tokenRefreshed = tokenRefreshJob?.await() ?: false
 
-            if (tokenRefreshed) {
-                proceedWithAuthorization(chain, originalRequest) // 새 토큰으로 요청 재시도
+            return@runBlocking if (tokenRefreshed) {
+                val newRequest = addAuthorizationHeader(originalRequest)
+                chain.proceed(newRequest)
             } else {
                 clearUserInfoAndLogout()
                 throw IOException("Token expired and reissue failed")
@@ -85,11 +89,12 @@ class AuthInterceptor @Inject constructor(
     private suspend fun reissueToken(): Boolean {
         return try {
             val reissueTokenUseCase = reissueTokenUseCaseProvider.get()
-            reissueTokenUseCase(tokenLocalDataSource.refreshToken ?: "").onSuccess { data ->
+            reissueTokenUseCase().onSuccess { data ->
                 if (data.accessToken.isEmpty() || data.refreshToken.isEmpty()) {
                     Timber.e("Token reissue returned empty tokens")
                     clearUserInfoAndLogout()
                 } else {
+                    Timber.d("Token reissue succeed")
                     updateTokens(data.accessToken, data.refreshToken)
                 }
             }.onFailure { throwable ->
@@ -104,17 +109,20 @@ class AuthInterceptor @Inject constructor(
         }
     }
 
-    private fun updateTokens(newAccessToken: String, newRefreshToken: String) {
+    private suspend fun updateTokens(newAccessToken: String, newRefreshToken: String) {
         Timber.d("NEW ACCESS TOKEN : $newAccessToken")
         Timber.d("NEW REFRESH TOKEN : $newRefreshToken")
-        tokenLocalDataSource.apply {
-            accessToken = newAccessToken
-            refreshToken = newRefreshToken
-        }
+        tokenLocalDataSource.saveAuthTokens(
+            AuthTokens(
+                signUpToken = "",
+                accessToken = newAccessToken,
+                refreshToken = newRefreshToken
+            )
+        )
     }
 
-    private fun clearUserInfoAndLogout() {
-        tokenLocalDataSource.clearInfo()
+    private suspend fun clearUserInfoAndLogout() {
+        tokenLocalDataSource.clearAuthTokens()
         Handler(Looper.getMainLooper()).post {
             val intent = Intent(context, MainActivity::class.java).apply {
                 flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
@@ -127,6 +135,6 @@ class AuthInterceptor @Inject constructor(
     companion object {
         private const val BEARER = "Bearer"
         private const val AUTHORIZATION = "Authorization"
-        private const val ACCESS_TOKEN_EXPIRED = 4012
+        private const val ACCESS_TOKEN_EXPIRED = 401
     }
 }

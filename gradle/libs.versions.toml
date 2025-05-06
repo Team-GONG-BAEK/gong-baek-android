@@ -29,6 +29,9 @@ hiltNavigationCompose = "1.2.0"
 accompanist = "0.25.1"
 lottie-compose = "6.6.0"
 
+# DataStore
+datastore = "1.1.1"
+
 # Dependency Injection
 hilt = "2.51.1"
 
@@ -74,6 +77,9 @@ androidx-compose-navigation = { group = "androidx.navigation", name = "navigatio
 hilt-navigation-compose = { group = "androidx.hilt", name = "hilt-navigation-compose", version.ref = "hiltNavigationCompose" }
 accompanist-systemuicontroller = { group = "com.google.accompanist", name = "accompanist-systemuicontroller", version.ref = "accompanist" }
 lottie-compose = { group = "com.airbnb.android", name = "lottie-compose", version.ref = "lottie-compose" }
+
+# --- DataStore ---
+androidx-datastore-core = { group = "androidx.datastore", name = "datastore", version.ref = "datastore" }
 
 # --- Dependency Injection ---
 hilt-android = { group = "com.google.dagger", name = "hilt-android", version.ref = "hilt" }
@@ -124,6 +130,10 @@ compose = [
     "hilt-navigation-compose",
     "accompanist-systemuicontroller",
     "lottie-compose"
+]
+
+datastore = [
+    "androidx-datastore-core"
 ]
 
 di = [

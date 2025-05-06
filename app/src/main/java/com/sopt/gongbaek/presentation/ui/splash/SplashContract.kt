@@ -12,6 +12,7 @@ class SplashContract {
 
     sealed class Event : UiEvent {
         data object ValidateAutoLogin : Event()
+        data object ResetAutoLogin : Event()
     }
 
     sealed interface SideEffect : UiSideEffect {
