@@ -35,8 +35,10 @@ import com.sopt.gongbaek.domain.model.GroupInfo
 import com.sopt.gongbaek.domain.type.GroupCategoryType
 import com.sopt.gongbaek.presentation.type.GroupInfoChipType
 import com.sopt.gongbaek.presentation.ui.component.section.GroupInfoSection
+import com.sopt.gongbaek.presentation.ui.component.stateView.LoadingScreen
 import com.sopt.gongbaek.presentation.ui.component.topbar.CenterTitleTopBar
 import com.sopt.gongbaek.presentation.ui.grouplist.component.CategoryBar
+import com.sopt.gongbaek.presentation.util.base.UiLoadState
 import com.sopt.gongbaek.presentation.util.extension.clickableWithoutRipple
 import com.sopt.gongbaek.presentation.util.formatGroupTimeDescription
 import com.sopt.gongbaek.ui.theme.GONGBAEKTheme
@@ -69,28 +71,32 @@ fun GroupListRoute(
             }
     }
 
-    GroupListScreen(
-        selectedDayOfWeekIndex = uiState.selectedDayOfWeekIndex,
-        onDayOfWeekSelected = { index ->
-            viewModel.setEvent(GroupListContract.Event.OnDayOfWeekSelected(index))
-        },
-        selectedCategoryIndex = uiState.selectedCategoryIndex,
-        onCategorySelected = { index ->
-            viewModel.setEvent(GroupListContract.Event.OnCategorySelected(index))
-        },
-        toggleCheckedState = uiState.toggleCheckedState,
-        onToggleStateChanged = { state ->
-            viewModel.setEvent(GroupListContract.Event.OnToggleCheckStateChanged(state))
-        },
-        navigateGroupDetail = { groupId, groupCycle ->
-            viewModel.sendSideEffect(GroupListContract.SideEffect.NavigateGroupDetail(groupId, groupCycle))
-        },
-        navigateGroupRegister = {
-            viewModel.sendSideEffect(GroupListContract.SideEffect.NavigateGroupRegister)
-        },
-        groupList = uiState.groups,
-        modifier = Modifier.padding(innerPadding)
-    )
+    if (uiState.loadState == UiLoadState.Loading) {
+        LoadingScreen()
+    } else {
+        GroupListScreen(
+            selectedDayOfWeekIndex = uiState.selectedDayOfWeekIndex,
+            onDayOfWeekSelected = { index ->
+                viewModel.setEvent(GroupListContract.Event.OnDayOfWeekSelected(index))
+            },
+            selectedCategoryIndex = uiState.selectedCategoryIndex,
+            onCategorySelected = { index ->
+                viewModel.setEvent(GroupListContract.Event.OnCategorySelected(index))
+            },
+            toggleCheckedState = uiState.toggleCheckedState,
+            onToggleStateChanged = { state ->
+                viewModel.setEvent(GroupListContract.Event.OnToggleCheckStateChanged(state))
+            },
+            navigateGroupDetail = { groupId, groupCycle ->
+                viewModel.sendSideEffect(GroupListContract.SideEffect.NavigateGroupDetail(groupId, groupCycle))
+            },
+            navigateGroupRegister = {
+                viewModel.sendSideEffect(GroupListContract.SideEffect.NavigateGroupRegister)
+            },
+            groupList = uiState.groups,
+            modifier = Modifier.padding(innerPadding)
+        )
+    }
 }
 
 @Composable
