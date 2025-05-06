@@ -25,6 +25,6 @@ object DataStoreModule {
     ): DataStore<AuthTokens> = DataStoreFactory.create(
         serializer = AuthTokensSerializer,
         produceFile = { File(context.filesDir, "auth_tokens.pb") },
-        corruptionHandler = ReplaceFileCorruptionHandler { AuthTokens("","","") }
+        corruptionHandler = ReplaceFileCorruptionHandler { AuthTokens("", "", "") }
     )
 }
