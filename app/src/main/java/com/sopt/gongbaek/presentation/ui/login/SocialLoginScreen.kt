@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.size
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
@@ -85,10 +86,11 @@ private fun SocialLoginScreen(
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        Spacer(modifier = Modifier.weight(1f))
+        Spacer(modifier = Modifier.weight(1.15f))
         Image(
             painter = painterResource(id = R.drawable.img_logo),
-            contentDescription = null
+            contentDescription = null,
+            modifier = Modifier.size(74.dp)
         )
         Spacer(modifier = Modifier.height(28.dp))
         Text(
