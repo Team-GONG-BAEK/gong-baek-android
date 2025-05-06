@@ -71,13 +71,13 @@ import com.sopt.gongbaek.ui.theme.GongBaekTheme
 @Composable
 fun GroupRoomRoute(
     viewModel: GroupRoomViewModel = hiltViewModel(),
-    navigateMyGroup: () -> Unit
+    navigateBack: () -> Unit
 ) {
     val groupRoomUiState by viewModel.state.collectAsStateWithLifecycle()
     val lifecycleOwner = LocalLifecycleOwner.current
 
     BackHandler {
-        navigateMyGroup()
+        navigateBack()
     }
 
     LaunchedEffect(Unit) {
@@ -88,7 +88,7 @@ fun GroupRoomRoute(
         viewModel.sideEffect.flowWithLifecycle(lifecycle = lifecycleOwner.lifecycle)
             .collect { sideEffect ->
                 when (sideEffect) {
-                    is GroupRoomContract.SideEffect.NavigateMyGroup -> navigateMyGroup()
+                    is GroupRoomContract.SideEffect.NavigateBack -> navigateBack()
                 }
             }
     }
@@ -96,7 +96,7 @@ fun GroupRoomRoute(
     GroupRoomScreen(
         uiState = groupRoomUiState,
         updateInputComment = { inputComment -> viewModel.setEvent(GroupRoomContract.Event.UpdateInputComment(inputComment)) },
-        onBackClick = { viewModel.sendSideEffect(GroupRoomContract.SideEffect.NavigateMyGroup) },
+        onBackClick = { viewModel.sendSideEffect(GroupRoomContract.SideEffect.NavigateBack) },
         onCommentRefreshClick = { viewModel.setEvent(GroupRoomContract.Event.OnCommentRefreshClick) },
         onCommentPostClick = { viewModel.setEvent(GroupRoomContract.Event.OnCommentPostClick) }
     )
@@ -147,7 +147,6 @@ fun GroupRoomScreen(
                     .onGloballyPositioned { layoutCoordinates ->
                         columnHeight = layoutCoordinates.size.height
                     }
-                    .padding(top = WindowInsets.statusBars.asPaddingValues().calculateTopPadding())
             ) {
                 StartTitleTopBar(onLeadingIconClick = onBackClick)
                 GroupRoomInfoSection(

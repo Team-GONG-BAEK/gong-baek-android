@@ -24,9 +24,9 @@ fun MainScreen(
         bottomBar = {
             MainBottomNavBar(
                 isVisible = navigator.showBottomBar(),
-                bottomNavBarTabTypes = MainBottomNavBarTabType.entries.toList(),
+                bottomNavBarTabTypes = MainBottomNavBarTabType.entries,
                 currentBottomNavBarTab = navigator.currentMainBottomNavBarTab,
-                onBottomNavBarTabSelected = { navigator.navigate(it) }
+                onBottomNavBarTabSelected = navigator::navigate
             )
         },
         contentWindowInsets = WindowInsets(0.dp),

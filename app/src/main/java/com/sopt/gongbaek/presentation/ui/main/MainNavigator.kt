@@ -1,12 +1,13 @@
 package com.sopt.gongbaek.presentation.ui.main
 
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.navigation.NavDestination
 import androidx.navigation.NavDestination.Companion.hasRoute
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
-import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navOptions
 import com.sopt.gongbaek.presentation.model.NavigationRoute
@@ -23,10 +24,18 @@ class MainNavigator(
     val currentMainBottomNavBarTab: MainBottomNavBarTabType?
         @Composable get() = MainBottomNavBarTabType.find { tab -> currentDestination?.hasRoute(tab::class) == true }
 
+    private val previousDestination = mutableStateOf<NavDestination?>(null)
+
     private val currentDestination: NavDestination?
-        @Composable get() = navController.currentBackStackEntryAsState()
-            .value
-            ?.destination
+        @Composable get() {
+            val currentEntry = navController.currentBackStackEntryFlow.collectAsState(initial = null)
+
+            return currentEntry.value?.destination.also { destination ->
+                if (destination != null) {
+                    previousDestination.value = destination
+                }
+            } ?: previousDestination.value
+        }
 
     fun navigate(mainBottomNavBarTabType: MainBottomNavBarTabType) {
         val navOptions = navOptions {

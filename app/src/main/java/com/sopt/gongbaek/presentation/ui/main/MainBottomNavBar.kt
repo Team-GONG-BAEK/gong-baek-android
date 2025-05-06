@@ -1,6 +1,5 @@
 package com.sopt.gongbaek.presentation.ui.main
 
-import android.content.Context
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -16,7 +15,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -31,8 +30,7 @@ fun MainBottomNavBar(
     bottomNavBarTabTypes: List<MainBottomNavBarTabType>,
     currentBottomNavBarTab: MainBottomNavBarTabType?,
     onBottomNavBarTabSelected: (MainBottomNavBarTabType) -> Unit,
-    modifier: Modifier = Modifier,
-    context: Context = LocalContext.current
+    modifier: Modifier = Modifier
 ) {
     if (isVisible) {
         Column {
@@ -50,7 +48,6 @@ fun MainBottomNavBar(
             ) {
                 bottomNavBarTabTypes.forEach { bottomNavBarTabType ->
                     MainBottomNavBarItem(
-                        context = context,
                         bottomNavBarTabType = bottomNavBarTabType,
                         isSelected = currentBottomNavBarTab == bottomNavBarTabType,
                         onClick = { onBottomNavBarTabSelected(bottomNavBarTabType) },
@@ -64,7 +61,6 @@ fun MainBottomNavBar(
 
 @Composable
 private fun MainBottomNavBarItem(
-    context: Context,
     bottomNavBarTabType: MainBottomNavBarTabType,
     isSelected: Boolean,
     onClick: () -> Unit,
@@ -89,7 +85,7 @@ private fun MainBottomNavBarItem(
         )
         Spacer(modifier = Modifier.height(2.dp))
         Text(
-            text = context.getString(bottomNavBarTabType.label),
+            text = stringResource(bottomNavBarTabType.label),
             style = GongBaekTheme.typography.body2.m14,
             color = if (isSelected) GongBaekTheme.colors.gray10 else GongBaekTheme.colors.gray05
         )
@@ -102,7 +98,7 @@ private fun MainBottomNavBarPreview() {
     GONGBAEKTheme {
         MainBottomNavBar(
             isVisible = true,
-            bottomNavBarTabTypes = MainBottomNavBarTabType.entries.toList(),
+            bottomNavBarTabTypes = MainBottomNavBarTabType.entries,
             currentBottomNavBarTab = MainBottomNavBarTabType.HOME,
             onBottomNavBarTabSelected = {}
         )
