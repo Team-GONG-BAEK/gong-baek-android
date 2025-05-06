@@ -3,6 +3,7 @@ package com.sopt.gongbaek.di
 import android.content.Context
 import androidx.datastore.core.DataStore
 import androidx.datastore.core.DataStoreFactory
+import androidx.datastore.core.handlers.ReplaceFileCorruptionHandler
 import com.sopt.gongbaek.data.security.AuthTokens
 import com.sopt.gongbaek.data.security.AuthTokensSerializer
 import dagger.Module
@@ -23,6 +24,7 @@ object DataStoreModule {
         @ApplicationContext context: Context
     ): DataStore<AuthTokens> = DataStoreFactory.create(
         serializer = AuthTokensSerializer,
-        produceFile = { File(context.filesDir, "auth_tokens.pb") }
+        produceFile = { File(context.filesDir, "auth_tokens.pb") },
+        corruptionHandler = ReplaceFileCorruptionHandler { AuthTokens("","","") }
     )
 }
