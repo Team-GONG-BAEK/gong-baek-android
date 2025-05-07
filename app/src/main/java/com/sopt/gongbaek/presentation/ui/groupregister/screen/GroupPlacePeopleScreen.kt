@@ -142,6 +142,7 @@ private fun GroupPlacePeopleSection(
         ) {
             PageDescriptionSection(
                 titleResId = R.string.groupregister_place_people_place_title,
+                descriptionResId = R.string.groupregister_place_people_place_description,
                 modifier = Modifier.padding(top = 40.dp, bottom = 28.dp)
             )
 
@@ -211,5 +212,15 @@ private fun GroupPlacePeopleSection(
 @Composable
 fun ShowGroupPlacePeopleScreen() {
     GONGBAEKTheme {
+        GroupPlacePeopleScreen(
+            place = "",
+            placeErrorMessage = null,
+            onPlaceChange = {},
+            peopleCount = 0,
+            onIncreasePeopleCount = {},
+            onDecreasePeopleCount = {},
+            onNextButtonClicked = {},
+            onBackClick = {}
+        )
     }
 }

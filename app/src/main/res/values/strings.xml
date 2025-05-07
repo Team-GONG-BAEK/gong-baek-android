@@ -204,6 +204,7 @@
     <!--GroupPlacePeople-->
     <string name="groupregister_place_people_place_title">만날 장소를 작성해주세요.</string>
     <string name="groupregister_place_people_people_title">인원을 선택해주세요.</string>
+    <string name="groupregister_place_people_place_description">초성이 포함될 경우 모임이 생성되지 않습니다.</string>
     <string name="groupregister_place_people_people_description">본인 포함 최소 2명부터 최대 10명까지 모집 가능해요.</string>
     <string name="groupregister_place_people_count">%d명</string>
 

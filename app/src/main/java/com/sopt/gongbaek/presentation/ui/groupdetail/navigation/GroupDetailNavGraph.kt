@@ -8,11 +8,12 @@ import com.sopt.gongbaek.presentation.ui.groupdetail.screen.GroupDetailRoute
 import com.sopt.gongbaek.presentation.ui.grouproom.navigation.navigateGroupRoom
 
 fun NavGraphBuilder.groupDetailNavGraph(
-    navController: NavHostController
+    navController: NavHostController,
+    navigateBack: () -> Unit
 ) {
     composable<NavigationRoute.GroupDetail> {
         GroupDetailRoute(
-            navigateBack = navController::popBackStack,
+            navigateBack = navigateBack,
             navigateGroupRoom = { groupId, groupCycle ->
                 navController.navigateGroupRoom(groupId, groupCycle)
             }
