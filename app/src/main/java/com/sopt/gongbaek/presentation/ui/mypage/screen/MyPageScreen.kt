@@ -201,8 +201,8 @@ private fun MyGroupSection(
                 when (page) {
                     0 -> {
                         MyGroupScreenContent(
-                            activeGroups = uiState.registerActiveGroups,
-                            closedGroups = uiState.registerClosedGroups,
+                            activeGroups = uiState.applyActiveGroups,
+                            closedGroups = uiState.applyClosedGroups,
                             onGroupDetailButtonClick = onGroupDetailButtonClick,
                             onGroupRoomButtonClick = onGroupRoomButtonClick
                         )
@@ -210,8 +210,8 @@ private fun MyGroupSection(
 
                     1 -> {
                         MyGroupScreenContent(
-                            activeGroups = uiState.applyActiveGroups,
-                            closedGroups = uiState.applyClosedGroups,
+                            activeGroups = uiState.registerActiveGroups,
+                            closedGroups = uiState.registerClosedGroups,
                             onGroupDetailButtonClick = onGroupDetailButtonClick,
                             onGroupRoomButtonClick = onGroupRoomButtonClick
                         )
