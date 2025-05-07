@@ -23,6 +23,7 @@ class GroupDetailContract {
         data class UpdateInputComment(val inputComment: String) : Event()
         data object OnCommentRefreshClick : Event()
         data object OnCommentPostClick : Event()
+        data class OnCommentDeleteClick(val commentId: Int) : Event()
     }
 
     sealed interface SideEffect : UiSideEffect {

@@ -6,6 +6,8 @@ import androidx.navigation.toRoute
 import com.sopt.gongbaek.domain.model.Comment
 import com.sopt.gongbaek.domain.model.GroupDetail
 import com.sopt.gongbaek.domain.usecase.ApplyGroupUseCase
+import com.sopt.gongbaek.domain.usecase.DeleteCommentUseCase
+import com.sopt.gongbaek.domain.usecase.DeleteGroupUseCase
 import com.sopt.gongbaek.domain.usecase.GetGroupCommentsUseCase
 import com.sopt.gongbaek.domain.usecase.LoadGroupDetailScreenUseCase
 import com.sopt.gongbaek.domain.usecase.PostCommentUseCase
@@ -22,7 +24,8 @@ class GroupDetailViewModel @Inject constructor(
     private val loadGroupDetailScreenUseCase: LoadGroupDetailScreenUseCase,
     private val applyGroupUseCase: ApplyGroupUseCase,
     private val getGroupCommentsUseCase: GetGroupCommentsUseCase,
-    private val postCommentUseCase: PostCommentUseCase
+    private val postCommentUseCase: PostCommentUseCase,
+    private val deleteCommentUseCase: DeleteCommentUseCase
 ) : BaseViewModel<GroupDetailContract.State, GroupDetailContract.Event, GroupDetailContract.SideEffect>() {
 
     init {
@@ -63,6 +66,9 @@ class GroupDetailViewModel @Inject constructor(
             }
             is GroupDetailContract.Event.OnCommentPostClick -> {
                 postInputComment()
+            }
+            is GroupDetailContract.Event.OnCommentDeleteClick -> {
+                deleteComment(event.commentId)
             }
         }
     }
@@ -135,6 +141,21 @@ class GroupDetailViewModel @Inject constructor(
                 onSuccess = { groupComments ->
                     setState { copy(commentState = UiLoadState.Success, inputComment = "") }
                     updateGroupDetail { copy(groupComments = groupComments) }
+                },
+                onFailure = {
+                    setState { copy(commentState = UiLoadState.Error) }
+                }
+            )
+        }
+    }
+
+    private fun deleteComment(commentId: Int) {
+        viewModelScope.launch {
+            setState { copy(commentState = UiLoadState.Loading) }
+            deleteCommentUseCase(commentId).fold(
+                onSuccess = {
+                    setState { copy(commentState = UiLoadState.Success) }
+                    setEvent(GroupDetailContract.Event.OnCommentRefreshClick)
                 },
                 onFailure = {
                     setState { copy(commentState = UiLoadState.Error) }

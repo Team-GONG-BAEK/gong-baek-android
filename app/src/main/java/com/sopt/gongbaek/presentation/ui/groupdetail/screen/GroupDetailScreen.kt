@@ -80,7 +80,8 @@ fun GroupDetailRoute(
         onDialogDismissClick = { viewModel.setEvent(GroupDetailContract.Event.OnDialogDismissClick) },
         updateInputComment = { inputComment -> viewModel.setEvent(GroupDetailContract.Event.UpdateInputComment(inputComment)) },
         onCommentRefreshClick = { viewModel.setEvent(GroupDetailContract.Event.OnCommentRefreshClick) },
-        onCommentPostClick = { viewModel.setEvent(GroupDetailContract.Event.OnCommentPostClick) }
+        onCommentPostClick = { viewModel.setEvent(GroupDetailContract.Event.OnCommentPostClick) },
+        onCommentDeleteClick = { commentId -> viewModel.setEvent(GroupDetailContract.Event.OnCommentDeleteClick(commentId)) }
     )
 }
 
@@ -95,7 +96,8 @@ fun GroupDetailScreen(
     onDialogDismissClick: () -> Unit,
     updateInputComment: (String) -> Unit,
     onCommentRefreshClick: () -> Unit,
-    onCommentPostClick: () -> Unit
+    onCommentPostClick: () -> Unit,
+    onCommentDeleteClick: (Int) -> Unit
 ) {
     Column(
         modifier = Modifier.fillMaxSize()
@@ -142,6 +144,7 @@ fun GroupDetailScreen(
                         value = uiState.inputComment,
                         onValueChanged = updateInputComment,
                         onRefreshClicked = onCommentRefreshClick,
+                        onDeleteClicked = onCommentDeleteClick,
                         onSendClicked = onCommentPostClick
                     )
                 }
@@ -256,7 +259,8 @@ private fun GroupDetailScreenPreview() {
             onDialogDismissClick = {},
             updateInputComment = {},
             onCommentRefreshClick = {},
-            onCommentPostClick = {}
+            onCommentPostClick = {},
+            onCommentDeleteClick = {}
         )
     }
 }

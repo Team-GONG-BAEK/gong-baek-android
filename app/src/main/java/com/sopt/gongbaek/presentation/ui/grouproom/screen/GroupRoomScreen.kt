@@ -98,7 +98,8 @@ fun GroupRoomRoute(
         updateInputComment = { inputComment -> viewModel.setEvent(GroupRoomContract.Event.UpdateInputComment(inputComment)) },
         onBackClick = { viewModel.sendSideEffect(GroupRoomContract.SideEffect.NavigateBack) },
         onCommentRefreshClick = { viewModel.setEvent(GroupRoomContract.Event.OnCommentRefreshClick) },
-        onCommentPostClick = { viewModel.setEvent(GroupRoomContract.Event.OnCommentPostClick) }
+        onCommentPostClick = { viewModel.setEvent(GroupRoomContract.Event.OnCommentPostClick) },
+        onCommentDeleteClick = { commentId -> viewModel.setEvent(GroupRoomContract.Event.OnCommentDeleteClick(commentId)) }
     )
 }
 
@@ -108,7 +109,8 @@ fun GroupRoomScreen(
     updateInputComment: (String) -> Unit,
     onBackClick: () -> Unit,
     onCommentRefreshClick: () -> Unit,
-    onCommentPostClick: () -> Unit
+    onCommentPostClick: () -> Unit,
+    onCommentDeleteClick: (Int) -> Unit
 ) {
     var columnHeight by remember { mutableIntStateOf(0) }
     val systemUiController = rememberSystemUiController()
@@ -172,6 +174,7 @@ fun GroupRoomScreen(
             value = uiState.inputComment,
             onValueChanged = updateInputComment,
             onRefreshClicked = onCommentRefreshClick,
+            onDeleteClicked = onCommentDeleteClick,
             onSendClicked = onCommentPostClick
         )
     }
@@ -367,7 +370,8 @@ private fun GroupRoomScreenPreview1() {
             updateInputComment = {},
             onBackClick = {},
             onCommentRefreshClick = {},
-            onCommentPostClick = {}
+            onCommentPostClick = {},
+            onCommentDeleteClick = {}
         )
     }
 }
