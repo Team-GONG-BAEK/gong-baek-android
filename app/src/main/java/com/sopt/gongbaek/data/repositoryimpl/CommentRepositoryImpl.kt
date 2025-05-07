@@ -3,6 +3,7 @@ package com.sopt.gongbaek.data.repositoryimpl
 import com.sopt.gongbaek.data.mapper.todata.toData
 import com.sopt.gongbaek.data.mapper.todomain.toDomain
 import com.sopt.gongbaek.data.remote.datasource.CommentRemoteDataSource
+import com.sopt.gongbaek.data.remote.dto.request.DeleteCommentRequestDto
 import com.sopt.gongbaek.data.remote.util.handleApiResponse
 import com.sopt.gongbaek.data.remote.util.handleNullableApiResponse
 import com.sopt.gongbaek.domain.model.Comment
@@ -36,5 +37,12 @@ class CommentRepositoryImpl @Inject constructor(
                 .handleNullableApiResponse()
                 .getOrThrow()
                 ?.toDomain() ?: 0
+        }
+
+    override suspend fun deleteComment(commentId: Int): Result<Unit> =
+        runCatching {
+            commentRemoteDataSource.deleteComment(deleteCommentRequestDto = DeleteCommentRequestDto(commentId))
+                .handleNullableApiResponse()
+                .getOrThrow()
         }
 }

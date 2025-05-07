@@ -2,6 +2,7 @@ package com.sopt.gongbaek.data.remote.datasource
 
 import com.sopt.gongbaek.data.remote.dto.base.ApiResponse
 import com.sopt.gongbaek.data.remote.dto.base.NullableApiResponse
+import com.sopt.gongbaek.data.remote.dto.request.DeleteCommentRequestDto
 import com.sopt.gongbaek.data.remote.dto.request.PostCommentRequestDto
 import com.sopt.gongbaek.data.remote.dto.response.GroupCommentsResponseDto
 import com.sopt.gongbaek.data.remote.dto.response.PostCommentResponseDto
@@ -12,6 +13,6 @@ interface CommentRemoteDataSource {
         groupId: Int,
         groupType: String
     ): ApiResponse<GroupCommentsResponseDto>
-
     suspend fun postComment(postCommentRequestDto: PostCommentRequestDto): NullableApiResponse<PostCommentResponseDto>
+    suspend fun deleteComment(deleteCommentRequestDto: DeleteCommentRequestDto): NullableApiResponse<Unit>
 }

@@ -9,6 +9,6 @@ interface CommentRepository {
         groupId: Int,
         groupType: String
     ): Result<GroupComments>
-
     suspend fun postComment(comment: Comment): Result<Int>
+    suspend fun deleteComment(commentId: Int): Result<Unit>
 }

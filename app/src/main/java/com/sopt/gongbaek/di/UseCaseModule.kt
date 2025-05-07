@@ -8,6 +8,7 @@ import com.sopt.gongbaek.domain.repository.SearchRepository
 import com.sopt.gongbaek.domain.repository.TokenRepository
 import com.sopt.gongbaek.domain.repository.UserRepository
 import com.sopt.gongbaek.domain.usecase.ApplyGroupUseCase
+import com.sopt.gongbaek.domain.usecase.DeleteCommentUseCase
 import com.sopt.gongbaek.domain.usecase.FetchHomeScreenUseCase
 import com.sopt.gongbaek.domain.usecase.FetchLatestGroupUseCase
 import com.sopt.gongbaek.domain.usecase.FetchUserLectureTimetableUseCase
@@ -200,4 +201,10 @@ object UseCaseModule {
     fun provideVerifyEmailCodeUseCase(
         authRepository: AuthRepository
     ): VerifyEmailCodeUseCase = VerifyEmailCodeUseCase(authRepository)
+
+    @Provides
+    @Singleton
+    fun provideDeleteCommentUseCase(
+        commentRepository: CommentRepository
+    ): DeleteCommentUseCase = DeleteCommentUseCase(commentRepository)
 }
