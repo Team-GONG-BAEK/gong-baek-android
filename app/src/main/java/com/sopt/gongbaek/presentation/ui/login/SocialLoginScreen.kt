@@ -7,13 +7,14 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.size
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.SideEffect
-import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -40,6 +41,7 @@ fun SocialLoginRoute(
 ) {
     val context = LocalContext.current
     val lifecycleOwner = LocalLifecycleOwner.current
+    val systemUiController = rememberSystemUiController()
 
     LaunchedEffect(Unit) {
         viewModel.sideEffect
@@ -52,6 +54,7 @@ fun SocialLoginRoute(
                             launchSingleTop = true
                         }
                     }
+
                     is SocialLoginContract.SideEffect.NavigateTermsOfService -> {
                         navController.navigate(NavigationRoute.TermsOfService) {
                             popUpTo(NavigationRoute.Login) { inclusive = true }
@@ -59,6 +62,12 @@ fun SocialLoginRoute(
                     }
                 }
             }
+    }
+
+    DisposableEffect(Unit) {
+        onDispose {
+            systemUiController.setStatusBarColor(color = Color.White)
+        }
     }
 
     SocialLoginScreen(
@@ -70,27 +79,18 @@ fun SocialLoginRoute(
 private fun SocialLoginScreen(
     onLoginClick: () -> Unit
 ) {
-    val systemUiController = rememberSystemUiController()
-    val backgroundColor = GongBaekTheme.colors.gray10
-
-    SideEffect {
-        systemUiController.setStatusBarColor(
-            color = backgroundColor,
-            darkIcons = true
-        )
-    }
-
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .background(color = backgroundColor),
+            .background(color = GongBaekTheme.colors.gray10),
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        Spacer(modifier = Modifier.weight(1f))
+        Spacer(modifier = Modifier.weight(1.15f))
         Image(
             painter = painterResource(id = R.drawable.img_logo),
-            contentDescription = null
+            contentDescription = null,
+            modifier = Modifier.size(74.dp)
         )
         Spacer(modifier = Modifier.height(28.dp))
         Text(
@@ -111,7 +111,7 @@ private fun SocialLoginScreen(
                     end = 5
                 )
             },
-            color = GongBaekTheme.colors.white,
+            color = GongBaekTheme.colors.gray02,
             style = GongBaekTheme.typography.body2.sb14
         )
         Spacer(modifier = Modifier.weight(1f))

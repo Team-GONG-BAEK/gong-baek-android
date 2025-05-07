@@ -66,7 +66,7 @@ fun SplashRoute(
     }
 
     LaunchedEffect(Unit) {
-        systemUiController.setSystemBarsColor(color = backgroundColor)
+        systemUiController.setStatusBarColor(color = backgroundColor)
     }
 
     SplashScreen(

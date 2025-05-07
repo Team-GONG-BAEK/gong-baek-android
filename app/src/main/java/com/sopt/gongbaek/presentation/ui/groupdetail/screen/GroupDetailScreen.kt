@@ -1,6 +1,5 @@
 package com.sopt.gongbaek.presentation.ui.groupdetail.screen
 
-import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -41,7 +40,6 @@ import com.sopt.gongbaek.presentation.util.formatGroupTimeDescription
 import com.sopt.gongbaek.ui.theme.GONGBAEKTheme
 import com.sopt.gongbaek.ui.theme.GongBaekTheme
 
-@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun GroupDetailRoute(
     viewModel: GroupDetailViewModel = hiltViewModel(),
@@ -65,7 +63,9 @@ fun GroupDetailRoute(
             .collect { sideEffect ->
                 when (sideEffect) {
                     is GroupDetailContract.SideEffect.NavigateBack -> navigateBack()
-                    is GroupDetailContract.SideEffect.NavigateGroupRoom -> { navigateGroupRoom(sideEffect.groupId, sideEffect.groupCycle) }
+                    is GroupDetailContract.SideEffect.NavigateGroupRoom -> {
+                        navigateGroupRoom(sideEffect.groupId, sideEffect.groupCycle)
+                    }
                 }
             }
     }
@@ -84,7 +84,6 @@ fun GroupDetailRoute(
     )
 }
 
-@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun GroupDetailScreen(
     uiState: GroupDetailContract.State,
@@ -186,7 +185,6 @@ fun GroupDetailScreen(
     }
 }
 
-@OptIn(ExperimentalFoundationApi::class)
 @Preview(showBackground = true)
 @Composable
 private fun GroupDetailScreenPreview() {
