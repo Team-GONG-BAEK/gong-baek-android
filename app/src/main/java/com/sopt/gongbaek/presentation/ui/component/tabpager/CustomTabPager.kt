@@ -1,6 +1,5 @@
 package com.sopt.gongbaek.presentation.ui.component.tabpager
 
-import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -19,7 +18,6 @@ import com.sopt.gongbaek.presentation.util.extension.clickableWithoutRipple
 import com.sopt.gongbaek.ui.theme.GongBaekTheme
 import kotlinx.coroutines.launch
 
-@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun CustomTabPager(tabs: List<String>, pagerState: PagerState) {
     val coroutineScope = rememberCoroutineScope()
@@ -38,7 +36,8 @@ fun CustomTabPager(tabs: List<String>, pagerState: PagerState) {
         },
         indicator = { tabPositions ->
             SecondaryIndicator(
-                Modifier.tabIndicatorOffset(tabPositions[pagerState.currentPage]),
+                modifier = Modifier.tabIndicatorOffset(tabPositions[pagerState.currentPage]),
+                height = 2.dp,
                 color = GongBaekTheme.colors.gray10
             )
         },
@@ -59,7 +58,7 @@ fun CustomTabPager(tabs: List<String>, pagerState: PagerState) {
                         text = tabTitle,
                         modifier = Modifier.padding(15.dp),
                         color = if (pagerState.currentPage == index) GongBaekTheme.colors.gray10 else GongBaekTheme.colors.gray05,
-                        style = GongBaekTheme.typography.body1.m16
+                        style = if (pagerState.currentPage == index) GongBaekTheme.typography.body1.b16 else GongBaekTheme.typography.body1.m16
                     )
                 }
             }
