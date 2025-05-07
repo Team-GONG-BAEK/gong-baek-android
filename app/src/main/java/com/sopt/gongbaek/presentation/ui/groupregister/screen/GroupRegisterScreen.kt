@@ -5,6 +5,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -104,7 +105,8 @@ fun GroupRegisterScreen(
                 modifier = Modifier
                     .padding(horizontal = 16.dp, vertical = 12.dp)
             )
-        }
+        },
+        contentWindowInsets = WindowInsets(0.dp, 0.dp, 0.dp, 0.dp)
     ) { innerPadding ->
         Column(
             modifier = Modifier.padding(innerPadding)
@@ -215,5 +217,13 @@ private fun GroupRegisterSection(
 @Composable
 fun ShowGroupRegisterScreen() {
     GONGBAEKTheme {
+            GroupRegisterScreen(
+                uiState = GroupRegisterContract.State(),
+                groupRegisterInfo = GroupRegisterInfo(),
+                onBackClick = {},
+                onRegisterButtonClicked = {},
+                onDialogConfirmButtonClicked = {},
+                onDialogDismissClicked = {}
+            )
     }
 }
