@@ -13,6 +13,7 @@ import com.sopt.gongbaek.presentation.ui.mypage.screen.SettingRoute
 
 fun NavGraphBuilder.myPageNavGraph(
     navController: NavController,
+    navigateBack: () -> Unit,
     innerPadding: PaddingValues
 ) {
     composable<MainBottomTabRoute.MyPage> {
@@ -32,7 +33,7 @@ fun NavGraphBuilder.myPageNavGraph(
 
     composable<NavigationRoute.Setting> {
         SettingRoute(
-            navigateBack = navController::popBackStack,
+            navigateBack = navigateBack,
             navigateLogin = {
                 navController.navigate(NavigationRoute.Login) {
                     popUpTo(NavigationRoute.Setting) { inclusive = true }

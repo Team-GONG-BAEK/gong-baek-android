@@ -35,20 +35,33 @@ fun MainNavHost(
         composable<NavigationRoute.Login> { SocialLoginRoute(navController = navigator.navController) }
         composable<NavigationRoute.TermsOfService> { TermsOfServiceRoute(navController = navigator.navController) }
         onboardingNavGraph(navigator.navController)
-        authNavGraph(navigator.navController)
+        authNavGraph(
+            navController = navigator.navController,
+            navigateBack = navigator::navigateBack
+        )
         groupListNavGraph(
             navController = navigator.navController,
             innerPadding = paddingValues
         )
-        groupRegisterNavGraph(navigator.navController)
-        groupDetailNavGraph(navigator.navController)
+        groupRegisterNavGraph(
+            navController = navigator.navController,
+            navigateBack = navigator::navigateBack
+        )
+        groupDetailNavGraph(
+            navController = navigator.navController,
+            navigateBack = navigator::navigateBack
+        )
         homeNavGraph(
             navController = navigator.navController,
             innerPadding = paddingValues
         )
-        groupRoomNavGraph(navigator.navController)
+        groupRoomNavGraph(
+            navController = navigator.navController,
+            navigateBack = navigator::navigateBack
+        )
         myPageNavGraph(
             navController = navigator.navController,
+            navigateBack = navigator::navigateBack,
             innerPadding = paddingValues
         )
     }
