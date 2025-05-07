@@ -22,7 +22,8 @@ import com.sopt.gongbaek.presentation.ui.home.navigation.navigateHomeNavGraph
 import com.sopt.gongbaek.presentation.util.extension.sharedViewModel
 
 fun NavGraphBuilder.authNavGraph(
-    navController: NavHostController
+    navController: NavHostController,
+    navigateBack: () -> Unit
 ) {
     navigation<AuthNavGraphRoute.AuthNavGraph>(
         startDestination = AuthNavGraphRoute.AcademicInfo
@@ -34,7 +35,7 @@ fun NavGraphBuilder.authNavGraph(
                 navigateEmailVerification = navController::navigateEmailVerification,
                 navigateUnivSearch = navController::navigateUnivSearch,
                 navigateMajorSearch = navController::navigateMajorSearch,
-                navigateBack = navController::popBackStack
+                navigateBack = navigateBack
             )
         }
 
@@ -42,7 +43,7 @@ fun NavGraphBuilder.authNavGraph(
             val viewModel = backStackEntry.sharedViewModel<AuthViewModel>(navController)
             UnivSearchRoute(
                 viewModel = viewModel,
-                navigateBack = navController::popBackStack
+                navigateBack = navigateBack
             )
         }
 
@@ -50,7 +51,7 @@ fun NavGraphBuilder.authNavGraph(
             val viewModel = backStackEntry.sharedViewModel<AuthViewModel>(navController)
             MajorSearchRoute(
                 viewModel = viewModel,
-                navigateBack = navController::popBackStack
+                navigateBack = navigateBack
             )
         }
 
@@ -59,7 +60,7 @@ fun NavGraphBuilder.authNavGraph(
             EmailVerificationRoute(
                 viewModel = viewModel,
                 navigateNicknameGender = navController::navigateNicknameGender,
-                navigateBack = navController::popBackStack
+                navigateBack = navigateBack
             )
         }
 
@@ -68,7 +69,7 @@ fun NavGraphBuilder.authNavGraph(
             NicknameGenderRoute(
                 viewModel = viewModel,
                 navigateSelectProfile = navController::navigateSelectProfile,
-                navigateBack = navController::popBackStack
+                navigateBack = navigateBack
             )
         }
 
@@ -77,7 +78,7 @@ fun NavGraphBuilder.authNavGraph(
             SelectProfileRoute(
                 viewModel = viewModel,
                 navigateMbti = navController::navigateMbti,
-                navigateBack = navController::popBackStack
+                navigateBack = navigateBack
             )
         }
 
@@ -86,7 +87,7 @@ fun NavGraphBuilder.authNavGraph(
             MbtiRoute(
                 viewModel = viewModel,
                 navigateSelfIntroduction = navController::navigateSelfIntroduction,
-                navigateBack = navController::popBackStack
+                navigateBack = navigateBack
             )
         }
 
@@ -95,7 +96,7 @@ fun NavGraphBuilder.authNavGraph(
             SelfIntroductionRoute(
                 viewModel = viewModel,
                 navigateEnterTimetable = navController::navigateEnterTimetable,
-                navigateBack = navController::popBackStack
+                navigateBack = navigateBack
             )
         }
 
@@ -104,7 +105,7 @@ fun NavGraphBuilder.authNavGraph(
             EnterTimeTableRoute(
                 viewModel = viewModel,
                 navigateCompleteAuth = navController::navigateCompleteAuth,
-                navigateBack = navController::popBackStack
+                navigateBack = navigateBack
             )
         }
 

@@ -7,11 +7,12 @@ import com.sopt.gongbaek.presentation.model.NavigationRoute
 import com.sopt.gongbaek.presentation.ui.grouproom.screen.GroupRoomRoute
 
 fun NavGraphBuilder.groupRoomNavGraph(
-    navController: NavHostController
+    navController: NavHostController,
+    navigateBack: () -> Unit
 ) {
     composable<NavigationRoute.GroupRoom> {
         GroupRoomRoute(
-            navigateBack = navController::popBackStack
+            navigateBack = navigateBack
         )
     }
 }

@@ -15,6 +15,10 @@ import com.sopt.gongbaek.presentation.type.MainBottomNavBarTabType
 import com.sopt.gongbaek.presentation.ui.grouplist.navigation.navigateGroupListNavGraph
 import com.sopt.gongbaek.presentation.ui.home.navigation.navigateHomeNavGraph
 import com.sopt.gongbaek.presentation.ui.mypage.navigation.navigateMyPage
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 class MainNavigator(
     val navController: NavHostController
@@ -23,6 +27,8 @@ class MainNavigator(
 
     val currentMainBottomNavBarTab: MainBottomNavBarTabType?
         @Composable get() = MainBottomNavBarTabType.find { tab -> currentDestination?.hasRoute(tab::class) == true }
+
+    private var isNavigatingBack = false
 
     private val previousDestination = mutableStateOf<NavDestination?>(null)
 
@@ -56,6 +62,15 @@ class MainNavigator(
     @Composable
     fun showBottomBar() = MainBottomNavBarTabType.contains {
         currentDestination?.hasRoute(it::class) == true
+    }
+
+    fun navigateBack() {
+        if (isNavigatingBack || !navController.popBackStack()) return
+        isNavigatingBack = true
+        CoroutineScope(Dispatchers.Main).launch {
+            delay(600L)
+            isNavigatingBack = false
+        }
     }
 }
 
