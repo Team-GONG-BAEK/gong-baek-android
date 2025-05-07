@@ -217,13 +217,13 @@ private fun GroupRegisterSection(
 @Composable
 fun ShowGroupRegisterScreen() {
     GONGBAEKTheme {
-            GroupRegisterScreen(
-                uiState = GroupRegisterContract.State(),
-                groupRegisterInfo = GroupRegisterInfo(),
-                onBackClick = {},
-                onRegisterButtonClicked = {},
-                onDialogConfirmButtonClicked = {},
-                onDialogDismissClicked = {}
-            )
+        GroupRegisterScreen(
+            uiState = GroupRegisterContract.State(),
+            groupRegisterInfo = GroupRegisterInfo(),
+            onBackClick = {},
+            onRegisterButtonClicked = {},
+            onDialogConfirmButtonClicked = {},
+            onDialogDismissClicked = {}
+        )
     }
 }
