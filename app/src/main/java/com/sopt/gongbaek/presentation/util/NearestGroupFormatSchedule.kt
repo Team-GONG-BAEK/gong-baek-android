@@ -8,8 +8,8 @@ import java.util.Locale
 
 fun nearestGroupFormatSchedule(
     weekDate: String?,
-    startTime: Double,
-    endTime: Double
+    startTime: Double?,
+    endTime: Double?
 ): String {
     val formattedDate = if (!weekDate.isNullOrBlank()) {
         try {
@@ -22,7 +22,7 @@ fun nearestGroupFormatSchedule(
         "날짜 없음"
     }
 
-    return "$formattedDate ${formatTime(startTime)}-${formatTime(endTime)}"
+    return "$formattedDate ${startTime?.let { formatTime(it) }}-${endTime?.let { formatTime(it) }}"
 }
 
 fun homeOnceGroupFormatSchedule(

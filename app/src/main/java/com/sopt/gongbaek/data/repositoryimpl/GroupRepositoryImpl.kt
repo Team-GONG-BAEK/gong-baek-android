@@ -60,12 +60,12 @@ class GroupRepositoryImpl @Inject constructor(
         }
     }
 
-    override suspend fun getNearestGroup(): Result<NearestGroup> =
+    override suspend fun getNearestGroup(): Result<NearestGroup?> =
         runCatching {
             groupDataSource.getNearestGroup()
-                .handleApiResponse()
+                .handleNullableApiResponse()
                 .getOrThrow()
-                .toDomain()
+                ?.toDomain()
         }
 
     override suspend fun getLatestGroup(groupType: String): Result<List<RecommendGroupInfo>> =
