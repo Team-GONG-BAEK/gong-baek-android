@@ -6,6 +6,7 @@ import androidx.navigation.toRoute
 import com.sopt.gongbaek.domain.model.Comment
 import com.sopt.gongbaek.domain.model.GroupDetail
 import com.sopt.gongbaek.domain.usecase.ApplyGroupUseCase
+import com.sopt.gongbaek.domain.usecase.CancelGroupUseCase
 import com.sopt.gongbaek.domain.usecase.DeleteCommentUseCase
 import com.sopt.gongbaek.domain.usecase.DeleteGroupUseCase
 import com.sopt.gongbaek.domain.usecase.GetGroupCommentsUseCase
@@ -23,6 +24,8 @@ class GroupDetailViewModel @Inject constructor(
     private val savedStateHandle: SavedStateHandle,
     private val loadGroupDetailScreenUseCase: LoadGroupDetailScreenUseCase,
     private val applyGroupUseCase: ApplyGroupUseCase,
+    private val cancelGroupUseCase: CancelGroupUseCase,
+    private val deleteGroupUseCase: DeleteGroupUseCase,
     private val getGroupCommentsUseCase: GetGroupCommentsUseCase,
     private val postCommentUseCase: PostCommentUseCase,
     private val deleteCommentUseCase: DeleteCommentUseCase
@@ -51,9 +54,23 @@ class GroupDetailViewModel @Inject constructor(
             is GroupDetailContract.Event.OnApplyClick -> {
                 applyGroup()
             }
-            is GroupDetailContract.Event.OnDialogDismissClick -> {
+            is GroupDetailContract.Event.ResetApplyState -> {
                 setState { copy(groupApplyState = UiLoadState.Idle) }
-                getGroupDetailInfo()
+            }
+            is GroupDetailContract.Event.OnCancelClick -> {
+                cancelGroup()
+            }
+            is GroupDetailContract.Event.ResetCancelState -> {
+                setState { copy(groupCancelState = UiLoadState.Idle) }
+            }
+            is GroupDetailContract.Event.ShowDeleteDialog -> {
+                setState { copy(groupDeleteState = UiLoadState.Loading) }
+            }
+            is GroupDetailContract.Event.OnDeleteClick -> {
+                deleteGroup()
+            }
+            is GroupDetailContract.Event.ResetDeleteState -> {
+                setState { copy(groupDeleteState = UiLoadState.Idle) }
             }
             is GroupDetailContract.Event.OnCommentTabClick -> {
                 getGroupDetailInfo()
@@ -104,6 +121,31 @@ class GroupDetailViewModel @Inject constructor(
             ).fold(
                 onSuccess = { setState { copy(groupApplyState = UiLoadState.Success) } },
                 onFailure = { setState { copy(groupApplyState = UiLoadState.Error) } }
+            )
+        }
+    }
+
+    private fun cancelGroup() {
+        viewModelScope.launch {
+            setState { copy(groupCancelState = UiLoadState.Loading) }
+            cancelGroupUseCase(
+                groupId = currentState.groupDetail.groupInfo.groupId,
+                groupType = currentState.groupDetail.groupInfo.cycle
+            ).fold(
+                onSuccess = { setState { copy(groupCancelState = UiLoadState.Success) } },
+                onFailure = { setState { copy(groupCancelState = UiLoadState.Error) } }
+            )
+        }
+    }
+
+    private fun deleteGroup() {
+        viewModelScope.launch {
+            deleteGroupUseCase(
+                groupId = currentState.groupDetail.groupInfo.groupId,
+                groupType = currentState.groupDetail.groupInfo.cycle
+            ).fold(
+                onSuccess = { setState { copy(groupDeleteState = UiLoadState.Success) } },
+                onFailure = { setState { copy(groupDeleteState = UiLoadState.Error) } }
             )
         }
     }

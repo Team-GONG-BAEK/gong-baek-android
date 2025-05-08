@@ -33,6 +33,7 @@ import com.sopt.gongbaek.presentation.type.GroupInfoChipType
 import com.sopt.gongbaek.presentation.ui.component.dialog.GongBaekDialog
 import com.sopt.gongbaek.presentation.ui.component.section.CommentSection
 import com.sopt.gongbaek.presentation.ui.component.section.GroupInfoSection
+import com.sopt.gongbaek.presentation.ui.component.stateView.LoadingScreen
 import com.sopt.gongbaek.presentation.ui.component.tabpager.CustomTabPager
 import com.sopt.gongbaek.presentation.ui.component.topbar.StartTitleTopBar
 import com.sopt.gongbaek.presentation.util.base.UiLoadState
@@ -44,7 +45,8 @@ import com.sopt.gongbaek.ui.theme.GongBaekTheme
 fun GroupDetailRoute(
     viewModel: GroupDetailViewModel = hiltViewModel(),
     navigateBack: () -> Unit,
-    navigateGroupRoom: (Int, String) -> Unit
+    navigateGroupRoom: (Int, String) -> Unit,
+    navigateMyPage: () -> Unit
 ) {
     val groupDetailUiState by viewModel.state.collectAsStateWithLifecycle()
     val lifecycleOwner = LocalLifecycleOwner.current
@@ -58,14 +60,14 @@ fun GroupDetailRoute(
         }
     }
 
-    LaunchedEffect(viewModel.sideEffect, lifecycleOwner) {
-        viewModel.sideEffect.flowWithLifecycle(lifecycle = lifecycleOwner.lifecycle)
+    LaunchedEffect(Unit) {
+        viewModel.sideEffect
+            .flowWithLifecycle(lifecycleOwner.lifecycle)
             .collect { sideEffect ->
                 when (sideEffect) {
                     is GroupDetailContract.SideEffect.NavigateBack -> navigateBack()
-                    is GroupDetailContract.SideEffect.NavigateGroupRoom -> {
-                        navigateGroupRoom(sideEffect.groupId, sideEffect.groupCycle)
-                    }
+                    is GroupDetailContract.SideEffect.NavigateGroupRoom -> navigateGroupRoom(sideEffect.groupId, sideEffect.groupCycle)
+                    is GroupDetailContract.SideEffect.NavigateMyPage -> navigateMyPage()
                 }
             }
     }
@@ -76,13 +78,139 @@ fun GroupDetailRoute(
         pagerState = pagerState,
         onBackClick = { viewModel.sendSideEffect(GroupDetailContract.SideEffect.NavigateBack) },
         onApplyClick = { viewModel.setEvent(GroupDetailContract.Event.OnApplyClick) },
-        onDialogConfirmClick = { groupId, groupCycle -> viewModel.sendSideEffect(GroupDetailContract.SideEffect.NavigateGroupRoom(groupId, groupCycle)) },
-        onDialogDismissClick = { viewModel.setEvent(GroupDetailContract.Event.OnDialogDismissClick) },
+        onCancelClick = { viewModel.setEvent(GroupDetailContract.Event.OnCancelClick) },
+        onDeleteClick = { viewModel.setEvent(GroupDetailContract.Event.ShowDeleteDialog) },
         updateInputComment = { inputComment -> viewModel.setEvent(GroupDetailContract.Event.UpdateInputComment(inputComment)) },
         onCommentRefreshClick = { viewModel.setEvent(GroupDetailContract.Event.OnCommentRefreshClick) },
         onCommentPostClick = { viewModel.setEvent(GroupDetailContract.Event.OnCommentPostClick) },
         onCommentDeleteClick = { commentId -> viewModel.setEvent(GroupDetailContract.Event.OnCommentDeleteClick(commentId)) }
     )
+
+    when (groupDetailUiState.groupApplyState) {
+        UiLoadState.Idle -> {
+        }
+
+        UiLoadState.Loading -> {
+        }
+
+        UiLoadState.Success -> {
+            Box(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .background(color = Color.Transparent)
+            ) {
+                Dialog(
+                    onDismissRequest = { viewModel.setEvent(GroupDetailContract.Event.ResetApplyState) }
+                ) {
+                    GongBaekDialog(
+                        gongBaekDialogType = GongBaekDialogType.ENTER_SUCCESS,
+                        onConfirmButtonClick = { viewModel.sendSideEffect(GroupDetailContract.SideEffect.NavigateGroupRoom(groupDetailUiState.groupDetail.groupInfo.groupId, groupDetailUiState.groupDetail.groupInfo.cycle)) },
+                        onDismissButtonClick = { viewModel.setEvent(GroupDetailContract.Event.ResetApplyState) }
+                    )
+                }
+            }
+        }
+
+        UiLoadState.Error -> {
+            if (groupDetailUiState.groupDetail.groupInfo.maxPeopleCount == groupDetailUiState.groupDetail.groupInfo.currentPeopleCount) {
+                Box(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .background(color = Color.Transparent)
+                ) {
+                    Dialog(
+                        onDismissRequest = { viewModel.setEvent(GroupDetailContract.Event.ResetApplyState) }
+                    ) {
+                        GongBaekDialog(
+                            gongBaekDialogType = GongBaekDialogType.ENTER_FAIL,
+                            onConfirmButtonClick = { viewModel.setEvent(GroupDetailContract.Event.ResetApplyState) }
+                        )
+                    }
+                }
+            } else {
+                Box(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .background(color = Color.Transparent)
+                ) {
+                    Dialog(
+                        onDismissRequest = { viewModel.setEvent(GroupDetailContract.Event.ResetApplyState) }
+                    ) {
+                        GongBaekDialog(
+                            gongBaekDialogType = GongBaekDialogType.ERROR,
+                            onConfirmButtonClick = { viewModel.setEvent(GroupDetailContract.Event.ResetApplyState) }
+                        )
+                    }
+                }
+            }
+        }
+    }
+
+    when (groupDetailUiState.groupCancelState) {
+        UiLoadState.Idle -> {
+        }
+
+        UiLoadState.Loading -> {
+        }
+
+        UiLoadState.Success -> {
+            Box(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .background(color = Color.Transparent)
+            ) {
+                Dialog(
+                    onDismissRequest = {
+                        viewModel.setEvent(GroupDetailContract.Event.ResetCancelState)
+                        viewModel.setEvent(GroupDetailContract.Event.OnGroupInfoTabClick)
+                    }
+                ) {
+                    GongBaekDialog(
+                        gongBaekDialogType = GongBaekDialogType.CANCEL_SUCCESS,
+                        onConfirmButtonClick = {
+                            viewModel.setEvent(GroupDetailContract.Event.ResetCancelState)
+                            viewModel.setEvent(GroupDetailContract.Event.OnGroupInfoTabClick)
+                        }
+                    )
+                }
+            }
+        }
+
+        UiLoadState.Error -> {
+        }
+    }
+
+    when (groupDetailUiState.groupDeleteState) {
+        UiLoadState.Idle -> {
+        }
+
+        UiLoadState.Loading -> {
+            Box(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .background(color = Color.Transparent)
+            ) {
+                Dialog(
+                    onDismissRequest = { viewModel.setEvent(GroupDetailContract.Event.ResetDeleteState) }
+                ) {
+                    GongBaekDialog(
+                        gongBaekDialogType = GongBaekDialogType.DELETE_GROUP,
+                        onConfirmButtonClick = { viewModel.setEvent(GroupDetailContract.Event.OnDeleteClick) },
+                        onDismissButtonClick = { viewModel.setEvent(GroupDetailContract.Event.ResetDeleteState) }
+                    )
+                }
+            }
+        }
+
+        UiLoadState.Success -> {
+            viewModel.setEvent(GroupDetailContract.Event.ResetDeleteState)
+            viewModel.sendSideEffect(GroupDetailContract.SideEffect.NavigateMyPage)
+        }
+
+        UiLoadState.Error -> {
+            viewModel.setEvent(GroupDetailContract.Event.ResetDeleteState)
+        }
+    }
 }
 
 @Composable
@@ -92,8 +220,8 @@ fun GroupDetailScreen(
     pagerState: PagerState,
     onBackClick: () -> Unit,
     onApplyClick: () -> Unit,
-    onDialogConfirmClick: (Int, String) -> Unit,
-    onDialogDismissClick: () -> Unit,
+    onCancelClick: () -> Unit,
+    onDeleteClick: () -> Unit,
     updateInputComment: (String) -> Unit,
     onCommentRefreshClick: () -> Unit,
     onCommentPostClick: () -> Unit,
@@ -108,82 +236,59 @@ fun GroupDetailScreen(
             onLeadingIconClick = onBackClick,
             isTrailingIconIncluded = true
         )
-        GroupInfoSection(
-            groupStatus = GroupInfoChipType.getChipTypeFromStatus(uiState.groupDetail.groupInfo.status),
-            groupCategory = GroupInfoChipType.getChipTypeFromCategory(uiState.groupDetail.groupInfo.category),
-            groupCycle = GroupInfoChipType.getChipTypeFromCycle(uiState.groupDetail.groupInfo.cycle),
-            groupTitle = uiState.groupDetail.groupInfo.title,
-            groupTime = formatGroupTimeDescription(uiState.groupDetail.groupInfo),
-            groupPlace = uiState.groupDetail.groupInfo.place,
-            groupCover = uiState.groupDetail.groupInfo.coverImg,
-            modifier = Modifier
-                .background(color = GongBaekTheme.colors.white)
-                .padding(16.dp)
-        )
-        HorizontalDivider(
-            modifier = Modifier.fillMaxWidth(),
-            thickness = 8.dp,
-            color = GongBaekTheme.colors.gray02
-        )
-        CustomTabPager(
-            tabs = groupDetailTabs,
-            pagerState = pagerState
-        )
-        HorizontalPager(
-            state = pagerState,
-            pageContent = { page ->
-                when (page) {
-                    0 -> GroupDetailInfoSection(
-                        groupInfo = uiState.groupDetail.groupInfo,
-                        groupHost = uiState.groupDetail.groupHost,
-                        onApplyClick = onApplyClick
-                    )
+        when (uiState.groupDetailLoadState) {
+            UiLoadState.Idle -> { }
 
-                    1 -> CommentSection(
-                        groupComments = uiState.groupDetail.groupComments,
-                        value = uiState.inputComment,
-                        onValueChanged = updateInputComment,
-                        onRefreshClicked = onCommentRefreshClick,
-                        onDeleteClicked = onCommentDeleteClick,
-                        onSendClicked = onCommentPostClick
-                    )
-                }
-            }
-        )
-    }
+            UiLoadState.Loading -> LoadingScreen()
 
-    if (uiState.groupApplyState == UiLoadState.Success) {
-        Box(
-            modifier = Modifier
-                .fillMaxSize()
-                .background(color = Color.Transparent)
-        ) {
-            Dialog(
-                onDismissRequest = onDialogDismissClick
-            ) {
-                GongBaekDialog(
-                    gongBaekDialogType = GongBaekDialogType.ENTER_SUCCESS,
-                    onConfirmButtonClick = { onDialogConfirmClick(uiState.groupDetail.groupInfo.groupId, uiState.groupDetail.groupInfo.cycle) },
-                    onDismissButtonClick = onDialogDismissClick
+            UiLoadState.Success -> {
+                GroupInfoSection(
+                    groupStatus = GroupInfoChipType.getChipTypeFromStatus(uiState.groupDetail.groupInfo.status),
+                    groupCategory = GroupInfoChipType.getChipTypeFromCategory(uiState.groupDetail.groupInfo.category),
+                    groupCycle = GroupInfoChipType.getChipTypeFromCycle(uiState.groupDetail.groupInfo.cycle),
+                    groupTitle = uiState.groupDetail.groupInfo.title,
+                    groupTime = formatGroupTimeDescription(uiState.groupDetail.groupInfo),
+                    groupPlace = uiState.groupDetail.groupInfo.place,
+                    groupCover = uiState.groupDetail.groupInfo.coverImg,
+                    modifier = Modifier
+                        .background(color = GongBaekTheme.colors.white)
+                        .padding(16.dp)
+                )
+                HorizontalDivider(
+                    modifier = Modifier.fillMaxWidth(),
+                    thickness = 8.dp,
+                    color = GongBaekTheme.colors.gray02
+                )
+                CustomTabPager(
+                    tabs = groupDetailTabs,
+                    pagerState = pagerState
+                )
+                HorizontalPager(
+                    state = pagerState,
+                    pageContent = { page ->
+                        when (page) {
+                            0 -> GroupDetailInfoSection(
+                                groupInfo = uiState.groupDetail.groupInfo,
+                                groupHost = uiState.groupDetail.groupHost,
+                                onApplyClick = onApplyClick,
+                                onCancelClick = onCancelClick,
+                                onDeleteClick = onDeleteClick
+                            )
+
+                            1 -> CommentSection(
+                                groupComments = uiState.groupDetail.groupComments,
+                                value = uiState.inputComment,
+                                onValueChanged = updateInputComment,
+                                onRefreshClicked = onCommentRefreshClick,
+                                onDeleteClicked = onCommentDeleteClick,
+                                onSendClicked = onCommentPostClick
+                            )
+                        }
+                    }
                 )
             }
-        }
-    }
 
-    if (uiState.groupApplyState == UiLoadState.Error) {
-        Box(
-            modifier = Modifier
-                .fillMaxSize()
-                .background(color = Color.Transparent)
-        ) {
-            Dialog(
-                onDismissRequest = onDialogDismissClick
-            ) {
-                GongBaekDialog(
-                    gongBaekDialogType = GongBaekDialogType.ENTER_FAIL,
-                    onConfirmButtonClick = onDialogDismissClick
-                )
-            }
+            UiLoadState.Error -> { }
         }
     }
 }
@@ -194,6 +299,7 @@ private fun GroupDetailScreenPreview() {
     GONGBAEKTheme {
         GroupDetailScreen(
             uiState = GroupDetailContract.State(
+                groupDetailLoadState = UiLoadState.Success,
                 groupDetail = GroupDetail(
                     groupInfo = GroupInfo(
                         groupId = 1,
@@ -255,8 +361,8 @@ private fun GroupDetailScreenPreview() {
             pagerState = rememberPagerState { GroupDetailPagerType.entries.size },
             onBackClick = {},
             onApplyClick = {},
-            onDialogConfirmClick = { _, _ -> },
-            onDialogDismissClick = {},
+            onCancelClick = {},
+            onDeleteClick = {},
             updateInputComment = {},
             onCommentRefreshClick = {},
             onCommentPostClick = {},
