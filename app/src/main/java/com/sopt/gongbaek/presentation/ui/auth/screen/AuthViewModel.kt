@@ -15,7 +15,13 @@ import com.sopt.gongbaek.domain.usecase.SearchUniversitiesUseCase
 import com.sopt.gongbaek.domain.usecase.SetTokenUseCase
 import com.sopt.gongbaek.domain.usecase.ValidateNicknameUseCase
 import com.sopt.gongbaek.domain.usecase.VerifyEmailCodeUseCase
+import com.sopt.gongbaek.presentation.ui.auth.state.EmailVerificationState
 import com.sopt.gongbaek.presentation.ui.auth.state.EmailVerificationStep
+import com.sopt.gongbaek.presentation.ui.auth.state.EnterTimeTableState
+import com.sopt.gongbaek.presentation.ui.auth.state.MbtiState
+import com.sopt.gongbaek.presentation.ui.auth.state.NicknameGenderState
+import com.sopt.gongbaek.presentation.ui.auth.state.SelectProfileState
+import com.sopt.gongbaek.presentation.ui.auth.state.SelfIntroductionState
 import com.sopt.gongbaek.presentation.util.base.BaseViewModel
 import com.sopt.gongbaek.presentation.util.base.UiLoadState
 import com.sopt.gongbaek.presentation.util.extension.isCompleteKorean
@@ -59,26 +65,32 @@ class AuthViewModel @Inject constructor(
             is AuthContract.Event.VerificationCodeRequested -> handleVerificationCodeRequested()
             is AuthContract.Event.VerificationCodeChanged -> updateVerificationCode(event.code)
             is AuthContract.Event.VerificationCodeSubmitted -> handleVerificationCodeSubmitted()
+            is AuthContract.Event.ClearEmailVerification -> clearEmailVerificationState()
 
             // NicknameGender Event
             is AuthContract.Event.NicknameChanged -> updateNickname(event.nickname)
             is AuthContract.Event.GenderSelected -> updateSelectedGender(event.gender)
             is AuthContract.Event.ValidateNickname -> handleNicknameValidation()
+            is AuthContract.Event.ClearNicknameGender -> clearNicknameGenderState()
 
             // SelectProfile Event
             is AuthContract.Event.ProfileImageSelected -> updateProfileImage(event.profileImageIndex)
+            is AuthContract.Event.ClearProfileImage -> clearSelectProfileState()
 
             // Mbti Event
             is AuthContract.Event.MbtiFirstOptionSelected -> updateMbtiFirstOption(event.option)
             is AuthContract.Event.MbtiSecondOptionSelected -> updateMbtiSecondOption(event.option)
             is AuthContract.Event.MbtiThirdOptionSelected -> updateMbtiThirdOption(event.option)
             is AuthContract.Event.MbtiFourthOptionSelected -> updateMbtiFourthOption(event.option)
+            is AuthContract.Event.ClearMbti -> clearMbtiState()
 
             // SelfIntroduction Event
             is AuthContract.Event.SelfIntroductionChanged -> updateSelfIntroduction(event.selfIntroduction)
+            is AuthContract.Event.ClearSelfIntroduction -> clearSelfIntroductionState()
 
             // EnterTimeTable Event
             is AuthContract.Event.TimeSlotSelectionChanged -> updateTimeSlotSelectionChanged(event.day, event.timeSlots)
+            is AuthContract.Event.ClearTimeTable -> clearTimeTableState()
             is AuthContract.Event.RequestSingUp -> requestSingUp()
         }
     }
@@ -95,7 +107,7 @@ class AuthViewModel @Inject constructor(
 
     private fun searchUniversities() = viewModelScope.launch {
         setState { copy(loadState = UiLoadState.Loading) }
-        searchUniversitiesUseCase(currentState.academicInfoState.universitySearchQuery)
+        searchUniversitiesUseCase(currentState.academicInfoState.universitySearchQuery.trim())
             .fold(
                 onSuccess = { universities ->
                     setState {
@@ -123,7 +135,7 @@ class AuthViewModel @Inject constructor(
     private fun updateMajorSearchQuery(query: String) = setState {
         copy(
             academicInfoState = currentState.academicInfoState.copy(
-                majorSearchQuery = query
+                majorSearchQuery = query.trim()
             )
         )
     }
@@ -132,7 +144,7 @@ class AuthViewModel @Inject constructor(
         setState { copy(loadState = UiLoadState.Loading) }
         searchMajorsUseCase(
             universityName = currentState.academicInfoState.university,
-            majorName = currentState.academicInfoState.majorSearchQuery
+            majorName = currentState.academicInfoState.majorSearchQuery.trim()
         ).fold(
             onSuccess = { majors ->
                 setState {
@@ -309,6 +321,12 @@ class AuthViewModel @Inject constructor(
         }
     }
 
+    private fun clearEmailVerificationState() = setState {
+        copy(
+            emailVerificationState = EmailVerificationState()
+        )
+    }
+
     private fun updateNickname(nickname: String) = setState {
         copy(
             nicknameGenderState = currentState.nicknameGenderState.copy(
@@ -368,11 +386,23 @@ class AuthViewModel @Inject constructor(
         }
     }
 
+    private fun clearNicknameGenderState() = setState {
+        copy(
+            nicknameGenderState = NicknameGenderState()
+        )
+    }
+
     private fun updateProfileImage(profileImageIndex: Int) = setState {
         copy(
             selectProfileState = currentState.selectProfileState.copy(
                 profileImageIndex = profileImageIndex
             )
+        )
+    }
+
+    private fun clearSelectProfileState() = setState {
+        copy(
+            selectProfileState = SelectProfileState()
         )
     }
 
@@ -408,11 +438,23 @@ class AuthViewModel @Inject constructor(
         )
     }
 
+    private fun clearMbtiState() = setState {
+        copy(
+            mbtiState = MbtiState()
+        )
+    }
+
     private fun updateSelfIntroduction(selfIntroduction: String) = setState {
         copy(
             selfIntroductionState = currentState.selfIntroductionState.copy(
                 selfIntroduction = selfIntroduction
             )
+        )
+    }
+
+    private fun clearSelfIntroductionState() = setState {
+        copy(
+            selfIntroductionState = SelfIntroductionState()
         )
     }
 
@@ -427,6 +469,12 @@ class AuthViewModel @Inject constructor(
                 )
             )
         }
+    }
+
+    private fun clearTimeTableState() = setState {
+        copy(
+            enterTimeTableState = EnterTimeTableState()
+        )
     }
 
     private fun buildSignUpInfo(): SignUpInfo =

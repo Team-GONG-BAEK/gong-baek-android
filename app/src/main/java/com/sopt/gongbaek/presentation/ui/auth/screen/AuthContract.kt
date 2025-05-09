@@ -37,21 +37,27 @@ class AuthContract {
         data object VerificationCodeRequested : Event()
         data class VerificationCodeChanged(val code: String) : Event()
         data object VerificationCodeSubmitted : Event()
+        data object ClearEmailVerification : Event()
 
         data class NicknameChanged(val nickname: String) : Event()
         data class GenderSelected(val gender: String) : Event()
         data object ValidateNickname : Event()
+        data object ClearNicknameGender : Event()
 
         data class ProfileImageSelected(val profileImageIndex: Int) : Event()
+        data object ClearProfileImage : Event()
 
         data class MbtiFirstOptionSelected(val option: String) : Event()
         data class MbtiSecondOptionSelected(val option: String) : Event()
         data class MbtiThirdOptionSelected(val option: String) : Event()
         data class MbtiFourthOptionSelected(val option: String) : Event()
+        data object ClearMbti : Event()
 
         data class SelfIntroductionChanged(val selfIntroduction: String) : Event()
+        data object ClearSelfIntroduction : Event()
 
         data class TimeSlotSelectionChanged(val day: String, val timeSlots: List<Int>) : Event()
+        data object ClearTimeTable : Event()
         data object RequestSingUp : Event()
     }
 
