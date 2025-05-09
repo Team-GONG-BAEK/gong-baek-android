@@ -172,7 +172,11 @@ class GroupRegisterViewModel @Inject constructor(
         }
     }
 
+    private var isRegistering = false
     private fun registerGroup(groupRegisterInfo: GroupRegisterInfo) {
+        if (isRegistering) return
+        isRegistering = true
+
         viewModelScope.launch {
             setState { copy(registerState = UiLoadState.Loading) }
 
