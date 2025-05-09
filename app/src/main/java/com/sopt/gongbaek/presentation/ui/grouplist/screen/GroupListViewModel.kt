@@ -14,6 +14,10 @@ class GroupListViewModel @Inject constructor(
     private val getGroupsUseCase: GetGroupsUseCase
 ) : BaseViewModel<GroupListContract.State, GroupListContract.Event, GroupListContract.SideEffect>() {
 
+    init {
+        getGroups(GroupCategoryType.ALL.name)
+    }
+
     override fun createInitialState(): GroupListContract.State = GroupListContract.State()
 
     override suspend fun handleEvent(event: GroupListContract.Event) {
