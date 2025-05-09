@@ -62,7 +62,12 @@ class MyPageViewModel @Inject constructor(
             setState { copy(myPageLoadState = UiLoadState.Loading) }
             getMyProfileUseCase().fold(
                 onSuccess = { myProfile ->
-                    setState { copy(myPageInfo = myProfile) }
+                    setState {
+                        copy(
+                            myPageLoadState = UiLoadState.Success,
+                            myPageInfo = myProfile
+                        )
+                    }
                 },
                 onFailure = { setState { copy(myPageLoadState = UiLoadState.Error) } }
             )
@@ -74,7 +79,12 @@ class MyPageViewModel @Inject constructor(
             setState { copy(registerGroupsLoadState = UiLoadState.Loading) }
             getMyGroupsUseCase(category = "REGISTER", status = true).fold(
                 onSuccess = { activeGroups ->
-                    setState { copy(registerActiveGroups = activeGroups) }
+                    setState {
+                        copy(
+                            myPageLoadState = UiLoadState.Success,
+                            registerActiveGroups = activeGroups
+                        )
+                    }
                 },
                 onFailure = { setState { copy(registerGroupsLoadState = UiLoadState.Error) } }
             )
@@ -97,7 +107,11 @@ class MyPageViewModel @Inject constructor(
             setState { copy(applyGroupsLoadState = UiLoadState.Loading) }
             getMyGroupsUseCase(category = "APPLY", status = true).fold(
                 onSuccess = { activeGroups ->
-                    setState { copy(applyActiveGroups = activeGroups) }
+                    setState {
+                        copy(
+                            applyGroupsLoadState = UiLoadState.Success,
+                            applyActiveGroups = activeGroups)
+                    }
                 },
                 onFailure = { setState { copy(applyGroupsLoadState = UiLoadState.Error) } }
             )

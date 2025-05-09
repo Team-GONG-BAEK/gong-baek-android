@@ -35,9 +35,12 @@ import androidx.lifecycle.flowWithLifecycle
 import com.sopt.gongbaek.R
 import com.sopt.gongbaek.presentation.model.ProfileImageList
 import com.sopt.gongbaek.presentation.type.MyGroupPagerType
+import com.sopt.gongbaek.presentation.ui.component.stateView.ErrorScreen
+import com.sopt.gongbaek.presentation.ui.component.stateView.LoadingScreen
 import com.sopt.gongbaek.presentation.ui.component.tabpager.CustomTabPager
 import com.sopt.gongbaek.presentation.ui.component.topbar.CenterTitleTopBar
 import com.sopt.gongbaek.presentation.ui.mypage.component.MyGroupScreenContent
+import com.sopt.gongbaek.presentation.util.base.UiLoadState
 import com.sopt.gongbaek.presentation.util.extension.roundedBackgroundWithBorder
 import com.sopt.gongbaek.ui.theme.GongBaekTheme
 
@@ -61,7 +64,7 @@ fun MyPageRoute(
         }
     }
 
-    LaunchedEffect(viewModel.sideEffect, lifecycleOwner) {
+    LaunchedEffect(Unit) {
         viewModel.sideEffect
             .flowWithLifecycle(lifecycleOwner.lifecycle)
             .collect { sideEffect ->
@@ -80,21 +83,28 @@ fun MyPageRoute(
             }
     }
 
-    MyPageScreen(
-        uiState = myPageUiState,
-        onSettingButtonClicked = {
-            viewModel.sendSideEffect(MyPageContract.SideEffect.NavigateSetting)
-        },
-        myPageTabs = myPageTabs,
-        pagerState = pagerState,
-        onGroupDetailButtonClick = { groupId, groupCycle ->
-            viewModel.sendSideEffect(MyPageContract.SideEffect.NavigateGroupDetail(groupId, groupCycle))
-        },
-        onGroupRoomButtonClick = { groupId, groupCycle ->
-            viewModel.sendSideEffect(MyPageContract.SideEffect.NavigateGroupRoom(groupId, groupCycle))
-        },
-        modifier = Modifier.padding(innerPadding)
-    )
+    when (myPageUiState.myPageLoadState) {
+        UiLoadState.Idle -> LoadingScreen()
+        UiLoadState.Loading -> LoadingScreen()
+        UiLoadState.Error -> ErrorScreen(
+            onClickRetry = { viewModel.setEvent(MyPageContract.Event.OnGetMyProfile) }
+        )
+        UiLoadState.Success -> MyPageScreen(
+            uiState = myPageUiState,
+            onSettingButtonClicked = {
+                viewModel.sendSideEffect(MyPageContract.SideEffect.NavigateSetting)
+            },
+            myPageTabs = myPageTabs,
+            pagerState = pagerState,
+            onGroupDetailButtonClick = { groupId, groupCycle ->
+                viewModel.sendSideEffect(MyPageContract.SideEffect.NavigateGroupDetail(groupId, groupCycle))
+            },
+            onGroupRoomButtonClick = { groupId, groupCycle ->
+                viewModel.sendSideEffect(MyPageContract.SideEffect.NavigateGroupRoom(groupId, groupCycle))
+            },
+            modifier = Modifier.padding(innerPadding)
+        )
+    }
 }
 
 @Composable
