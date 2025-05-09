@@ -14,11 +14,14 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.flowWithLifecycle
+import com.sopt.gongbaek.presentation.ui.component.stateView.ErrorScreen
+import com.sopt.gongbaek.presentation.ui.component.stateView.LoadingScreen
 import com.sopt.gongbaek.presentation.ui.home.component.section.HomeBannerSection
 import com.sopt.gongbaek.presentation.ui.home.component.section.MemberRecommendSection
 import com.sopt.gongbaek.presentation.ui.home.component.section.NearestGroupSection
 import com.sopt.gongbaek.presentation.ui.home.component.section.OnceRecommendSection
 import com.sopt.gongbaek.presentation.ui.home.component.section.WeekRecommendSection
+import com.sopt.gongbaek.presentation.util.base.UiLoadState
 import com.sopt.gongbaek.ui.theme.GONGBAEKTheme
 
 @Composable
@@ -44,30 +47,30 @@ fun HomeRoute(
             }
     }
 
-    LaunchedEffect(Unit) {
-        viewModel.setEvent(HomeContract.Event.OnFetchHomeInfo)
-        viewModel.setEvent(HomeContract.Event.OnFetchLatestOnceGroup)
-        viewModel.setEvent(HomeContract.Event.OnFetchLatestWeekGroup)
-        viewModel.setEvent(HomeContract.Event.OnFetchUserProfile)
-        viewModel.setEvent(HomeContract.Event.OnFetchUserLectureTimetable)
+    when (uiState.homeLoadState) {
+        UiLoadState.Idle -> LoadingScreen()
+        UiLoadState.Loading -> LoadingScreen()
+        UiLoadState.Error -> ErrorScreen(
+            onClickRetry = { viewModel.setEvent(HomeContract.Event.OnFetchHomeData) }
+        )
+        UiLoadState.Success ->
+            HomeScreen(
+                uiState = uiState,
+                onClickWeekRecommendItem = { groupId, groupCycle ->
+                    viewModel.sendSideEffect(HomeContract.SideEffect.NavigateToGroupDetail(groupId, groupCycle))
+                },
+                onClickOnceRecommendItem = { groupId, groupCycle ->
+                    viewModel.sendSideEffect(HomeContract.SideEffect.NavigateToGroupDetail(groupId, groupCycle))
+                },
+                onFillGroupClick = {
+                    viewModel.sendSideEffect(HomeContract.SideEffect.NavigateToGroupList)
+                },
+                onNearestGroupClick = { groupId, groupType ->
+                    viewModel.sendSideEffect(HomeContract.SideEffect.NavigateToGroupRoom(groupId, groupType))
+                },
+                modifier = Modifier.padding(innerPadding)
+            )
     }
-
-    HomeScreen(
-        uiState = uiState,
-        onClickWeekRecommendItem = { groupId, groupCycle ->
-            viewModel.sendSideEffect(HomeContract.SideEffect.NavigateToGroupDetail(groupId, groupCycle))
-        },
-        onClickOnceRecommendItem = { groupId, groupCycle ->
-            viewModel.sendSideEffect(HomeContract.SideEffect.NavigateToGroupDetail(groupId, groupCycle))
-        },
-        onFillGroupClick = {
-            viewModel.sendSideEffect(HomeContract.SideEffect.NavigateToGroupList)
-        },
-        onNearestGroupClick = { groupId, groupType ->
-            viewModel.sendSideEffect(HomeContract.SideEffect.NavigateToGroupRoom(groupId, groupType))
-        },
-        modifier = Modifier.padding(innerPadding)
-    )
 }
 
 @Composable
