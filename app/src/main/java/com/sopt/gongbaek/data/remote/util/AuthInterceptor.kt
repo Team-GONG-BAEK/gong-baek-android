@@ -53,7 +53,9 @@ class AuthInterceptor @Inject constructor(
     private fun shouldAddAuthorization(url: String): Boolean {
         return !url.contains("api/v1/login") &&
             !url.contains("/api/v1/user/signup") &&
-            !url.contains("/api/v1/reissue/token")
+            !url.contains("/api/v1/reissue/token") &&
+            !url.contains("/api/v1/emails/verification-requests") &&
+            !url.contains("/api/v1/emails/verifications")
     }
 
     private suspend fun proceedWithAuthorization(chain: Interceptor.Chain, request: Request): Response {

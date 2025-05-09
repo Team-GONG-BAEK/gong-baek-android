@@ -14,7 +14,7 @@ interface GroupRepository {
     suspend fun getGroupHost(groupId: Int, groupType: String): Result<GroupHost>
     suspend fun applyGroup(groupId: Int, groupType: String): Result<Unit>
     suspend fun getGroups(category: String?): Result<List<GroupInfo>>
-    suspend fun getNearestGroup(): Result<NearestGroup>
+    suspend fun getNearestGroup(): Result<NearestGroup?>
     suspend fun getLatestGroup(groupType: String): Result<List<RecommendGroupInfo>>
     suspend fun postGroup(groupRegisterInfo: GroupRegisterInfo): Result<GroupRegisterResponseDto>
     suspend fun getGroupMembers(groupId: Int, groupType: String): Result<GroupMembers>

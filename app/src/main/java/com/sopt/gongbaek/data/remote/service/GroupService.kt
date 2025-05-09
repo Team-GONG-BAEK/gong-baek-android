@@ -51,7 +51,7 @@ interface GroupService {
     ): ApiResponse<List<GroupListGroupResponseDto>>
 
     @GET("/api/v1/group/my/participation")
-    suspend fun getNearestGroup(): ApiResponse<NearestGroupResponseDto>
+    suspend fun getNearestGroup(): NullableApiResponse<NearestGroupResponseDto>
 
     @GET("/api/v1/group/latest")
     suspend fun getLatestGroup(

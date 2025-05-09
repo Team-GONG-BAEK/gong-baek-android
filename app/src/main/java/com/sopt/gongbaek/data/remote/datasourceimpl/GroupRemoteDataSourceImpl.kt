@@ -36,7 +36,7 @@ class GroupRemoteDataSourceImpl @Inject constructor(
     override suspend fun getGroups(category: String?): ApiResponse<List<GroupListGroupResponseDto>> =
         groupService.getGroups(category = category)
 
-    override suspend fun getNearestGroup(): ApiResponse<NearestGroupResponseDto> =
+    override suspend fun getNearestGroup(): NullableApiResponse<NearestGroupResponseDto> =
         groupService.getNearestGroup()
 
     override suspend fun getLatestGroup(groupType: String): ApiResponse<List<RecommendGroupInfoResponseDto>> =

@@ -35,6 +35,7 @@ import com.sopt.gongbaek.domain.model.GroupInfo
 import com.sopt.gongbaek.domain.type.GroupCategoryType
 import com.sopt.gongbaek.presentation.type.GroupInfoChipType
 import com.sopt.gongbaek.presentation.ui.component.section.GroupInfoSection
+import com.sopt.gongbaek.presentation.ui.component.stateView.ErrorScreen
 import com.sopt.gongbaek.presentation.ui.component.stateView.LoadingScreen
 import com.sopt.gongbaek.presentation.ui.component.topbar.CenterTitleTopBar
 import com.sopt.gongbaek.presentation.ui.grouplist.component.CategoryBar
@@ -55,11 +56,8 @@ fun GroupListRoute(
     val lifecycleOwner = LocalLifecycleOwner.current
 
     LaunchedEffect(Unit) {
-        viewModel.setEvent(GroupListContract.Event.GetGroups(GroupCategoryType.ALL.name))
-    }
-
-    LaunchedEffect(viewModel.sideEffect, lifecycleOwner) {
-        viewModel.sideEffect.flowWithLifecycle(lifecycle = lifecycleOwner.lifecycle)
+        viewModel.sideEffect
+            .flowWithLifecycle(lifecycle = lifecycleOwner.lifecycle)
             .collect { sideEffect ->
                 when (sideEffect) {
                     is GroupListContract.SideEffect.NavigateGroupDetail -> {
@@ -71,10 +69,13 @@ fun GroupListRoute(
             }
     }
 
-    if (uiState.loadState == UiLoadState.Loading) {
-        LoadingScreen()
-    } else {
-        GroupListScreen(
+    when (uiState.loadState) {
+        UiLoadState.Idle -> LoadingScreen()
+        UiLoadState.Loading -> LoadingScreen()
+        UiLoadState.Error -> ErrorScreen(
+            onClickRetry = { viewModel.setEvent(GroupListContract.Event.GetGroups(GroupCategoryType.ALL.name)) }
+        )
+        UiLoadState.Success -> GroupListScreen(
             selectedDayOfWeekIndex = uiState.selectedDayOfWeekIndex,
             onDayOfWeekSelected = { index ->
                 viewModel.setEvent(GroupListContract.Event.OnDayOfWeekSelected(index))
@@ -100,7 +101,7 @@ fun GroupListRoute(
 }
 
 @Composable
-fun GroupListScreen(
+private fun GroupListScreen(
     selectedDayOfWeekIndex: Int,
     onDayOfWeekSelected: (Int) -> Unit,
     selectedCategoryIndex: Int,

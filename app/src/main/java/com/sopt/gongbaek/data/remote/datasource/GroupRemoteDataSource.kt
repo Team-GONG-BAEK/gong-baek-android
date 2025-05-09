@@ -20,7 +20,7 @@ interface GroupRemoteDataSource {
     suspend fun getGroupHost(groupId: Int, groupType: String): ApiResponse<GroupHostResponseDto>
     suspend fun applyGroup(applyGroupRequestDto: ApplyGroupRequestDto): NullableApiResponse<Unit>
     suspend fun getGroups(category: String?): ApiResponse<List<GroupListGroupResponseDto>>
-    suspend fun getNearestGroup(): ApiResponse<NearestGroupResponseDto>
+    suspend fun getNearestGroup(): NullableApiResponse<NearestGroupResponseDto>
     suspend fun getLatestGroup(groupType: String): ApiResponse<List<RecommendGroupInfoResponseDto>>
     suspend fun postGroup(groupRegisterRequestDto: GroupRegisterRequestDto): ApiResponse<GroupRegisterResponseDto>
     suspend fun getGroupMembers(groupId: Int, groupType: String): ApiResponse<GroupMembersResponseDto>

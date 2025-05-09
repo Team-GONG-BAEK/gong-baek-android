@@ -10,6 +10,8 @@ import com.sopt.gongbaek.presentation.util.base.BaseViewModel
 import com.sopt.gongbaek.presentation.util.base.UiLoadState
 import com.sopt.gongbaek.presentation.util.timetable.convertToSlotsByDay
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.async
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -22,99 +24,55 @@ class HomeViewModel @Inject constructor(
     private val setLectureTimetableUseCase: SetLectureTimetableUseCase
 ) : BaseViewModel<HomeContract.State, HomeContract.Event, HomeContract.SideEffect>() {
 
+    init {
+        fetchAllHomeData()
+    }
+
     override fun createInitialState(): HomeContract.State = HomeContract.State()
 
     override suspend fun handleEvent(event: HomeContract.Event) {
         when (event) {
-            is HomeContract.Event.OnFetchHomeInfo -> fetchHomeInfo()
-            is HomeContract.Event.OnFetchLatestOnceGroup -> fetchLatestOnceGroup()
-            is HomeContract.Event.OnFetchLatestWeekGroup -> fetchLatestWeekGroup()
-            is HomeContract.Event.OnFetchUserProfile -> fetchUserProfile()
-            is HomeContract.Event.OnFetchUserLectureTimetable -> fetchUserLectureTimetable()
+            is HomeContract.Event.OnFetchHomeData -> fetchAllHomeData()
         }
     }
 
-    fun sendSideEffect(sideEffect: HomeContract.SideEffect) =
-        setSideEffect(sideEffect)
+    fun sendSideEffect(sideEffect: HomeContract.SideEffect) = setSideEffect(sideEffect)
 
-    private fun fetchHomeInfo() =
-        viewModelScope.launch {
-            setState { copy(homeLoadState = UiLoadState.Loading) }
-            fetchHomeScreenUseCase()
-                .fold(
-                    onSuccess = { nearestGroup ->
-                        setState {
-                            copy(
-                                homeLoadState = UiLoadState.Success,
-                                nearestGroup = nearestGroup
-                            )
-                        }
-                    },
-                    onFailure = { setState { copy(homeLoadState = UiLoadState.Error) } }
-                )
+    private fun fetchAllHomeData() = viewModelScope.launch {
+        setState { copy(homeLoadState = UiLoadState.Loading) }
+
+        val homeInfoDeferred = async { fetchHomeScreenUseCase() }
+        delay(100)
+        val onceGroupDeferred = async { fetchLatestGroupUseCase("ONCE") }
+        delay(100)
+        val weekGroupDeferred = async { fetchLatestGroupUseCase("WEEKLY") }
+        delay(100)
+        val profileDeferred = async { fetchUserProfileUseCase() }
+        delay(100)
+        val timetableDeferred = async { fetchUserLectureTimetableUseCase() }
+
+        val homeInfo = homeInfoDeferred.await()
+        val onceGroup = onceGroupDeferred.await()
+        val weekGroup = weekGroupDeferred.await()
+        val profile = profileDeferred.await()
+        val timetable = timetableDeferred.await()
+
+        val convertedTimetable = convertToSlotsByDay(timetable.getOrThrow())
+
+        setState {
+            copy(
+                homeLoadState = UiLoadState.Success,
+                nearestGroup = homeInfo.getOrThrow(),
+                onceRecommendGroupList = onceGroup.getOrThrow(),
+                weekRecommendGroupList = weekGroup.getOrThrow(),
+                userProfile = profile.getOrThrow(),
+                userLectureTimeTable = timetable.getOrThrow(),
+                convertedUserLectureTimeTable = convertedTimetable
+            )
         }
 
-    private fun fetchLatestOnceGroup() =
-        viewModelScope.launch {
-            setState { copy(homeLoadState = UiLoadState.Loading) }
-            fetchLatestGroupUseCase(groupType = "ONCE")
-                .fold(
-                    onSuccess = { latestOnceGroups ->
-                        setState {
-                            copy(
-                                homeLoadState = UiLoadState.Success,
-                                onceRecommendGroupList = latestOnceGroups
-                            )
-                        }
-                    },
-                    onFailure = {
-                        setState { copy(homeLoadState = UiLoadState.Error) }
-                    }
-                )
-        }
-
-    private fun fetchLatestWeekGroup() =
-        viewModelScope.launch {
-            setState { copy(homeLoadState = UiLoadState.Loading) }
-            fetchLatestGroupUseCase(groupType = "WEEKLY")
-                .fold(
-                    onSuccess = { latestWeekGroups ->
-                        setState {
-                            copy(
-                                homeLoadState = UiLoadState.Success,
-                                weekRecommendGroupList = latestWeekGroups
-                            )
-                        }
-                    },
-                    onFailure = {
-                        setState { copy(homeLoadState = UiLoadState.Error) }
-                    }
-                )
-        }
-
-    private fun fetchUserProfile() =
-        viewModelScope.launch {
-            fetchUserProfileUseCase()
-                .fold(
-                    onSuccess = { userProfile ->
-                        setState { copy(userProfile = userProfile) }
-                    },
-                    onFailure = { setState { copy(homeLoadState = UiLoadState.Error) } }
-                )
-        }
-
-    private fun fetchUserLectureTimetable() =
-        viewModelScope.launch {
-            fetchUserLectureTimetableUseCase()
-                .fold(
-                    onSuccess = { userLectureTimeTable ->
-                        setState { copy(userLectureTimeTable = userLectureTimeTable) }
-                        setState { copy(convertedUserLectureTimeTable = convertToSlotsByDay(userLectureTimeTable)) }
-                        setUserLectureTimetable(convertToSlotsByDay(userLectureTimeTable))
-                    },
-                    onFailure = { setState { copy(homeLoadState = UiLoadState.Error) } }
-                )
-        }
+        setUserLectureTimetable(convertedTimetable)
+    }
 
     private fun setUserLectureTimetable(lectureTimetable: Map<String, List<Int>>) =
         viewModelScope.launch {

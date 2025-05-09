@@ -45,7 +45,7 @@ import com.sopt.gongbaek.ui.theme.GongBaekTheme
 @Composable
 fun NearestGroupSection(
     university: String,
-    nearestGroup: NearestGroup,
+    nearestGroup: NearestGroup?,
     onNearestGroupClick: (Int, String) -> Unit,
     onFillGroupClick: () -> Unit,
     modifier: Modifier = Modifier
@@ -125,12 +125,12 @@ private fun UnivInfo(
 
 @Composable
 private fun NearestGroup(
-    nearestGroup: NearestGroup,
+    nearestGroup: NearestGroup?,
     onNearestGroupClick: (Int, String) -> Unit,
     onFillGroupClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
-    val isGroupExist = nearestGroup.groupTitle.isEmpty()
+    val isEmptyGroup = nearestGroup?.groupTitle.isNullOrEmpty()
     Box(
         modifier = modifier.fillMaxWidth()
     ) {
@@ -145,20 +145,20 @@ private fun NearestGroup(
             )
 
             Text(
-                text = nearestGroup.groupTitle.ifEmpty { "공백을 채워주세요!" },
+                text = if (isEmptyGroup) "공백을 채워주세요!" else nearestGroup?.groupTitle.orEmpty(),
                 color = GongBaekTheme.colors.white,
                 style = GongBaekTheme.typography.title1.b20,
                 modifier = Modifier.padding(bottom = 12.dp)
             )
 
             GroupTimeDescription(
-                description = if (isGroupExist) {
+                description = if (isEmptyGroup) {
                     "다가오는 모임이 없어요!"
                 } else {
                     nearestGroupFormatSchedule(
-                        nearestGroup.weekDate,
-                        nearestGroup.startTime,
-                        nearestGroup.endTime
+                        nearestGroup?.weekDate,
+                        nearestGroup?.startTime,
+                        nearestGroup?.endTime
                     )
                 },
                 textColor = GongBaekTheme.colors.gray06,
@@ -173,10 +173,12 @@ private fun NearestGroup(
                     shape = RoundedCornerShape(4.dp)
                 )
                 .clickableWithoutRipple {
-                    if (isGroupExist) {
+                    if (isEmptyGroup) {
                         onFillGroupClick()
                     } else {
-                        onNearestGroupClick(nearestGroup.groupId, nearestGroup.groupType)
+                        nearestGroup?.let {
+                            onNearestGroupClick(it.groupId, it.groupType)
+                        }
                     }
                 }
                 .align(Alignment.BottomEnd)
@@ -184,7 +186,7 @@ private fun NearestGroup(
             contentAlignment = Alignment.Center
         ) {
             Text(
-                text = if (isGroupExist) "채우기 입장" else "스페이스 입장",
+                text = if (isEmptyGroup) "채우기 입장" else "스페이스 입장",
                 color = GongBaekTheme.colors.white,
                 style = GongBaekTheme.typography.caption2.b12
             )
@@ -203,7 +205,7 @@ private fun PreviewNearestGroupSection() {
             weekDate = "2021-09-20",
             startTime = 18.0,
             endTime = 20.0,
-            groupTitle = ""
+            groupTitle = "야무진 모임"
         )
     )
 }
