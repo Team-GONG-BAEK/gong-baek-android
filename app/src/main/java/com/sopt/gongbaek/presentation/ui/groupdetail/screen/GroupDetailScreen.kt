@@ -33,6 +33,7 @@ import com.sopt.gongbaek.presentation.type.GroupInfoChipType
 import com.sopt.gongbaek.presentation.ui.component.dialog.GongBaekDialog
 import com.sopt.gongbaek.presentation.ui.component.section.CommentSection
 import com.sopt.gongbaek.presentation.ui.component.section.GroupInfoSection
+import com.sopt.gongbaek.presentation.ui.component.stateView.ErrorScreen
 import com.sopt.gongbaek.presentation.ui.component.stateView.LoadingScreen
 import com.sopt.gongbaek.presentation.ui.component.tabpager.CustomTabPager
 import com.sopt.gongbaek.presentation.ui.component.topbar.StartTitleTopBar
@@ -72,19 +73,27 @@ fun GroupDetailRoute(
             }
     }
 
-    GroupDetailScreen(
-        uiState = groupDetailUiState,
-        groupDetailTabs = groupDetailTabs,
-        pagerState = pagerState,
-        onBackClick = { viewModel.sendSideEffect(GroupDetailContract.SideEffect.NavigateBack) },
-        onApplyClick = { viewModel.setEvent(GroupDetailContract.Event.OnApplyClick) },
-        onCancelClick = { viewModel.setEvent(GroupDetailContract.Event.OnCancelClick) },
-        onDeleteClick = { viewModel.setEvent(GroupDetailContract.Event.ShowDeleteDialog) },
-        updateInputComment = { inputComment -> viewModel.setEvent(GroupDetailContract.Event.UpdateInputComment(inputComment)) },
-        onCommentRefreshClick = { viewModel.setEvent(GroupDetailContract.Event.OnCommentRefreshClick) },
-        onCommentPostClick = { viewModel.setEvent(GroupDetailContract.Event.OnCommentPostClick) },
-        onCommentDeleteClick = { commentId -> viewModel.setEvent(GroupDetailContract.Event.OnCommentDeleteClick(commentId)) }
-    )
+    when (groupDetailUiState.groupDetailLoadState) {
+        UiLoadState.Idle -> {}
+        UiLoadState.Loading -> LoadingScreen()
+        UiLoadState.Success -> {
+            GroupDetailScreen(
+                uiState = groupDetailUiState,
+                groupDetailTabs = groupDetailTabs,
+                pagerState = pagerState,
+                onBackClick = { viewModel.sendSideEffect(GroupDetailContract.SideEffect.NavigateBack) },
+                onApplyClick = { viewModel.setEvent(GroupDetailContract.Event.OnApplyClick) },
+                onCancelClick = { viewModel.setEvent(GroupDetailContract.Event.OnCancelClick) },
+                onDeleteClick = { viewModel.setEvent(GroupDetailContract.Event.ShowDeleteDialog) },
+                updateInputComment = { inputComment -> viewModel.setEvent(GroupDetailContract.Event.UpdateInputComment(inputComment)) },
+                onCommentRefreshClick = { viewModel.setEvent(GroupDetailContract.Event.OnCommentRefreshClick) },
+                onCommentPostClick = { viewModel.setEvent(GroupDetailContract.Event.OnCommentPostClick) },
+                onCommentDeleteClick = { commentId -> viewModel.setEvent(GroupDetailContract.Event.OnCommentDeleteClick(commentId)) }
+            )
+        }
+
+        UiLoadState.Error -> ErrorScreen(onClickRetry = { viewModel.setEvent(GroupDetailContract.Event.OnGroupInfoTabClick) })
+    }
 
     when (groupDetailUiState.groupApplyState) {
         UiLoadState.Idle -> {
@@ -236,60 +245,51 @@ fun GroupDetailScreen(
             onLeadingIconClick = onBackClick,
             isTrailingIconIncluded = true
         )
-        when (uiState.groupDetailLoadState) {
-            UiLoadState.Idle -> { }
 
-            UiLoadState.Loading -> LoadingScreen()
+        GroupInfoSection(
+            groupStatus = GroupInfoChipType.getChipTypeFromStatus(uiState.groupDetail.groupInfo.status),
+            groupCategory = GroupInfoChipType.getChipTypeFromCategory(uiState.groupDetail.groupInfo.category),
+            groupCycle = GroupInfoChipType.getChipTypeFromCycle(uiState.groupDetail.groupInfo.cycle),
+            groupTitle = uiState.groupDetail.groupInfo.title,
+            groupTime = formatGroupTimeDescription(uiState.groupDetail.groupInfo),
+            groupPlace = uiState.groupDetail.groupInfo.place,
+            groupCover = uiState.groupDetail.groupInfo.coverImg,
+            modifier = Modifier
+                .background(color = GongBaekTheme.colors.white)
+                .padding(16.dp)
+        )
+        HorizontalDivider(
+            modifier = Modifier.fillMaxWidth(),
+            thickness = 8.dp,
+            color = GongBaekTheme.colors.gray02
+        )
+        CustomTabPager(
+            tabs = groupDetailTabs,
+            pagerState = pagerState
+        )
+        HorizontalPager(
+            state = pagerState,
+            pageContent = { page ->
+                when (page) {
+                    0 -> GroupDetailInfoSection(
+                        groupInfo = uiState.groupDetail.groupInfo,
+                        groupHost = uiState.groupDetail.groupHost,
+                        onApplyClick = onApplyClick,
+                        onCancelClick = onCancelClick,
+                        onDeleteClick = onDeleteClick
+                    )
 
-            UiLoadState.Success -> {
-                GroupInfoSection(
-                    groupStatus = GroupInfoChipType.getChipTypeFromStatus(uiState.groupDetail.groupInfo.status),
-                    groupCategory = GroupInfoChipType.getChipTypeFromCategory(uiState.groupDetail.groupInfo.category),
-                    groupCycle = GroupInfoChipType.getChipTypeFromCycle(uiState.groupDetail.groupInfo.cycle),
-                    groupTitle = uiState.groupDetail.groupInfo.title,
-                    groupTime = formatGroupTimeDescription(uiState.groupDetail.groupInfo),
-                    groupPlace = uiState.groupDetail.groupInfo.place,
-                    groupCover = uiState.groupDetail.groupInfo.coverImg,
-                    modifier = Modifier
-                        .background(color = GongBaekTheme.colors.white)
-                        .padding(16.dp)
-                )
-                HorizontalDivider(
-                    modifier = Modifier.fillMaxWidth(),
-                    thickness = 8.dp,
-                    color = GongBaekTheme.colors.gray02
-                )
-                CustomTabPager(
-                    tabs = groupDetailTabs,
-                    pagerState = pagerState
-                )
-                HorizontalPager(
-                    state = pagerState,
-                    pageContent = { page ->
-                        when (page) {
-                            0 -> GroupDetailInfoSection(
-                                groupInfo = uiState.groupDetail.groupInfo,
-                                groupHost = uiState.groupDetail.groupHost,
-                                onApplyClick = onApplyClick,
-                                onCancelClick = onCancelClick,
-                                onDeleteClick = onDeleteClick
-                            )
-
-                            1 -> CommentSection(
-                                groupComments = uiState.groupDetail.groupComments,
-                                value = uiState.inputComment,
-                                onValueChanged = updateInputComment,
-                                onRefreshClicked = onCommentRefreshClick,
-                                onDeleteClicked = onCommentDeleteClick,
-                                onSendClicked = onCommentPostClick
-                            )
-                        }
-                    }
-                )
+                    1 -> CommentSection(
+                        groupComments = uiState.groupDetail.groupComments,
+                        value = uiState.inputComment,
+                        onValueChanged = updateInputComment,
+                        onRefreshClicked = onCommentRefreshClick,
+                        onDeleteClicked = onCommentDeleteClick,
+                        onSendClicked = onCommentPostClick
+                    )
+                }
             }
-
-            UiLoadState.Error -> { }
-        }
+        )
     }
 }
 
@@ -366,7 +366,7 @@ private fun GroupDetailScreenPreview() {
             updateInputComment = {},
             onCommentRefreshClick = {},
             onCommentPostClick = {},
-            onCommentDeleteClick = {}
+            onCommentDeleteClick = {},
         )
     }
 }
