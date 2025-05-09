@@ -3,9 +3,10 @@ package com.sopt.gongbaek.data.remote.service
 import com.sopt.gongbaek.data.remote.dto.base.ApiResponse
 import com.sopt.gongbaek.data.remote.dto.base.NullableApiResponse
 import com.sopt.gongbaek.data.remote.dto.request.ApplyGroupRequestDto
+import com.sopt.gongbaek.data.remote.dto.request.GroupManagementRequestDto
+import com.sopt.gongbaek.data.remote.dto.request.GroupRegisterRequestDto
 import com.sopt.gongbaek.data.remote.dto.response.GroupDetailResponseDto
 import com.sopt.gongbaek.data.remote.dto.response.GroupHostResponseDto
-import com.sopt.gongbaek.data.remote.dto.request.GroupRegisterRequestDto
 import com.sopt.gongbaek.data.remote.dto.response.GroupListGroupResponseDto
 import com.sopt.gongbaek.data.remote.dto.response.GroupMembersResponseDto
 import com.sopt.gongbaek.data.remote.dto.response.GroupRegisterResponseDto
@@ -14,6 +15,8 @@ import com.sopt.gongbaek.data.remote.dto.response.NearestGroupResponseDto
 import com.sopt.gongbaek.data.remote.dto.response.RecommendGroupInfoResponseDto
 import retrofit2.http.Body
 import retrofit2.http.GET
+import retrofit2.http.HTTP
+import retrofit2.http.PATCH
 import retrofit2.http.POST
 import retrofit2.http.Query
 
@@ -65,4 +68,14 @@ interface GroupService {
         @Query("groupId") groupId: Int,
         @Query("groupType") groupType: String
     ): ApiResponse<GroupMembersResponseDto>
+
+    @HTTP(method = "DELETE", path = "/api/v1/my/groups", hasBody = true)
+    suspend fun deleteGroup(
+        @Body groupManagementRequestDto: GroupManagementRequestDto
+    ): NullableApiResponse<Unit>
+
+    @PATCH("/api/v1/my/groups")
+    suspend fun cancelGroup(
+        @Body groupManagementRequestDto: GroupManagementRequestDto
+    ): NullableApiResponse<Unit>
 }

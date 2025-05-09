@@ -18,4 +18,6 @@ interface GroupRepository {
     suspend fun getLatestGroup(groupType: String): Result<List<RecommendGroupInfo>>
     suspend fun postGroup(groupRegisterInfo: GroupRegisterInfo): Result<GroupRegisterResponseDto>
     suspend fun getGroupMembers(groupId: Int, groupType: String): Result<GroupMembers>
+    suspend fun deleteGroup(groupId: Int, groupType: String): Result<Unit>
+    suspend fun cancelGroup(groupId: Int, groupType: String): Result<Unit>
 }

@@ -47,7 +47,9 @@ import com.sopt.gongbaek.ui.theme.GongBaekTheme
 fun GroupDetailInfoSection(
     groupInfo: GroupInfo,
     groupHost: GroupHost,
-    onApplyClick: () -> Unit
+    onApplyClick: () -> Unit,
+    onCancelClick: () -> Unit,
+    onDeleteClick: () -> Unit
 ) {
     Column(
         modifier = Modifier
@@ -248,6 +250,7 @@ fun GroupDetailInfoSection(
                 }
             }
         }
+
         Row(
             modifier = Modifier
                 .fillMaxWidth()
@@ -260,7 +263,11 @@ fun GroupDetailInfoSection(
                     .weight(1f)
                     .roundedBackgroundWithBorder(
                         cornerRadius = 6.dp,
-                        backgroundColor = if (groupInfo.currentPeopleCount == groupInfo.maxPeopleCount) GongBaekTheme.colors.gray04 else GongBaekTheme.colors.gray09
+                        backgroundColor = if (groupInfo.status == GroupStatusType.CLOSED.name) {
+                            GongBaekTheme.colors.gray04
+                        } else {
+                            GongBaekTheme.colors.gray09
+                        }
                     ),
                 contentAlignment = Alignment.Center
             ) {
@@ -282,13 +289,24 @@ fun GroupDetailInfoSection(
                         cornerRadius = 6.dp,
                         backgroundColor = when {
                             groupInfo.status == GroupStatusType.CLOSED.name -> GongBaekTheme.colors.gray03
-                            groupInfo.status == GroupStatusType.RECRUITED.name && !groupInfo.isApply -> GongBaekTheme.colors.gray03
+                            groupInfo.isHost || groupInfo.isApply -> GongBaekTheme.colors.mainOrange
+                            groupInfo.currentPeopleCount == groupInfo.maxPeopleCount -> GongBaekTheme.colors.gray03
                             else -> GongBaekTheme.colors.mainOrange
                         }
                     )
                     .clickableWithoutRipple(
-                        enabled = groupInfo.status == GroupStatusType.RECRUITING.name && !groupInfo.isApply && !groupInfo.isHost,
-                        onClick = onApplyClick
+                        enabled = when {
+                            groupInfo.status == GroupStatusType.CLOSED.name -> false
+                            groupInfo.isHost -> true
+                            groupInfo.isApply -> true
+                            groupInfo.currentPeopleCount == groupInfo.maxPeopleCount -> false
+                            else -> true
+                        },
+                        onClick = when {
+                            groupInfo.isHost -> onDeleteClick
+                            groupInfo.isApply -> onCancelClick
+                            else -> onApplyClick
+                        }
                     ),
                 contentAlignment = Alignment.Center
             ) {
@@ -297,6 +315,7 @@ fun GroupDetailInfoSection(
                         groupInfo.status == GroupStatusType.CLOSED.name -> stringResource(R.string.group_detail_button_closed)
                         groupInfo.isHost -> stringResource(R.string.group_detail_button_delete)
                         groupInfo.isApply -> stringResource(R.string.group_detail_button_cancel)
+                        groupInfo.currentPeopleCount == groupInfo.maxPeopleCount -> stringResource(R.string.group_detail_button_full)
                         else -> stringResource(R.string.group_detail_button_apply)
                     },
                     modifier = Modifier.padding(vertical = 16.dp),
@@ -322,7 +341,9 @@ fun GroupDetailInfoScreenPreview() {
                 enterYear = 2020,
                 mbti = "ESFP"
             ),
-            onApplyClick = {}
+            onApplyClick = {},
+            onCancelClick = {},
+            onDeleteClick = {}
         )
     }
 }

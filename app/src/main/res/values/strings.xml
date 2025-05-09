@@ -69,8 +69,12 @@
     <string name="dialog_description_enter_success">생성자에 의해 모임이 삭제될 수도 있어요.</string>
     <string name="dialog_title_enter_fail">인원이 마감되어 신청이 불가능해요!</string>
     <string name="dialog_description_enter_fail">아쉽지만, 다른 모임을 찾아보세요.</string>
+    <string name="dialog_title_cancel_success">모임 신청이 취소되었어요!</string>
+    <string name="dialog_title_delete_group">모임을 삭제하시겠습니까?</string>
+    <string name="dialog_description_delete_group">삭제한 모임은 복구가 불가합니다.</string>
+    <string name="dialog_confirm_delete_group">삭제하기</string>
     <string name="dialog_title_error">앗! 데이터를 불러오지 못했어요.</string>
-    <string name="dialog_description_error">다시 시도해주세요.</string>
+    <string name="dialog_description_error">잠시 후 다시 시도해주세요.</string>
     <string name="dialog_button_confirm">확인</string>
     <string name="dialog_button_close">닫기</string>
     <string name="dialog_button_cancel">취소</string>
@@ -160,6 +164,8 @@
     <string name="group_detail_button_cancel">신청 취소하기</string>
     <string name="group_detail_button_delete">삭제하기</string>
     <string name="group_detail_button_closed">종료된 모임입니다.</string>
+    <string name="group_detail_button_full">인원 마감</string>
+
 
     <!--GroupListScreen-->
     <string name="grouplist_dayofweek_all">전체</string>

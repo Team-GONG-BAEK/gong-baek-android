@@ -4,6 +4,7 @@ import com.sopt.gongbaek.data.mapper.todata.toData
 import com.sopt.gongbaek.data.mapper.todomain.toDomain
 import com.sopt.gongbaek.data.remote.datasource.GroupRemoteDataSource
 import com.sopt.gongbaek.data.remote.dto.request.ApplyGroupRequestDto
+import com.sopt.gongbaek.data.remote.dto.request.GroupManagementRequestDto
 import com.sopt.gongbaek.data.remote.dto.response.GroupRegisterResponseDto
 import com.sopt.gongbaek.data.remote.util.handleApiResponse
 import com.sopt.gongbaek.data.remote.util.handleNullableApiResponse
@@ -89,5 +90,19 @@ class GroupRepositoryImpl @Inject constructor(
                 .handleApiResponse()
                 .getOrThrow()
                 .toDomain()
+        }
+
+    override suspend fun deleteGroup(groupId: Int, groupType: String): Result<Unit> =
+        runCatching {
+            groupDataSource.deleteGroup(groupManagementRequestDto = GroupManagementRequestDto(groupId, groupType))
+                .handleNullableApiResponse()
+                .getOrThrow()
+        }
+
+    override suspend fun cancelGroup(groupId: Int, groupType: String): Result<Unit> =
+        runCatching {
+            groupDataSource.cancelGroup(groupManagementRequestDto = GroupManagementRequestDto(groupId, groupType))
+                .handleNullableApiResponse()
+                .getOrThrow()
         }
 }

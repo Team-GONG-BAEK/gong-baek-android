@@ -27,6 +27,16 @@ enum class GongBaekDialogType(
         imageResId = R.drawable.img_dialog_fail,
         descriptionResId = R.string.dialog_description_enter_fail
     ),
+    CANCEL_SUCCESS(
+        titleResId = R.string.dialog_title_cancel_success,
+        imageResId = R.drawable.img_dialog_fail,
+        descriptionResId = null
+    ),
+    DELETE_GROUP(
+        titleResId = R.string.dialog_title_delete_group,
+        imageResId = R.drawable.img_dialog_fail,
+        descriptionResId = R.string.dialog_description_delete_group
+    ),
     ERROR(
         titleResId = R.string.dialog_title_error,
         imageResId = R.drawable.img_dialog_fail,

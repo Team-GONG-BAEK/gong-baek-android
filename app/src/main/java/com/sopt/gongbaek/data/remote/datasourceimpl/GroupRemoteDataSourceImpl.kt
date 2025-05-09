@@ -4,6 +4,7 @@ import com.sopt.gongbaek.data.remote.datasource.GroupRemoteDataSource
 import com.sopt.gongbaek.data.remote.dto.base.ApiResponse
 import com.sopt.gongbaek.data.remote.dto.base.NullableApiResponse
 import com.sopt.gongbaek.data.remote.dto.request.ApplyGroupRequestDto
+import com.sopt.gongbaek.data.remote.dto.request.GroupManagementRequestDto
 import com.sopt.gongbaek.data.remote.dto.request.GroupRegisterRequestDto
 import com.sopt.gongbaek.data.remote.dto.response.GroupDetailResponseDto
 import com.sopt.gongbaek.data.remote.dto.response.GroupHostResponseDto
@@ -46,4 +47,10 @@ class GroupRemoteDataSourceImpl @Inject constructor(
 
     override suspend fun getGroupMembers(groupId: Int, groupType: String): ApiResponse<GroupMembersResponseDto> =
         groupService.getGroupMembers(groupId = groupId, groupType = groupType)
+
+    override suspend fun deleteGroup(groupManagementRequestDto: GroupManagementRequestDto): NullableApiResponse<Unit> =
+        groupService.deleteGroup(groupManagementRequestDto = groupManagementRequestDto)
+
+    override suspend fun cancelGroup(groupManagementRequestDto: GroupManagementRequestDto): NullableApiResponse<Unit> =
+        groupService.cancelGroup(groupManagementRequestDto = groupManagementRequestDto)
 }
