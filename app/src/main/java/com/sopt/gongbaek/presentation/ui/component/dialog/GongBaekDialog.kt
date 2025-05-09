@@ -88,6 +88,27 @@ fun GongBaekDialog(
                     )
                 }
 
+            GongBaekDialogType.DELETE_GROUP ->
+                Row(
+                    horizontalArrangement = Arrangement.spacedBy(10.dp)
+                ) {
+                    GongBaekBasicButton(
+                        title = stringResource(R.string.dialog_button_close),
+                        onClick = onDismissButtonClick,
+                        verticalPadding = 12,
+                        modifier = Modifier.weight(1f),
+                        enabled = true,
+                        enableButtonColor = GongBaekTheme.colors.gray08
+                    )
+                    GongBaekBasicButton(
+                        title = stringResource(R.string.dialog_confirm_delete_group),
+                        onClick = onConfirmButtonClick,
+                        verticalPadding = 12,
+                        enabled = true,
+                        modifier = Modifier.weight(2f)
+                    )
+                }
+
             else ->
                 GongBaekBasicButton(
                     title = stringResource(R.string.dialog_button_confirm),
@@ -151,6 +172,26 @@ private fun PreviewGongBaekDialog3() {
             GongBaekDialog(
                 gongBaekDialogType = GongBaekDialogType.ERROR,
                 onConfirmButtonClick = {}
+            )
+        }
+    }
+}
+
+@Preview
+@Composable
+private fun PreviewGongBaekDialog4() {
+    Box(
+        modifier = Modifier
+            .background(color = GongBaekTheme.colors.white)
+            .fillMaxSize()
+    ) {
+        Dialog(
+            onDismissRequest = { }
+        ) {
+            GongBaekDialog(
+                gongBaekDialogType = GongBaekDialogType.DELETE_GROUP,
+                onConfirmButtonClick = {},
+                onDismissButtonClick = {}
             )
         }
     }

@@ -45,7 +45,7 @@ fun CommentSection(
     value: String,
     onValueChanged: (String) -> Unit,
     onRefreshClicked: () -> Unit = {},
-    onDeleteClicked: () -> Unit = {},
+    onDeleteClicked: (Int) -> Unit = {},
     onSendClicked: () -> Unit = {}
 ) {
     Column(
@@ -146,7 +146,7 @@ private fun CommentSectionHeader(
 @Composable
 private fun CommentSectionItem(
     groupComment: GroupComments.GroupComment,
-    onDeleteClicked: () -> Unit,
+    onDeleteClicked: (Int) -> Unit,
     modifier: Modifier = Modifier
 ) {
     Column(
@@ -186,7 +186,7 @@ private fun CommentSectionItem(
                 Image(
                     imageVector = ImageVector.vectorResource(R.drawable.ic_comment_x_20),
                     contentDescription = null,
-                    modifier = Modifier.clickableWithoutRipple(onClick = onDeleteClicked)
+                    modifier = Modifier.clickableWithoutRipple(onClick = { onDeleteClicked(groupComment.commentId) })
                 )
             }
         }

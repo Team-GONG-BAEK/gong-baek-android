@@ -3,6 +3,7 @@ package com.sopt.gongbaek.data.remote.datasourceimpl
 import com.sopt.gongbaek.data.remote.datasource.CommentRemoteDataSource
 import com.sopt.gongbaek.data.remote.dto.base.ApiResponse
 import com.sopt.gongbaek.data.remote.dto.base.NullableApiResponse
+import com.sopt.gongbaek.data.remote.dto.request.DeleteCommentRequestDto
 import com.sopt.gongbaek.data.remote.dto.request.PostCommentRequestDto
 import com.sopt.gongbaek.data.remote.dto.response.GroupCommentsResponseDto
 import com.sopt.gongbaek.data.remote.dto.response.PostCommentResponseDto
@@ -26,4 +27,7 @@ class CommentRemoteDataSourceImpl @Inject constructor(
 
     override suspend fun postComment(postCommentRequestDto: PostCommentRequestDto): NullableApiResponse<PostCommentResponseDto> =
         commentService.postComment(postCommentRequestDto = postCommentRequestDto)
+
+    override suspend fun deleteComment(deleteCommentRequestDto: DeleteCommentRequestDto): NullableApiResponse<Unit> =
+        commentService.deleteComment(deleteCommentRequestDto = deleteCommentRequestDto)
 }

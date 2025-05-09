@@ -61,6 +61,8 @@ import com.sopt.gongbaek.presentation.ui.component.chip.GroupInfoChip
 import com.sopt.gongbaek.presentation.ui.component.section.CommentSection
 import com.sopt.gongbaek.presentation.ui.component.section.GroupPlaceDescription
 import com.sopt.gongbaek.presentation.ui.component.section.GroupTimeDescription
+import com.sopt.gongbaek.presentation.ui.component.stateView.ErrorScreen
+import com.sopt.gongbaek.presentation.ui.component.stateView.LoadingScreen
 import com.sopt.gongbaek.presentation.ui.component.topbar.StartTitleTopBar
 import com.sopt.gongbaek.presentation.util.base.UiLoadState
 import com.sopt.gongbaek.presentation.util.extension.roundedBackgroundWithBorder
@@ -84,8 +86,9 @@ fun GroupRoomRoute(
         viewModel.getGroupRoomInfo()
     }
 
-    LaunchedEffect(viewModel.sideEffect, lifecycleOwner) {
-        viewModel.sideEffect.flowWithLifecycle(lifecycle = lifecycleOwner.lifecycle)
+    LaunchedEffect(Unit) {
+        viewModel.sideEffect
+            .flowWithLifecycle(lifecycleOwner.lifecycle)
             .collect { sideEffect ->
                 when (sideEffect) {
                     is GroupRoomContract.SideEffect.NavigateBack -> navigateBack()
@@ -93,13 +96,22 @@ fun GroupRoomRoute(
             }
     }
 
-    GroupRoomScreen(
-        uiState = groupRoomUiState,
-        updateInputComment = { inputComment -> viewModel.setEvent(GroupRoomContract.Event.UpdateInputComment(inputComment)) },
-        onBackClick = { viewModel.sendSideEffect(GroupRoomContract.SideEffect.NavigateBack) },
-        onCommentRefreshClick = { viewModel.setEvent(GroupRoomContract.Event.OnCommentRefreshClick) },
-        onCommentPostClick = { viewModel.setEvent(GroupRoomContract.Event.OnCommentPostClick) }
-    )
+    when (groupRoomUiState.groupRoomLoadState) {
+        UiLoadState.Idle -> {}
+        UiLoadState.Loading -> LoadingScreen()
+        UiLoadState.Success -> {
+            GroupRoomScreen(
+                uiState = groupRoomUiState,
+                updateInputComment = { inputComment -> viewModel.setEvent(GroupRoomContract.Event.UpdateInputComment(inputComment)) },
+                onBackClick = { viewModel.sendSideEffect(GroupRoomContract.SideEffect.NavigateBack) },
+                onCommentRefreshClick = { viewModel.setEvent(GroupRoomContract.Event.OnCommentRefreshClick) },
+                onCommentPostClick = { viewModel.setEvent(GroupRoomContract.Event.OnCommentPostClick) },
+                onCommentDeleteClick = { commentId -> viewModel.setEvent(GroupRoomContract.Event.OnCommentDeleteClick(commentId)) }
+            )
+        }
+
+        UiLoadState.Error -> ErrorScreen(onClickRetry = { viewModel.getGroupRoomInfo() })
+    }
 }
 
 @Composable
@@ -108,7 +120,8 @@ fun GroupRoomScreen(
     updateInputComment: (String) -> Unit,
     onBackClick: () -> Unit,
     onCommentRefreshClick: () -> Unit,
-    onCommentPostClick: () -> Unit
+    onCommentPostClick: () -> Unit,
+    onCommentDeleteClick: (Int) -> Unit
 ) {
     var columnHeight by remember { mutableIntStateOf(0) }
     val systemUiController = rememberSystemUiController()
@@ -172,6 +185,7 @@ fun GroupRoomScreen(
             value = uiState.inputComment,
             onValueChanged = updateInputComment,
             onRefreshClicked = onCommentRefreshClick,
+            onDeleteClicked = onCommentDeleteClick,
             onSendClicked = onCommentPostClick
         )
     }
@@ -367,7 +381,8 @@ private fun GroupRoomScreenPreview1() {
             updateInputComment = {},
             onBackClick = {},
             onCommentRefreshClick = {},
-            onCommentPostClick = {}
+            onCommentPostClick = {},
+            onCommentDeleteClick = {}
         )
     }
 }

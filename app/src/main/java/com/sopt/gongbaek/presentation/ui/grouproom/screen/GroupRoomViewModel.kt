@@ -5,6 +5,7 @@ import androidx.lifecycle.viewModelScope
 import androidx.navigation.toRoute
 import com.sopt.gongbaek.domain.model.Comment
 import com.sopt.gongbaek.domain.model.GroupRoom
+import com.sopt.gongbaek.domain.usecase.DeleteCommentUseCase
 import com.sopt.gongbaek.domain.usecase.GetGroupCommentsUseCase
 import com.sopt.gongbaek.domain.usecase.LoadGroupRoomScreenUseCase
 import com.sopt.gongbaek.domain.usecase.PostCommentUseCase
@@ -20,7 +21,8 @@ class GroupRoomViewModel @Inject constructor(
     private val savedStateHandle: SavedStateHandle,
     private val loadGroupRoomScreenUseCase: LoadGroupRoomScreenUseCase,
     private val getGroupCommentsUseCase: GetGroupCommentsUseCase,
-    private val postCommentUseCase: PostCommentUseCase
+    private val postCommentUseCase: PostCommentUseCase,
+    private val deleteCommentUseCase: DeleteCommentUseCase
 ) : BaseViewModel<GroupRoomContract.State, GroupRoomContract.Event, GroupRoomContract.SideEffect>() {
 
     init {
@@ -48,6 +50,9 @@ class GroupRoomViewModel @Inject constructor(
             }
             is GroupRoomContract.Event.OnCommentPostClick -> {
                 postInputComment()
+            }
+            is GroupRoomContract.Event.OnCommentDeleteClick -> {
+                deleteComment(event.commentId)
             }
         }
     }
@@ -107,6 +112,21 @@ class GroupRoomViewModel @Inject constructor(
                 onSuccess = { groupComments ->
                     setState { copy(commentState = UiLoadState.Success, inputComment = "") }
                     updateGroupRoom { copy(groupComments = groupComments) }
+                },
+                onFailure = {
+                    setState { copy(commentState = UiLoadState.Error) }
+                }
+            )
+        }
+    }
+
+    private fun deleteComment(commentId: Int) {
+        viewModelScope.launch {
+            setState { copy(commentState = UiLoadState.Loading) }
+            deleteCommentUseCase(commentId).fold(
+                onSuccess = {
+                    setState { copy(commentState = UiLoadState.Success) }
+                    setEvent(GroupRoomContract.Event.OnCommentRefreshClick)
                 },
                 onFailure = {
                     setState { copy(commentState = UiLoadState.Error) }
