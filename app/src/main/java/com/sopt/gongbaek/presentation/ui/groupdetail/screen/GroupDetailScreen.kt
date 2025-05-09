@@ -366,7 +366,7 @@ private fun GroupDetailScreenPreview() {
             updateInputComment = {},
             onCommentRefreshClick = {},
             onCommentPostClick = {},
-            onCommentDeleteClick = {},
+            onCommentDeleteClick = {}
         )
     }
 }
