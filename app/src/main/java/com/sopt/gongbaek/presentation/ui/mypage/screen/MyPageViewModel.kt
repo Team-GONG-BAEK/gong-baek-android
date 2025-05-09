@@ -24,6 +24,7 @@ class MyPageViewModel @Inject constructor(
 
     init {
         getMyProfile()
+        getApplyGroups()
     }
 
     override fun createInitialState(): MyPageContract.State = MyPageContract.State()

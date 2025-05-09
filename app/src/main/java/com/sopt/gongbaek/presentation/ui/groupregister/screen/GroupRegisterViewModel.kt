@@ -101,6 +101,7 @@ class GroupRegisterViewModel @Inject constructor(
             }
 
             is GroupRegisterContract.Event.OnDialogConfirmClicked -> {
+                isRegistering = false
                 setSideEffect(GroupRegisterContract.SideEffect.NavigateMyGroup)
             }
 
@@ -172,7 +173,11 @@ class GroupRegisterViewModel @Inject constructor(
         }
     }
 
+    private var isRegistering = false
     private fun registerGroup(groupRegisterInfo: GroupRegisterInfo) {
+        if (isRegistering) return
+        isRegistering = true
+
         viewModelScope.launch {
             setState { copy(registerState = UiLoadState.Loading) }
 
@@ -182,6 +187,7 @@ class GroupRegisterViewModel @Inject constructor(
                         setState { copy(registerState = UiLoadState.Success) }
                     },
                     onFailure = { error ->
+                        isRegistering = false
                         setState { copy(registerState = UiLoadState.Error) }
                     }
                 )

@@ -106,6 +106,7 @@ fun GroupRegisterScreen(
                     .padding(horizontal = 16.dp, vertical = 12.dp)
             )
         },
+        containerColor = GongBaekTheme.colors.white,
         contentWindowInsets = WindowInsets(0.dp, 0.dp, 0.dp, 0.dp)
     ) { innerPadding ->
         Column(
