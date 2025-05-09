@@ -95,7 +95,7 @@ class AuthViewModel @Inject constructor(
 
     private fun searchUniversities() = viewModelScope.launch {
         setState { copy(loadState = UiLoadState.Loading) }
-        searchUniversitiesUseCase(currentState.academicInfoState.universitySearchQuery)
+        searchUniversitiesUseCase(currentState.academicInfoState.universitySearchQuery.trim())
             .fold(
                 onSuccess = { universities ->
                     setState {
@@ -123,7 +123,7 @@ class AuthViewModel @Inject constructor(
     private fun updateMajorSearchQuery(query: String) = setState {
         copy(
             academicInfoState = currentState.academicInfoState.copy(
-                majorSearchQuery = query
+                majorSearchQuery = query.trim()
             )
         )
     }
@@ -132,7 +132,7 @@ class AuthViewModel @Inject constructor(
         setState { copy(loadState = UiLoadState.Loading) }
         searchMajorsUseCase(
             universityName = currentState.academicInfoState.university,
-            majorName = currentState.academicInfoState.majorSearchQuery
+            majorName = currentState.academicInfoState.majorSearchQuery.trim()
         ).fold(
             onSuccess = { majors ->
                 setState {
