@@ -1,5 +1,6 @@
 package com.sopt.gongbaek.presentation.ui.auth.screen
 
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -40,6 +41,11 @@ fun NicknameGenderRoute(
     val uiState by viewModel.state.collectAsStateWithLifecycle()
     val lifecycleOwner = LocalLifecycleOwner.current
 
+    BackHandler {
+        viewModel.setEvent(AuthContract.Event.ClearNicknameGender)
+        viewModel.sendSideEffect(AuthContract.SideEffect.NavigateBack)
+    }
+
     LaunchedEffect(Unit) {
         viewModel.sideEffect
             .flowWithLifecycle(lifecycleOwner.lifecycle)
@@ -57,7 +63,10 @@ fun NicknameGenderRoute(
         onNicknameChanged = { nickname -> viewModel.setEvent(AuthContract.Event.NicknameChanged(nickname)) },
         onGenderSelected = { gender -> viewModel.setEvent(AuthContract.Event.GenderSelected(gender)) },
         onNextClick = { viewModel.setEvent(AuthContract.Event.ValidateNickname) },
-        onBackClick = { viewModel.sendSideEffect(AuthContract.SideEffect.NavigateBack) }
+        onBackClick = {
+            viewModel.setEvent(AuthContract.Event.ClearNicknameGender)
+            viewModel.sendSideEffect(AuthContract.SideEffect.NavigateBack)
+        }
     )
 }
 

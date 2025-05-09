@@ -1,5 +1,6 @@
 package com.sopt.gongbaek.presentation.ui.auth.screen
 
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
@@ -38,6 +39,11 @@ fun MbtiRoute(
     val uiState by viewModel.state.collectAsStateWithLifecycle()
     val lifecycleOwner = LocalLifecycleOwner.current
 
+    BackHandler {
+        viewModel.setEvent(AuthContract.Event.ClearMbti)
+        viewModel.sendSideEffect(AuthContract.SideEffect.NavigateBack)
+    }
+
     LaunchedEffect(Unit) {
         viewModel.sideEffect
             .flowWithLifecycle(lifecycleOwner.lifecycle)
@@ -57,7 +63,10 @@ fun MbtiRoute(
         onMbtiThirdOptionSelected = { option -> viewModel.setEvent(AuthContract.Event.MbtiThirdOptionSelected(option)) },
         onMbtiFourthOptionSelected = { option -> viewModel.setEvent(AuthContract.Event.MbtiFourthOptionSelected(option)) },
         onNextClick = { viewModel.sendSideEffect(AuthContract.SideEffect.NavigateSelfIntroduction) },
-        onBackClick = { viewModel.sendSideEffect(AuthContract.SideEffect.NavigateBack) }
+        onBackClick = {
+            viewModel.setEvent(AuthContract.Event.ClearMbti)
+            viewModel.sendSideEffect(AuthContract.SideEffect.NavigateBack)
+        }
     )
 }
 

@@ -1,5 +1,6 @@
 package com.sopt.gongbaek.presentation.ui.auth.screen
 
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -41,6 +42,11 @@ fun SelfIntroductionRoute(
     val uiState by viewModel.state.collectAsStateWithLifecycle()
     val lifecycleOwner = LocalLifecycleOwner.current
 
+    BackHandler {
+        viewModel.setEvent(AuthContract.Event.ClearSelfIntroduction)
+        viewModel.sendSideEffect(AuthContract.SideEffect.NavigateBack)
+    }
+
     LaunchedEffect(Unit) {
         viewModel.sideEffect
             .flowWithLifecycle(lifecycleOwner.lifecycle)
@@ -57,7 +63,10 @@ fun SelfIntroductionRoute(
         uiState = uiState.selfIntroductionState,
         onSelfIntroductionChanged = { selfIntroduction -> viewModel.setEvent(AuthContract.Event.SelfIntroductionChanged(selfIntroduction)) },
         onNextClick = { viewModel.sendSideEffect(AuthContract.SideEffect.NavigateEnterTimetable) },
-        onBackClick = { viewModel.sendSideEffect(AuthContract.SideEffect.NavigateBack) }
+        onBackClick = {
+            viewModel.setEvent(AuthContract.Event.ClearSelfIntroduction)
+            viewModel.sendSideEffect(AuthContract.SideEffect.NavigateBack)
+        }
     )
 }
 

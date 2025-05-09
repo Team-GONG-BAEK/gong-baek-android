@@ -1,5 +1,6 @@
 package com.sopt.gongbaek.presentation.ui.auth.screen
 
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
@@ -56,6 +57,11 @@ fun EmailVerificationRoute(
     val uiState by viewModel.state.collectAsStateWithLifecycle()
     val lifecycleOwner = LocalLifecycleOwner.current
 
+    BackHandler {
+        viewModel.setEvent(AuthContract.Event.ClearEmailVerification)
+        viewModel.sendSideEffect(AuthContract.SideEffect.NavigateBack)
+    }
+
     LaunchedEffect(Unit) {
         viewModel.sideEffect
             .flowWithLifecycle(lifecycleOwner.lifecycle)
@@ -76,7 +82,10 @@ fun EmailVerificationRoute(
         onVerificationCodeChanged = { code -> viewModel.setEvent(AuthContract.Event.VerificationCodeChanged(code)) },
         onVerificationCodeSubmitted = { viewModel.setEvent(AuthContract.Event.VerificationCodeSubmitted) },
         onNextClick = { viewModel.sendSideEffect(AuthContract.SideEffect.NavigateNicknameGender) },
-        onBackClick = { viewModel.sendSideEffect(AuthContract.SideEffect.NavigateBack) }
+        onBackClick = {
+            viewModel.setEvent(AuthContract.Event.ClearEmailVerification)
+            viewModel.sendSideEffect(AuthContract.SideEffect.NavigateBack)
+        }
     )
 }
 

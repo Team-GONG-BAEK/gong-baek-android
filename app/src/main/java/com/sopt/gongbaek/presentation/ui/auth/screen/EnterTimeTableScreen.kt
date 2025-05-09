@@ -1,5 +1,6 @@
 package com.sopt.gongbaek.presentation.ui.auth.screen
 
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
@@ -36,6 +37,11 @@ fun EnterTimeTableRoute(
     val uiState by viewModel.state.collectAsStateWithLifecycle()
     val lifecycleOwner = LocalLifecycleOwner.current
 
+    BackHandler {
+        viewModel.setEvent(AuthContract.Event.ClearTimeTable)
+        viewModel.sendSideEffect(AuthContract.SideEffect.NavigateBack)
+    }
+
     LaunchedEffect(Unit) {
         viewModel.sideEffect
             .flowWithLifecycle(lifecycleOwner.lifecycle)
@@ -54,7 +60,10 @@ fun EnterTimeTableRoute(
             viewModel.setEvent(AuthContract.Event.TimeSlotSelectionChanged(day, timeSlots))
         },
         onNextClick = { viewModel.setEvent(AuthContract.Event.RequestSingUp) },
-        onBackClick = { viewModel.sendSideEffect(AuthContract.SideEffect.NavigateBack) }
+        onBackClick = {
+            viewModel.setEvent(AuthContract.Event.ClearTimeTable)
+            viewModel.sendSideEffect(AuthContract.SideEffect.NavigateBack)
+        }
     )
 }
 
