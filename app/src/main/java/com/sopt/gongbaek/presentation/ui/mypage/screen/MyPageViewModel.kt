@@ -110,7 +110,8 @@ class MyPageViewModel @Inject constructor(
                     setState {
                         copy(
                             applyGroupsLoadState = UiLoadState.Success,
-                            applyActiveGroups = activeGroups)
+                            applyActiveGroups = activeGroups
+                        )
                     }
                 },
                 onFailure = { setState { copy(applyGroupsLoadState = UiLoadState.Error) } }

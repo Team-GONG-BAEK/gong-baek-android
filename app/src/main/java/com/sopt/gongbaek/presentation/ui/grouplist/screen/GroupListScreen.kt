@@ -73,7 +73,7 @@ fun GroupListRoute(
         UiLoadState.Idle -> LoadingScreen()
         UiLoadState.Loading -> LoadingScreen()
         UiLoadState.Error -> ErrorScreen(
-            onClickRetry = { viewModel.setEvent(GroupListContract.Event.GetGroups(GroupCategoryType.ALL.name)) },
+            onClickRetry = { viewModel.setEvent(GroupListContract.Event.GetGroups(GroupCategoryType.ALL.name)) }
         )
         UiLoadState.Success -> GroupListScreen(
             selectedDayOfWeekIndex = uiState.selectedDayOfWeekIndex,
