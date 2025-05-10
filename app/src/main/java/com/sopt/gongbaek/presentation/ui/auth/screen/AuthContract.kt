@@ -28,9 +28,11 @@ class AuthContract {
         data class UniversitySearchQueryChanged(val query: String) : Event()
         data object UniversitySearchClicked : Event()
         data class UniversitySelected(val university: String) : Event()
+        data object ClearUniversity : Event()
         data class MajorSearchQueryChanged(val query: String) : Event()
         data object MajorSearchClicked : Event()
         data class MajorSelected(val major: String) : Event()
+        data object ClearMajor : Event()
         data class EnterYearSelected(val enterYear: Int) : Event()
 
         data class EmailChanged(val email: String) : Event()
@@ -63,7 +65,6 @@ class AuthContract {
 
     sealed interface SideEffect : UiSideEffect {
         data object NavigateBack : SideEffect
-        data object NavigateAcademicInfo : SideEffect
         data object NavigateUnivSearch : SideEffect
         data object NavigateMajorSearch : SideEffect
         data object NavigateEmailVerification : SideEffect

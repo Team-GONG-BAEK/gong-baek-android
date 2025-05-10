@@ -1,5 +1,6 @@
 package com.sopt.gongbaek.presentation.ui.auth.screen
 
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -54,6 +55,11 @@ fun UnivSearchRoute(
     val uiState by viewModel.state.collectAsStateWithLifecycle()
     val lifecycleOwner = LocalLifecycleOwner.current
 
+    BackHandler {
+        viewModel.setEvent(AuthContract.Event.ClearUniversity)
+        viewModel.sendSideEffect(AuthContract.SideEffect.NavigateBack)
+    }
+
     LaunchedEffect(Unit) {
         viewModel.sideEffect
             .flowWithLifecycle(lifecycleOwner.lifecycle)
@@ -70,8 +76,11 @@ fun UnivSearchRoute(
         onSearchQueryChanged = { query -> viewModel.setEvent(AuthContract.Event.UniversitySearchQueryChanged(query)) },
         onSearchButtonClicked = { viewModel.setEvent(AuthContract.Event.UniversitySearchClicked) },
         onUniversitySelected = { selectedUniversity -> viewModel.setEvent(AuthContract.Event.UniversitySelected(selectedUniversity)) },
-        navigateBack = { viewModel.sendSideEffect(AuthContract.SideEffect.NavigateBack) },
-        onCloseClick = { viewModel.sendSideEffect(AuthContract.SideEffect.NavigateBack) }
+        onComplete = { viewModel.sendSideEffect(AuthContract.SideEffect.NavigateBack) },
+        onCloseClick = {
+            viewModel.setEvent(AuthContract.Event.ClearUniversity)
+            viewModel.sendSideEffect(AuthContract.SideEffect.NavigateBack)
+        }
     )
 }
 
@@ -82,7 +91,7 @@ private fun UnivSearchScreen(
     onSearchButtonClicked: () -> Unit,
     onUniversitySelected: (String) -> Unit,
     onCloseClick: () -> Unit,
-    navigateBack: () -> Unit
+    onComplete: () -> Unit
 ) {
     Scaffold(
         topBar = {
@@ -98,7 +107,7 @@ private fun UnivSearchScreen(
             GongBaekBasicButton(
                 title = stringResource(R.string.auth_academic_info_apply_button),
                 enabled = academicInfoState.isUniversitySearchComplete,
-                onClick = navigateBack,
+                onClick = onComplete,
                 modifier = Modifier
                     .padding(horizontal = 16.dp, vertical = 12.dp)
             )
@@ -216,9 +225,10 @@ private fun SearchTextField(
                     imageVector = ImageVector.vectorResource(R.drawable.ic_search_black_48),
                     contentDescription = null,
                     tint = GongBaekTheme.colors.gray10,
-                    modifier = Modifier.clickableWithoutRipple {
-                        onSearchButtonClicked()
-                    }
+                    modifier = Modifier.clickableWithoutRipple(
+                        enabled = value.isNotEmpty(),
+                        onClick = onSearchButtonClicked
+                    )
                 )
             }
         }
@@ -234,7 +244,7 @@ private fun UnivSearchScreenPreview() {
             onSearchQueryChanged = {},
             onSearchButtonClicked = {},
             onUniversitySelected = {},
-            navigateBack = {},
+            onComplete = {},
             onCloseClick = {}
         )
     }
