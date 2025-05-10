@@ -3,8 +3,8 @@ package com.sopt.gongbaek.domain.type
 enum class MbtiFourthLetterType(
     val description: String
 ) {
-    P(description = "P"),
-    J(description = "J");
+    J(description = "J"),
+    P(description = "P");
 
     companion object {
         private const val INVALID_DESCRIPTION_ERROR_MESSAGE = "유효하지 않은 MBTI 타입입니다: "

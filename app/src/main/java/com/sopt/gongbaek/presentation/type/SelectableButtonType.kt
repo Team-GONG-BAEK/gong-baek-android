@@ -34,20 +34,20 @@ enum class SelectableButtonType(
     ),
     MBTI_SECOND(
         options = listOf(
-            MbtiSecondLetterType.N.description,
-            MbtiSecondLetterType.S.description
+            MbtiSecondLetterType.S.description,
+            MbtiSecondLetterType.N.description
         )
     ),
     MBTI_THIRD(
         options = listOf(
-            MbtiThirdLetterType.F.description,
-            MbtiThirdLetterType.T.description
+            MbtiThirdLetterType.T.description,
+            MbtiThirdLetterType.F.description
         )
     ),
     MBTI_FOURTH(
         options = listOf(
-            MbtiFourthLetterType.P.description,
-            MbtiFourthLetterType.J.description
+            MbtiFourthLetterType.J.description,
+            MbtiFourthLetterType.P.description
         )
     ),
     GENDER(
