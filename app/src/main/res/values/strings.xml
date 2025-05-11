@@ -197,7 +197,7 @@
     <!--GroupTime-->
     <string name="groupregister_time_title">공백을 채울 시간을 선택해주세요.</string>
     <string name="groupregister_time_my_timetable">나의 시간표</string>
-    <string name="groupregister_time_retry">다시 선택</string>
+    <string name="groupregister_time_retry">다시선택</string>
 
     <!--GroupCategory-->
     <string name="groupregister_category_title">카테고리를 선택해주세요.</string>
