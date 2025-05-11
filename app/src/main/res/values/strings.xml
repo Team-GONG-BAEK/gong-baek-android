@@ -205,7 +205,7 @@
 
     <!--GroupCover-->
     <string name="groupregister_cover_title">커버 사진을 선택해주세요.</string>
-    <string name="groupregister_cover_description">커버된 사진 중 하나를 선택할 수 있어요.</string>
+    <string name="groupregister_cover_description">제공된 사진 중 하나를 선택할 수 있어요.</string>
 
     <!--GroupPlacePeople-->
     <string name="groupregister_place_people_place_title">만날 장소를 작성해주세요.</string>
