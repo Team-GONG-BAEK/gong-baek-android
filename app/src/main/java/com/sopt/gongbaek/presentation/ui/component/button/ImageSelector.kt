@@ -42,13 +42,13 @@ fun ImageSelector(
 ) {
     val chunkedImages = imageButtonResIdList.chunked(imageSelectorType.chunkedCount)
     Column(
-        modifier = Modifier.fillMaxWidth()
+        modifier = Modifier.fillMaxWidth(),
+        verticalArrangement = Arrangement.spacedBy(8.dp)
     ) {
         chunkedImages.forEachIndexed { rowIndex, imageRow ->
             Row(
                 modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(vertical = 8.dp),
+                    .fillMaxWidth(),
                 horizontalArrangement = Arrangement.spacedBy(8.dp)
             ) {
                 imageRow.forEachIndexed { columnIndex, imageResId ->
