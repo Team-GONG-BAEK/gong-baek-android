@@ -82,7 +82,7 @@ fun GongBaekSelectableButton(
             text = option,
             modifier = Modifier.padding(vertical = 14.dp),
             color = if (isSelected) selectableButtonType.selectedTextColor else selectableButtonType.unSelectedTextColor,
-            style = selectableButtonType.typoStyle
+            style = if (isSelected) selectableButtonType.selectedTypoStyle else GongBaekTheme.typography.body1.m16
         )
     }
 }
