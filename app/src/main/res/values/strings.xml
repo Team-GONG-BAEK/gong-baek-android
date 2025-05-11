@@ -32,7 +32,7 @@
     <string name="gongbaek_basic_textfield_group_title_title">제목</string>
     <string name="gongbaek_basic_textfield_group_title_placeholder">2글자 이상 모임 제목을 입력해주세요.</string>
     <string name="gongbaek_basic_textfield_group_introduction_title">소개글</string>
-    <string name="gongbaek_basic_textfield_group_introduction_placeholder">간단한 소개글을 작성해보세요.\nex. 화석된 사람들끼리 소소한 점심 모임 어때요?</string>
+    <string name="gongbaek_basic_textfield_group_introduction_placeholder">간단한 소개글을 작성해보세요.\nex) 화석된 사람들끼리 소소한 점심 모임 어때요?</string>
 
     <!--TopBar-->
     <string name="topbar_search">검색하기</string>
