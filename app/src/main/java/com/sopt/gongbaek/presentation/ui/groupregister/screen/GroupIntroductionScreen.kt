@@ -94,7 +94,7 @@ fun GroupIntroductionScreen(
         GongBaekBasicButton(
             title = stringResource(R.string.groupregister_next),
             onClick = onNextButtonClicked,
-            enabled = groupTitle.isNotBlank() && introduction.length >= 20,
+            enabled = groupTitle.isNotBlank(),
             modifier = Modifier
                 .padding(horizontal = 16.dp, vertical = 12.dp)
                 .align(Alignment.BottomCenter)
