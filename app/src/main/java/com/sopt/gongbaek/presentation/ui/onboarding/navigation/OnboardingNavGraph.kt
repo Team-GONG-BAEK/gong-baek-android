@@ -5,13 +5,13 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.composable
 import com.sopt.gongbaek.presentation.model.NavigationRoute
 import com.sopt.gongbaek.presentation.ui.auth.navigation.navigateAuthRoute
-import com.sopt.gongbaek.presentation.ui.onboarding.screen.OnboardingScreen
+import com.sopt.gongbaek.presentation.ui.onboarding.screen.OnboardingRoute
 
 fun NavGraphBuilder.onboardingNavGraph(
     navController: NavHostController
 ) {
     composable<NavigationRoute.Onboarding> {
-        OnboardingScreen(
+        OnboardingRoute(
             navigateAuth = navController::navigateAuthRoute
         )
     }
