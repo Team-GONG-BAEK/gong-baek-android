@@ -205,7 +205,7 @@ private fun GroupRoomInfoSection(
         modifier = modifier
             .fillMaxWidth()
             .padding(WindowInsets.statusBars.asPaddingValues())
-            .padding(16.dp)
+            .padding(horizontal = 16.dp, vertical = 18.dp)
     ) {
         Row(
             horizontalArrangement = Arrangement.spacedBy(5.dp)
@@ -220,7 +220,7 @@ private fun GroupRoomInfoSection(
             color = GongBaekTheme.colors.white,
             style = GongBaekTheme.typography.title1.b20
         )
-        Spacer(modifier = Modifier.height(12.dp))
+        Spacer(modifier = Modifier.height(18.dp))
         GroupTimeDescription(
             description = groupTime,
             textColor = GongBaekTheme.colors.white,
