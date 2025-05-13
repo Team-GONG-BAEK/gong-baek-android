@@ -1,5 +1,6 @@
 package com.sopt.gongbaek.presentation.ui.groupregister.screen
 
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -37,7 +38,12 @@ fun GroupIntroductionRoute(
     val uiState by viewModel.state.collectAsStateWithLifecycle()
     val lifecycleOwner = LocalLifecycleOwner.current
 
-    LaunchedEffect(viewModel.sideEffect, lifecycleOwner) {
+    BackHandler {
+        viewModel.sendSideEffect(GroupRegisterContract.SideEffect.NavigateBack)
+        viewModel.setEvent(GroupRegisterContract.Event.OnTitleIntroductionDeleted)
+    }
+
+    LaunchedEffect(Unit) {
         viewModel.sideEffect
             .flowWithLifecycle(lifecycleOwner.lifecycle)
             .collect { sideEffect ->
@@ -69,7 +75,7 @@ fun GroupIntroductionRoute(
 }
 
 @Composable
-fun GroupIntroductionScreen(
+private fun GroupIntroductionScreen(
     groupTitle: String,
     titleErrorMessage: String?,
     onGroupTitleChange: (String) -> Unit,
@@ -152,7 +158,7 @@ private fun GroupIntroductionSection(
 
 @Preview(showBackground = true)
 @Composable
-fun ShowGroupIntroductionScreen() {
+private fun ShowGroupIntroductionScreen() {
     GONGBAEKTheme {
         GroupIntroductionScreen(
             groupTitle = "",

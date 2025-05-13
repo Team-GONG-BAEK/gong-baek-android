@@ -1,5 +1,6 @@
 package com.sopt.gongbaek.presentation.ui.groupregister.screen
 
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -32,7 +33,12 @@ fun GroupCategoryRoute(
     val uiState by viewModel.state.collectAsStateWithLifecycle()
     val lifecycleOwner = LocalLifecycleOwner.current
 
-    LaunchedEffect(viewModel.sideEffect, lifecycleOwner) {
+    BackHandler {
+        viewModel.sendSideEffect(GroupRegisterContract.SideEffect.NavigateBack)
+        viewModel.setEvent(GroupRegisterContract.Event.OnCategoryDeleted)
+    }
+
+    LaunchedEffect(Unit) {
         viewModel.sideEffect
             .flowWithLifecycle(lifecycleOwner.lifecycle)
             .collect { sideEffect ->
@@ -63,7 +69,7 @@ fun GroupCategoryRoute(
 }
 
 @Composable
-fun GroupCategoryScreen(
+private fun GroupCategoryScreen(
     category: String,
     selectedCategory: String,
     onCategorySelected: (String) -> Unit,
@@ -128,7 +134,7 @@ private fun GroupCategorySection(
 
 @Preview(showBackground = true)
 @Composable
-fun ShowGroupCategoryScreen() {
+private fun ShowGroupCategoryScreen() {
     GroupCategoryScreen(
         category = "",
         selectedCategory = "",

@@ -1,5 +1,6 @@
 package com.sopt.gongbaek.presentation.ui.groupregister.screen
 
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -17,11 +18,11 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.flowWithLifecycle
 import com.sopt.gongbaek.R
@@ -45,7 +46,12 @@ fun GroupCycleRoute(
     val uiState by viewModel.state.collectAsStateWithLifecycle()
     val lifecycleOwner = LocalLifecycleOwner.current
 
-    LaunchedEffect(viewModel.sideEffect, lifecycleOwner) {
+    BackHandler {
+        viewModel.sendSideEffect(GroupRegisterContract.SideEffect.NavigateBack)
+        viewModel.setEvent(GroupRegisterContract.Event.OnGroupCycleDeleted)
+    }
+
+    LaunchedEffect(Unit) {
         viewModel.sideEffect
             .flowWithLifecycle(lifecycleOwner.lifecycle)
             .collect { sideEffect ->
@@ -80,7 +86,7 @@ fun GroupCycleRoute(
 }
 
 @Composable
-fun GroupCycleScreen(
+private fun GroupCycleScreen(
     groupCycle: String,
     selectedGroupCycle: String,
     onGroupCycleSelected: (String) -> Unit,
@@ -162,7 +168,7 @@ private fun GroupCycleSection(
 
 @Preview(showBackground = true)
 @Composable
-fun ShowGroupCycleScreen() {
+private fun ShowGroupCycleScreen() {
     GONGBAEKTheme {
         GroupCycleScreen(
             groupCycle = "",

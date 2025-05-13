@@ -1,5 +1,6 @@
 package com.sopt.gongbaek.presentation.ui.groupregister.screen
 
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -43,7 +44,12 @@ fun GroupPlacePeopleRoute(
     val uiState by viewModel.state.collectAsStateWithLifecycle()
     val lifecycleOwner = LocalLifecycleOwner.current
 
-    LaunchedEffect(viewModel.sideEffect, lifecycleOwner) {
+    BackHandler {
+        viewModel.sendSideEffect(GroupRegisterContract.SideEffect.NavigateBack)
+        viewModel.setEvent(GroupRegisterContract.Event.OnPlacePeopleDeleted)
+    }
+
+    LaunchedEffect(Unit) {
         viewModel.sideEffect
             .flowWithLifecycle(lifecycleOwner.lifecycle)
             .collect { sideEffect ->
@@ -79,7 +85,7 @@ fun GroupPlacePeopleRoute(
 }
 
 @Composable
-fun GroupPlacePeopleScreen(
+private fun GroupPlacePeopleScreen(
     place: String,
     placeErrorMessage: String?,
     onPlaceChange: (String) -> Unit,
@@ -210,7 +216,7 @@ private fun GroupPlacePeopleSection(
 
 @Preview(showBackground = true)
 @Composable
-fun ShowGroupPlacePeopleScreen() {
+private fun ShowGroupPlacePeopleScreen() {
     GONGBAEKTheme {
         GroupPlacePeopleScreen(
             place = "",

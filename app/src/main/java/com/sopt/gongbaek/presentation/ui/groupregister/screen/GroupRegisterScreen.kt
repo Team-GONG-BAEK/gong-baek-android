@@ -53,7 +53,7 @@ fun GroupRegisterRoute(
     val uiState by viewModel.state.collectAsStateWithLifecycle()
     val lifecycleOwner = LocalLifecycleOwner.current
 
-    LaunchedEffect(viewModel.sideEffect, lifecycleOwner) {
+    LaunchedEffect(Unit) {
         viewModel.sideEffect
             .flowWithLifecycle(lifecycleOwner.lifecycle)
             .collect { sideEffect ->
@@ -88,7 +88,7 @@ fun GroupRegisterRoute(
 }
 
 @Composable
-fun GroupRegisterScreen(
+private fun GroupRegisterScreen(
     uiState: GroupRegisterContract.State,
     groupRegisterInfo: GroupRegisterInfo,
     onBackClick: () -> Unit,
@@ -216,7 +216,7 @@ private fun GroupRegisterSection(
 
 @Preview(showBackground = true)
 @Composable
-fun ShowGroupRegisterScreen() {
+private fun ShowGroupRegisterScreen() {
     GONGBAEKTheme {
         GroupRegisterScreen(
             uiState = GroupRegisterContract.State(),

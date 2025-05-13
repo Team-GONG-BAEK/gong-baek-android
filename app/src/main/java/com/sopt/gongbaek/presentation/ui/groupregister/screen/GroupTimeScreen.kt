@@ -1,5 +1,6 @@
 package com.sopt.gongbaek.presentation.ui.groupregister.screen
 
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -34,11 +35,16 @@ fun GroupTimeRoute(
     val uiState by viewModel.state.collectAsStateWithLifecycle()
     val lifecycleOwner = LocalLifecycleOwner.current
 
+    BackHandler {
+        viewModel.sendSideEffect(GroupRegisterContract.SideEffect.NavigateBack)
+        viewModel.setEvent(GroupRegisterContract.Event.OnTimeSlotDeleted)
+    }
+
     LaunchedEffect(Unit) {
         viewModel.setEvent(GroupRegisterContract.Event.GetLectureTime)
     }
 
-    LaunchedEffect(viewModel.sideEffect, lifecycleOwner) {
+    LaunchedEffect(Unit) {
         viewModel.sideEffect
             .flowWithLifecycle(lifecycleOwner.lifecycle)
             .collect { sideEffect ->
@@ -69,7 +75,7 @@ fun GroupTimeRoute(
 }
 
 @Composable
-fun GroupTimeScreen(
+private fun GroupTimeScreen(
     selectedDay: String,
     lectureTime: Map<String, List<Int>>,
     selectedTimeSlotsByDay: Map<String, List<Int>>,
@@ -123,7 +129,7 @@ fun GroupTimeScreen(
 
 @Preview(showBackground = true)
 @Composable
-fun ShowGroupTimeScreen() {
+private fun ShowGroupTimeScreen() {
     GONGBAEKTheme {
     }
 }
