@@ -22,6 +22,13 @@ class GroupRegisterViewModel @Inject constructor(
         registerState = UiLoadState.Idle
     )
 
+    /**
+     * Handles UI events related to group registration and updates the state or triggers actions accordingly.
+     *
+     * Processes user interactions such as selecting group cycle, day, category, cover image, place, people count, title, introduction, and time slots. Initiates group registration, fetches lecture timetables, manages dialog actions, and updates or resets relevant state fields based on the received event.
+     *
+     * @param event The event representing a user action or UI interaction in the group registration flow.
+     */
     override suspend fun handleEvent(event: GroupRegisterContract.Event) {
         when (event) {
             is GroupRegisterContract.Event.GetLectureTime -> getLectureTime()
@@ -132,6 +139,14 @@ class GroupRegisterViewModel @Inject constructor(
         }
     }
 
+    /**
+     * Updates the group's start and end times based on the provided time slot selections.
+     *
+     * Converts the given map of time slots into a timetable and sets the group's start and end times
+     * to those of the first timetable entry if available, or resets them to zero if no time slots are selected.
+     *
+     * @param timeSlots A map where keys represent days and values are lists of selected time indices.
+     */
     private fun updateGroupRegisterTime(timeSlots: Map<String, List<Int>>) {
         val lectureTimeTable = convertToTimeTable(timeSlots)
         if (lectureTimeTable.isNotEmpty()) {

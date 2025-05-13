@@ -24,6 +24,15 @@ import com.sopt.gongbaek.presentation.ui.component.section.PageDescriptionSectio
 import com.sopt.gongbaek.presentation.ui.component.topbar.StartTitleTopBar
 import com.sopt.gongbaek.presentation.ui.groupregister.component.GroupCategorySelectableButtons
 
+/**
+ * Connects the group category selection UI with the ViewModel and handles navigation events.
+ *
+ * Observes UI state and side effects from the [GroupRegisterViewModel], manages back button behavior,
+ * and triggers navigation callbacks when appropriate. Passes current selection and event handlers to the UI screen.
+ *
+ * @param navigateGroupCover Callback invoked to navigate to the group cover selection screen.
+ * @param navigateBack Callback invoked to navigate back in the registration flow.
+ */
 @Composable
 fun GroupCategoryRoute(
     viewModel: GroupRegisterViewModel,
@@ -68,6 +77,15 @@ fun GroupCategoryRoute(
     )
 }
 
+/**
+ * Displays the group category selection screen with selectable options and a "Next" button.
+ *
+ * @param category The currently chosen category string.
+ * @param selectedCategory The category option currently highlighted as selected.
+ * @param onCategorySelected Callback invoked when a category is selected.
+ * @param onNextButtonClicked Callback invoked when the "Next" button is clicked.
+ * @param onBackClick Callback invoked when the back button is pressed.
+ */
 @Composable
 private fun GroupCategoryScreen(
     category: String,
@@ -132,6 +150,9 @@ private fun GroupCategorySection(
     }
 }
 
+/**
+ * Displays a preview of the group category selection screen with default values for design-time visualization.
+ */
 @Preview(showBackground = true)
 @Composable
 private fun ShowGroupCategoryScreen() {

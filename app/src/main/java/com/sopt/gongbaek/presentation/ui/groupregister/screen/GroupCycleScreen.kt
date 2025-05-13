@@ -36,6 +36,16 @@ import com.sopt.gongbaek.presentation.ui.component.topbar.StartTitleTopBar
 import com.sopt.gongbaek.ui.theme.GONGBAEKTheme
 import com.sopt.gongbaek.ui.theme.GongBaekTheme
 
+/**
+ * Connects the group cycle selection UI with the view model and handles navigation events.
+ *
+ * Observes the group registration state and side effects from the [GroupRegisterViewModel], manages back button behavior,
+ * and triggers navigation callbacks based on user actions and side effects.
+ *
+ * @param navigateDay Called to navigate to the day selection screen.
+ * @param navigateDayOfWeek Called to navigate to the day-of-week selection screen.
+ * @param navigateBack Called to navigate back in the registration flow.
+ */
 @Composable
 fun GroupCycleRoute(
     viewModel: GroupRegisterViewModel,
@@ -85,6 +95,17 @@ fun GroupCycleRoute(
     )
 }
 
+/**
+ * Displays the group cycle selection screen with selectable options and a next button.
+ *
+ * Presents the group cycle selection UI and a bottom-aligned next button, which is enabled only when a group cycle is selected.
+ *
+ * @param groupCycle The currently selected group cycle as a string.
+ * @param selectedGroupCycle The group cycle option that is currently highlighted.
+ * @param onGroupCycleSelected Callback invoked when a group cycle option is selected.
+ * @param onNextButtonClicked Callback invoked when the next button is clicked.
+ * @param onBackClick Callback invoked when the back button is pressed.
+ */
 @Composable
 private fun GroupCycleScreen(
     groupCycle: String,
@@ -166,6 +187,9 @@ private fun GroupCycleSection(
     }
 }
 
+/**
+ * Displays a preview of the GroupCycleScreen composable with default parameters for UI development.
+ */
 @Preview(showBackground = true)
 @Composable
 private fun ShowGroupCycleScreen() {

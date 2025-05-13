@@ -26,6 +26,16 @@ import com.sopt.gongbaek.presentation.ui.groupregister.component.SelectDayCalend
 import com.sopt.gongbaek.ui.theme.GONGBAEKTheme
 import java.time.LocalDate
 
+/**
+ * Connects the group registration day selection UI with the ViewModel and handles navigation events.
+ *
+ * Observes UI state and side effects from the [GroupRegisterViewModel], manages back button behavior,
+ * and coordinates navigation callbacks for progressing to the next step or returning to the previous screen.
+ *
+ * @param viewModel The ViewModel managing group registration state and side effects.
+ * @param navigateGroupTime Callback invoked to navigate to the group time selection screen.
+ * @param navigateBack Callback invoked to navigate back to the previous screen.
+ */
 @Composable
 fun SelectDayRoute(
     viewModel: GroupRegisterViewModel,
@@ -71,6 +81,16 @@ fun SelectDayRoute(
     )
 }
 
+/**
+ * Displays the day selection UI with a calendar and a "Next" button for group registration.
+ *
+ * Shows a calendar for selecting a date and a bottom-aligned button to proceed. The "Next" button is enabled only when a date is selected.
+ *
+ * @param selectedDate The currently selected date, or null if none is selected.
+ * @param onSelectedDate Callback invoked when a date is selected from the calendar.
+ * @param onNextButtonClicked Callback invoked when the "Next" button is clicked.
+ * @param onBackClick Callback invoked when the back button is pressed.
+ */
 @Composable
 private fun SelectDayScreen(
     selectedDate: LocalDate?,
@@ -133,6 +153,11 @@ private fun SelectDaySection(
     }
 }
 
+/**
+ * Preview composable for the Select Day screen with the app theme applied.
+ *
+ * This preview does not display any UI content.
+ */
 @Preview(showBackground = true)
 @Composable
 private fun ShowSelectDayScreen() {

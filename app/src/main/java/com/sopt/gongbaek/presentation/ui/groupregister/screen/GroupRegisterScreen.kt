@@ -44,6 +44,16 @@ import com.sopt.gongbaek.presentation.util.createGroupRegisterTimeDescription
 import com.sopt.gongbaek.ui.theme.GONGBAEKTheme
 import com.sopt.gongbaek.ui.theme.GongBaekTheme
 
+/**
+ * Connects the group registration UI with its ViewModel, handling state collection and navigation side effects.
+ *
+ * Collects UI state and side effects from the [GroupRegisterViewModel], triggering navigation callbacks when appropriate.
+ * Passes current state and event handlers to the group registration screen composable.
+ *
+ * @param viewModel The ViewModel managing group registration state and side effects.
+ * @param navigateMyGroup Callback invoked to navigate to the user's group screen.
+ * @param navigateBack Callback invoked to navigate back in the navigation stack.
+ */
 @Composable
 fun GroupRegisterRoute(
     viewModel: GroupRegisterViewModel,
@@ -87,6 +97,18 @@ fun GroupRegisterRoute(
     )
 }
 
+/**
+ * Displays the group registration screen with group details, a registration button, and dialogs for registration success or failure.
+ *
+ * Shows group information and allows the user to initiate registration. Displays a dialog based on the registration result.
+ *
+ * @param uiState The current UI state, including registration status.
+ * @param groupRegisterInfo Information about the group being registered.
+ * @param onBackClick Callback invoked when the back button is pressed.
+ * @param onRegisterButtonClicked Callback invoked when the registration button is pressed.
+ * @param onDialogConfirmButtonClicked Callback invoked when the dialog confirm button is pressed.
+ * @param onDialogDismissClicked Callback invoked when the dialog dismiss button is pressed.
+ */
 @Composable
 private fun GroupRegisterScreen(
     uiState: GroupRegisterContract.State,
@@ -214,6 +236,9 @@ private fun GroupRegisterSection(
     }
 }
 
+/**
+ * Displays a preview of the group registration screen with default state for UI design and testing.
+ */
 @Preview(showBackground = true)
 @Composable
 private fun ShowGroupRegisterScreen() {

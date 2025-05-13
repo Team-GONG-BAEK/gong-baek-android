@@ -29,6 +29,15 @@ import com.sopt.gongbaek.presentation.ui.component.textfield.GongBaekBasicTextFi
 import com.sopt.gongbaek.presentation.ui.component.topbar.StartTitleTopBar
 import com.sopt.gongbaek.ui.theme.GONGBAEKTheme
 
+/**
+ * Connects the group introduction registration UI with the ViewModel, handling state, navigation, and back button behavior.
+ *
+ * Observes the group title and introduction state, manages navigation side effects, and responds to user actions such as back navigation and progressing to the next registration step.
+ *
+ * @param viewModel The ViewModel managing group registration state and events.
+ * @param navigateRegister Callback invoked to navigate to the next registration step.
+ * @param navigateBack Callback invoked to navigate back in the registration flow.
+ */
 @Composable
 fun GroupIntroductionRoute(
     viewModel: GroupRegisterViewModel,
@@ -73,6 +82,11 @@ fun GroupIntroductionRoute(
     )
 }
 
+/**
+ * Displays the group introduction registration screen with input fields and a "Next" button.
+ *
+ * Shows fields for entering the group title and introduction, and enables the "Next" button only when the title is not blank. Handles user input and navigation actions via provided callbacks.
+ */
 @Composable
 private fun GroupIntroductionScreen(
     groupTitle: String,
@@ -105,6 +119,19 @@ private fun GroupIntroductionScreen(
     }
 }
 
+/**
+ * Displays the UI section for entering a group title and introduction during group registration.
+ *
+ * Presents a top bar with a back button, a progress bar, a description, and two text fields for the group title and introduction.
+ * Invokes the provided callbacks when the user edits the text fields or presses the back button.
+ *
+ * @param groupTitle Current value of the group title input.
+ * @param onGroupTitleChange Callback invoked when the group title changes.
+ * @param introduction Current value of the group introduction input.
+ * @param onIntroductionChange Callback invoked when the group introduction changes.
+ * @param onBackClick Callback invoked when the back button is pressed.
+ * @param modifier Modifier to be applied to the section layout.
+ */
 @Composable
 private fun GroupIntroductionSection(
     groupTitle: String,
@@ -150,6 +177,9 @@ private fun GroupIntroductionSection(
     }
 }
 
+/**
+ * Displays a preview of the group introduction registration screen with default values for design and development purposes.
+ */
 @Preview(showBackground = true)
 @Composable
 private fun ShowGroupIntroductionScreen() {

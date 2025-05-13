@@ -28,6 +28,14 @@ import com.sopt.gongbaek.presentation.ui.component.topbar.StartTitleTopBar
 import com.sopt.gongbaek.ui.theme.GONGBAEKTheme
 import com.sopt.gongbaek.ui.theme.GongBaekTheme
 
+/**
+ * Connects the group cover selection UI with the ViewModel, handling state, navigation, and user interactions.
+ *
+ * Observes the ViewModel's state and side effects to update the UI and perform navigation actions. Intercepts the system back button to trigger navigation and cover deletion events. Passes relevant state and event handlers to the group cover selection screen.
+ *
+ * @param navigateGroupPlacePeople Callback to navigate to the group place/people selection screen.
+ * @param navigateBack Callback to navigate back in the registration flow.
+ */
 @Composable
 fun GroupCoverRoute(
     viewModel: GroupRegisterViewModel,
@@ -73,6 +81,16 @@ fun GroupCoverRoute(
     )
 }
 
+/**
+ * Displays the group cover selection screen with a selectable list of cover images and a "Next" button.
+ *
+ * @param category The group category used to determine available cover images.
+ * @param cover The currently selected cover image index.
+ * @param selectedCover The index of the cover image currently highlighted as selected, or null if none.
+ * @param onCoverSelected Callback invoked when a cover image is selected.
+ * @param onNextButtonClicked Callback invoked when the "Next" button is clicked.
+ * @param onBackClick Callback invoked when the back button is pressed.
+ */
 @Composable
 private fun GroupCoverScreen(
     category: String,
@@ -152,6 +170,11 @@ private fun GroupCoverSection(
     }
 }
 
+/**
+ * Displays a preview of the group cover selection screen with sample data for UI development.
+ *
+ * This preview uses the "EXERCISE" category and sample cover selection values.
+ */
 @Preview
 @Composable
 private fun ShowGroupCoverScreen() {

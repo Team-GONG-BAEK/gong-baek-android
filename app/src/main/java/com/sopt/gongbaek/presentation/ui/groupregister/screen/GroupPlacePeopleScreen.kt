@@ -34,6 +34,15 @@ import com.sopt.gongbaek.ui.theme.GONGBAEKTheme
 import com.sopt.gongbaek.ui.theme.GongBaekTheme
 import com.sopt.gongbaek.ui.theme.defaultGongBaekTypography
 
+/**
+ * Composable route for the group place and people count registration screen.
+ *
+ * Connects the UI with the GroupRegisterViewModel, handles navigation side effects, and manages back navigation and user input events for place and people count.
+ *
+ * @param viewModel The ViewModel managing group registration state and events.
+ * @param navigateGroupIntroduction Callback invoked to navigate to the group introduction screen.
+ * @param navigateBack Callback invoked to navigate back in the registration flow.
+ */
 @Composable
 fun GroupPlacePeopleRoute(
     viewModel: GroupRegisterViewModel,
@@ -82,6 +91,20 @@ fun GroupPlacePeopleRoute(
     )
 }
 
+/**
+ * Displays the group place and people count input screen with a bottom-aligned "Next" button.
+ *
+ * Presents input fields for the group place and people count, along with controls to adjust values and navigate back.
+ * The "Next" button is enabled only when the place input is not blank.
+ *
+ * @param place Current value of the place input field.
+ * @param onPlaceChange Callback invoked when the place input changes.
+ * @param peopleCount Current number of people selected.
+ * @param onIncreasePeopleCount Callback invoked when the people count is increased.
+ * @param onDecreasePeopleCount Callback invoked when the people count is decreased.
+ * @param onNextButtonClicked Callback invoked when the "Next" button is clicked.
+ * @param onBackClick Callback invoked when the back button is pressed.
+ */
 @Composable
 private fun GroupPlacePeopleScreen(
     place: String,
@@ -116,6 +139,19 @@ private fun GroupPlacePeopleScreen(
     }
 }
 
+/**
+ * Displays the UI section for entering a group place and selecting the number of people.
+ *
+ * Includes a top bar with a back button, progress indicator, input field for the place, descriptive text, and a counter for people selection.
+ *
+ * @param place Current value of the place input field.
+ * @param onPlaceChange Callback invoked when the place input changes.
+ * @param peopleCount Current number of people selected.
+ * @param onMinusButtonClicked Callback invoked when the minus button is clicked to decrease the people count.
+ * @param onPlusButtonClicked Callback invoked when the plus button is clicked to increase the people count.
+ * @param onBackClick Callback invoked when the back button is clicked.
+ * @param modifier Modifier for styling and layout adjustments.
+ */
 @Composable
 private fun GroupPlacePeopleSection(
     place: String,
@@ -207,6 +243,11 @@ private fun GroupPlacePeopleSection(
     }
 }
 
+/**
+ * Displays a preview of the group place and people registration screen with default values.
+ *
+ * Intended for use in design previews to visualize the UI layout and appearance.
+ */
 @Preview(showBackground = true)
 @Composable
 private fun ShowGroupPlacePeopleScreen() {

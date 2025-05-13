@@ -49,6 +49,13 @@ class AuthViewModel @Inject constructor(
 
     override fun createInitialState(): AuthContract.State = AuthContract.State()
 
+    /**
+     * Handles authentication-related events by delegating to appropriate state update or processing methods.
+     *
+     * Processes events such as academic information input, email verification, nickname and gender selection, profile image selection, MBTI selection, self-introduction, timetable entry, and sign-up requests, updating the ViewModel state or triggering side effects as needed.
+     *
+     * @param event The authentication event to handle.
+     */
     override suspend fun handleEvent(event: AuthContract.Event) {
         when (event) {
             // AcademicInfo Event
@@ -126,6 +133,13 @@ class AuthViewModel @Inject constructor(
             )
     }
 
+    /**
+     * Updates the selected university in the academic info state, toggling selection if the same university is chosen.
+     *
+     * If the provided university matches the currently selected one, the selection is cleared; otherwise, it is set as the new selection.
+     *
+     * @param university The university to select or deselect.
+     */
     private fun updateSelectedUniversity(university: String) = setState {
         copy(
             academicInfoState = currentState.academicInfoState.copy(
@@ -134,6 +148,9 @@ class AuthViewModel @Inject constructor(
         )
     }
 
+    /**
+     * Clears the university selection, search query, and search results from the academic info state.
+     */
     private fun clearUniversitySearchQuery() = setState {
         copy(
             academicInfoState = currentState.academicInfoState.copy(
@@ -144,6 +161,11 @@ class AuthViewModel @Inject constructor(
         )
     }
 
+    /**
+     * Updates the major search query in the academic info state with the trimmed input string.
+     *
+     * @param query The new search query for majors.
+     */
     private fun updateMajorSearchQuery(query: String) = setState {
         copy(
             academicInfoState = currentState.academicInfoState.copy(
@@ -173,6 +195,13 @@ class AuthViewModel @Inject constructor(
         )
     }
 
+    /**
+     * Updates the selected major in the academic info state, toggling it off if the same major is selected again.
+     *
+     * If the provided major matches the currently selected major, the selection is cleared; otherwise, the major is set as selected.
+     *
+     * @param major The major to select or deselect.
+     */
     private fun updateSelectedMajor(major: String) = setState {
         copy(
             academicInfoState = currentState.academicInfoState.copy(
@@ -181,6 +210,9 @@ class AuthViewModel @Inject constructor(
         )
     }
 
+    /**
+     * Clears the selected major, major search query, and search results from the academic info state.
+     */
     private fun clearMajorSearchQuery() = setState {
         copy(
             academicInfoState = currentState.academicInfoState.copy(
@@ -191,6 +223,11 @@ class AuthViewModel @Inject constructor(
         )
     }
 
+    /**
+     * Updates the academic information state with the specified entering year.
+     *
+     * @param enterYear The year the user entered or will enter university.
+     */
     private fun updateEnterYear(enterYear: Int) = setState {
         copy(
             academicInfoState = currentState.academicInfoState.copy(

@@ -26,6 +26,14 @@ import com.sopt.gongbaek.presentation.ui.component.section.PageDescriptionSectio
 import com.sopt.gongbaek.presentation.ui.component.topbar.StartTitleTopBar
 import com.sopt.gongbaek.ui.theme.GONGBAEKTheme
 
+/**
+ * Connects the day-of-week selection UI with the group registration ViewModel and handles navigation events.
+ *
+ * Observes UI state and side effects from the ViewModel, manages back button behavior, and triggers navigation callbacks based on user actions or side effects.
+ *
+ * @param navigateGroupTime Callback invoked to navigate to the group time selection screen.
+ * @param navigateBack Callback invoked to navigate back in the registration flow.
+ */
 @Composable
 fun SelectDayOfWeekRoute(
     viewModel: GroupRegisterViewModel,
@@ -70,6 +78,17 @@ fun SelectDayOfWeekRoute(
     )
 }
 
+/**
+ * Displays the UI for selecting a day of the week with a bottom-aligned "Next" button.
+ *
+ * Renders the day selection section and enables the "Next" button only when a day is selected.
+ *
+ * @param dayOfWeek The currently selected day of the week as a string.
+ * @param selectedDayOfWeek The day of the week option currently highlighted in the UI.
+ * @param onDayOfWeekSelected Callback invoked when a day is selected.
+ * @param onNextButtonClicked Callback invoked when the "Next" button is clicked.
+ * @param onBackClick Callback invoked when the back button is pressed.
+ */
 @Composable
 private fun SelectDayOfWeekScreen(
     dayOfWeek: String,
@@ -134,6 +153,9 @@ private fun SelectDayOfWeekSection(
     }
 }
 
+/**
+ * Displays a preview of the SelectDayOfWeekScreen composable with default parameters for UI development.
+ */
 @Preview(showBackground = true)
 @Composable
 private fun ShowSelectDayOfWeekScreen() {

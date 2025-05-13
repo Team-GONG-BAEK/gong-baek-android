@@ -50,6 +50,14 @@ import com.sopt.gongbaek.presentation.util.extension.roundedBackgroundWithBorder
 import com.sopt.gongbaek.ui.theme.GONGBAEKTheme
 import com.sopt.gongbaek.ui.theme.GongBaekTheme
 
+/**
+ * Connects the major search UI with the authentication ViewModel, handling state, events, and navigation.
+ *
+ * Observes UI state and side effects from the ViewModel, manages back navigation to clear the selected major, and passes relevant event handlers to the major search screen.
+ *
+ * @param viewModel The authentication ViewModel providing state and event handling for the major search flow.
+ * @param navigateBack Callback invoked to navigate back in the navigation stack.
+ */
 @Composable
 fun MajorSearchRoute(
     viewModel: AuthViewModel,
@@ -87,6 +95,19 @@ fun MajorSearchRoute(
     )
 }
 
+/**
+ * Displays the UI for searching and selecting an academic major, including direct registration and completion actions.
+ *
+ * Presents a search field, search results, and options to directly register a new major or apply the selected one.
+ * Invokes callbacks when the search query changes, a search is performed, a major is selected, the close icon is clicked, or the completion action is triggered.
+ *
+ * @param academicInfoState The current state of academic information and search results.
+ * @param onSearchQueryChanged Called when the search query input changes.
+ * @param onSearchButtonClicked Called when the search action is triggered.
+ * @param onMajorSelected Called when a major is selected from the results or via direct registration.
+ * @param onCloseClick Called when the close icon in the top bar is clicked.
+ * @param onComplete Called when the user completes the selection or registration process.
+ */
 @Composable
 private fun MajorSearchScreen(
     academicInfoState: AcademicInfoState,
@@ -165,6 +186,17 @@ private fun MajorSearchScreen(
     )
 }
 
+/**
+ * Displays a text input field for searching academic majors with a search icon and error handling.
+ *
+ * Shows a labeled input with a placeholder, manages focus and error state, and triggers search actions via the keyboard or search icon.
+ *
+ * @param value The current text input value.
+ * @param onValueChange Called when the text input changes.
+ * @param isError Whether the input is in an error state.
+ * @param onSearchButtonClicked Called when the search action is triggered.
+ * @param onErrorChange Called to update the error state.
+ */
 @Composable
 private fun SearchTextField(
     value: String,
@@ -308,6 +340,9 @@ private fun DirectRegistrationButtonPreview() {
     )
 }
 
+/**
+ * Displays a preview of the MajorSearchScreen composable with default state and empty event handlers.
+ */
 @Preview(showBackground = true)
 @Composable
 private fun MajorSearchScreenPreview() {

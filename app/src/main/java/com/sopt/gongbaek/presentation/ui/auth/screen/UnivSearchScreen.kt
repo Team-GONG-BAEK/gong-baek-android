@@ -47,6 +47,14 @@ import com.sopt.gongbaek.presentation.util.extension.roundedBackgroundWithBorder
 import com.sopt.gongbaek.ui.theme.GONGBAEKTheme
 import com.sopt.gongbaek.ui.theme.GongBaekTheme
 
+/**
+ * Composable route for the university search screen in the authentication flow.
+ *
+ * Connects the UI to the [AuthViewModel], manages navigation and side effects, and handles back navigation by clearing university selection and triggering navigation events.
+ *
+ * @param viewModel The authentication ViewModel providing state and event handling.
+ * @param navigateBack Callback invoked when navigation back is requested.
+ */
 @Composable
 fun UnivSearchRoute(
     viewModel: AuthViewModel,
@@ -84,6 +92,19 @@ fun UnivSearchRoute(
     )
 }
 
+/**
+ * Displays the university search screen within the authentication flow.
+ *
+ * Shows a search field, search results or empty state, and a bottom button to complete the selection.
+ * Allows users to search for universities, select one from the results, and complete the process.
+ *
+ * @param academicInfoState Current state of the academic information and search results.
+ * @param onSearchQueryChanged Called when the search query input changes.
+ * @param onSearchButtonClicked Called when the search action is triggered.
+ * @param onUniversitySelected Called when a university is selected from the results.
+ * @param onCloseClick Called when the close icon in the top bar is clicked.
+ * @param onComplete Called when the user completes the university selection.
+ */
 @Composable
 private fun UnivSearchScreen(
     academicInfoState: AcademicInfoState,
@@ -150,6 +171,16 @@ private fun UnivSearchScreen(
     )
 }
 
+/**
+ * Displays a styled text input field for searching universities with a search icon and placeholder.
+ *
+ * Shows a label above the input, highlights the border on focus, and triggers the search action when the search icon is clicked or the keyboard search action is used. The search icon is enabled only when the input is non-empty.
+ *
+ * @param value The current text input value.
+ * @param onValueChange Callback invoked when the input value changes.
+ * @param modifier Modifier for styling and layout.
+ * @param onSearchButtonClicked Callback invoked when the search action is triggered.
+ */
 @Composable
 private fun SearchTextField(
     value: String,
@@ -239,6 +270,9 @@ private fun SearchTextField(
     }
 }
 
+/**
+ * Displays a preview of the university search screen with default state and no-op event handlers.
+ */
 @Preview
 @Composable
 private fun UnivSearchScreenPreview() {

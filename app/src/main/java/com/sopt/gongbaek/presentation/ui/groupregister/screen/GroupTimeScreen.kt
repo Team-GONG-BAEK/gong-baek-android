@@ -26,6 +26,15 @@ import com.sopt.gongbaek.presentation.ui.component.topbar.StartTitleTopBar
 import com.sopt.gongbaek.ui.theme.GONGBAEKTheme
 import com.sopt.gongbaek.ui.theme.GongBaekTheme
 
+/**
+ * Composable route for the group time registration screen, connecting UI state and navigation with the GroupRegisterViewModel.
+ *
+ * Observes state and side effects from the view model, handles back navigation, and triggers data loading and navigation events.
+ *
+ * @param viewModel The view model managing group registration state and events.
+ * @param navigateGroupCategory Callback to navigate to the group category selection screen.
+ * @param navigateBack Callback to navigate back in the navigation stack.
+ */
 @Composable
 fun GroupTimeRoute(
     viewModel: GroupRegisterViewModel,
@@ -74,6 +83,20 @@ fun GroupTimeRoute(
     )
 }
 
+/**
+ * Displays the group time selection screen, allowing users to choose available time slots for a specific day.
+ *
+ * Presents a timetable for the selected day, highlights selected time slots, and provides navigation controls.
+ * The "Next" button is enabled only when at least one time slot is selected.
+ *
+ * @param selectedDay The day for which time slots are being selected.
+ * @param lectureTime A map of days to available lecture time slots.
+ * @param selectedTimeSlotsByDay A map of days to the currently selected time slots.
+ * @param onTimeSlotSelectionChange Callback invoked when the selection of time slots changes for a day.
+ * @param onNextButtonClicked Callback invoked when the "Next" button is clicked.
+ * @param onBackClick Callback invoked when the back button is pressed.
+ * @param timeSlotLabels Labels for the time slots displayed in the timetable.
+ */
 @Composable
 private fun GroupTimeScreen(
     selectedDay: String,
@@ -127,6 +150,11 @@ private fun GroupTimeScreen(
     }
 }
 
+/**
+ * Preview of the group time selection screen with the app theme applied.
+ *
+ * Displays the themed scaffold without rendering any UI content.
+ */
 @Preview(showBackground = true)
 @Composable
 private fun ShowGroupTimeScreen() {
