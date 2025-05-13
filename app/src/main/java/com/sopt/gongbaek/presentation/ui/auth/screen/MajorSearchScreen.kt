@@ -144,6 +144,7 @@ private fun MajorSearchScreen(
 
                 Spacer(modifier = Modifier.height(14.dp))
 
+                val keyboardController = LocalSoftwareKeyboardController.current
                 val majors = academicInfoState.searchedMajors
                 when {
                     majors == null -> {}
@@ -152,7 +153,10 @@ private fun MajorSearchScreen(
                         SearchResultSection(
                             searchResults = majors,
                             selectedItem = academicInfoState.major,
-                            onItemSelected = onMajorSelected
+                            onItemSelected = { query ->
+                                keyboardController?.hide()
+                                onMajorSelected(query)
+                            }
                         )
                     }
                 }

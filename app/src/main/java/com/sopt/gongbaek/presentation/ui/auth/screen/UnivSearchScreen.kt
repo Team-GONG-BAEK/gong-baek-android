@@ -129,6 +129,7 @@ private fun UnivSearchScreen(
 
                 Spacer(modifier = Modifier.height(14.dp))
 
+                val keyboardController = LocalSoftwareKeyboardController.current
                 val universities = academicInfoState.searchedUniversities
                 when {
                     universities == null -> {}
@@ -137,7 +138,10 @@ private fun UnivSearchScreen(
                         SearchResultSection(
                             searchResults = universities,
                             selectedItem = academicInfoState.university,
-                            onItemSelected = onUniversitySelected
+                            onItemSelected = { query ->
+                                keyboardController?.hide()
+                                onUniversitySelected(query)
+                            }
                         )
                     }
                 }
