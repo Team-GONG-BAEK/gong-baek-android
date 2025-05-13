@@ -1,5 +1,6 @@
 package com.sopt.gongbaek.presentation.ui.groupregister.screen
 
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -34,7 +35,12 @@ fun SelectDayOfWeekRoute(
     val uiState by viewModel.state.collectAsStateWithLifecycle()
     val lifecycleOwner = LocalLifecycleOwner.current
 
-    LaunchedEffect(viewModel.sideEffect, lifecycleOwner) {
+    BackHandler {
+        viewModel.setEvent(GroupRegisterContract.Event.OnDayOfWeekDeleted)
+        viewModel.sendSideEffect(GroupRegisterContract.SideEffect.NavigateBack)
+    }
+
+    LaunchedEffect(Unit) {
         viewModel.sideEffect
             .flowWithLifecycle(lifecycleOwner.lifecycle)
             .collect { sideEffect ->
@@ -58,14 +64,14 @@ fun SelectDayOfWeekRoute(
             viewModel.sendSideEffect(GroupRegisterContract.SideEffect.NavigateTime)
         },
         onBackClick = {
-            viewModel.sendSideEffect(GroupRegisterContract.SideEffect.NavigateBack)
             viewModel.setEvent(GroupRegisterContract.Event.OnDayOfWeekDeleted)
+            viewModel.sendSideEffect(GroupRegisterContract.SideEffect.NavigateBack)
         }
     )
 }
 
 @Composable
-fun SelectDayOfWeekScreen(
+private fun SelectDayOfWeekScreen(
     dayOfWeek: String,
     selectedDayOfWeek: String,
     onDayOfWeekSelected: (String) -> Unit,
@@ -130,7 +136,7 @@ private fun SelectDayOfWeekSection(
 
 @Preview(showBackground = true)
 @Composable
-fun ShowSelectDayOfWeekScreen() {
+private fun ShowSelectDayOfWeekScreen() {
     GONGBAEKTheme {
         SelectDayOfWeekScreen(
             dayOfWeek = "",

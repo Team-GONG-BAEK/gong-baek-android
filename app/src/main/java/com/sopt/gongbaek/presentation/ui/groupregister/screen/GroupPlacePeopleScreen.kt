@@ -1,5 +1,6 @@
 package com.sopt.gongbaek.presentation.ui.groupregister.screen
 
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -29,7 +30,6 @@ import com.sopt.gongbaek.presentation.ui.component.section.PageDescriptionSectio
 import com.sopt.gongbaek.presentation.ui.component.textfield.GongBaekBasicTextField
 import com.sopt.gongbaek.presentation.ui.component.topbar.StartTitleTopBar
 import com.sopt.gongbaek.presentation.ui.groupregister.component.GroupPeopleCounter
-import com.sopt.gongbaek.presentation.util.extension.hasCompleteKoreanCharacters
 import com.sopt.gongbaek.ui.theme.GONGBAEKTheme
 import com.sopt.gongbaek.ui.theme.GongBaekTheme
 import com.sopt.gongbaek.ui.theme.defaultGongBaekTypography
@@ -43,7 +43,12 @@ fun GroupPlacePeopleRoute(
     val uiState by viewModel.state.collectAsStateWithLifecycle()
     val lifecycleOwner = LocalLifecycleOwner.current
 
-    LaunchedEffect(viewModel.sideEffect, lifecycleOwner) {
+    BackHandler {
+        viewModel.setEvent(GroupRegisterContract.Event.OnPlacePeopleDeleted)
+        viewModel.sendSideEffect(GroupRegisterContract.SideEffect.NavigateBack)
+    }
+
+    LaunchedEffect(Unit) {
         viewModel.sideEffect
             .flowWithLifecycle(lifecycleOwner.lifecycle)
             .collect { sideEffect ->
@@ -57,7 +62,6 @@ fun GroupPlacePeopleRoute(
 
     GroupPlacePeopleScreen(
         place = uiState.groupRegisterInfo.location,
-        placeErrorMessage = uiState.placeErrorMessage,
         onPlaceChange = { place ->
             viewModel.setEvent(GroupRegisterContract.Event.OnPlaceChanged(place = place))
         },
@@ -72,16 +76,15 @@ fun GroupPlacePeopleRoute(
             viewModel.sendSideEffect(GroupRegisterContract.SideEffect.NavigateIntroduction)
         },
         onBackClick = {
-            viewModel.sendSideEffect(GroupRegisterContract.SideEffect.NavigateBack)
             viewModel.setEvent(GroupRegisterContract.Event.OnPlacePeopleDeleted)
+            viewModel.sendSideEffect(GroupRegisterContract.SideEffect.NavigateBack)
         }
     )
 }
 
 @Composable
-fun GroupPlacePeopleScreen(
+private fun GroupPlacePeopleScreen(
     place: String,
-    placeErrorMessage: String?,
     onPlaceChange: (String) -> Unit,
     peopleCount: Int,
     onIncreasePeopleCount: () -> Unit,
@@ -95,7 +98,6 @@ fun GroupPlacePeopleScreen(
     ) {
         GroupPlacePeopleSection(
             place = place,
-            placeErrorMessage = placeErrorMessage,
             onPlaceChange = onPlaceChange,
             peopleCount = peopleCount,
             onMinusButtonClicked = onDecreasePeopleCount,
@@ -106,7 +108,7 @@ fun GroupPlacePeopleScreen(
         GongBaekBasicButton(
             title = stringResource(R.string.groupregister_next),
             onClick = onNextButtonClicked,
-            enabled = place.isNotBlank() && place.hasCompleteKoreanCharacters(2),
+            enabled = place.isNotBlank(),
             modifier = Modifier
                 .padding(horizontal = 16.dp, vertical = 12.dp)
                 .align(Alignment.BottomCenter)
@@ -117,7 +119,6 @@ fun GroupPlacePeopleScreen(
 @Composable
 private fun GroupPlacePeopleSection(
     place: String,
-    placeErrorMessage: String?,
     onPlaceChange: (String) -> Unit,
     peopleCount: Int,
     onMinusButtonClicked: () -> Unit,
@@ -149,9 +150,7 @@ private fun GroupPlacePeopleSection(
             GongBaekBasicTextField(
                 value = place,
                 onValueChange = onPlaceChange,
-                gongBaekBasicTextFieldType = GongBaekBasicTextFieldType.GROUP_PLACE,
-                isError = !placeErrorMessage.isNullOrEmpty(),
-                errorMessage = placeErrorMessage.orEmpty()
+                gongBaekBasicTextFieldType = GongBaekBasicTextFieldType.GROUP_PLACE
             )
 
             PageDescriptionSection(
@@ -210,11 +209,10 @@ private fun GroupPlacePeopleSection(
 
 @Preview(showBackground = true)
 @Composable
-fun ShowGroupPlacePeopleScreen() {
+private fun ShowGroupPlacePeopleScreen() {
     GONGBAEKTheme {
         GroupPlacePeopleScreen(
             place = "",
-            placeErrorMessage = null,
             onPlaceChange = {},
             peopleCount = 0,
             onIncreasePeopleCount = {},

@@ -1,5 +1,6 @@
 package com.sopt.gongbaek.presentation.ui.groupregister.screen
 
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.aspectRatio
@@ -36,7 +37,12 @@ fun GroupCoverRoute(
     val uiState by viewModel.state.collectAsStateWithLifecycle()
     val lifecycleOwner = LocalLifecycleOwner.current
 
-    LaunchedEffect(viewModel.sideEffect, lifecycleOwner) {
+    BackHandler {
+        viewModel.setEvent(GroupRegisterContract.Event.OnCoverDeleted)
+        viewModel.sendSideEffect(GroupRegisterContract.SideEffect.NavigateBack)
+    }
+
+    LaunchedEffect(Unit) {
         viewModel.sideEffect
             .flowWithLifecycle(lifecycleOwner.lifecycle)
             .collect { sideEffect ->
@@ -61,14 +67,14 @@ fun GroupCoverRoute(
             viewModel.sendSideEffect(GroupRegisterContract.SideEffect.NavigatePlacePeople)
         },
         onBackClick = {
-            viewModel.sendSideEffect(GroupRegisterContract.SideEffect.NavigateBack)
             viewModel.setEvent(GroupRegisterContract.Event.OnCoverDeleted)
+            viewModel.sendSideEffect(GroupRegisterContract.SideEffect.NavigateBack)
         }
     )
 }
 
 @Composable
-fun GroupCoverScreen(
+private fun GroupCoverScreen(
     category: String,
     cover: Int,
     selectedCover: Int?,
@@ -148,7 +154,7 @@ private fun GroupCoverSection(
 
 @Preview
 @Composable
-fun ShowGroupCoverScreen() {
+private fun ShowGroupCoverScreen() {
     val category = "EXERCISE"
     GONGBAEKTheme {
         GroupCoverScreen(

@@ -1,5 +1,6 @@
 package com.sopt.gongbaek.presentation.ui.groupregister.screen
 
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -37,7 +38,12 @@ fun GroupIntroductionRoute(
     val uiState by viewModel.state.collectAsStateWithLifecycle()
     val lifecycleOwner = LocalLifecycleOwner.current
 
-    LaunchedEffect(viewModel.sideEffect, lifecycleOwner) {
+    BackHandler {
+        viewModel.setEvent(GroupRegisterContract.Event.OnTitleIntroductionDeleted)
+        viewModel.sendSideEffect(GroupRegisterContract.SideEffect.NavigateBack)
+    }
+
+    LaunchedEffect(Unit) {
         viewModel.sideEffect
             .flowWithLifecycle(lifecycleOwner.lifecycle)
             .collect { sideEffect ->
@@ -50,7 +56,6 @@ fun GroupIntroductionRoute(
     }
     GroupIntroductionScreen(
         groupTitle = uiState.groupRegisterInfo.groupTitle,
-        titleErrorMessage = uiState.titleErrorMessage,
         onGroupTitleChange = { groupTitle ->
             viewModel.setEvent(GroupRegisterContract.Event.OnTitleChanged(groupTitle))
         },
@@ -62,16 +67,15 @@ fun GroupIntroductionRoute(
             viewModel.sendSideEffect(GroupRegisterContract.SideEffect.NavigateRegister)
         },
         onBackClick = {
-            viewModel.sendSideEffect(GroupRegisterContract.SideEffect.NavigateBack)
             viewModel.setEvent(GroupRegisterContract.Event.OnTitleIntroductionDeleted)
+            viewModel.sendSideEffect(GroupRegisterContract.SideEffect.NavigateBack)
         }
     )
 }
 
 @Composable
-fun GroupIntroductionScreen(
+private fun GroupIntroductionScreen(
     groupTitle: String,
-    titleErrorMessage: String?,
     onGroupTitleChange: (String) -> Unit,
     introduction: String,
     onIntroductionChange: (String) -> Unit,
@@ -84,7 +88,6 @@ fun GroupIntroductionScreen(
     ) {
         GroupIntroductionSection(
             groupTitle = groupTitle,
-            titleErrorMessage = titleErrorMessage,
             onGroupTitleChange = onGroupTitleChange,
             introduction = introduction,
             onIntroductionChange = onIntroductionChange,
@@ -105,7 +108,6 @@ fun GroupIntroductionScreen(
 @Composable
 private fun GroupIntroductionSection(
     groupTitle: String,
-    titleErrorMessage: String?,
     onGroupTitleChange: (String) -> Unit,
     introduction: String,
     onIntroductionChange: (String) -> Unit,
@@ -133,9 +135,7 @@ private fun GroupIntroductionSection(
             GongBaekBasicTextField(
                 value = groupTitle,
                 onValueChange = onGroupTitleChange,
-                gongBaekBasicTextFieldType = GongBaekBasicTextFieldType.GROUP_TITLE,
-                isError = !titleErrorMessage.isNullOrEmpty(),
-                errorMessage = titleErrorMessage.orEmpty()
+                gongBaekBasicTextFieldType = GongBaekBasicTextFieldType.GROUP_TITLE
             )
             Spacer(Modifier.height(28.dp))
 
@@ -152,11 +152,10 @@ private fun GroupIntroductionSection(
 
 @Preview(showBackground = true)
 @Composable
-fun ShowGroupIntroductionScreen() {
+private fun ShowGroupIntroductionScreen() {
     GONGBAEKTheme {
         GroupIntroductionScreen(
             groupTitle = "",
-            titleErrorMessage = null,
             onGroupTitleChange = {},
             introduction = "",
             onIntroductionChange = {},

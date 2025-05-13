@@ -55,9 +55,11 @@ class AuthViewModel @Inject constructor(
             is AuthContract.Event.UniversitySearchQueryChanged -> updateUniversitySearchQuery(event.query)
             is AuthContract.Event.UniversitySearchClicked -> searchUniversities()
             is AuthContract.Event.UniversitySelected -> updateSelectedUniversity(event.university)
+            is AuthContract.Event.ClearUniversity -> clearUniversitySearchQuery()
             is AuthContract.Event.MajorSearchQueryChanged -> updateMajorSearchQuery(event.query)
             is AuthContract.Event.MajorSearchClicked -> searchMajors()
             is AuthContract.Event.MajorSelected -> updateSelectedMajor(event.major)
+            is AuthContract.Event.ClearMajor -> clearMajorSearchQuery()
             is AuthContract.Event.EnterYearSelected -> updateEnterYear(event.enterYear)
 
             // EmailVerification Event
@@ -132,6 +134,16 @@ class AuthViewModel @Inject constructor(
         )
     }
 
+    private fun clearUniversitySearchQuery() = setState {
+        copy(
+            academicInfoState = currentState.academicInfoState.copy(
+                university = "",
+                universitySearchQuery = "",
+                searchedUniversities = null
+            )
+        )
+    }
+
     private fun updateMajorSearchQuery(query: String) = setState {
         copy(
             academicInfoState = currentState.academicInfoState.copy(
@@ -165,6 +177,16 @@ class AuthViewModel @Inject constructor(
         copy(
             academicInfoState = currentState.academicInfoState.copy(
                 major = if (currentState.academicInfoState.major == major) "" else major
+            )
+        )
+    }
+
+    private fun clearMajorSearchQuery() = setState {
+        copy(
+            academicInfoState = currentState.academicInfoState.copy(
+                major = "",
+                majorSearchQuery = "",
+                searchedMajors = null
             )
         )
     }

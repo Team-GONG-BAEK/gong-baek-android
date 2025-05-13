@@ -1,5 +1,6 @@
 package com.sopt.gongbaek.presentation.ui.groupregister.screen
 
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -34,7 +35,12 @@ fun SelectDayRoute(
     val uiState by viewModel.state.collectAsStateWithLifecycle()
     val lifecycleOwner = LocalLifecycleOwner.current
 
-    LaunchedEffect(viewModel.sideEffect, lifecycleOwner) {
+    BackHandler {
+        viewModel.setEvent(GroupRegisterContract.Event.OnWeekDateAndDayDeleted)
+        viewModel.sendSideEffect(GroupRegisterContract.SideEffect.NavigateBack)
+    }
+
+    LaunchedEffect(Unit) {
         viewModel.sideEffect
             .flowWithLifecycle(lifecycleOwner.lifecycle)
             .collect { sideEffect ->
@@ -59,14 +65,14 @@ fun SelectDayRoute(
             viewModel.sendSideEffect(GroupRegisterContract.SideEffect.NavigateTime)
         },
         onBackClick = {
-            viewModel.sendSideEffect(GroupRegisterContract.SideEffect.NavigateBack)
             viewModel.setEvent(GroupRegisterContract.Event.OnWeekDateAndDayDeleted)
+            viewModel.sendSideEffect(GroupRegisterContract.SideEffect.NavigateBack)
         }
     )
 }
 
 @Composable
-fun SelectDayScreen(
+private fun SelectDayScreen(
     selectedDate: LocalDate?,
     onSelectedDate: (LocalDate) -> Unit,
     onNextButtonClicked: () -> Unit,
@@ -129,7 +135,7 @@ private fun SelectDaySection(
 
 @Preview(showBackground = true)
 @Composable
-fun ShowSelectDayScreen() {
+private fun ShowSelectDayScreen() {
     GONGBAEKTheme {
     }
 }

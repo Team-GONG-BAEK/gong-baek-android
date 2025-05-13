@@ -1,5 +1,6 @@
 package com.sopt.gongbaek.presentation.ui.auth.screen
 
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -57,6 +58,11 @@ fun MajorSearchRoute(
     val uiState by viewModel.state.collectAsStateWithLifecycle()
     val lifecycleOwner = LocalLifecycleOwner.current
 
+    BackHandler {
+        viewModel.setEvent(AuthContract.Event.ClearMajor)
+        viewModel.sendSideEffect(AuthContract.SideEffect.NavigateBack)
+    }
+
     LaunchedEffect(Unit) {
         viewModel.sideEffect
             .flowWithLifecycle(lifecycleOwner.lifecycle)
@@ -73,8 +79,11 @@ fun MajorSearchRoute(
         onSearchQueryChanged = { query -> viewModel.setEvent(AuthContract.Event.MajorSearchQueryChanged(query)) },
         onSearchButtonClicked = { viewModel.setEvent(AuthContract.Event.MajorSearchClicked) },
         onMajorSelected = { selectedMajor -> viewModel.setEvent(AuthContract.Event.MajorSelected(selectedMajor)) },
-        onCloseClick = { viewModel.sendSideEffect(AuthContract.SideEffect.NavigateBack) },
-        navigateBack = { viewModel.sendSideEffect(AuthContract.SideEffect.NavigateBack) }
+        onComplete = { viewModel.sendSideEffect(AuthContract.SideEffect.NavigateBack) },
+        onCloseClick = {
+            viewModel.setEvent(AuthContract.Event.ClearMajor)
+            viewModel.sendSideEffect(AuthContract.SideEffect.NavigateBack)
+        }
     )
 }
 
@@ -85,7 +94,7 @@ private fun MajorSearchScreen(
     onSearchButtonClicked: () -> Unit,
     onMajorSelected: (String) -> Unit,
     onCloseClick: () -> Unit,
-    navigateBack: () -> Unit
+    onComplete: () -> Unit
 ) {
     Scaffold(
         topBar = {
@@ -104,7 +113,7 @@ private fun MajorSearchScreen(
                         major = academicInfoState.majorSearchQuery,
                         onClick = {
                             onMajorSelected(academicInfoState.majorSearchQuery)
-                            navigateBack()
+                            onComplete()
                         },
                         modifier = Modifier.padding(horizontal = 16.dp)
                     )
@@ -112,7 +121,7 @@ private fun MajorSearchScreen(
                 GongBaekBasicButton(
                     title = stringResource(R.string.auth_academic_info_apply_button),
                     enabled = academicInfoState.isMajorSearchComplete,
-                    onClick = navigateBack,
+                    onClick = onComplete,
                     modifier = Modifier
                         .padding(horizontal = 16.dp, vertical = 12.dp)
                 )
@@ -135,6 +144,7 @@ private fun MajorSearchScreen(
 
                 Spacer(modifier = Modifier.height(14.dp))
 
+                val keyboardController = LocalSoftwareKeyboardController.current
                 val majors = academicInfoState.searchedMajors
                 when {
                     majors == null -> {}
@@ -143,7 +153,10 @@ private fun MajorSearchScreen(
                         SearchResultSection(
                             searchResults = majors,
                             selectedItem = academicInfoState.major,
-                            onItemSelected = onMajorSelected
+                            onItemSelected = { query ->
+                                keyboardController?.hide()
+                                onMajorSelected(query)
+                            }
                         )
                     }
                 }
@@ -238,9 +251,10 @@ private fun SearchTextField(
                     imageVector = ImageVector.vectorResource(R.drawable.ic_search_black_48),
                     contentDescription = null,
                     tint = GongBaekTheme.colors.gray10,
-                    modifier = Modifier.clickableWithoutRipple {
-                        onSearchButtonClicked()
-                    }
+                    modifier = Modifier.clickableWithoutRipple(
+                        enabled = value.isNotEmpty(),
+                        onClick = onSearchButtonClicked
+                    )
                 )
             }
         }
@@ -303,7 +317,7 @@ private fun MajorSearchScreenPreview() {
             onSearchQueryChanged = {},
             onSearchButtonClicked = {},
             onMajorSelected = {},
-            navigateBack = {},
+            onComplete = {},
             onCloseClick = {}
         )
     }
