@@ -24,6 +24,7 @@ import com.sopt.gongbaek.presentation.type.SelectableButtonType
 import com.sopt.gongbaek.presentation.util.extension.clickableWithoutRipple
 import com.sopt.gongbaek.presentation.util.extension.roundedBackgroundWithBorder
 import com.sopt.gongbaek.ui.theme.GONGBAEKTheme
+import com.sopt.gongbaek.ui.theme.GongBaekTheme
 
 @Composable
 fun GroupCategorySelectableButtons(
@@ -87,7 +88,7 @@ fun GroupCategorySelectableButton(
         Text(
             text = textOption,
             color = if (isSelected) selectableButtonType.selectedTextColor else selectableButtonType.unSelectedTextColor,
-            style = selectableButtonType.typoStyle
+            style = GongBaekTheme.typography.body1.m16
         )
     }
 }

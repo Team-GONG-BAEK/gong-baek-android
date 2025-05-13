@@ -49,7 +49,7 @@ fun GroupInfoSection(
             painter = painterResource(ImageSelectorType.getCoverImage(groupCategory.name, groupCover)),
             contentDescription = null,
             modifier = Modifier
-                .width((LocalConfiguration.current.screenWidthDp * 0.28).dp)
+                .width((LocalConfiguration.current.screenWidthDp * 0.26).dp)
                 .aspectRatio(1f / 1f)
                 .clip(shape = RoundedCornerShape(2.dp)),
             contentScale = ContentScale.Crop
@@ -66,7 +66,7 @@ fun GroupInfoSection(
                 GroupInfoChip(groupInfoChipType = groupCategory)
                 GroupInfoChip(groupInfoChipType = groupCycle)
             }
-            Spacer(modifier = Modifier.height(6.dp))
+            Spacer(modifier = Modifier.height(8.dp))
             Text(
                 text = groupTitle,
                 color = GongBaekTheme.colors.gray10,
@@ -86,6 +86,7 @@ fun GroupInfoSection(
                 textColor = GongBaekTheme.colors.gray06,
                 textStyle = GongBaekTheme.typography.caption2.r12
             )
+            Spacer(modifier = Modifier.height(4.dp))
         }
     }
 }

@@ -19,7 +19,7 @@ import com.sopt.gongbaek.ui.theme.defaultGongBaekTypography
 enum class SelectableButtonType(
     val options: List<String>,
     val chunkedCount: Int = 2,
-    val typoStyle: TextStyle = defaultGongBaekTypography.body1.m16,
+    val selectedTypoStyle: TextStyle = defaultGongBaekTypography.body1.m16,
     @ColorRes val selectedButtonColor: Color = defaultGongBaekColors.subOrange,
     @ColorRes val selectedTextColor: Color = defaultGongBaekColors.mainOrange,
     @ColorRes val unSelectedButtonColor: Color = defaultGongBaekColors.gray01,
@@ -70,6 +70,7 @@ enum class SelectableButtonType(
             DayOfWeekType.THU.description,
             DayOfWeekType.FRI.description
         ),
+        selectedTypoStyle = defaultGongBaekTypography.body1.b16,
         chunkedCount = 1
     ),
     CATEGORY(
