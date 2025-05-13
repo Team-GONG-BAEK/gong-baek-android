@@ -2,7 +2,6 @@ package com.sopt.gongbaek.presentation.ui.onboarding.screen
 
 import android.app.Activity
 import androidx.activity.compose.BackHandler
-import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -12,13 +11,16 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.pager.HorizontalPager
+import androidx.compose.foundation.pager.PagerState
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.mutableLongStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -34,27 +36,33 @@ import com.sopt.gongbaek.ui.theme.GONGBAEKTheme
 import com.sopt.gongbaek.ui.theme.GongBaekTheme
 import kotlinx.coroutines.launch
 
-@OptIn(ExperimentalFoundationApi::class)
 @Composable
-fun OnboardingScreen(
+fun OnboardingRoute(
     navigateAuth: () -> Unit
 ) {
     val pages = listOf(1, 2, 3)
     val pagerState = rememberPagerState(pageCount = { pages.size })
     val coroutineScope = rememberCoroutineScope()
-    var backPressedTime by remember { mutableStateOf(0L) }
+    var backPressedTime by rememberSaveable { mutableLongStateOf(0L) }
     val backPressThreshold = 2000
     val context = LocalContext.current
-    val onBackClick = {
-        if (pagerState.currentPage > 0) {
-            coroutineScope.launch {
-                pagerState.animateScrollToPage(pagerState.currentPage - 1)
+
+    val currentPage by remember {
+        derivedStateOf { pagerState.currentPage }
+    }
+
+    val onBackClick = remember(currentPage) {
+        {
+            if (currentPage > 0) {
+                coroutineScope.launch {
+                    pagerState.animateScrollToPage(currentPage - 1)
+                }
             }
         }
     }
 
     BackHandler {
-        if (pagerState.currentPage == 0) {
+        if (currentPage == 0) {
             val currentTime = System.currentTimeMillis()
             if (currentTime - backPressedTime <= backPressThreshold) {
                 (context as? Activity)?.finish()
@@ -66,17 +74,40 @@ fun OnboardingScreen(
         }
     }
 
+    OnboardingScreen(
+        currentPage = currentPage,
+        pageCount = pages.size,
+        pagerState = pagerState,
+        onBackClick = onBackClick,
+        onNextClick = {
+            coroutineScope.launch {
+                pagerState.animateScrollToPage(currentPage + 1)
+            }
+        },
+        onStartClick = navigateAuth
+    )
+}
+
+@Composable
+fun OnboardingScreen(
+    currentPage: Int,
+    pageCount: Int,
+    pagerState: PagerState,
+    onBackClick: () -> Unit,
+    onNextClick: () -> Unit,
+    onStartClick: () -> Unit
+) {
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .background(color = GongBaekTheme.colors.white),
+            .background(GongBaekTheme.colors.white),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        if (pagerState.currentPage == 0) {
-            StartTitleTopBar(isLeadingIconIncluded = false)
-        } else {
-            StartTitleTopBar(onLeadingIconClick = onBackClick)
-        }
+        StartTitleTopBar(
+            isLeadingIconIncluded = currentPage != 0,
+            onLeadingIconClick = onBackClick
+        )
+
         HorizontalPager(
             state = pagerState,
             modifier = Modifier.weight(1f)
@@ -87,33 +118,39 @@ fun OnboardingScreen(
                 2 -> OnboardingScreen3()
             }
         }
+
         Row(
             modifier = Modifier.padding(vertical = 30.dp),
             horizontalArrangement = Arrangement.spacedBy(6.dp)
         ) {
-            repeat(pagerState.pageCount) { iteration ->
-                val color = if (pagerState.currentPage == iteration) GongBaekTheme.colors.gray08 else GongBaekTheme.colors.gray03
+            repeat(pageCount) { iteration ->
+                val isSelected = currentPage == iteration
                 Box(
                     modifier = Modifier
                         .clip(CircleShape)
-                        .background(color)
+                        .background(
+                            if (isSelected) {
+                                GongBaekTheme.colors.gray08
+                            } else {
+                                GongBaekTheme.colors.gray03
+                            }
+                        )
                         .size(6.dp)
                 )
             }
         }
+
         GongBaekBasicButton(
-            title = if (pagerState.currentPage == pagerState.pageCount - 1) {
+            title = if (currentPage == pageCount - 1) {
                 stringResource(R.string.onboarding_button_start)
             } else {
                 stringResource(R.string.onboarding_button_next)
             },
             onClick = {
-                if (pagerState.currentPage < pagerState.pageCount - 1) {
-                    coroutineScope.launch {
-                        pagerState.animateScrollToPage(pagerState.currentPage + 1)
-                    }
+                if (currentPage < pageCount - 1) {
+                    onNextClick()
                 } else {
-                    navigateAuth()
+                    onStartClick()
                 }
             },
             enabled = true,
@@ -126,8 +163,6 @@ fun OnboardingScreen(
 @Composable
 fun OnboardingScreen0Preview() {
     GONGBAEKTheme {
-        OnboardingScreen(
-            navigateAuth = {}
-        )
+        OnboardingRoute { }
     }
 }
