@@ -122,34 +122,49 @@ fun GroupDetailRoute(
         }
 
         UiLoadState.Error -> {
-            if (groupDetailUiState.groupDetail.groupInfo.maxPeopleCount == groupDetailUiState.groupDetail.groupInfo.currentPeopleCount) {
-                Box(
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .background(color = Color.Transparent)
-                ) {
-                    Dialog(
-                        onDismissRequest = { viewModel.setEvent(GroupDetailContract.Event.ResetApplyState) }
+            when (groupDetailUiState.groupApplyStatusCode) {
+                GroupDetailViewModel.GROUP_ALREADY_FULL -> {
+                    Box(
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .background(color = Color.Transparent)
                     ) {
-                        GongBaekDialog(
-                            gongBaekDialogType = GongBaekDialogType.ENTER_FAIL,
-                            onConfirmButtonClick = { viewModel.setEvent(GroupDetailContract.Event.ResetApplyState) }
-                        )
+                        Dialog(
+                            onDismissRequest = {
+                                viewModel.setEvent(GroupDetailContract.Event.ResetApplyState)
+                                viewModel.setEvent(GroupDetailContract.Event.OnGroupInfoTabClick)
+                            }
+                        ) {
+                            GongBaekDialog(
+                                gongBaekDialogType = GongBaekDialogType.ENTER_FAIL,
+                                onConfirmButtonClick = {
+                                    viewModel.setEvent(GroupDetailContract.Event.ResetApplyState)
+                                    viewModel.setEvent(GroupDetailContract.Event.OnGroupInfoTabClick)
+                                }
+                            )
+                        }
                     }
                 }
-            } else {
-                Box(
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .background(color = Color.Transparent)
-                ) {
-                    Dialog(
-                        onDismissRequest = { viewModel.setEvent(GroupDetailContract.Event.ResetApplyState) }
+                else -> {
+                    Box(
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .background(color = Color.Transparent)
                     ) {
-                        GongBaekDialog(
-                            gongBaekDialogType = GongBaekDialogType.ERROR,
-                            onConfirmButtonClick = { viewModel.setEvent(GroupDetailContract.Event.ResetApplyState) }
-                        )
+                        Dialog(
+                            onDismissRequest = {
+                                viewModel.setEvent(GroupDetailContract.Event.ResetApplyState)
+                                viewModel.setEvent(GroupDetailContract.Event.OnGroupInfoTabClick)
+                            }
+                        ) {
+                            GongBaekDialog(
+                                gongBaekDialogType = GongBaekDialogType.ERROR,
+                                onConfirmButtonClick = {
+                                    viewModel.setEvent(GroupDetailContract.Event.ResetApplyState)
+                                    viewModel.setEvent(GroupDetailContract.Event.OnGroupInfoTabClick)
+                                }
+                            )
+                        }
                     }
                 }
             }

@@ -3,6 +3,7 @@ package com.sopt.gongbaek.presentation.ui.groupdetail.screen
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.toRoute
+import com.sopt.gongbaek.data.remote.util.HttpResponseException
 import com.sopt.gongbaek.domain.model.Comment
 import com.sopt.gongbaek.domain.model.GroupDetail
 import com.sopt.gongbaek.domain.usecase.ApplyGroupUseCase
@@ -120,7 +121,19 @@ class GroupDetailViewModel @Inject constructor(
                 groupType = currentState.groupDetail.groupInfo.cycle
             ).fold(
                 onSuccess = { setState { copy(groupApplyState = UiLoadState.Success) } },
-                onFailure = { setState { copy(groupApplyState = UiLoadState.Error) } }
+                onFailure = { t ->
+                    if (t is HttpResponseException) {
+                        when (t.code) {
+                            GROUP_ALREADY_FULL -> {
+                                setState { copy(groupApplyStatusCode = GROUP_ALREADY_FULL) }
+                                setState { copy(groupApplyState = UiLoadState.Error) }
+                            }
+                            else -> {
+                                setState { copy(groupApplyState = UiLoadState.Error) }
+                            }
+                        }
+                    }
+                }
             )
         }
     }
@@ -204,5 +217,9 @@ class GroupDetailViewModel @Inject constructor(
                 }
             )
         }
+    }
+
+    companion object {
+        const val GROUP_ALREADY_FULL = 4097
     }
 }

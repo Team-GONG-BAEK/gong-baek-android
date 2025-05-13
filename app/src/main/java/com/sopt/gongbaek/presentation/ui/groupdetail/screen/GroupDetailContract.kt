@@ -12,6 +12,7 @@ class GroupDetailContract {
         val groupDetail: GroupDetail = GroupDetail(),
         val inputComment: String = "",
         val groupApplyState: UiLoadState = UiLoadState.Idle,
+        val groupApplyStatusCode: Int? = null,
         val groupCancelState: UiLoadState = UiLoadState.Idle,
         val groupDeleteState: UiLoadState = UiLoadState.Idle,
         val commentState: UiLoadState = UiLoadState.Idle
