@@ -36,8 +36,8 @@ fun GroupTimeRoute(
     val lifecycleOwner = LocalLifecycleOwner.current
 
     BackHandler {
-        viewModel.sendSideEffect(GroupRegisterContract.SideEffect.NavigateBack)
         viewModel.setEvent(GroupRegisterContract.Event.OnTimeSlotDeleted)
+        viewModel.sendSideEffect(GroupRegisterContract.SideEffect.NavigateBack)
     }
 
     LaunchedEffect(Unit) {
@@ -68,8 +68,8 @@ fun GroupTimeRoute(
             viewModel.sendSideEffect(GroupRegisterContract.SideEffect.NavigateCategory)
         },
         onBackClick = {
-            viewModel.sendSideEffect(GroupRegisterContract.SideEffect.NavigateBack)
             viewModel.setEvent(GroupRegisterContract.Event.OnTimeSlotDeleted)
+            viewModel.sendSideEffect(GroupRegisterContract.SideEffect.NavigateBack)
         }
     )
 }

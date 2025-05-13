@@ -36,8 +36,8 @@ fun SelectDayRoute(
     val lifecycleOwner = LocalLifecycleOwner.current
 
     BackHandler {
-        viewModel.sendSideEffect(GroupRegisterContract.SideEffect.NavigateBack)
         viewModel.setEvent(GroupRegisterContract.Event.OnWeekDateAndDayDeleted)
+        viewModel.sendSideEffect(GroupRegisterContract.SideEffect.NavigateBack)
     }
 
     LaunchedEffect(Unit) {
@@ -65,8 +65,8 @@ fun SelectDayRoute(
             viewModel.sendSideEffect(GroupRegisterContract.SideEffect.NavigateTime)
         },
         onBackClick = {
-            viewModel.sendSideEffect(GroupRegisterContract.SideEffect.NavigateBack)
             viewModel.setEvent(GroupRegisterContract.Event.OnWeekDateAndDayDeleted)
+            viewModel.sendSideEffect(GroupRegisterContract.SideEffect.NavigateBack)
         }
     )
 }

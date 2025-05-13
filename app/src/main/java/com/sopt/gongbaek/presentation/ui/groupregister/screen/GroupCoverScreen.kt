@@ -38,8 +38,8 @@ fun GroupCoverRoute(
     val lifecycleOwner = LocalLifecycleOwner.current
 
     BackHandler {
-        viewModel.sendSideEffect(GroupRegisterContract.SideEffect.NavigateBack)
         viewModel.setEvent(GroupRegisterContract.Event.OnCoverDeleted)
+        viewModel.sendSideEffect(GroupRegisterContract.SideEffect.NavigateBack)
     }
 
     LaunchedEffect(Unit) {
@@ -67,8 +67,8 @@ fun GroupCoverRoute(
             viewModel.sendSideEffect(GroupRegisterContract.SideEffect.NavigatePlacePeople)
         },
         onBackClick = {
-            viewModel.sendSideEffect(GroupRegisterContract.SideEffect.NavigateBack)
             viewModel.setEvent(GroupRegisterContract.Event.OnCoverDeleted)
+            viewModel.sendSideEffect(GroupRegisterContract.SideEffect.NavigateBack)
         }
     )
 }
