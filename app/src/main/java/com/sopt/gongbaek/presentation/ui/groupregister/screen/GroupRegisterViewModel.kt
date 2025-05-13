@@ -65,9 +65,6 @@ class GroupRegisterViewModel @Inject constructor(
 
             is GroupRegisterContract.Event.OnTitleChanged -> {
                 updateGroupRegisterInfo { copy(groupTitle = event.title) }
-                        }
-                    )
-                }
             }
 
             is GroupRegisterContract.Event.OnIntroductionChanged -> {
@@ -136,8 +133,8 @@ class GroupRegisterViewModel @Inject constructor(
     }
 
     private fun updateGroupRegisterTime(timeSlots: Map<String, List<Int>>) {
-        if (timeSlots.isNotEmpty()) {
-            val lectureTimeTable = convertToTimeTable(timeSlots)
+        val lectureTimeTable = convertToTimeTable(timeSlots)
+        if (lectureTimeTable.isNotEmpty()) {
             val startTime = lectureTimeTable.first().startTime
             val endTime = lectureTimeTable.first().endTime
 

@@ -16,8 +16,8 @@ class GroupRegisterContract {
         val selectedCategory: String = "",
         val selectedCover: Int? = null,
         val registerState: UiLoadState = UiLoadState.Idle,
-        val lectureTime: Map<String, List<Int>> = mapOf(),
-        val selectedTimeSlotsByDay: Map<String, List<Int>> = emptyMap(),
+        val lectureTime: Map<String, List<Int>> = emptyMap(),
+        val selectedTimeSlotsByDay: Map<String, List<Int>> = emptyMap()
     ) : UiState
 
     sealed class Event : UiEvent {
