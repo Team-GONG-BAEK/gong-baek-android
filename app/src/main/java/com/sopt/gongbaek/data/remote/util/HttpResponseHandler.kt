@@ -6,6 +6,8 @@ import kotlinx.serialization.json.Json
 import retrofit2.HttpException
 
 object HttpResponseHandler {
+    private val json = Json { ignoreUnknownKeys = true }
+
     fun <T> ApiResponse<T>.handleApiResponse(): Result<T> =
         if (this.code in 2000..2999) {
             Result.success(this.data)
@@ -23,7 +25,6 @@ object HttpResponseHandler {
     fun parseHttpException(e: Throwable): Exception {
         return if (e is HttpException) {
             try {
-                val json = Json { ignoreUnknownKeys = true }
                 val errorBody = e.response()?.errorBody()?.string()
                 val errorResponse = errorBody?.let { json.decodeFromString<NullableApiResponse<Unit>>(it) }
                     ?: NullableApiResponse(success = false, code = e.code(), message = e.message(), data = null)
