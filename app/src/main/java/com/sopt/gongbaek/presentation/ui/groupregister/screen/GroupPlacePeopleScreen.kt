@@ -30,7 +30,6 @@ import com.sopt.gongbaek.presentation.ui.component.section.PageDescriptionSectio
 import com.sopt.gongbaek.presentation.ui.component.textfield.GongBaekBasicTextField
 import com.sopt.gongbaek.presentation.ui.component.topbar.StartTitleTopBar
 import com.sopt.gongbaek.presentation.ui.groupregister.component.GroupPeopleCounter
-import com.sopt.gongbaek.presentation.util.extension.hasCompleteKoreanCharacters
 import com.sopt.gongbaek.ui.theme.GONGBAEKTheme
 import com.sopt.gongbaek.ui.theme.GongBaekTheme
 import com.sopt.gongbaek.ui.theme.defaultGongBaekTypography
@@ -63,7 +62,6 @@ fun GroupPlacePeopleRoute(
 
     GroupPlacePeopleScreen(
         place = uiState.groupRegisterInfo.location,
-        placeErrorMessage = uiState.placeErrorMessage,
         onPlaceChange = { place ->
             viewModel.setEvent(GroupRegisterContract.Event.OnPlaceChanged(place = place))
         },
@@ -87,7 +85,6 @@ fun GroupPlacePeopleRoute(
 @Composable
 private fun GroupPlacePeopleScreen(
     place: String,
-    placeErrorMessage: String?,
     onPlaceChange: (String) -> Unit,
     peopleCount: Int,
     onIncreasePeopleCount: () -> Unit,
@@ -101,7 +98,6 @@ private fun GroupPlacePeopleScreen(
     ) {
         GroupPlacePeopleSection(
             place = place,
-            placeErrorMessage = placeErrorMessage,
             onPlaceChange = onPlaceChange,
             peopleCount = peopleCount,
             onMinusButtonClicked = onDecreasePeopleCount,
@@ -112,7 +108,7 @@ private fun GroupPlacePeopleScreen(
         GongBaekBasicButton(
             title = stringResource(R.string.groupregister_next),
             onClick = onNextButtonClicked,
-            enabled = place.isNotBlank() && place.hasCompleteKoreanCharacters(2),
+            enabled = place.isNotBlank(),
             modifier = Modifier
                 .padding(horizontal = 16.dp, vertical = 12.dp)
                 .align(Alignment.BottomCenter)
@@ -123,7 +119,6 @@ private fun GroupPlacePeopleScreen(
 @Composable
 private fun GroupPlacePeopleSection(
     place: String,
-    placeErrorMessage: String?,
     onPlaceChange: (String) -> Unit,
     peopleCount: Int,
     onMinusButtonClicked: () -> Unit,
@@ -155,9 +150,7 @@ private fun GroupPlacePeopleSection(
             GongBaekBasicTextField(
                 value = place,
                 onValueChange = onPlaceChange,
-                gongBaekBasicTextFieldType = GongBaekBasicTextFieldType.GROUP_PLACE,
-                isError = !placeErrorMessage.isNullOrEmpty(),
-                errorMessage = placeErrorMessage.orEmpty()
+                gongBaekBasicTextFieldType = GongBaekBasicTextFieldType.GROUP_PLACE
             )
 
             PageDescriptionSection(
@@ -220,7 +213,6 @@ private fun ShowGroupPlacePeopleScreen() {
     GONGBAEKTheme {
         GroupPlacePeopleScreen(
             place = "",
-            placeErrorMessage = null,
             onPlaceChange = {},
             peopleCount = 0,
             onIncreasePeopleCount = {},

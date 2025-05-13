@@ -18,10 +18,6 @@ class GroupRegisterContract {
         val registerState: UiLoadState = UiLoadState.Idle,
         val lectureTime: Map<String, List<Int>> = mapOf(),
         val selectedTimeSlotsByDay: Map<String, List<Int>> = emptyMap(),
-        val placeValidation: Boolean = false,
-        val placeErrorMessage: String? = null,
-        val titleValidation: Boolean = false,
-        val titleErrorMessage: String? = null
     ) : UiState
 
     sealed class Event : UiEvent {
