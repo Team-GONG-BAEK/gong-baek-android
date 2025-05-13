@@ -3,7 +3,8 @@ package com.sopt.gongbaek.data.repositoryimpl
 import com.sopt.gongbaek.data.local.datasource.TokenLocalDataSource
 import com.sopt.gongbaek.data.mapper.todomain.toDomain
 import com.sopt.gongbaek.data.remote.datasource.TokenReissueRemoteDataSource
-import com.sopt.gongbaek.data.remote.util.handleApiResponse
+import com.sopt.gongbaek.data.remote.util.HttpResponseHandler.handleApiResponse
+import com.sopt.gongbaek.data.remote.util.safeApiCall
 import com.sopt.gongbaek.data.security.AuthTokens
 import com.sopt.gongbaek.domain.model.UserAuth
 import com.sopt.gongbaek.domain.repository.TokenRepository
@@ -13,6 +14,7 @@ class TokenRepositoryImpl @Inject constructor(
     private val tokenLocalDataSource: TokenLocalDataSource,
     private val tokenRemoteDataSource: TokenReissueRemoteDataSource
 ) : TokenRepository {
+
     override suspend fun saveAuthTokens(signUpToken: String, accessToken: String, refreshToken: String) =
         tokenLocalDataSource.saveAuthTokens(AuthTokens(signUpToken, accessToken, refreshToken))
 
@@ -22,13 +24,12 @@ class TokenRepositoryImpl @Inject constructor(
 
     override suspend fun getRefreshToken(): String = tokenLocalDataSource.getRefreshToken()
 
-    override suspend fun reissueToken(): Result<UserAuth> =
-        runCatching {
-            tokenRemoteDataSource.reissueToken("Bearer ${tokenLocalDataSource.getRefreshToken()}")
-                .handleApiResponse()
-                .getOrThrow()
-                .toDomain()
-        }
+    override suspend fun reissueToken(): Result<UserAuth> = safeApiCall {
+        tokenRemoteDataSource.reissueToken("Bearer ${tokenLocalDataSource.getRefreshToken()}")
+            .handleApiResponse()
+            .getOrThrow()
+            .toDomain()
+    }
 
     override suspend fun clearAuthTokens() = tokenLocalDataSource.clearAuthTokens()
 }
