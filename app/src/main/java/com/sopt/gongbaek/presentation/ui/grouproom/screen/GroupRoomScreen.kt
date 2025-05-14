@@ -308,7 +308,7 @@ private fun GroupRoomPeopleSection(
                     }
                     Spacer(modifier = Modifier.height(6.dp))
                     Text(
-                        text = member.nickname,
+                        text = member.nickname ?: stringResource(R.string.grouproom_member_unknown),
                         color = GongBaekTheme.colors.gray10,
                         overflow = TextOverflow.Ellipsis,
                         maxLines = 1,

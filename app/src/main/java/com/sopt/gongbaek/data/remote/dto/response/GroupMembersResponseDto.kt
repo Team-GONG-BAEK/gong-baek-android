@@ -12,7 +12,7 @@ data class GroupMembersResponseDto(
     @Serializable
     data class GroupMemberResponseDto(
         @SerialName("profileImg") val profileImg: Int,
-        @SerialName("nickname") val nickname: String,
+        @SerialName("nickname") val nickname: String?,
         @SerialName("isHost") val isHost: Boolean
     )
 }
