@@ -2,7 +2,7 @@ package com.sopt.gongbaek.domain.model
 
 data class GroupHost(
     val profileImg: Int = 0,
-    val nickname: String = "",
+    val nickname: String? = null,
     val gender: String = "",
     val major: String = "",
     val enterYear: Int = 0,

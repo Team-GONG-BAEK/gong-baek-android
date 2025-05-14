@@ -1,6 +1,7 @@
 package com.sopt.gongbaek.domain.usecase
 
 import com.sopt.gongbaek.domain.model.GroupDetail
+import com.sopt.gongbaek.domain.model.GroupHost
 import com.sopt.gongbaek.domain.repository.CommentRepository
 import com.sopt.gongbaek.domain.repository.GroupRepository
 import kotlinx.coroutines.async
@@ -27,11 +28,11 @@ class LoadGroupDetailScreenUseCase(
                 val groupHostResult = groupHostDeferred.await()
                 val groupCommentsResult = groupCommentsDeferred.await()
 
-                if (groupInfoResult.isSuccess && groupHostResult.isSuccess && groupCommentsResult.isSuccess) {
+                if (groupInfoResult.isSuccess && groupCommentsResult.isSuccess) {
                     Result.success(
                         GroupDetail(
                             groupInfo = groupInfoResult.getOrThrow(),
-                            groupHost = groupHostResult.getOrThrow(),
+                            groupHost = groupHostResult.getOrElse { GroupHost() },
                             groupComments = groupCommentsResult.getOrThrow()
                         )
                     )
@@ -39,9 +40,9 @@ class LoadGroupDetailScreenUseCase(
                     Result.failure(
                         Exception(
                             "Failed to load group detail: " +
-                                "GroupInfo=${groupInfoResult.exceptionOrNull()?.message}, " +
-                                "GroupHost=${groupHostResult.exceptionOrNull()?.message}, " +
-                                "GroupComments=${groupCommentsResult.exceptionOrNull()?.message}"
+                                "\nGroupInfo : ${groupInfoResult.exceptionOrNull()?.message}" +
+                                "\nGroupHost : ${groupHostResult.exceptionOrNull()?.message}" +
+                                "\nGroupComments : ${groupCommentsResult.exceptionOrNull()?.message}"
                         )
                     )
                 }
