@@ -46,6 +46,7 @@
     <string name="comment_section_header">댓글 %1$s개</string>
     <string name="comment_section_empty_description">아직 댓글이 없어요!\n궁금한 것을 댓글로 작성해주세요.</string>
     <string name="comment_section_comment_writer_chip">모집자</string>
+    <string name="comment_section_unknown">알 수 없음</string>
     <string name="comment_section_text_field_placeholder">댓글을 작성해주세요.</string>
 
     <!--GroupInfoChip-->

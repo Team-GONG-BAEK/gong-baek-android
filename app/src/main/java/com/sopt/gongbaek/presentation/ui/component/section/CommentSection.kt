@@ -160,7 +160,7 @@ private fun CommentSectionItem(
             verticalAlignment = Alignment.CenterVertically
         ) {
             Text(
-                text = groupComment.commentWriter,
+                text = groupComment.commentWriter ?: stringResource(R.string.comment_section_unknown),
                 color = GongBaekTheme.colors.gray10,
                 style = GongBaekTheme.typography.body1.sb16
             )

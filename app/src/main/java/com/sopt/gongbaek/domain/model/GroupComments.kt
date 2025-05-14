@@ -9,7 +9,7 @@ data class GroupComments(
 ) {
     data class GroupComment(
         val commentId: Int = 0,
-        val commentWriter: String = "",
+        val commentWriter: String? = null,
         val commentContent: String = "",
         val createdAt: String = "",
         val isGroupHost: Boolean = false,
