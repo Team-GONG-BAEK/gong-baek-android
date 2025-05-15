@@ -32,7 +32,6 @@ import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.mapNotNull
 import java.util.Calendar
 
-@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun Picker(
     items: List<String>,
