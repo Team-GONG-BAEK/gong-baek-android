@@ -2,6 +2,7 @@ package com.sopt.gongbaek.presentation.ui.auth.screen
 
 import android.util.Patterns
 import androidx.lifecycle.viewModelScope
+import com.sopt.gongbaek.data.remote.util.HttpResponseException
 import com.sopt.gongbaek.domain.model.SignUpInfo
 import com.sopt.gongbaek.domain.type.GenderType
 import com.sopt.gongbaek.domain.type.MbtiFirstLetterType
@@ -394,13 +395,17 @@ class AuthViewModel @Inject constructor(
                     sendSideEffect(AuthContract.SideEffect.NavigateSelectProfile)
                 },
                 onFailure = { exception ->
-                    if (exception.message == ERROR_CODE_DUPLICATE_NICKNAME) {
-                        setState {
-                            copy(
-                                nicknameGenderState = currentState.nicknameGenderState.copy(
-                                    nicknameErrorMessage = ERROR_NICKNAME_DUPLICATE_MESSAGE
-                                )
-                            )
+                    if (exception is HttpResponseException) {
+                        when (exception.code) {
+                            ERROR_CODE_DUPLICATE_NICKNAME -> {
+                                setState {
+                                    copy(
+                                        nicknameGenderState = currentState.nicknameGenderState.copy(
+                                            nicknameErrorMessage = ERROR_NICKNAME_DUPLICATE_MESSAGE
+                                        )
+                                    )
+                                }
+                            }
                         }
                     }
                 }
@@ -544,7 +549,7 @@ class AuthViewModel @Inject constructor(
         // Nickname Validation Messages
         private const val ERROR_NICKNAME_VALIDATION_MESSAGE = "한글 최소 2자 이상 입력해주세요."
         private const val ERROR_NICKNAME_DUPLICATE_MESSAGE = "중복된 닉네임입니다. 다시 입력해주세요."
-        private const val ERROR_CODE_DUPLICATE_NICKNAME = "HTTP 409 "
+        private const val ERROR_CODE_DUPLICATE_NICKNAME = 4092
 
         // Timer
         private const val EMAIL_VERIFICATION_TIME_LIMIT = 180

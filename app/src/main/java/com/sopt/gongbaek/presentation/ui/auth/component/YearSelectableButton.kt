@@ -2,7 +2,6 @@ package com.sopt.gongbaek.presentation.ui.auth.component
 
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -43,45 +42,16 @@ fun YearSelectableButton(
             style = GongBaekTheme.typography.body2.sb14
         )
 
-        SelectableButton(
-            selectedYear = selectedYear,
-            currentYear = currentYear,
-            onClick = { showBottomSheet = true }
-        )
-
-        if (showBottomSheet) {
-            YearSelectionBottomSheet(
-                selectedYear = selectedYear,
-                currentYear = currentYear,
-                onDismiss = { showBottomSheet = false },
-                onYearSelected = {
-                    onYearSelected(it)
-                    showBottomSheet = false
-                }
-            )
-        }
-    }
-}
-
-@Composable
-private fun SelectableButton(
-    selectedYear: Int,
-    currentYear: Int,
-    onClick: () -> Unit
-) {
-    Box(
-        modifier = Modifier
-            .fillMaxWidth()
-            .clickableWithoutRipple { onClick() }
-            .border(
-                width = 1.dp,
-                color = GongBaekTheme.colors.gray03,
-                shape = RoundedCornerShape(6.dp)
-            )
-            .padding(vertical = 12.dp, horizontal = 16.dp)
-    ) {
         Row(
-            modifier = Modifier.fillMaxWidth(),
+            modifier = Modifier
+                .fillMaxWidth()
+                .clickableWithoutRipple { showBottomSheet = true }
+                .border(
+                    width = 1.dp,
+                    color = GongBaekTheme.colors.gray03,
+                    shape = RoundedCornerShape(6.dp)
+                )
+                .padding(vertical = 12.dp, horizontal = 16.dp),
             horizontalArrangement = Arrangement.SpaceBetween,
             verticalAlignment = Alignment.CenterVertically
         ) {
@@ -94,6 +64,18 @@ private fun SelectableButton(
                 imageVector = ImageVector.vectorResource(id = R.drawable.ic_arrow_bottom_gray_24),
                 contentDescription = null,
                 tint = GongBaekTheme.colors.gray04
+            )
+        }
+
+        if (showBottomSheet) {
+            YearSelectionBottomSheet(
+                selectedYear = selectedYear,
+                currentYear = currentYear,
+                onDismiss = { showBottomSheet = false },
+                onYearSelected = {
+                    onYearSelected(it)
+                    showBottomSheet = false
+                }
             )
         }
     }

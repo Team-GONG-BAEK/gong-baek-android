@@ -28,7 +28,7 @@ fun YearSelectionBottomSheet(
     val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
     val years = remember { (2000..currentYear).toList() }
     val defaultYearIndex = years.indexOf(
-        if (selectedYear == 0) currentYear else selectedYear
+        if (selectedYear == 0) currentYear else selectedYear - 1
     ).takeIf { it >= 0 } ?: 0
 
     val pickerState = remember {
