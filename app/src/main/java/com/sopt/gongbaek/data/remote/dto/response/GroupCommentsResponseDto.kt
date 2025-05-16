@@ -14,7 +14,7 @@ data class GroupCommentsResponseDto(
     @Serializable
     data class GroupCommentResponseDto(
         @SerialName("commentId") val commentId: Int,
-        @SerialName("nickname") val nickname: String,
+        @SerialName("nickname") val nickname: String?,
         @SerialName("body") val body: String,
         @SerialName("createdAt") val createdAt: String,
         @SerialName("isGroupHost") val isGroupHost: Boolean,

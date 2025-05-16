@@ -87,166 +87,195 @@ fun GroupDetailInfoSection(
                 Spacer(modifier = Modifier.height(30.dp))
             }
 
-            item {
-                Column {
-                    Text(
-                        text = stringResource(R.string.group_detail_host_profile_title),
-                        color = GongBaekTheme.colors.gray10,
-                        style = GongBaekTheme.typography.body1.b16
-                    )
-                    Spacer(modifier = Modifier.height(10.dp))
-                    Row(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .roundedBackgroundWithBorder(
-                                cornerRadius = 4.dp,
-                                backgroundColor = GongBaekTheme.colors.gray01
-                            )
-                            .padding(10.dp),
-                        verticalAlignment = Alignment.CenterVertically
-                    ) {
-                        Image(
-                            painter = painterResource(ProfileImageList.getProfileImage(groupHost.profileImg)),
-                            contentDescription = null,
-                            modifier = Modifier
-                                .width((LocalConfiguration.current.screenWidthDp * 0.22).dp)
-                                .aspectRatio(1f / 1f)
-                                .clip(shape = RoundedCornerShape(2.dp))
-                                .roundedBackgroundWithBorder(
-                                    cornerRadius = 2.dp,
-                                    backgroundColor = Color.Transparent,
-                                    borderColor = GongBaekTheme.colors.gray02,
-                                    borderWidth = 1.dp
-                                )
+            if (groupHost.nickname != null) {
+                item {
+                    Column {
+                        Text(
+                            text = stringResource(R.string.group_detail_host_profile_title),
+                            color = GongBaekTheme.colors.gray10,
+                            style = GongBaekTheme.typography.body1.b16
                         )
-                        Spacer(modifier = Modifier.width(10.dp))
-                        Column {
-                            Row(
-                                horizontalArrangement = Arrangement.spacedBy(4.dp),
-                                verticalAlignment = Alignment.CenterVertically
-                            ) {
-                                Text(
-                                    text = groupHost.nickname,
-                                    color = GongBaekTheme.colors.gray09,
-                                    style = GongBaekTheme.typography.body1.b16
+                        Spacer(modifier = Modifier.height(10.dp))
+                        Row(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .roundedBackgroundWithBorder(
+                                    cornerRadius = 4.dp,
+                                    backgroundColor = GongBaekTheme.colors.gray01
                                 )
-                                when {
-                                    groupHost.gender.isEmpty() -> {}
-                                    else -> {
-                                        when (GenderType.fromName(groupHost.gender)) {
-                                            GenderType.MAN -> Image(
-                                                imageVector = ImageVector.vectorResource(R.drawable.ic_male_20),
-                                                contentDescription = null
-                                            )
+                                .padding(10.dp),
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+                            Image(
+                                painter = painterResource(ProfileImageList.getProfileImage(groupHost.profileImg)),
+                                contentDescription = null,
+                                modifier = Modifier
+                                    .width((LocalConfiguration.current.screenWidthDp * 0.22).dp)
+                                    .aspectRatio(1f / 1f)
+                                    .clip(shape = RoundedCornerShape(2.dp))
+                                    .roundedBackgroundWithBorder(
+                                        cornerRadius = 2.dp,
+                                        backgroundColor = Color.Transparent,
+                                        borderColor = GongBaekTheme.colors.gray02,
+                                        borderWidth = 1.dp
+                                    )
+                            )
+                            Spacer(modifier = Modifier.width(10.dp))
+                            Column {
+                                Row(
+                                    horizontalArrangement = Arrangement.spacedBy(4.dp),
+                                    verticalAlignment = Alignment.CenterVertically
+                                ) {
+                                    Text(
+                                        text = groupHost.nickname,
+                                        color = GongBaekTheme.colors.gray09,
+                                        style = GongBaekTheme.typography.body1.b16
+                                    )
+                                    when {
+                                        groupHost.gender.isEmpty() -> {}
+                                        else -> {
+                                            when (GenderType.fromName(groupHost.gender)) {
+                                                GenderType.MAN -> Image(
+                                                    imageVector = ImageVector.vectorResource(R.drawable.ic_male_20),
+                                                    contentDescription = null
+                                                )
 
-                                            GenderType.WOMAN -> Image(
-                                                imageVector = ImageVector.vectorResource(R.drawable.ic_female_20),
-                                                contentDescription = null
-                                            )
+                                                GenderType.WOMAN -> Image(
+                                                    imageVector = ImageVector.vectorResource(R.drawable.ic_female_20),
+                                                    contentDescription = null
+                                                )
+                                            }
                                         }
                                     }
                                 }
-                            }
-                            Spacer(modifier = Modifier.height(6.dp))
-                            Box(
-                                contentAlignment = Alignment.Center,
-                                modifier = Modifier.roundedBackgroundWithBorder(
-                                    cornerRadius = 4.dp,
-                                    backgroundColor = GongBaekTheme.colors.gray09
-                                )
-                            ) {
-                                Text(
-                                    text = groupHost.major,
-                                    modifier = Modifier.padding(horizontal = 6.dp, vertical = 1.dp),
-                                    color = GongBaekTheme.colors.gray01,
-                                    style = GongBaekTheme.typography.caption2.m12
-                                )
-                            }
-                            Spacer(modifier = Modifier.height(6.dp))
-                            FlowRow(
-                                modifier = Modifier.fillMaxWidth(),
-                                horizontalArrangement = Arrangement.spacedBy(12.dp),
-                                verticalArrangement = Arrangement.spacedBy(6.dp)
-                            ) {
-                                Row(
-                                    horizontalArrangement = Arrangement.spacedBy(6.dp),
-                                    verticalAlignment = Alignment.CenterVertically
+                                Spacer(modifier = Modifier.height(6.dp))
+                                Box(
+                                    contentAlignment = Alignment.Center,
+                                    modifier = Modifier.roundedBackgroundWithBorder(
+                                        cornerRadius = 4.dp,
+                                        backgroundColor = GongBaekTheme.colors.gray09
+                                    )
                                 ) {
-                                    Box(
-                                        contentAlignment = Alignment.Center,
-                                        modifier = Modifier.roundedBackgroundWithBorder(
-                                            cornerRadius = 4.dp,
-                                            backgroundColor = GongBaekTheme.colors.white
-                                        )
-                                    ) {
-                                        Text(
-                                            text = stringResource(R.string.group_detail_enter_year_title),
-                                            modifier = Modifier.padding(
-                                                horizontal = 6.dp,
-                                                vertical = 1.dp
-                                            ),
-                                            color = GongBaekTheme.colors.mainOrange,
-                                            style = GongBaekTheme.typography.caption2.m12
-                                        )
-                                    }
                                     Text(
-                                        text = stringResource(
-                                            R.string.group_detail_enter_year,
-                                            formatEnterYearToString(groupHost.enterYear)
-                                        ),
-                                        color = GongBaekTheme.colors.gray08,
+                                        text = groupHost.major,
+                                        modifier = Modifier.padding(horizontal = 6.dp, vertical = 1.dp),
+                                        color = GongBaekTheme.colors.gray01,
                                         style = GongBaekTheme.typography.caption2.m12
                                     )
                                 }
-                                Row(
-                                    horizontalArrangement = Arrangement.spacedBy(6.dp),
-                                    verticalAlignment = Alignment.CenterVertically
+                                Spacer(modifier = Modifier.height(6.dp))
+                                FlowRow(
+                                    modifier = Modifier.fillMaxWidth(),
+                                    horizontalArrangement = Arrangement.spacedBy(12.dp),
+                                    verticalArrangement = Arrangement.spacedBy(6.dp)
                                 ) {
-                                    Box(
-                                        contentAlignment = Alignment.Center,
-                                        modifier = Modifier.roundedBackgroundWithBorder(
-                                            cornerRadius = 4.dp,
-                                            backgroundColor = GongBaekTheme.colors.white
-                                        )
+                                    Row(
+                                        horizontalArrangement = Arrangement.spacedBy(6.dp),
+                                        verticalAlignment = Alignment.CenterVertically
                                     ) {
+                                        Box(
+                                            contentAlignment = Alignment.Center,
+                                            modifier = Modifier.roundedBackgroundWithBorder(
+                                                cornerRadius = 4.dp,
+                                                backgroundColor = GongBaekTheme.colors.white
+                                            )
+                                        ) {
+                                            Text(
+                                                text = stringResource(R.string.group_detail_enter_year_title),
+                                                modifier = Modifier.padding(
+                                                    horizontal = 6.dp,
+                                                    vertical = 1.dp
+                                                ),
+                                                color = GongBaekTheme.colors.mainOrange,
+                                                style = GongBaekTheme.typography.caption2.m12
+                                            )
+                                        }
                                         Text(
-                                            text = stringResource(R.string.group_detail_mbti_title),
-                                            modifier = Modifier.padding(
-                                                horizontal = 6.dp,
-                                                vertical = 1.dp
+                                            text = stringResource(
+                                                R.string.group_detail_enter_year,
+                                                formatEnterYearToString(groupHost.enterYear)
                                             ),
-                                            color = GongBaekTheme.colors.mainOrange,
+                                            color = GongBaekTheme.colors.gray08,
                                             style = GongBaekTheme.typography.caption2.m12
                                         )
                                     }
-                                    Text(
-                                        text = groupHost.mbti,
-                                        color = GongBaekTheme.colors.gray08,
-                                        style = GongBaekTheme.typography.caption2.m12
-                                    )
+                                    Row(
+                                        horizontalArrangement = Arrangement.spacedBy(6.dp),
+                                        verticalAlignment = Alignment.CenterVertically
+                                    ) {
+                                        Box(
+                                            contentAlignment = Alignment.Center,
+                                            modifier = Modifier.roundedBackgroundWithBorder(
+                                                cornerRadius = 4.dp,
+                                                backgroundColor = GongBaekTheme.colors.white
+                                            )
+                                        ) {
+                                            Text(
+                                                text = stringResource(R.string.group_detail_mbti_title),
+                                                modifier = Modifier.padding(
+                                                    horizontal = 6.dp,
+                                                    vertical = 1.dp
+                                                ),
+                                                color = GongBaekTheme.colors.mainOrange,
+                                                style = GongBaekTheme.typography.caption2.m12
+                                            )
+                                        }
+                                        Text(
+                                            text = groupHost.mbti,
+                                            color = GongBaekTheme.colors.gray08,
+                                            style = GongBaekTheme.typography.caption2.m12
+                                        )
+                                    }
                                 }
                             }
                         }
                     }
+                    Spacer(modifier = Modifier.height(10.dp))
                 }
-                Spacer(modifier = Modifier.height(10.dp))
-            }
 
-            item {
-                Box(
-                    modifier = Modifier.roundedBackgroundWithBorder(
-                        cornerRadius = 4.dp,
-                        backgroundColor = GongBaekTheme.colors.gray01
-                    )
-                ) {
-                    Text(
-                        text = groupHost.introduction,
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(16.dp),
-                        color = GongBaekTheme.colors.gray08,
-                        style = GongBaekTheme.typography.body2.r14
-                    )
+                item {
+                    Box(
+                        modifier = Modifier.roundedBackgroundWithBorder(
+                            cornerRadius = 4.dp,
+                            backgroundColor = GongBaekTheme.colors.gray01
+                        )
+                    ) {
+                        Text(
+                            text = groupHost.introduction,
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(16.dp),
+                            color = GongBaekTheme.colors.gray08,
+                            style = GongBaekTheme.typography.body2.r14
+                        )
+                    }
+                }
+            } else {
+                item {
+                    Column {
+                        Text(
+                            text = stringResource(R.string.group_detail_host_profile_title),
+                            color = GongBaekTheme.colors.gray10,
+                            style = GongBaekTheme.typography.body1.b16
+                        )
+                        Spacer(modifier = Modifier.height(10.dp))
+                        Box(
+                            modifier = Modifier
+                                .roundedBackgroundWithBorder(
+                                    cornerRadius = 4.dp,
+                                    backgroundColor = GongBaekTheme.colors.gray01
+                                )
+                                .padding(16.dp),
+                            contentAlignment = Alignment.Center
+                        ) {
+                            Text(
+                                text = "탈퇴한 회원입니다.",
+                                modifier = Modifier.fillMaxWidth(),
+                                color = GongBaekTheme.colors.gray08,
+                                style = GongBaekTheme.typography.body2.r14
+                            )
+                        }
+                    }
                 }
             }
         }

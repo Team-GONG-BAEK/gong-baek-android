@@ -7,7 +7,7 @@ data class GroupMembers(
 ) {
     data class Member(
         val profileImg: Int = 0,
-        val nickname: String = "",
+        val nickname: String? = null,
         val isHost: Boolean = false
     )
 }
