@@ -38,8 +38,8 @@ jobs:
         env:
             STORE_FILE: ${{ secrets.STORE_FILE }}
         run: |
-            mkdir -p app/keystore
-            echo "$STORE_FILE" | base64 --decode > app/keystore/gongbaek_release.jks
+            mkdir -p keystore
+            echo "$STORE_FILE" | base64 --decode > keystore/gongbaek_release.jks
 
       - name: Generate local.properties
         env:
@@ -49,7 +49,7 @@ jobs:
             GONGBAEK_BASE_URL: ${{ secrets.BASE_URL }}
             KAKAO_API_KEY: ${{ secrets.KAKAO_NATIVE_APP_KEY }}
         run: |
-            echo "storeFile=app/keystore/gongbaek_release.jks" >> local.properties
+            echo "storeFile=keystore/gongbaek_release.jks" >> local.properties
             echo "storePassword=$STORE_PASSWORD" >> local.properties
             echo "keyAlias=$KEY_ALIAS" >> local.properties
             echo "keyPassword=$KEY_PASSWORD" >> local.properties
