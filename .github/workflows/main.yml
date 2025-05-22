@@ -49,7 +49,7 @@ jobs:
           GONGBAEK_BASE_URL: ${{ secrets.BASE_URL }}
           KAKAO_API_KEY: ${{ secrets.KAKAO_NATIVE_APP_KEY }}
         run: |
-          echo "storeFile=$(pwd)/app/keystore/gongbaek_release.jks" >> local.properties
+          echo "storeFile=keystore/gongbaek_release.jks" >> local.properties
           echo "storePassword=$STORE_PASSWORD" >> local.properties
           echo "keyAlias=$KEY_ALIAS" >> local.properties
           echo "keyPassword=$KEY_PASSWORD" >> local.properties
