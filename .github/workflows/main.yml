@@ -40,7 +40,7 @@ jobs:
         env:
             STORE_FILE: ${{ secrets.STORE_FILE }}
         run: |
-            mkdir -p ./app/keystore
+            mkdir -p /app/keystore
             echo "$STORE_FILE" | base64 --decode > /app/keystore/gongbaek_release.jks
       
 
