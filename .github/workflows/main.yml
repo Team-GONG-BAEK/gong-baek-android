@@ -40,8 +40,9 @@ jobs:
         env:
             STORE_FILE: ${{ secrets.STORE_FILE }}
         run: |
-            mkdir -p keystore
-            echo "$STORE_FILE" | base64 --decode > keystore/gongbaek_release.jks
+            mkdir -p app/keystore
+            echo "$STORE_FILE" | base64 —decode > app/keystore/gongbaek_release.jks
+      
 
       - name: Generate local.properties
         env:
