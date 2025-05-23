@@ -30,14 +30,14 @@ android {
         disable.add("CoroutineCreationDuringComposition")
     }
 
-//    signingConfigs {
-//        create("release") {
-//            storeFile = file(project.getLocalProperty(""))
-//            storePassword = project.getLocalProperty("")
-//            keyAlias = project.getLocalProperty("")
-//            keyPassword = project.getLocalProperty("")
-//        }
-//    }
+    signingConfigs {
+        create("release") {
+            storeFile = rootProject.file(project.getLocalProperty("storeFile"))
+            storePassword = project.getLocalProperty("storePassword")
+            keyAlias = project.getLocalProperty("keyAlias")
+            keyPassword = project.getLocalProperty("keyPassword")
+        }
+    }
 
     buildTypes {
         debug {
@@ -49,7 +49,7 @@ android {
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
             )
-//            signingConfig = signingConfig.getByName("release")
+            signingConfig = signingConfigs.getByName("release")
         }
     }
 

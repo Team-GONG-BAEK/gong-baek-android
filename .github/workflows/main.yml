@@ -33,14 +33,29 @@ jobs:
 
       - name: Grant execute permission for gradlew
         run: chmod +x gradlew
+          
+      # keystore 복호화
+      - name: Decode keystore file
+        env:
+            STORE_FILE: ${{ secrets.STORE_FILE }}
+        run: |
+            mkdir -p keystore
+            echo "$STORE_FILE" | base64 --decode > keystore/gongbaek_release.jks
 
       - name: Generate local.properties
         env:
             GONGBAEK_BASE_URL: ${{ secrets.BASE_URL }}
             KAKAO_API_KEY: ${{ secrets.KAKAO_NATIVE_APP_KEY }}
+            STORE_PASSWORD: ${{ secrets.STORE_PASSWORD }}
+            KEY_ALIAS: ${{ secrets.KEY_ALIAS }}
+            KEY_PASSWORD: ${{ secrets.KEY_PASSWORD }}
         run: |
             echo "gongbaek.base.url=$GONGBAEK_BASE_URL" >> local.properties
             echo "kakao.native.app.key=$KAKAO_NATIVE_APP_KEY" >> local.properties
+            echo "storeFile=keystore/gongbaek_release.jks" >> local.properties
+            echo "storePassword=$STORE_PASSWORD" >> local.properties
+            echo "keyAlias=$KEY_ALIAS" >> local.properties
+            echo "keyPassword=$KEY_PASSWORD" >> local.properties
 
       - name: Lint Check
         run: ./gradlew ktlintCheck -PcompileSdkVersion=34
