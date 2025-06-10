@@ -30,6 +30,7 @@ import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.SolidColor
+import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
@@ -45,6 +46,7 @@ import com.sopt.gongbaek.presentation.ui.component.button.GongBaekButton
 import com.sopt.gongbaek.presentation.ui.component.button.GongBaekButtonDefault
 import com.sopt.gongbaek.presentation.ui.component.progressBar.GongBaekProgressBar
 import com.sopt.gongbaek.presentation.ui.component.topbar.StartTitleTopBar
+import com.sopt.gongbaek.presentation.util.extension.clickableWithoutRipple
 import com.sopt.gongbaek.presentation.util.formatTimeLeft
 import com.sopt.gongbaek.ui.theme.GongBaekTheme
 
@@ -101,6 +103,8 @@ private fun EmailVerificationScreen(
     onBackClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
+    val focusManager = LocalFocusManager.current
+
     Column(
         modifier = modifier.fillMaxSize()
     ) {
@@ -110,6 +114,9 @@ private fun EmailVerificationScreen(
         Box(
             modifier = Modifier
                 .fillMaxSize()
+                .clickableWithoutRipple {
+                    focusManager.clearFocus()
+                }
                 .padding(horizontal = 16.dp)
         ) {
             Column {

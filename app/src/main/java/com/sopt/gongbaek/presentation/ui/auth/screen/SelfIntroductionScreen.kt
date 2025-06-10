@@ -14,6 +14,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalConfiguration
+import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
@@ -30,6 +31,7 @@ import com.sopt.gongbaek.presentation.ui.component.progressBar.GongBaekProgressB
 import com.sopt.gongbaek.presentation.ui.component.section.PageDescriptionSection
 import com.sopt.gongbaek.presentation.ui.component.textfield.GongBaekBasicTextField
 import com.sopt.gongbaek.presentation.ui.component.topbar.StartTitleTopBar
+import com.sopt.gongbaek.presentation.util.extension.clickableWithoutRipple
 import com.sopt.gongbaek.ui.theme.GONGBAEKTheme
 import com.sopt.gongbaek.ui.theme.GongBaekTheme
 
@@ -77,8 +79,13 @@ private fun SelfIntroductionScreen(
     onNextClick: () -> Unit,
     onBackClick: () -> Unit
 ) {
+    val focusManager = LocalFocusManager.current
     Box(
-        modifier = Modifier.fillMaxSize()
+        modifier = Modifier
+            .fillMaxSize()
+            .clickableWithoutRipple {
+                focusManager.clearFocus()
+            }
     ) {
         SelfIntroductionSection(
             selfIntroduction = uiState.selfIntroduction,

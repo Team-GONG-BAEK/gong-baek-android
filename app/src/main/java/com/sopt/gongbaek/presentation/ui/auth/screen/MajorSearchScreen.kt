@@ -27,6 +27,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
@@ -96,6 +97,8 @@ private fun MajorSearchScreen(
     onCloseClick: () -> Unit,
     onComplete: () -> Unit
 ) {
+    val focusManager = LocalFocusManager.current
+
     Scaffold(
         topBar = {
             CenterTitleTopBar(
@@ -129,35 +132,43 @@ private fun MajorSearchScreen(
         },
         containerColor = GongBaekTheme.colors.white,
         content = { paddingValues ->
-            Column(
+            Box(
                 modifier = Modifier
                     .fillMaxSize()
                     .padding(paddingValues)
-                    .padding(top = 12.dp)
+                    .clickableWithoutRipple {
+                        focusManager.clearFocus()
+                    }
             ) {
-                SearchTextField(
-                    value = academicInfoState.majorSearchQuery,
-                    onValueChange = onSearchQueryChanged,
-                    modifier = Modifier.padding(horizontal = 16.dp),
-                    onSearchButtonClicked = onSearchButtonClicked
-                )
+                Column(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(top = 12.dp)
+                ) {
+                    SearchTextField(
+                        value = academicInfoState.majorSearchQuery,
+                        onValueChange = onSearchQueryChanged,
+                        modifier = Modifier.padding(horizontal = 16.dp),
+                        onSearchButtonClicked = onSearchButtonClicked
+                    )
 
-                Spacer(modifier = Modifier.height(14.dp))
+                    Spacer(modifier = Modifier.height(14.dp))
 
-                val keyboardController = LocalSoftwareKeyboardController.current
-                val majors = academicInfoState.searchedMajors
-                when {
-                    majors == null -> {}
-                    majors.isEmpty() -> EmptySearchResultView()
-                    else -> {
-                        SearchResultSection(
-                            searchResults = majors,
-                            selectedItem = academicInfoState.major,
-                            onItemSelected = { query ->
-                                keyboardController?.hide()
-                                onMajorSelected(query)
-                            }
-                        )
+                    val keyboardController = LocalSoftwareKeyboardController.current
+                    val majors = academicInfoState.searchedMajors
+                    when {
+                        majors == null -> {}
+                        majors.isEmpty() -> EmptySearchResultView()
+                        else -> {
+                            SearchResultSection(
+                                searchResults = majors,
+                                selectedItem = academicInfoState.major,
+                                onItemSelected = { query ->
+                                    keyboardController?.hide()
+                                    onMajorSelected(query)
+                                }
+                            )
+                        }
                     }
                 }
             }
