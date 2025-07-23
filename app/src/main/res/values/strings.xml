@@ -243,6 +243,7 @@
     <!--Setting-->
     <string name="setting_service_guide_title">이용 안내</string>
     <string name="setting_notice">공지사항</string>
+    <string name="setting_faq">문의하기</string>
     <string name="setting_privacy_policy">개인정보 처리방침</string>
     <string name="setting_terms_of_service">서비스 이용 약관</string>
     <string name="setting_version_info">버전 정보</string>
