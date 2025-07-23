@@ -33,6 +33,7 @@ import androidx.compose.ui.unit.dp
 import com.sopt.gongbaek.R
 import com.sopt.gongbaek.domain.model.GroupComments
 import com.sopt.gongbaek.domain.type.GroupStatusType
+import com.sopt.gongbaek.presentation.ui.component.dialog.ReportDialog
 import com.sopt.gongbaek.presentation.util.extension.clickableWithoutRipple
 import com.sopt.gongbaek.presentation.util.extension.roundedBackgroundWithBorder
 import com.sopt.gongbaek.presentation.util.extension.showIf
@@ -45,6 +46,10 @@ fun CommentSection(
     value: String,
     onValueChanged: (String) -> Unit,
     onRefreshClicked: () -> Unit = {},
+    showReportDialog: Boolean = false,
+    onReportClicked: () -> Unit = {},
+    onConfirmReport: (Int) -> Unit = {},
+    onDismissReport: () -> Unit = {},
     onDeleteClicked: (Int) -> Unit = {},
     onSendClicked: () -> Unit = {}
 ) {
@@ -101,6 +106,10 @@ fun CommentSection(
                 items(items = groupComments.groupCommentList) { comment ->
                     CommentSectionItem(
                         groupComment = comment,
+                        showReportDialog = showReportDialog,
+                        onReportClicked = onReportClicked,
+                        onConfirmReport = onConfirmReport,
+                        onDismissReport = onDismissReport,
                         onDeleteClicked = onDeleteClicked
                     )
                 }
@@ -146,6 +155,10 @@ private fun CommentSectionHeader(
 @Composable
 private fun CommentSectionItem(
     groupComment: GroupComments.GroupComment,
+    showReportDialog: Boolean,
+    onReportClicked: () -> Unit,
+    onConfirmReport: (Int) -> Unit,
+    onDismissReport: () -> Unit,
     onDeleteClicked: (Int) -> Unit,
     modifier: Modifier = Modifier
 ) {
@@ -188,6 +201,13 @@ private fun CommentSectionItem(
                     contentDescription = null,
                     modifier = Modifier.clickableWithoutRipple(onClick = { onDeleteClicked(groupComment.commentId) })
                 )
+            } else {
+                Spacer(modifier = Modifier.weight(1f))
+                Image(
+                    imageVector = ImageVector.vectorResource(R.drawable.ic_report_20),
+                    contentDescription = null,
+                    modifier = Modifier.clickableWithoutRipple(onClick = onReportClicked)
+                )
             }
         }
         Spacer(modifier = Modifier.height(8.dp))
@@ -207,6 +227,17 @@ private fun CommentSectionItem(
             modifier = Modifier.fillMaxWidth(),
             thickness = 1.dp,
             color = GongBaekTheme.colors.gray02
+        )
+    }
+
+    if (showReportDialog) {
+        ReportDialog(
+            titleMassage = stringResource(id = R.string.dialog_title_comment_report),
+            descriptionMassage = stringResource(id = R.string.dialog_description_comment_report),
+            confirmOption = "신고하기",
+            onConfirm = { onConfirmReport(groupComment.commentId) },
+            dismissOption = "취소",
+            onDismiss = onDismissReport
         )
     }
 }
@@ -356,6 +387,10 @@ private fun CommentSectionItemPreview() {
                 isGroupHost = true,
                 isWriter = true
             ),
+            showReportDialog = false,
+            onReportClicked = {},
+            onConfirmReport = {},
+            onDismissReport = {},
             onDeleteClicked = {}
         )
     }

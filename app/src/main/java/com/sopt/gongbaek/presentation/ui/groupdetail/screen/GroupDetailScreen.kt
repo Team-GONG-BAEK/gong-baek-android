@@ -15,6 +15,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
@@ -31,10 +32,12 @@ import com.sopt.gongbaek.presentation.type.GongBaekDialogType
 import com.sopt.gongbaek.presentation.type.GroupDetailPagerType
 import com.sopt.gongbaek.presentation.type.GroupInfoChipType
 import com.sopt.gongbaek.presentation.ui.component.dialog.GongBaekDialog
+import com.sopt.gongbaek.presentation.ui.component.dialog.ReportDialog
 import com.sopt.gongbaek.presentation.ui.component.section.CommentSection
 import com.sopt.gongbaek.presentation.ui.component.section.GroupInfoSection
 import com.sopt.gongbaek.presentation.ui.component.stateView.ErrorScreen
 import com.sopt.gongbaek.presentation.ui.component.tabpager.CustomTabPager
+import com.sopt.gongbaek.presentation.ui.component.toast.GongBaekToastMessage
 import com.sopt.gongbaek.presentation.ui.component.topbar.StartTitleTopBar
 import com.sopt.gongbaek.presentation.util.base.UiLoadState
 import com.sopt.gongbaek.presentation.util.formatGroupTimeDescription
@@ -77,11 +80,17 @@ fun GroupDetailRoute(
         groupDetailTabs = groupDetailTabs,
         pagerState = pagerState,
         onBackClick = { viewModel.sendSideEffect(GroupDetailContract.SideEffect.NavigateBack) },
+        onGroupReportClick = { viewModel.setEvent(GroupDetailContract.Event.OnGroupReportClick) },
+        dismissGroupReport = { viewModel.setEvent(GroupDetailContract.Event.DismissGroupReport) },
+        confirmGroupReport = { groupId, groupType -> viewModel.setEvent(GroupDetailContract.Event.ConfirmGroupReport(groupId, groupType)) },
         onApplyClick = { viewModel.setEvent(GroupDetailContract.Event.OnApplyClick) },
         onCancelClick = { viewModel.setEvent(GroupDetailContract.Event.OnCancelClick) },
         onDeleteClick = { viewModel.setEvent(GroupDetailContract.Event.ShowDeleteDialog) },
         updateInputComment = { inputComment -> viewModel.setEvent(GroupDetailContract.Event.UpdateInputComment(inputComment)) },
         onCommentRefreshClick = { viewModel.setEvent(GroupDetailContract.Event.OnCommentRefreshClick) },
+        onCommentReportClick = { viewModel.setEvent(GroupDetailContract.Event.OnCommentReportClick) },
+        dismissCommentReport = { viewModel.setEvent(GroupDetailContract.Event.DismissCommentReport) },
+        confirmCommentReport = { commentId -> viewModel.setEvent(GroupDetailContract.Event.ConfirmCommentReport(commentId)) },
         onCommentPostClick = { viewModel.setEvent(GroupDetailContract.Event.OnCommentPostClick) },
         onCommentDeleteClick = { commentId -> viewModel.setEvent(GroupDetailContract.Event.OnCommentDeleteClick(commentId)) },
         onRetryClick = { viewModel.setEvent(GroupDetailContract.Event.OnGroupInfoTabClick) }
@@ -236,6 +245,24 @@ fun GroupDetailRoute(
             viewModel.setEvent(GroupDetailContract.Event.ResetDeleteState)
         }
     }
+
+    if (groupDetailUiState.groupReportState == UiLoadState.Success) {
+        GongBaekToastMessage(
+            iconResId = R.drawable.ic_check_fill_24,
+            message = "해당 모임 신고가 완료되었습니다.",
+            durationMillis = 2000,
+            onDismiss = { viewModel.setEvent(GroupDetailContract.Event.ResetGroupReportState) }
+        )
+    }
+
+    if (groupDetailUiState.commentReportState == UiLoadState.Success) {
+        GongBaekToastMessage(
+            iconResId = R.drawable.ic_check_fill_24,
+            message = "해당 댓글 신고가 완료되었습니다.",
+            durationMillis = 2000,
+            onDismiss = { viewModel.setEvent(GroupDetailContract.Event.ResetCommentReportState) }
+        )
+    }
 }
 
 @Composable
@@ -244,11 +271,17 @@ fun GroupDetailScreen(
     groupDetailTabs: List<String>,
     pagerState: PagerState,
     onBackClick: () -> Unit,
+    onGroupReportClick: () -> Unit,
+    dismissGroupReport: () -> Unit,
+    confirmGroupReport: (Int, String) -> Unit,
     onApplyClick: () -> Unit,
     onCancelClick: () -> Unit,
     onDeleteClick: () -> Unit,
     updateInputComment: (String) -> Unit,
     onCommentRefreshClick: () -> Unit,
+    onCommentReportClick: () -> Unit,
+    dismissCommentReport: () -> Unit,
+    confirmCommentReport: (Int) -> Unit,
     onCommentPostClick: () -> Unit,
     onCommentDeleteClick: (Int) -> Unit,
     onRetryClick: () -> Unit
@@ -260,7 +293,8 @@ fun GroupDetailScreen(
             modifier = Modifier.background(color = GongBaekTheme.colors.white),
             startTitleResId = R.string.topbar_group,
             onLeadingIconClick = onBackClick,
-            isTrailingIconIncluded = true
+            isTrailingIconIncluded = !uiState.groupDetail.groupInfo.isHost,
+            onTrailingIconClick = onGroupReportClick
         )
         when (uiState.groupDetailLoadState) {
             UiLoadState.Idle -> {}
@@ -304,6 +338,10 @@ fun GroupDetailScreen(
                                 value = uiState.inputComment,
                                 onValueChanged = updateInputComment,
                                 onRefreshClicked = onCommentRefreshClick,
+                                showReportDialog = uiState.showCommentReportDialog,
+                                onReportClicked = onCommentReportClick,
+                                onConfirmReport = confirmCommentReport,
+                                onDismissReport = dismissCommentReport,
                                 onDeleteClicked = onCommentDeleteClick,
                                 onSendClicked = onCommentPostClick
                             )
@@ -312,6 +350,17 @@ fun GroupDetailScreen(
                 )
             }
         }
+    }
+
+    if (uiState.showGroupReportDialog) {
+        ReportDialog(
+            titleMassage = stringResource(id = R.string.dialog_title_group_report),
+            descriptionMassage = stringResource(id = R.string.dialog_description_group_report),
+            confirmOption = "신고하기",
+            onConfirm = { confirmGroupReport(uiState.groupDetail.groupInfo.groupId, uiState.groupDetail.groupInfo.cycle) },
+            dismissOption = "취소",
+            onDismiss = dismissGroupReport
+        )
     }
 }
 
@@ -382,11 +431,17 @@ private fun GroupDetailScreenPreview() {
             groupDetailTabs = GroupDetailPagerType.entries.map { it.description },
             pagerState = rememberPagerState { GroupDetailPagerType.entries.size },
             onBackClick = {},
+            onGroupReportClick = {},
+            dismissGroupReport = {},
+            confirmGroupReport = { _, _ -> },
             onApplyClick = {},
             onCancelClick = {},
             onDeleteClick = {},
             updateInputComment = {},
             onCommentRefreshClick = {},
+            onCommentReportClick = {},
+            dismissCommentReport = {},
+            confirmCommentReport = {},
             onCommentPostClick = {},
             onCommentDeleteClick = {},
             onRetryClick = {}
