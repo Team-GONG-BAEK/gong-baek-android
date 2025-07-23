@@ -80,6 +80,10 @@
     <string name="dialog_button_close">닫기</string>
     <string name="dialog_button_cancel">취소</string>
     <string name="dialog_button_space">스페이스 바로가기</string>
+    <string name="dialog_title_group_report">해당 모임을 신고하겠습니까?</string>
+    <string name="dialog_description_group_report">모임을 신고할 경우,\n운영팀에서 검토를 거쳐 24시간 내\n적절한 조 및 게시자 제재를 취할 것입니다.</string>
+    <string name="dialog_title_comment_report">해당 댓글을 신고하겠습니까?</string>
+    <string name="dialog_description_comment_report">댓글을 신고할 경우,\n해당 유저는 차단되며\n운영팀에서 검토를 거쳐 제재를 취할 것입니다.</string>
 
     <!-- GroupRoomScreen-->
     <string name="grouproom_people_count">멤버 (%1$s/%2$s명)</string>
