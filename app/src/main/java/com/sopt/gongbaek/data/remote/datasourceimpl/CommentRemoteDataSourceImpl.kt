@@ -30,4 +30,7 @@ class CommentRemoteDataSourceImpl @Inject constructor(
 
     override suspend fun deleteComment(deleteCommentRequestDto: DeleteCommentRequestDto): NullableApiResponse<Unit> =
         commentService.deleteComment(deleteCommentRequestDto = deleteCommentRequestDto)
+
+    override suspend fun reportComment(commentId: Long): NullableApiResponse<Unit> =
+        commentService.reportComment(commentId = commentId)
 }

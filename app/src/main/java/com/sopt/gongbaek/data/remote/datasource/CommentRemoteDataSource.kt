@@ -15,4 +15,5 @@ interface CommentRemoteDataSource {
     ): ApiResponse<GroupCommentsResponseDto>
     suspend fun postComment(postCommentRequestDto: PostCommentRequestDto): NullableApiResponse<PostCommentResponseDto>
     suspend fun deleteComment(deleteCommentRequestDto: DeleteCommentRequestDto): NullableApiResponse<Unit>
+    suspend fun reportComment(commentId: Long): NullableApiResponse<Unit>
 }

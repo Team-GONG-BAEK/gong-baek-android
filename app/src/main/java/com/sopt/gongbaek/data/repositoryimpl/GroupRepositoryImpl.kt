@@ -94,4 +94,10 @@ class GroupRepositoryImpl @Inject constructor(
             .handleNullableApiResponse()
             .getOrThrow() ?: Unit
     }
+
+    override suspend fun reportGroup(groupId: Int, groupType: String): Result<Unit> = safeApiCall {
+        groupDataSource.reportGroup(groupId.toLong(), groupType)
+            .handleNullableApiResponse()
+            .getOrThrow() ?: Unit
+    }
 }

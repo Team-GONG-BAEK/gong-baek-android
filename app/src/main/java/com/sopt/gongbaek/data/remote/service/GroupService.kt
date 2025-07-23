@@ -18,6 +18,7 @@ import retrofit2.http.GET
 import retrofit2.http.HTTP
 import retrofit2.http.PATCH
 import retrofit2.http.POST
+import retrofit2.http.Path
 import retrofit2.http.Query
 
 interface GroupService {
@@ -77,5 +78,11 @@ interface GroupService {
     @PATCH("/api/v1/my/groups")
     suspend fun cancelGroup(
         @Body groupManagementRequestDto: GroupManagementRequestDto
+    ): NullableApiResponse<Unit>
+
+    @POST("/api/v1/reports/group/{groupId}")
+    suspend fun reportGroup(
+        @Path("groupId") groupId: Long,
+        @Query("groupType") groupType: String
     ): NullableApiResponse<Unit>
 }
