@@ -60,8 +60,8 @@ class GroupDetailViewModel @Inject constructor(
                 setState { copy(showGroupReportDialog = false) }
             }
             is GroupDetailContract.Event.ConfirmGroupReport -> {
-                setState { copy(showGroupReportDialog = false) }
                 reportGroup(event.groupId, event.groupType)
+                setState { copy(showGroupReportDialog = false) }
             }
             is GroupDetailContract.Event.ResetGroupReportState -> {
                 setState { copy(groupReportState = UiLoadState.Idle) }
@@ -106,8 +106,8 @@ class GroupDetailViewModel @Inject constructor(
                 setState { copy(showCommentReportDialog = false) }
             }
             is GroupDetailContract.Event.ConfirmCommentReport -> {
-                setState { copy(showCommentReportDialog = false) }
                 reportComment(event.commentId)
+                setState { copy(showCommentReportDialog = false) }
             }
             is GroupDetailContract.Event.ResetCommentReportState -> {
                 setState { copy(commentReportState = UiLoadState.Idle) }

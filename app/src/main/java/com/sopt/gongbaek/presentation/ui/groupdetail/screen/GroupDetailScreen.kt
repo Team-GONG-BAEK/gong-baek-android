@@ -83,6 +83,7 @@ fun GroupDetailRoute(
         onGroupReportClick = { viewModel.setEvent(GroupDetailContract.Event.OnGroupReportClick) },
         dismissGroupReport = { viewModel.setEvent(GroupDetailContract.Event.DismissGroupReport) },
         confirmGroupReport = { groupId, groupType -> viewModel.setEvent(GroupDetailContract.Event.ConfirmGroupReport(groupId, groupType)) },
+        resetGroupReportState = { viewModel.setEvent(GroupDetailContract.Event.ResetGroupReportState) },
         onApplyClick = { viewModel.setEvent(GroupDetailContract.Event.OnApplyClick) },
         onCancelClick = { viewModel.setEvent(GroupDetailContract.Event.OnCancelClick) },
         onDeleteClick = { viewModel.setEvent(GroupDetailContract.Event.ShowDeleteDialog) },
@@ -91,6 +92,7 @@ fun GroupDetailRoute(
         onCommentReportClick = { viewModel.setEvent(GroupDetailContract.Event.OnCommentReportClick) },
         dismissCommentReport = { viewModel.setEvent(GroupDetailContract.Event.DismissCommentReport) },
         confirmCommentReport = { commentId -> viewModel.setEvent(GroupDetailContract.Event.ConfirmCommentReport(commentId)) },
+        resetCommentReportState = { viewModel.setEvent(GroupDetailContract.Event.ResetCommentReportState) },
         onCommentPostClick = { viewModel.setEvent(GroupDetailContract.Event.OnCommentPostClick) },
         onCommentDeleteClick = { commentId -> viewModel.setEvent(GroupDetailContract.Event.OnCommentDeleteClick(commentId)) },
         onRetryClick = { viewModel.setEvent(GroupDetailContract.Event.OnGroupInfoTabClick) }
@@ -245,24 +247,6 @@ fun GroupDetailRoute(
             viewModel.setEvent(GroupDetailContract.Event.ResetDeleteState)
         }
     }
-
-    if (groupDetailUiState.groupReportState == UiLoadState.Success) {
-        GongBaekToastMessage(
-            iconResId = R.drawable.ic_check_fill_24,
-            message = "해당 모임 신고가 완료되었습니다.",
-            durationMillis = 2000,
-            onDismiss = { viewModel.setEvent(GroupDetailContract.Event.ResetGroupReportState) }
-        )
-    }
-
-    if (groupDetailUiState.commentReportState == UiLoadState.Success) {
-        GongBaekToastMessage(
-            iconResId = R.drawable.ic_check_fill_24,
-            message = "해당 댓글 신고가 완료되었습니다.",
-            durationMillis = 2000,
-            onDismiss = { viewModel.setEvent(GroupDetailContract.Event.ResetCommentReportState) }
-        )
-    }
 }
 
 @Composable
@@ -274,6 +258,7 @@ fun GroupDetailScreen(
     onGroupReportClick: () -> Unit,
     dismissGroupReport: () -> Unit,
     confirmGroupReport: (Int, String) -> Unit,
+    resetGroupReportState: () -> Unit,
     onApplyClick: () -> Unit,
     onCancelClick: () -> Unit,
     onDeleteClick: () -> Unit,
@@ -282,6 +267,7 @@ fun GroupDetailScreen(
     onCommentReportClick: () -> Unit,
     dismissCommentReport: () -> Unit,
     confirmCommentReport: (Int) -> Unit,
+    resetCommentReportState: () -> Unit,
     onCommentPostClick: () -> Unit,
     onCommentDeleteClick: (Int) -> Unit,
     onRetryClick: () -> Unit
@@ -362,6 +348,24 @@ fun GroupDetailScreen(
             onDismiss = dismissGroupReport
         )
     }
+
+    if (uiState.groupReportState == UiLoadState.Success) {
+        GongBaekToastMessage(
+            iconResId = R.drawable.ic_check_fill_24,
+            message = "해당 모임 신고가 완료되었습니다.",
+            durationMillis = 2000,
+            onDismiss = resetGroupReportState
+        )
+    }
+
+    if (uiState.commentReportState == UiLoadState.Success) {
+        GongBaekToastMessage(
+            iconResId = R.drawable.ic_check_fill_24,
+            message = "해당 댓글 신고가 완료되었습니다.",
+            durationMillis = 2000,
+            onDismiss = resetCommentReportState
+        )
+    }
 }
 
 @Preview(showBackground = true)
@@ -434,6 +438,7 @@ private fun GroupDetailScreenPreview() {
             onGroupReportClick = {},
             dismissGroupReport = {},
             confirmGroupReport = { _, _ -> },
+            resetGroupReportState = {},
             onApplyClick = {},
             onCancelClick = {},
             onDeleteClick = {},
@@ -442,6 +447,7 @@ private fun GroupDetailScreenPreview() {
             onCommentReportClick = {},
             dismissCommentReport = {},
             confirmCommentReport = {},
+            resetCommentReportState = {},
             onCommentPostClick = {},
             onCommentDeleteClick = {},
             onRetryClick = {}

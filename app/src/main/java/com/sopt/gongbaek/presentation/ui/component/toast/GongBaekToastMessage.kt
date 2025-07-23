@@ -8,6 +8,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -47,36 +48,43 @@ fun GongBaekToastMessage(
         onDismiss()
     }
 
-    AnimatedVisibility(
-        visible = visible,
-        exit = fadeOut() + slideOutVertically()
-    ) {
-        Box(
-            modifier = modifier
-                .fillMaxWidth()
-                .padding(horizontal = 16.dp)
-                .height(44.dp)
-                .background(color = GongBaekTheme.colors.black, shape = RoundedCornerShape(4.dp)),
-            contentAlignment = Alignment.CenterStart
-        ) {
-            Row(
-                verticalAlignment = Alignment.CenterVertically,
-                modifier = Modifier.padding(10.dp)
+    Box(
+        modifier = Modifier.fillMaxSize(),
+        contentAlignment = Alignment.BottomCenter,
+        content = {
+            AnimatedVisibility(
+                visible = visible,
+                exit = fadeOut() + slideOutVertically()
             ) {
-                Image(
-                    painter = painterResource(id = iconResId),
-                    contentDescription = null,
-                    modifier = Modifier.size(24.dp)
-                )
-                Spacer(modifier = Modifier.width(4.dp))
-                Text(
-                    text = message,
-                    color = GongBaekTheme.colors.white,
-                    style = GongBaekTheme.typography.body2.r14
-                )
+                Box(
+                    modifier = modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 16.dp)
+                        .padding(bottom = 80.dp)
+                        .height(44.dp)
+                        .background(color = GongBaekTheme.colors.black, shape = RoundedCornerShape(4.dp)),
+                    contentAlignment = Alignment.CenterStart
+                ) {
+                    Row(
+                        verticalAlignment = Alignment.CenterVertically,
+                        modifier = Modifier.padding(10.dp)
+                    ) {
+                        Image(
+                            painter = painterResource(id = iconResId),
+                            contentDescription = null,
+                            modifier = Modifier.size(24.dp)
+                        )
+                        Spacer(modifier = Modifier.width(4.dp))
+                        Text(
+                            text = message,
+                            color = GongBaekTheme.colors.white,
+                            style = GongBaekTheme.typography.body2.r14
+                        )
+                    }
+                }
             }
         }
-    }
+    )
 }
 
 @Preview(showBackground = true)
