@@ -7,5 +7,5 @@ enum class GongBaekWebView(
     FAQ("https://tally.so/r/mZQ9N5"),
     PRIVACY_POLICY("https://booming-jasmine-4c1.notion.site/1b34c7511f428057ad33e49f07f6125a"),
     TERMS_OF_SERVICE("https://booming-jasmine-4c1.notion.site/1b34c7511f4280fc8dabdb19fff63765"),
-    HOME_BANNER("https://booming-jasmine-4c1.notion.site/1b74c7511f42802fb684f47bf88c4280"),
+    HOME_BANNER("https://booming-jasmine-4c1.notion.site/1b74c7511f42802fb684f47bf88c4280")
 }
