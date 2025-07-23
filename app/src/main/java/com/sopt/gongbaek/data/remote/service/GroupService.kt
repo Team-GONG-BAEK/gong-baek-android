@@ -84,5 +84,5 @@ interface GroupService {
     suspend fun reportGroup(
         @Path("groupId") groupId: Long,
         @Query("groupType") groupType: String
-    ): NullableApiResponse<Unit>
+    ): NullableApiResponse<String>
 }

@@ -35,5 +35,5 @@ interface CommentService {
     @POST("/api/v1/reports/comment/{commentId}")
     suspend fun reportComment(
         @Path("commentId") commentId: Long
-    ): NullableApiResponse<Unit>
+    ): NullableApiResponse<String>
 }

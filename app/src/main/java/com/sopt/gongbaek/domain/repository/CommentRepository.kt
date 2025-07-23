@@ -11,5 +11,5 @@ interface CommentRepository {
     ): Result<GroupComments>
     suspend fun postComment(comment: Comment): Result<Int>
     suspend fun deleteComment(commentId: Int): Result<Unit>
-    suspend fun reportComment(commentId: Int): Result<Unit>
+    suspend fun reportComment(commentId: Int): Result<String>
 }

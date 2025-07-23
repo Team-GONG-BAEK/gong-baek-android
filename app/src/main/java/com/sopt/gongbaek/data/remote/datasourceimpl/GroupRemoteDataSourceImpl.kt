@@ -54,6 +54,6 @@ class GroupRemoteDataSourceImpl @Inject constructor(
     override suspend fun cancelGroup(groupManagementRequestDto: GroupManagementRequestDto): NullableApiResponse<Unit> =
         groupService.cancelGroup(groupManagementRequestDto = groupManagementRequestDto)
 
-    override suspend fun reportGroup(groupId: Long, groupType: String): NullableApiResponse<Unit> =
+    override suspend fun reportGroup(groupId: Long, groupType: String): NullableApiResponse<String> =
         groupService.reportGroup(groupId = groupId, groupType = groupType)
 }

@@ -20,5 +20,5 @@ interface GroupRepository {
     suspend fun getGroupMembers(groupId: Int, groupType: String): Result<GroupMembers>
     suspend fun deleteGroup(groupId: Int, groupType: String): Result<Unit>
     suspend fun cancelGroup(groupId: Int, groupType: String): Result<Unit>
-    suspend fun reportGroup(groupId: Int, groupType: String): Result<Unit>
+    suspend fun reportGroup(groupId: Int, groupType: String): Result<String>
 }
