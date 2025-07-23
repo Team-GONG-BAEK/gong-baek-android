@@ -63,6 +63,7 @@ import com.sopt.gongbaek.presentation.ui.component.section.GroupPlaceDescription
 import com.sopt.gongbaek.presentation.ui.component.section.GroupTimeDescription
 import com.sopt.gongbaek.presentation.ui.component.stateView.ErrorScreen
 import com.sopt.gongbaek.presentation.ui.component.stateView.LoadingScreen
+import com.sopt.gongbaek.presentation.ui.component.toast.GongBaekToastMessage
 import com.sopt.gongbaek.presentation.ui.component.topbar.StartTitleTopBar
 import com.sopt.gongbaek.presentation.util.base.UiLoadState
 import com.sopt.gongbaek.presentation.util.extension.roundedBackgroundWithBorder
@@ -105,6 +106,10 @@ fun GroupRoomRoute(
                 updateInputComment = { inputComment -> viewModel.setEvent(GroupRoomContract.Event.UpdateInputComment(inputComment)) },
                 onBackClick = { viewModel.sendSideEffect(GroupRoomContract.SideEffect.NavigateBack) },
                 onCommentRefreshClick = { viewModel.setEvent(GroupRoomContract.Event.OnCommentRefreshClick) },
+                onCommentReportClick = { viewModel.setEvent(GroupRoomContract.Event.OnCommentReportClick) },
+                dismissCommentReport = { viewModel.setEvent(GroupRoomContract.Event.DismissCommentReport) },
+                confirmCommentReport = { commentId -> viewModel.setEvent(GroupRoomContract.Event.ConfirmCommentReport(commentId)) },
+                resetCommentReportState = { viewModel.setEvent(GroupRoomContract.Event.ResetCommentReportState) },
                 onCommentPostClick = { viewModel.setEvent(GroupRoomContract.Event.OnCommentPostClick) },
                 onCommentDeleteClick = { commentId -> viewModel.setEvent(GroupRoomContract.Event.OnCommentDeleteClick(commentId)) }
             )
@@ -120,6 +125,10 @@ fun GroupRoomScreen(
     updateInputComment: (String) -> Unit,
     onBackClick: () -> Unit,
     onCommentRefreshClick: () -> Unit,
+    onCommentReportClick: () -> Unit,
+    dismissCommentReport: () -> Unit,
+    confirmCommentReport: (Int) -> Unit,
+    resetCommentReportState: () -> Unit,
     onCommentPostClick: () -> Unit,
     onCommentDeleteClick: (Int) -> Unit
 ) {
@@ -185,8 +194,21 @@ fun GroupRoomScreen(
             value = uiState.inputComment,
             onValueChanged = updateInputComment,
             onRefreshClicked = onCommentRefreshClick,
+            showReportDialog = uiState.showCommentReportDialog,
+            onReportClicked = onCommentReportClick,
+            onConfirmReport = confirmCommentReport,
+            onDismissReport = dismissCommentReport,
             onDeleteClicked = onCommentDeleteClick,
             onSendClicked = onCommentPostClick
+        )
+    }
+
+    if (uiState.commentReportState == UiLoadState.Success) {
+        GongBaekToastMessage(
+            iconResId = R.drawable.ic_check_fill_24,
+            message = "해당 댓글 신고가 완료되었습니다.",
+            durationMillis = 2000,
+            onDismiss = resetCommentReportState
         )
     }
 }
@@ -381,6 +403,10 @@ private fun GroupRoomScreenPreview1() {
             updateInputComment = {},
             onBackClick = {},
             onCommentRefreshClick = {},
+            onCommentReportClick = {},
+            dismissCommentReport = {},
+            confirmCommentReport = {},
+            resetCommentReportState = {},
             onCommentPostClick = {},
             onCommentDeleteClick = {}
         )
