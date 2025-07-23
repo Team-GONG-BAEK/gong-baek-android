@@ -21,6 +21,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
@@ -183,6 +184,14 @@ private fun GroupRegisterSection(
                     style = GongBaekTheme.typography.title2.b18,
                     modifier = Modifier.padding(bottom = 10.dp)
                 )
+                Spacer(modifier = Modifier.height(4.dp))
+                Text(
+                    text = "부적절하거나 불쾌감을 줄 수 있는 콘텐츠는 제재를 받을 수 있습니다.",
+                    color = GongBaekTheme.colors.gray07,
+                    overflow = TextOverflow.Ellipsis,
+                    style = GongBaekTheme.typography.caption2.r12
+                )
+                Spacer(modifier = Modifier.height(10.dp))
 
                 Column(
                     modifier = Modifier
