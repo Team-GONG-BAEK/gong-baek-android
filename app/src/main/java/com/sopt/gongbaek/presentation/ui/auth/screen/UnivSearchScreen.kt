@@ -27,6 +27,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
@@ -93,6 +94,8 @@ private fun UnivSearchScreen(
     onCloseClick: () -> Unit,
     onComplete: () -> Unit
 ) {
+    val focusManager = LocalFocusManager.current
+
     Scaffold(
         topBar = {
             CenterTitleTopBar(
@@ -114,35 +117,43 @@ private fun UnivSearchScreen(
         },
         containerColor = GongBaekTheme.colors.white,
         content = { paddingValues ->
-            Column(
+            Box(
                 modifier = Modifier
                     .fillMaxSize()
                     .padding(paddingValues)
-                    .padding(top = 12.dp)
+                    .clickableWithoutRipple {
+                        focusManager.clearFocus()
+                    }
             ) {
-                SearchTextField(
-                    value = academicInfoState.universitySearchQuery,
-                    onValueChange = onSearchQueryChanged,
-                    modifier = Modifier.padding(horizontal = 16.dp),
-                    onSearchButtonClicked = onSearchButtonClicked
-                )
+                Column(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(top = 12.dp)
+                ) {
+                    SearchTextField(
+                        value = academicInfoState.universitySearchQuery,
+                        onValueChange = onSearchQueryChanged,
+                        modifier = Modifier.padding(horizontal = 16.dp),
+                        onSearchButtonClicked = onSearchButtonClicked
+                    )
 
-                Spacer(modifier = Modifier.height(14.dp))
+                    Spacer(modifier = Modifier.height(14.dp))
 
-                val keyboardController = LocalSoftwareKeyboardController.current
-                val universities = academicInfoState.searchedUniversities
-                when {
-                    universities == null -> {}
-                    universities.isEmpty() -> EmptySearchResultView()
-                    else -> {
-                        SearchResultSection(
-                            searchResults = universities,
-                            selectedItem = academicInfoState.university,
-                            onItemSelected = { query ->
-                                keyboardController?.hide()
-                                onUniversitySelected(query)
-                            }
-                        )
+                    val keyboardController = LocalSoftwareKeyboardController.current
+                    val universities = academicInfoState.searchedUniversities
+                    when {
+                        universities == null -> {}
+                        universities.isEmpty() -> EmptySearchResultView()
+                        else -> {
+                            SearchResultSection(
+                                searchResults = universities,
+                                selectedItem = academicInfoState.university,
+                                onItemSelected = { query ->
+                                    keyboardController?.hide()
+                                    onUniversitySelected(query)
+                                }
+                            )
+                        }
                     }
                 }
             }
