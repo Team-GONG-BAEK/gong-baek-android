@@ -26,4 +26,5 @@ interface GroupRemoteDataSource {
     suspend fun getGroupMembers(groupId: Int, groupType: String): ApiResponse<GroupMembersResponseDto>
     suspend fun deleteGroup(groupManagementRequestDto: GroupManagementRequestDto): NullableApiResponse<Unit>
     suspend fun cancelGroup(groupManagementRequestDto: GroupManagementRequestDto): NullableApiResponse<Unit>
+    suspend fun reportGroup(groupId: Long, groupType: String): NullableApiResponse<String>
 }

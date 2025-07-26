@@ -1,12 +1,12 @@
 [versions]
 # Android SDK
-compileSdk = "34"
+compileSdk = "35"
 minSdk = "28"
-targetSdk = "34"
+targetSdk = "35"
 jvmTarget = "17"
 
 # Service Version
-versionCode = "3"
+versionCode = "4"
 versionName = "1.0.0"
 
 # Kotlin & Tools

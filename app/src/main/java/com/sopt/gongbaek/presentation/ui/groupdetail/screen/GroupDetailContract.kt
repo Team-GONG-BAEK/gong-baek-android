@@ -15,10 +15,18 @@ class GroupDetailContract {
         val groupApplyStatusCode: Int? = null,
         val groupCancelState: UiLoadState = UiLoadState.Idle,
         val groupDeleteState: UiLoadState = UiLoadState.Idle,
-        val commentState: UiLoadState = UiLoadState.Idle
+        val groupReportState: UiLoadState = UiLoadState.Idle,
+        val commentState: UiLoadState = UiLoadState.Idle,
+        val commentReportState: UiLoadState = UiLoadState.Idle,
+        val showGroupReportDialog: Boolean = false,
+        val showCommentReportDialog: Boolean = false
     ) : UiState
 
     sealed class Event : UiEvent {
+        data object OnGroupReportClick : Event()
+        data object DismissGroupReport : Event()
+        data class ConfirmGroupReport(val groupId: Int, val groupType: String) : Event()
+        data object ResetGroupReportState : Event()
         data object OnGroupInfoTabClick : Event()
         data object OnApplyClick : Event()
         data object ResetApplyState : Event()
@@ -30,6 +38,10 @@ class GroupDetailContract {
         data object OnCommentTabClick : Event()
         data class UpdateInputComment(val inputComment: String) : Event()
         data object OnCommentRefreshClick : Event()
+        data object OnCommentReportClick : Event()
+        data object DismissCommentReport : Event()
+        data class ConfirmCommentReport(val commentId: Int) : Event()
+        data object ResetCommentReportState : Event()
         data object OnCommentPostClick : Event()
         data class OnCommentDeleteClick(val commentId: Int) : Event()
     }

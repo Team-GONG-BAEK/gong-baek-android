@@ -9,6 +9,7 @@ import com.sopt.gongbaek.domain.usecase.DeleteCommentUseCase
 import com.sopt.gongbaek.domain.usecase.GetGroupCommentsUseCase
 import com.sopt.gongbaek.domain.usecase.LoadGroupRoomScreenUseCase
 import com.sopt.gongbaek.domain.usecase.PostCommentUseCase
+import com.sopt.gongbaek.domain.usecase.ReportCommentUseCase
 import com.sopt.gongbaek.presentation.model.NavigationRoute
 import com.sopt.gongbaek.presentation.util.base.BaseViewModel
 import com.sopt.gongbaek.presentation.util.base.UiLoadState
@@ -21,6 +22,7 @@ class GroupRoomViewModel @Inject constructor(
     private val savedStateHandle: SavedStateHandle,
     private val loadGroupRoomScreenUseCase: LoadGroupRoomScreenUseCase,
     private val getGroupCommentsUseCase: GetGroupCommentsUseCase,
+    private val reportCommentUseCase: ReportCommentUseCase,
     private val postCommentUseCase: PostCommentUseCase,
     private val deleteCommentUseCase: DeleteCommentUseCase
 ) : BaseViewModel<GroupRoomContract.State, GroupRoomContract.Event, GroupRoomContract.SideEffect>() {
@@ -47,6 +49,19 @@ class GroupRoomViewModel @Inject constructor(
             }
             is GroupRoomContract.Event.OnCommentRefreshClick -> {
                 getGroupComment()
+            }
+            is GroupRoomContract.Event.OnCommentReportClick -> {
+                setState { copy(showCommentReportDialog = true) }
+            }
+            is GroupRoomContract.Event.DismissCommentReport -> {
+                setState { copy(showCommentReportDialog = false) }
+            }
+            is GroupRoomContract.Event.ConfirmCommentReport -> {
+                reportComment(event.commentId)
+                setState { copy(showCommentReportDialog = false) }
+            }
+            is GroupRoomContract.Event.ResetCommentReportState -> {
+                setState { copy(commentReportState = UiLoadState.Idle) }
             }
             is GroupRoomContract.Event.OnCommentPostClick -> {
                 postInputComment()
@@ -93,6 +108,19 @@ class GroupRoomViewModel @Inject constructor(
                 },
                 onFailure = {
                     setState { copy(commentState = UiLoadState.Error) }
+                }
+            )
+        }
+    }
+
+    private fun reportComment(commentId: Int) {
+        viewModelScope.launch {
+            reportCommentUseCase(commentId).fold(
+                onSuccess = {
+                    setState { copy(commentReportState = UiLoadState.Success) }
+                },
+                onFailure = {
+                    setState { copy(commentReportState = UiLoadState.Error) }
                 }
             )
         }

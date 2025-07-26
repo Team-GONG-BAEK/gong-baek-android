@@ -21,9 +21,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.tooling.preview.Preview
 import com.sopt.gongbaek.R
-import com.sopt.gongbaek.presentation.type.GongBaekWebView
 import com.sopt.gongbaek.presentation.util.extension.clickableWithoutRipple
-import com.sopt.gongbaek.presentation.util.openWebView
 import com.sopt.gongbaek.ui.theme.GongBaekTheme
 
 @Composable
@@ -32,7 +30,8 @@ fun StartTitleTopBar(
     @StringRes startTitleResId: Int? = null,
     isLeadingIconIncluded: Boolean = true,
     isTrailingIconIncluded: Boolean = false,
-    onLeadingIconClick: () -> Unit = {}
+    onLeadingIconClick: () -> Unit = {},
+    onTrailingIconClick: () -> Unit = {}
 ) {
     val context = LocalContext.current
 
@@ -69,7 +68,7 @@ fun StartTitleTopBar(
                 contentDescription = null,
                 tint = GongBaekTheme.colors.gray04,
                 modifier = Modifier.clickableWithoutRipple {
-                    openWebView(context, GongBaekWebView.REPORT_FORM.url)
+                    onTrailingIconClick()
                 }
             )
         }

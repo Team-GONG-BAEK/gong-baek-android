@@ -10,6 +10,7 @@ import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.HTTP
 import retrofit2.http.POST
+import retrofit2.http.Path
 import retrofit2.http.Query
 
 interface CommentService {
@@ -30,4 +31,9 @@ interface CommentService {
     suspend fun deleteComment(
         @Body deleteCommentRequestDto: DeleteCommentRequestDto
     ): NullableApiResponse<Unit>
+
+    @POST("/api/v1/reports/comment/{commentId}")
+    suspend fun reportComment(
+        @Path("commentId") commentId: Long
+    ): NullableApiResponse<String>
 }

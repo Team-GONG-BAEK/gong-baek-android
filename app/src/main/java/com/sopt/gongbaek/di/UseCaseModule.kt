@@ -27,6 +27,8 @@ import com.sopt.gongbaek.domain.usecase.LogoutUseCase
 import com.sopt.gongbaek.domain.usecase.PostCommentUseCase
 import com.sopt.gongbaek.domain.usecase.PostGroupUseCase
 import com.sopt.gongbaek.domain.usecase.ReissueTokenUseCase
+import com.sopt.gongbaek.domain.usecase.ReportCommentUseCase
+import com.sopt.gongbaek.domain.usecase.ReportGroupUseCase
 import com.sopt.gongbaek.domain.usecase.RequestEmailVerificationUseCase
 import com.sopt.gongbaek.domain.usecase.RequestSignUpUseCase
 import com.sopt.gongbaek.domain.usecase.SearchMajorsUseCase
@@ -221,4 +223,16 @@ object UseCaseModule {
     fun provideCancelGroupUseCase(
         groupRepository: GroupRepository
     ): CancelGroupUseCase = CancelGroupUseCase(groupRepository)
+
+    @Provides
+    @Singleton
+    fun provideReportGroupUseCase(
+        groupRepository: GroupRepository
+    ): ReportGroupUseCase = ReportGroupUseCase(groupRepository)
+
+    @Provides
+    @Singleton
+    fun provideReportCommentUseCase(
+        commentRepository: CommentRepository
+    ): ReportCommentUseCase = ReportCommentUseCase(commentRepository)
 }

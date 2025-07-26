@@ -40,4 +40,10 @@ class CommentRepositoryImpl @Inject constructor(
             .handleNullableApiResponse()
             .getOrThrow() ?: Unit
     }
+
+    override suspend fun reportComment(commentId: Int): Result<String> = safeApiCall {
+        commentRemoteDataSource.reportComment(commentId.toLong())
+            .handleNullableApiResponse()
+            .getOrThrow() ?: ""
+    }
 }
