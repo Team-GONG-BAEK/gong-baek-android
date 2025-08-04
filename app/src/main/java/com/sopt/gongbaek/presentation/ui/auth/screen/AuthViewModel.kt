@@ -25,8 +25,6 @@ import com.sopt.gongbaek.presentation.ui.auth.state.SelectProfileState
 import com.sopt.gongbaek.presentation.ui.auth.state.SelfIntroductionState
 import com.sopt.gongbaek.presentation.util.base.BaseViewModel
 import com.sopt.gongbaek.presentation.util.base.UiLoadState
-import com.sopt.gongbaek.presentation.util.extension.isCompleteKorean
-import com.sopt.gongbaek.presentation.util.extension.isKoreanChar
 import com.sopt.gongbaek.presentation.util.timetable.convertToTimeTable
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Job
