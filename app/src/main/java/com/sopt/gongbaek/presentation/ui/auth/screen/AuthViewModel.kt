@@ -25,8 +25,6 @@ import com.sopt.gongbaek.presentation.ui.auth.state.SelectProfileState
 import com.sopt.gongbaek.presentation.ui.auth.state.SelfIntroductionState
 import com.sopt.gongbaek.presentation.util.base.BaseViewModel
 import com.sopt.gongbaek.presentation.util.base.UiLoadState
-import com.sopt.gongbaek.presentation.util.extension.isCompleteKorean
-import com.sopt.gongbaek.presentation.util.extension.isKoreanChar
 import com.sopt.gongbaek.presentation.util.timetable.convertToTimeTable
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Job
@@ -366,13 +364,10 @@ class AuthViewModel @Inject constructor(
         )
     }
 
-    private fun validateNicknameLocally(nickname: String): String? =
-        when {
-            nickname.length < 2 -> ERROR_NICKNAME_VALIDATION_MESSAGE
-            !nickname.all { it.isKoreanChar() } -> ERROR_NICKNAME_VALIDATION_MESSAGE
-            !nickname.all { it.isCompleteKorean() } -> ERROR_NICKNAME_VALIDATION_MESSAGE
-            else -> null
-        }
+    private fun validateNicknameLocally(nickname: String): String? {
+        val regex = Regex("^[a-zA-Z가-힣]{2,8}$")
+        return if (regex.matches(nickname)) null else ERROR_NICKNAME_VALIDATION_MESSAGE
+    }
 
     private fun handleNicknameValidation() {
         val nickname = currentState.nicknameGenderState.nickname
@@ -547,7 +542,7 @@ class AuthViewModel @Inject constructor(
         private const val ERROR_CODE_MISMATCH = "잘못된 코드입니다. 다시 입력해주세요."
 
         // Nickname Validation Messages
-        private const val ERROR_NICKNAME_VALIDATION_MESSAGE = "한글 최소 2자 이상 입력해주세요."
+        private const val ERROR_NICKNAME_VALIDATION_MESSAGE = "최소 2자 이상 입력해주세요."
         private const val ERROR_NICKNAME_DUPLICATE_MESSAGE = "중복된 닉네임입니다. 다시 입력해주세요."
         private const val ERROR_CODE_DUPLICATE_NICKNAME = 4092
 

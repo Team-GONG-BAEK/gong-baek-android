@@ -24,7 +24,7 @@
 
     <!--GongbaekBasicTextfield-->
     <string name="gongbaek_basic_textfield_nickname_title">닉네임</string>
-    <string name="gongbaek_basic_textfield_nickname_placeholder">한글을 활용해 최대 8자 이내로 입력해주세요.</string>
+    <string name="gongbaek_basic_textfield_nickname_placeholder">2자 이상 8자 이내로 입력해주세요.</string>
     <string name="gongbaek_basic_textfield_self_introduction_title">소개글</string>
     <string name="gongbaek_basic_textfield_self_introduction_palceholder">간단한 소개글을 작성해보세요.\nex) 안녕하세요! 이번에 복학한 학생입니다. 함께 좋은 모임 만들어봐요~!</string>
     <string name="gongbaek_basic_textfield_group_place_title">장소</string>
@@ -123,7 +123,7 @@
     <string name="auth_email_button_next">다음</string>
 
     <string name="auth_nickname_gender_title">닉네임과 성별을 입력해주세요.</string>
-    <string name="auth_nickname_gender_description">닉네임은 한글 최대 8자 이내로 입력할 수 있어요.</string>
+    <string name="auth_nickname_gender_description">닉네임은 최대 8자 이내로 입력할 수 있어요.</string>
     <string name="auth_nickname_gender_gender_title">성별</string>
     <string name="auth_nickname_gender_button_next">다음</string>
 
