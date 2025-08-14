@@ -1,0 +1,241 @@
+package com.gongbaek.android.presentation.ui.grouplist.screen
+
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.material3.FloatingActionButton
+import androidx.compose.material3.HorizontalDivider
+import androidx.compose.material3.Icon
+import androidx.compose.material3.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.res.vectorResource
+import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.LocalLifecycleOwner
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.lifecycle.flowWithLifecycle
+import com.gongbaek.android.R
+import com.gongbaek.android.domain.model.GroupInfo
+import com.gongbaek.android.domain.type.GroupCategoryType
+import com.gongbaek.android.presentation.type.GroupInfoChipType
+import com.gongbaek.android.presentation.ui.component.section.GroupInfoSection
+import com.gongbaek.android.presentation.ui.component.stateView.ErrorScreen
+import com.gongbaek.android.presentation.ui.component.stateView.LoadingScreen
+import com.gongbaek.android.presentation.ui.component.topbar.CenterTitleTopBar
+import com.gongbaek.android.presentation.ui.grouplist.component.CategoryBar
+import com.gongbaek.android.presentation.util.base.UiLoadState
+import com.gongbaek.android.presentation.util.extension.clickableWithoutRipple
+import com.gongbaek.android.presentation.util.formatGroupTimeDescription
+import com.gongbaek.android.ui.theme.GONGBAEKTheme
+import com.gongbaek.android.ui.theme.GongBaekTheme
+
+@Composable
+fun GroupListRoute(
+    viewModel: GroupListViewModel = hiltViewModel(),
+    navigateGroupDetail: (Int, String) -> Unit,
+    navigateGroupRegister: () -> Unit,
+    innerPadding: PaddingValues
+) {
+    val uiState by viewModel.state.collectAsStateWithLifecycle()
+    val lifecycleOwner = LocalLifecycleOwner.current
+
+    LaunchedEffect(Unit) {
+        viewModel.sideEffect
+            .flowWithLifecycle(lifecycle = lifecycleOwner.lifecycle)
+            .collect { sideEffect ->
+                when (sideEffect) {
+                    is GroupListContract.SideEffect.NavigateGroupDetail -> {
+                        navigateGroupDetail(sideEffect.groupId, sideEffect.groupCycle)
+                    }
+
+                    is GroupListContract.SideEffect.NavigateGroupRegister -> navigateGroupRegister()
+                }
+            }
+    }
+
+    when (uiState.loadState) {
+        UiLoadState.Idle -> LoadingScreen()
+        UiLoadState.Loading -> LoadingScreen()
+        UiLoadState.Error -> ErrorScreen(
+            onClickRetry = { viewModel.setEvent(GroupListContract.Event.GetGroups(GroupCategoryType.ALL.name)) }
+        )
+        UiLoadState.Success -> GroupListScreen(
+            selectedDayOfWeekIndex = uiState.selectedDayOfWeekIndex,
+            onDayOfWeekSelected = { index ->
+                viewModel.setEvent(GroupListContract.Event.OnDayOfWeekSelected(index))
+            },
+            selectedCategoryIndex = uiState.selectedCategoryIndex,
+            onCategorySelected = { index ->
+                viewModel.setEvent(GroupListContract.Event.OnCategorySelected(index))
+            },
+            toggleCheckedState = uiState.toggleCheckedState,
+            onToggleStateChanged = { state ->
+                viewModel.setEvent(GroupListContract.Event.OnToggleCheckStateChanged(state))
+            },
+            navigateGroupDetail = { groupId, groupCycle ->
+                viewModel.sendSideEffect(GroupListContract.SideEffect.NavigateGroupDetail(groupId, groupCycle))
+            },
+            navigateGroupRegister = {
+                viewModel.sendSideEffect(GroupListContract.SideEffect.NavigateGroupRegister)
+            },
+            groupList = uiState.groups,
+            modifier = Modifier.padding(innerPadding)
+        )
+    }
+}
+
+@Composable
+private fun GroupListScreen(
+    selectedDayOfWeekIndex: Int,
+    onDayOfWeekSelected: (Int) -> Unit,
+    selectedCategoryIndex: Int,
+    onCategorySelected: (Int) -> Unit,
+    toggleCheckedState: Boolean,
+    onToggleStateChanged: (Boolean) -> Unit,
+    navigateGroupDetail: (Int, String) -> Unit,
+    navigateGroupRegister: () -> Unit,
+    groupList: List<GroupInfo>,
+    modifier: Modifier = Modifier
+) {
+    Box(
+        modifier = modifier.fillMaxSize()
+    ) {
+        Column {
+            CenterTitleTopBar(centerTitleResId = R.string.topbar_group)
+//            DayOfWeekBar(
+//                selectedIndex = selectedDayOfWeekIndex,
+//                onIndexSelected = onDayOfWeekSelected
+//            )
+            Spacer(Modifier.height(8.dp))
+
+            CategoryBar(
+                selectedIndex = selectedCategoryIndex,
+                onIndexSelected = onCategorySelected
+            )
+            Spacer(Modifier.height(8.dp))
+
+            LazyColumn(
+                modifier = Modifier.fillMaxSize()
+            ) {
+                item {
+                    HorizontalDivider(
+                        thickness = 8.dp,
+                        color = GongBaekTheme.colors.gray02
+                    )
+                }
+
+//                item {
+//                    Row(
+//                        modifier = Modifier
+//                            .fillMaxWidth()
+//                            .padding(start = 16.dp, end = 16.dp, top = 12.dp)
+//                            .height(IntrinsicSize.Min),
+//                        horizontalArrangement = Arrangement.SpaceBetween,
+//                        verticalAlignment = Alignment.CenterVertically
+//                    ) {
+//                        CycleBottomSheetPresenter()
+//
+//                        GongBaekToggleButton(
+//                            checkedState = toggleCheckedState,
+//                            onClick = onToggleStateChanged,
+//                            modifier = Modifier.align(Alignment.Top)
+//                        )
+//                    }
+//                }
+
+                if (groupList.isEmpty()) {
+                    item {
+                        Box(
+                            modifier = Modifier
+                                .fillParentMaxSize()
+                                .fillMaxSize(),
+                            contentAlignment = Alignment.Center
+                        ) {
+                            Text(
+                                text = stringResource(R.string.grouplist_empty),
+                                textAlign = TextAlign.Center,
+                                color = GongBaekTheme.colors.gray06,
+                                style = GongBaekTheme.typography.caption1.m13
+                            )
+                        }
+                    }
+                } else {
+                    items(items = groupList) { groupList ->
+                        GroupInfoSection(
+                            groupStatus = GroupInfoChipType.getChipTypeFromStatus(groupList.status),
+                            groupCategory = GroupInfoChipType.getChipTypeFromCategory(groupList.category),
+                            groupCycle = GroupInfoChipType.getChipTypeFromCycle(groupList.cycle),
+                            groupCover = groupList.coverImg,
+                            groupTitle = groupList.title,
+                            groupTime = formatGroupTimeDescription(groupList),
+                            groupPlace = groupList.place,
+                            modifier = Modifier
+                                .padding(vertical = 12.dp, horizontal = 16.dp)
+                                .clickableWithoutRipple {
+                                    navigateGroupDetail(groupList.groupId, groupList.cycle)
+                                }
+                        )
+
+                        HorizontalDivider(
+                            modifier = Modifier.fillMaxWidth(),
+                            thickness = 1.dp,
+                            color = GongBaekTheme.colors.gray01
+                        )
+                    }
+                }
+            }
+        }
+
+        FloatingActionButton(
+            onClick = navigateGroupRegister,
+            shape = CircleShape,
+            containerColor = GongBaekTheme.colors.mainOrange,
+            modifier = Modifier
+                .align(Alignment.BottomEnd)
+                .padding(
+                    end = 16.dp,
+                    bottom = 16.dp
+                )
+        ) {
+            Icon(
+                imageVector = ImageVector.vectorResource(R.drawable.ic_plus_24),
+                contentDescription = null,
+                tint = GongBaekTheme.colors.white
+            )
+        }
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+private fun ShowGroupListScreen() {
+    GONGBAEKTheme {
+        GroupListScreen(
+            selectedDayOfWeekIndex = 0,
+            onDayOfWeekSelected = {},
+            selectedCategoryIndex = 0,
+            onCategorySelected = {},
+            toggleCheckedState = false,
+            onToggleStateChanged = {},
+            navigateGroupDetail = { _, _ -> },
+            navigateGroupRegister = {},
+            groupList = listOf()
+        )
+    }
+}

@@ -1,0 +1,54 @@
+package com.gongbaek.android.presentation.ui.groupdetail.screen
+
+import com.gongbaek.android.domain.model.GroupDetail
+import com.gongbaek.android.presentation.util.base.UiEvent
+import com.gongbaek.android.presentation.util.base.UiLoadState
+import com.gongbaek.android.presentation.util.base.UiSideEffect
+import com.gongbaek.android.presentation.util.base.UiState
+
+class GroupDetailContract {
+    data class State(
+        val groupDetailLoadState: UiLoadState = UiLoadState.Idle,
+        val groupDetail: GroupDetail = GroupDetail(),
+        val inputComment: String = "",
+        val groupApplyState: UiLoadState = UiLoadState.Idle,
+        val groupApplyStatusCode: Int? = null,
+        val groupCancelState: UiLoadState = UiLoadState.Idle,
+        val groupDeleteState: UiLoadState = UiLoadState.Idle,
+        val groupReportState: UiLoadState = UiLoadState.Idle,
+        val commentState: UiLoadState = UiLoadState.Idle,
+        val commentReportState: UiLoadState = UiLoadState.Idle,
+        val showGroupReportDialog: Boolean = false,
+        val showCommentReportDialog: Boolean = false
+    ) : UiState
+
+    sealed class Event : UiEvent {
+        data object OnGroupReportClick : Event()
+        data object DismissGroupReport : Event()
+        data class ConfirmGroupReport(val groupId: Int, val groupType: String) : Event()
+        data object ResetGroupReportState : Event()
+        data object OnGroupInfoTabClick : Event()
+        data object OnApplyClick : Event()
+        data object ResetApplyState : Event()
+        data object OnCancelClick : Event()
+        data object ResetCancelState : Event()
+        data object ShowDeleteDialog : Event()
+        data object OnDeleteClick : Event()
+        data object ResetDeleteState : Event()
+        data object OnCommentTabClick : Event()
+        data class UpdateInputComment(val inputComment: String) : Event()
+        data object OnCommentRefreshClick : Event()
+        data object OnCommentReportClick : Event()
+        data object DismissCommentReport : Event()
+        data class ConfirmCommentReport(val commentId: Int) : Event()
+        data object ResetCommentReportState : Event()
+        data object OnCommentPostClick : Event()
+        data class OnCommentDeleteClick(val commentId: Int) : Event()
+    }
+
+    sealed interface SideEffect : UiSideEffect {
+        data object NavigateBack : SideEffect
+        data class NavigateGroupRoom(val groupId: Int, val groupCycle: String) : SideEffect
+        data object NavigateMyPage : SideEffect
+    }
+}
