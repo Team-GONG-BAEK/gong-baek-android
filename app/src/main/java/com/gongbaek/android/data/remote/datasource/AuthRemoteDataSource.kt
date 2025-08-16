@@ -1,0 +1,26 @@
+package com.gongbaek.android.data.remote.datasource
+
+import com.gongbaek.android.data.remote.dto.base.ApiResponse
+import com.gongbaek.android.data.remote.dto.base.NullableApiResponse
+import com.gongbaek.android.data.remote.dto.request.LoginRequestDto
+import com.gongbaek.android.data.remote.dto.request.SignUpInfoRequestDto
+import com.gongbaek.android.data.remote.dto.response.LoginResponseDto
+import com.gongbaek.android.data.remote.dto.response.SignUpInfoResponseDto
+import com.gongbaek.android.data.remote.dto.response.UserProfileResponseDto
+import com.gongbaek.android.data.remote.dto.response.UserTimeTableResponseDto
+
+interface AuthRemoteDataSource {
+    suspend fun login(kakaoToken: String, loginRequestDto: LoginRequestDto): ApiResponse<LoginResponseDto>
+    suspend fun signUp(signUpToken: String, signUpInfoRequestDto: SignUpInfoRequestDto): ApiResponse<SignUpInfoResponseDto>
+    suspend fun validateNickname(nickname: String): NullableApiResponse<Unit>
+    suspend fun getUserProfile(): ApiResponse<UserProfileResponseDto>
+    suspend fun getUserLectureTimeTable(): ApiResponse<UserTimeTableResponseDto>
+    suspend fun logout(): NullableApiResponse<SignUpInfoResponseDto>
+    suspend fun withdraw(): NullableApiResponse<Unit>
+    suspend fun requestEmailVerification(email: String, schoolName: String): NullableApiResponse<Unit>
+    suspend fun verifyEmailCode(
+        email: String,
+        schoolName: String,
+        code: String
+    ): NullableApiResponse<Unit>
+}

@@ -1,0 +1,41 @@
+package com.gongbaek.android.presentation.ui.main
+
+import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.asPaddingValues
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.navigationBars
+import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.Scaffold
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.dp
+import com.gongbaek.android.presentation.type.MainBottomNavBarTabType
+import com.gongbaek.android.ui.theme.GongBaekTheme
+
+@Composable
+fun MainScreen(
+    navigator: MainNavigator,
+    modifier: Modifier = Modifier
+) {
+    Scaffold(
+        modifier = modifier
+            .fillMaxSize()
+            .padding(WindowInsets.navigationBars.asPaddingValues()),
+        bottomBar = {
+            MainBottomNavBar(
+                isVisible = navigator.showBottomBar(),
+                bottomNavBarTabTypes = MainBottomNavBarTabType.entries,
+                currentBottomNavBarTab = navigator.currentMainBottomNavBarTab,
+                onBottomNavBarTabSelected = navigator::navigate
+            )
+        },
+        contentWindowInsets = WindowInsets(0.dp),
+        containerColor = GongBaekTheme.colors.white,
+        content = { paddingValues ->
+            MainNavHost(
+                navigator = navigator,
+                paddingValues = paddingValues
+            )
+        }
+    )
+}

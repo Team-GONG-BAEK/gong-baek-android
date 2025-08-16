@@ -1,0 +1,144 @@
+package com.gongbaek.android.presentation.ui.auth.screen
+
+import androidx.activity.compose.BackHandler
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.aspectRatio
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
+import androidx.lifecycle.compose.LocalLifecycleOwner
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.lifecycle.flowWithLifecycle
+import com.gongbaek.android.R
+import com.gongbaek.android.presentation.type.ImageSelectorType
+import com.gongbaek.android.presentation.ui.auth.state.SelectProfileState
+import com.gongbaek.android.presentation.ui.component.button.GongBaekBasicButton
+import com.gongbaek.android.presentation.ui.component.button.ImageSelector
+import com.gongbaek.android.presentation.ui.component.progressBar.GongBaekProgressBar
+import com.gongbaek.android.presentation.ui.component.section.PageDescriptionSection
+import com.gongbaek.android.presentation.ui.component.topbar.StartTitleTopBar
+import com.gongbaek.android.ui.theme.GONGBAEKTheme
+
+@Composable
+fun SelectProfileRoute(
+    viewModel: AuthViewModel,
+    navigateMbti: () -> Unit,
+    navigateBack: () -> Unit
+) {
+    val uiState by viewModel.state.collectAsStateWithLifecycle()
+    val lifecycleOwner = LocalLifecycleOwner.current
+
+    BackHandler {
+        viewModel.setEvent(AuthContract.Event.ClearProfileImage)
+        viewModel.sendSideEffect(AuthContract.SideEffect.NavigateBack)
+    }
+
+    LaunchedEffect(Unit) {
+        viewModel.sideEffect
+            .flowWithLifecycle(lifecycleOwner.lifecycle)
+            .collect { sideEffect ->
+                when (sideEffect) {
+                    is AuthContract.SideEffect.NavigateMbti -> navigateMbti()
+                    is AuthContract.SideEffect.NavigateBack -> navigateBack()
+                    else -> {}
+                }
+            }
+    }
+
+    SelectProfileScreen(
+        uiState = uiState.selectProfileState,
+        onProfileImageSelected = { profileIndex -> viewModel.setEvent(AuthContract.Event.ProfileImageSelected(profileIndex)) },
+        onNextClick = { viewModel.sendSideEffect(AuthContract.SideEffect.NavigateMbti) },
+        onBackClick = {
+            viewModel.setEvent(AuthContract.Event.ClearProfileImage)
+            viewModel.sendSideEffect(AuthContract.SideEffect.NavigateBack)
+        }
+    )
+}
+
+@Composable
+private fun SelectProfileScreen(
+    uiState: SelectProfileState,
+    onProfileImageSelected: (Int) -> Unit,
+    onNextClick: () -> Unit,
+    onBackClick: () -> Unit
+) {
+    Box(
+        modifier = Modifier.fillMaxSize()
+    ) {
+        ImageSelectorSection(
+            selectedProfileIndex = uiState.profileImageIndex,
+            onProfileImageSelected = onProfileImageSelected,
+            onBackClick = onBackClick,
+            modifier = Modifier
+                .padding(horizontal = 16.dp)
+                .align(Alignment.TopCenter)
+        )
+
+        GongBaekBasicButton(
+            title = stringResource(R.string.auth_select_profile_button_next),
+            enabled = uiState.isNextEnabled,
+            onClick = onNextClick,
+            modifier = Modifier
+                .align(Alignment.BottomCenter)
+                .padding(horizontal = 16.dp, vertical = 12.dp)
+        )
+    }
+}
+
+@Composable
+private fun ImageSelectorSection(
+    selectedProfileIndex: Int?,
+    onProfileImageSelected: (Int) -> Unit,
+    onBackClick: () -> Unit,
+    modifier: Modifier = Modifier
+) {
+    Column {
+        StartTitleTopBar(onLeadingIconClick = onBackClick)
+
+        GongBaekProgressBar(progressPercent = 4 / 7f)
+
+        Column(
+            modifier = modifier
+        ) {
+            Spacer(modifier = Modifier.height(54.dp))
+
+            PageDescriptionSection(
+                titleResId = R.string.auth_select_profile_title,
+                descriptionResId = R.string.auth_select_profile_description
+            )
+
+            Spacer(modifier = Modifier.height(42.dp))
+
+            ImageSelector(
+                imageSelectorType = ImageSelectorType.Profile,
+                modifier = Modifier.aspectRatio(1f / 1f),
+                selectedIndex = selectedProfileIndex,
+                onIndexSelected = onProfileImageSelected
+            )
+        }
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+private fun SelectProfileScreenPreview() {
+    GONGBAEKTheme {
+        SelectProfileScreen(
+            uiState = SelectProfileState(),
+            onProfileImageSelected = {},
+            onBackClick = {},
+            onNextClick = {}
+        )
+    }
+}

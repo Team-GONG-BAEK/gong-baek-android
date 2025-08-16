@@ -1,0 +1,33 @@
+package com.gongbaek.android.presentation.ui.splash
+
+import androidx.lifecycle.viewModelScope
+import com.gongbaek.android.domain.repository.TokenRepository
+import com.gongbaek.android.presentation.util.base.BaseViewModel
+import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.launch
+import javax.inject.Inject
+
+@HiltViewModel
+class SplashViewModel @Inject constructor(
+    private val tokenRepository: TokenRepository
+) : BaseViewModel<SplashContract.State, SplashContract.Event, SplashContract.SideEffect>() {
+
+    override fun createInitialState(): SplashContract.State = SplashContract.State()
+
+    override suspend fun handleEvent(event: SplashContract.Event) {
+        when (event) {
+            is SplashContract.Event.ValidateAutoLogin -> validateAutoLogin()
+
+            is SplashContract.Event.ResetAutoLogin -> setState { copy(autoLogin = null) }
+        }
+    }
+
+    fun sendSideEffect(sideEffect: SplashContract.SideEffect) = setSideEffect(sideEffect)
+
+    private fun validateAutoLogin() {
+        viewModelScope.launch {
+            val hasTokens = tokenRepository.getAccessToken().isNotBlank() && tokenRepository.getRefreshToken().isNotBlank()
+            setState { copy(autoLogin = hasTokens) }
+        }
+    }
+}

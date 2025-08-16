@@ -6,7 +6,7 @@ targetSdk = "35"
 jvmTarget = "17"
 
 # Service Version
-versionCode = "5"
+versionCode = "1"
 versionName = "1.0.0"
 
 # Kotlin & Tools
