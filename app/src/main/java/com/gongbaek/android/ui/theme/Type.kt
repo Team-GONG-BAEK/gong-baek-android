@@ -5,15 +5,22 @@ import androidx.compose.runtime.staticCompositionLocalOf
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.LineHeightStyle
 import androidx.compose.ui.unit.sp
 import com.gongbaek.android.R
 
-object PretendardFont {
-    val Bold = FontFamily(Font(R.font.pretendard_bold))
-    val SemiBold = FontFamily(Font(R.font.pretendard_semibold))
-    val Medium = FontFamily(Font(R.font.pretendard_medium))
-    val Regular = FontFamily(Font(R.font.pretendard_regular))
-}
+private val PretendardFont = FontFamily(
+    Font(R.font.pretendard_bold, weight = FontWeight.Bold),
+    Font(R.font.pretendard_semibold, weight = FontWeight.SemiBold),
+    Font(R.font.pretendard_medium, weight = FontWeight.Medium),
+    Font(R.font.pretendard_regular, weight = FontWeight.Normal)
+)
+
+private val PretendardLineHeightStyle = LineHeightStyle(
+    alignment = LineHeightStyle.Alignment.Center,
+    trim = LineHeightStyle.Trim.None
+)
 
 sealed interface TypographyTokens {
     @Immutable
@@ -89,168 +96,218 @@ data class GongBaekTypography(
 val defaultGongBaekTypography = GongBaekTypography(
     head1 = TypographyTokens.Head1(
         b30 = TextStyle(
-            fontFamily = PretendardFont.Bold,
+            fontFamily = PretendardFont,
+            fontWeight = FontWeight.Bold,
             fontSize = 30.sp,
             lineHeight = 30.sp,
-            letterSpacing = (-1).sp
+            letterSpacing = (-1).sp,
+            lineHeightStyle = PretendardLineHeightStyle
         )
     ),
     head2 = TypographyTokens.Head2(
         b24 = TextStyle(
-            fontFamily = PretendardFont.Bold,
+            fontFamily = PretendardFont,
+            fontWeight = FontWeight.Bold,
             fontSize = 24.sp,
             lineHeight = 26.sp,
-            letterSpacing = (-1).sp
+            letterSpacing = (-1).sp,
+            lineHeightStyle = PretendardLineHeightStyle
         ),
         m24 = TextStyle(
-            fontFamily = PretendardFont.Medium,
+            fontFamily = PretendardFont,
+            fontWeight = FontWeight.Medium,
             fontSize = 24.sp,
             lineHeight = 26.sp,
-            letterSpacing = (-1).sp
+            letterSpacing = (-1).sp,
+            lineHeightStyle = PretendardLineHeightStyle
         ),
         r24 = TextStyle(
-            fontFamily = PretendardFont.Regular,
+            fontFamily = PretendardFont,
+            fontWeight = FontWeight.Normal,
             fontSize = 24.sp,
             lineHeight = 26.sp,
-            letterSpacing = (-1).sp
+            letterSpacing = (-1).sp,
+            lineHeightStyle = PretendardLineHeightStyle
         )
     ),
     title1 = TypographyTokens.Title1(
         b20 = TextStyle(
-            fontFamily = PretendardFont.Bold,
+            fontFamily = PretendardFont,
+            fontWeight = FontWeight.Bold,
             fontSize = 20.sp,
             lineHeight = 26.sp,
-            letterSpacing = (-1).sp
+            letterSpacing = (-1).sp,
+            lineHeightStyle = PretendardLineHeightStyle
         ),
         m20 = TextStyle(
-            fontFamily = PretendardFont.Medium,
+            fontFamily = PretendardFont,
+            fontWeight = FontWeight.Medium,
             fontSize = 20.sp,
             lineHeight = 26.sp,
-            letterSpacing = (-1).sp
+            letterSpacing = (-1).sp,
+            lineHeightStyle = PretendardLineHeightStyle
         ),
         r20 = TextStyle(
-            fontFamily = PretendardFont.Regular,
+            fontFamily = PretendardFont,
+            fontWeight = FontWeight.Normal,
             fontSize = 20.sp,
             lineHeight = 26.sp,
-            letterSpacing = (-1).sp
+            letterSpacing = (-1).sp,
+            lineHeightStyle = PretendardLineHeightStyle
         )
     ),
     title2 = TypographyTokens.Title2(
         b18 = TextStyle(
-            fontFamily = PretendardFont.Bold,
+            fontFamily = PretendardFont,
+            fontWeight = FontWeight.Bold,
             fontSize = 18.sp,
             lineHeight = 22.sp,
-            letterSpacing = (-0.5).sp
+            letterSpacing = (-0.5).sp,
+            lineHeightStyle = PretendardLineHeightStyle
         ),
         sb18 = TextStyle(
-            fontFamily = PretendardFont.SemiBold,
+            fontFamily = PretendardFont,
+            fontWeight = FontWeight.SemiBold,
             fontSize = 18.sp,
             lineHeight = 22.sp,
-            letterSpacing = (-0.5).sp
+            letterSpacing = (-0.5).sp,
+            lineHeightStyle = PretendardLineHeightStyle
         ),
         m18 = TextStyle(
-            fontFamily = PretendardFont.Medium,
+            fontFamily = PretendardFont,
+            fontWeight = FontWeight.Medium,
             fontSize = 18.sp,
             lineHeight = 22.sp,
-            letterSpacing = (-0.5).sp
+            letterSpacing = (-0.5).sp,
+            lineHeightStyle = PretendardLineHeightStyle
         ),
         r18 = TextStyle(
-            fontFamily = PretendardFont.Regular,
+            fontFamily = PretendardFont,
+            fontWeight = FontWeight.Normal,
             fontSize = 18.sp,
             lineHeight = 22.sp,
-            letterSpacing = (-0.5).sp
+            letterSpacing = (-0.5).sp,
+            lineHeightStyle = PretendardLineHeightStyle
         )
     ),
     body1 = TypographyTokens.Body1(
         b16 = TextStyle(
-            fontFamily = PretendardFont.Bold,
+            fontFamily = PretendardFont,
+            fontWeight = FontWeight.Bold,
             fontSize = 16.sp,
             lineHeight = 20.sp,
-            letterSpacing = (-0.5).sp
+            letterSpacing = (-0.5).sp,
+            lineHeightStyle = PretendardLineHeightStyle
         ),
         sb16 = TextStyle(
-            fontFamily = PretendardFont.SemiBold,
+            fontFamily = PretendardFont,
+            fontWeight = FontWeight.SemiBold,
             fontSize = 16.sp,
             lineHeight = 20.sp,
-            letterSpacing = (-0.5).sp
+            letterSpacing = (-0.5).sp,
+            lineHeightStyle = PretendardLineHeightStyle
         ),
         m16 = TextStyle(
-            fontFamily = PretendardFont.Medium,
+            fontFamily = PretendardFont,
+            fontWeight = FontWeight.Medium,
             fontSize = 16.sp,
             lineHeight = 20.sp,
-            letterSpacing = (-0.5).sp
+            letterSpacing = (-0.5).sp,
+            lineHeightStyle = PretendardLineHeightStyle
         ),
         r16 = TextStyle(
-            fontFamily = PretendardFont.Regular,
+            fontFamily = PretendardFont,
+            fontWeight = FontWeight.Normal,
             fontSize = 16.sp,
             lineHeight = 20.sp,
-            letterSpacing = (-0.5).sp
+            letterSpacing = (-0.5).sp,
+            lineHeightStyle = PretendardLineHeightStyle
         )
     ),
     body2 = TypographyTokens.Body2(
         b14 = TextStyle(
-            fontFamily = PretendardFont.Bold,
+            fontFamily = PretendardFont,
+            fontWeight = FontWeight.Bold,
             fontSize = 14.sp,
             lineHeight = 18.sp,
-            letterSpacing = (-0.5).sp
+            letterSpacing = (-0.5).sp,
+            lineHeightStyle = PretendardLineHeightStyle
         ),
         sb14 = TextStyle(
-            fontFamily = PretendardFont.SemiBold,
+            fontFamily = PretendardFont,
+            fontWeight = FontWeight.SemiBold,
             fontSize = 14.sp,
             lineHeight = 18.sp,
-            letterSpacing = (-0.5).sp
+            letterSpacing = (-0.5).sp,
+            lineHeightStyle = PretendardLineHeightStyle
         ),
         m14 = TextStyle(
-            fontFamily = PretendardFont.Medium,
+            fontFamily = PretendardFont,
+            fontWeight = FontWeight.Medium,
             fontSize = 14.sp,
             lineHeight = 18.sp,
-            letterSpacing = (-0.5).sp
+            letterSpacing = (-0.5).sp,
+            lineHeightStyle = PretendardLineHeightStyle
         ),
         r14 = TextStyle(
-            fontFamily = PretendardFont.Regular,
+            fontFamily = PretendardFont,
+            fontWeight = FontWeight.Normal,
             fontSize = 14.sp,
             lineHeight = 18.sp,
-            letterSpacing = (-0.5).sp
+            letterSpacing = (-0.5).sp,
+            lineHeightStyle = PretendardLineHeightStyle
         )
     ),
     caption1 = TypographyTokens.Caption1(
         sb13 = TextStyle(
-            fontFamily = PretendardFont.SemiBold,
+            fontFamily = PretendardFont,
+            fontWeight = FontWeight.SemiBold,
             fontSize = 13.sp,
             lineHeight = 18.sp,
-            letterSpacing = (-0.5).sp
+            letterSpacing = (-0.5).sp,
+            lineHeightStyle = PretendardLineHeightStyle
         ),
         m13 = TextStyle(
-            fontFamily = PretendardFont.Medium,
+            fontFamily = PretendardFont,
+            fontWeight = FontWeight.Medium,
             fontSize = 13.sp,
             lineHeight = 18.sp,
-            letterSpacing = (-0.5).sp
+            letterSpacing = (-0.5).sp,
+            lineHeightStyle = PretendardLineHeightStyle
         ),
         r13 = TextStyle(
-            fontFamily = PretendardFont.Regular,
+            fontFamily = PretendardFont,
+            fontWeight = FontWeight.Normal,
             fontSize = 13.sp,
             lineHeight = 18.sp,
-            letterSpacing = (-0.5).sp
+            letterSpacing = (-0.5).sp,
+            lineHeightStyle = PretendardLineHeightStyle
         )
     ),
     caption2 = TypographyTokens.Caption2(
         b12 = TextStyle(
-            fontFamily = PretendardFont.Bold,
+            fontFamily = PretendardFont,
+            fontWeight = FontWeight.Bold,
             fontSize = 12.sp,
             lineHeight = 18.sp,
-            letterSpacing = (-0.5).sp
+            letterSpacing = (-0.5).sp,
+            lineHeightStyle = PretendardLineHeightStyle
         ),
         m12 = TextStyle(
-            fontFamily = PretendardFont.Medium,
+            fontFamily = PretendardFont,
+            fontWeight = FontWeight.Medium,
             fontSize = 12.sp,
             lineHeight = 18.sp,
-            letterSpacing = (-0.5).sp
+            letterSpacing = (-0.5).sp,
+            lineHeightStyle = PretendardLineHeightStyle
         ),
         r12 = TextStyle(
-            fontFamily = PretendardFont.Regular,
+            fontFamily = PretendardFont,
+            fontWeight = FontWeight.Normal,
             fontSize = 12.sp,
             lineHeight = 18.sp,
-            letterSpacing = (-0.5).sp
+            letterSpacing = (-0.5).sp,
+            lineHeightStyle = PretendardLineHeightStyle
         )
     )
 )
